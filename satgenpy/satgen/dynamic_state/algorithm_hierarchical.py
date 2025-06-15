@@ -145,7 +145,7 @@ def merge_fstate(master_fstate, group_fstate):
     return merged
 
 def write_fstate_to_file(fstate, filename):
+    """Write forwarding state to text file."""
     with open(filename, "w+") as f:
-        for key, val in fstate.items():
-            f.write(f"{key[0]},{key[1]},{val[0]},{val[1]},{val[2]}\\n")
-
+        for (src, dst), (nxt, out_if, in_if) in fstate.items():
+            f.write(f"{src},{dst},{nxt},{out_if},{in_if}\n")
