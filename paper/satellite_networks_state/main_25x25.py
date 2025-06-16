@@ -84,7 +84,8 @@ def calculate(duration_s, time_step_ms, dynamic_state_algorithm, num_threads):
     # GSL interfaces
     ground_stations = satgen.read_ground_stations_extended("gen_data/" + name + "/ground_stations.txt")
     if dynamic_state_algorithm == "algorithm_free_one_only_over_isls" \
-            or dynamic_state_algorithm == "algorithm_free_one_only_gs_relays":
+            or dynamic_state_algorithm == "algorithm_free_one_only_gs_relays" \
+            or dynamic_state_algorithm == "algorithm_hierarchical":
         gsl_interfaces_per_satellite = 1
     elif dynamic_state_algorithm == "algorithm_paired_many_only_over_isls":
         gsl_interfaces_per_satellite = len(ground_stations)
@@ -122,7 +123,7 @@ def main():
     if len(args) != 4:
         print("Must supply exactly four arguments")
         print("Usage: python main_25x25.py [duration (s)] [time step (ms)] "
-              "[algorithm_{free_one_only_over_isls, free_one_only_gs_relays, paired_many_only_over_isls}] "
+              "[algorithm_{free_one_only_over_isls, free_one_only_gs_relays, paired_many_only_over_isls, hierarchical}] "
               "[num threads]")
         exit(1)
     else:
