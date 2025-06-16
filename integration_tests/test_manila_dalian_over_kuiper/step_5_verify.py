@@ -11,7 +11,8 @@ def assert_true(val):
 # Generated satellite network state is there
 for gen_data_subdir in [
     "temp/gen_data/reduced_kuiper_630_algorithm_free_one_only_over_isls",
-    "temp/gen_data/reduced_kuiper_630_algorithm_free_gs_one_sat_many_only_over_isls"
+    "temp/gen_data/reduced_kuiper_630_algorithm_free_gs_one_sat_many_only_over_isls",
+    "temp/gen_data/reduced_kuiper_630_algorithm_hierarchical",
 ]:
     for i in range(0, 200000000000, 100000000):
         assert_true(local_shell.file_exists(gen_data_subdir + "/description.txt"))
@@ -25,6 +26,7 @@ for gen_data_subdir in [
 # Runs are finished
 assert_true(local_shell.read_file("temp/runs/kuiper_630_isls_sat_one_17_to_18_with_TcpNewReno_at_10_Mbps/logs_ns3/finished.txt").strip() == "Yes")
 assert_true(local_shell.read_file("temp/runs/kuiper_630_isls_sat_many_17_to_18_with_TcpNewReno_at_10_Mbps/logs_ns3/finished.txt").strip() == "Yes")
+assert_true(local_shell.read_file("temp/runs/kuiper_630_hierarchical_17_to_18_with_TcpNewReno_at_10_Mbps/logs_ns3/finished.txt").strip() == "Yes")
 
 # Data is there
 assert_true(local_shell.file_exists("temp/data/kuiper_630_isls_sat_one_17_to_18_with_TcpNewReno_at_10_Mbps/tcp_flow_0_cwnd.csv"))
@@ -35,6 +37,10 @@ assert_true(local_shell.file_exists("temp/data/kuiper_630_isls_sat_many_17_to_18
 assert_true(local_shell.file_exists("temp/data/kuiper_630_isls_sat_many_17_to_18_with_TcpNewReno_at_10_Mbps/tcp_flow_0_progress.csv"))
 assert_true(local_shell.file_exists("temp/data/kuiper_630_isls_sat_many_17_to_18_with_TcpNewReno_at_10_Mbps/tcp_flow_0_rate_in_intervals.csv"))
 assert_true(local_shell.file_exists("temp/data/kuiper_630_isls_sat_many_17_to_18_with_TcpNewReno_at_10_Mbps/tcp_flow_0_rtt.csv"))
+assert_true(local_shell.file_exists("temp/data/kuiper_630_hierarchical_17_to_18_with_TcpNewReno_at_10_Mbps/tcp_flow_0_cwnd.csv"))
+assert_true(local_shell.file_exists("temp/data/kuiper_630_hierarchical_17_to_18_with_TcpNewReno_at_10_Mbps/tcp_flow_0_progress.csv"))
+assert_true(local_shell.file_exists("temp/data/kuiper_630_hierarchical_17_to_18_with_TcpNewReno_at_10_Mbps/tcp_flow_0_rate_in_intervals.csv"))
+assert_true(local_shell.file_exists("temp/data/kuiper_630_hierarchical_17_to_18_with_TcpNewReno_at_10_Mbps/tcp_flow_0_rtt.csv"))
 
 # Plots are there
 assert_true(local_shell.file_exists("temp/pdf/kuiper_630_isls_sat_one_17_to_18_with_TcpNewReno_at_10_Mbps/plot_tcp_flow_time_vs_cwnd_0.pdf"))
@@ -45,5 +51,9 @@ assert_true(local_shell.file_exists("temp/pdf/kuiper_630_isls_sat_many_17_to_18_
 assert_true(local_shell.file_exists("temp/pdf/kuiper_630_isls_sat_many_17_to_18_with_TcpNewReno_at_10_Mbps/plot_tcp_flow_time_vs_progress_0.pdf"))
 assert_true(local_shell.file_exists("temp/pdf/kuiper_630_isls_sat_many_17_to_18_with_TcpNewReno_at_10_Mbps/plot_tcp_flow_time_vs_rate_0.pdf"))
 assert_true(local_shell.file_exists("temp/pdf/kuiper_630_isls_sat_many_17_to_18_with_TcpNewReno_at_10_Mbps/plot_tcp_flow_time_vs_rtt_0.pdf"))
+assert_true(local_shell.file_exists("temp/pdf/kuiper_630_hierarchical_17_to_18_with_TcpNewReno_at_10_Mbps/plot_tcp_flow_time_vs_cwnd_0.pdf"))
+assert_true(local_shell.file_exists("temp/pdf/kuiper_630_hierarchical_17_to_18_with_TcpNewReno_at_10_Mbps/plot_tcp_flow_time_vs_progress_0.pdf"))
+assert_true(local_shell.file_exists("temp/pdf/kuiper_630_hierarchical_17_to_18_with_TcpNewReno_at_10_Mbps/plot_tcp_flow_time_vs_rate_0.pdf"))
+assert_true(local_shell.file_exists("temp/pdf/kuiper_630_hierarchical_17_to_18_with_TcpNewReno_at_10_Mbps/plot_tcp_flow_time_vs_rtt_0.pdf"))
 
 print("Verification completed")
