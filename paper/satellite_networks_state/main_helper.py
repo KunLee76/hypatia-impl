@@ -63,7 +63,7 @@ class MainHelper:
             time_step_ms,
             isl_selection,            # isls_{none, plus_grid}
             gs_selection,             # ground_stations_{top_100, paris_moscow_grid}
-            dynamic_state_algorithm,  # algorithm_{free_one_only_{gs_relays,_over_isls}, paired_many_only_over_isls}
+            dynamic_state_algorithm,  # algorithm_{free_one_only_{gs_relays,_over_isls}, paired_many_only_over_isls, hierarchical}
             num_threads
     ):
 
@@ -135,7 +135,9 @@ class MainHelper:
             output_generated_data_dir + "/" + name + "/ground_stations.txt"
         )
         if dynamic_state_algorithm == "algorithm_free_one_only_gs_relays" \
-                or dynamic_state_algorithm == "algorithm_free_one_only_over_isls":
+                or dynamic_state_algorithm == "algorithm_free_one_only_over_isls" \
+                or dynamic_state_algorithm == "algorithm_hierarchical":
+            # One GSL interface per satellite
             gsl_interfaces_per_satellite = 1
         elif dynamic_state_algorithm == "algorithm_paired_many_only_over_isls":
             gsl_interfaces_per_satellite = len(ground_stations)
