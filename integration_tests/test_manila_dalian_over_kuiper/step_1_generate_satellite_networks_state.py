@@ -83,7 +83,8 @@ local_shell.make_full_dir("temp/gen_data")
 # Both dynamic state algorithms should yield the same path and RTT
 for dynamic_state_algorithm in [
     "algorithm_free_one_only_over_isls",
-    "algorithm_free_gs_one_sat_many_only_over_isls"
+    "algorithm_free_gs_one_sat_many_only_over_isls",
+    "algorithm_hierarchical",
 ]:
 
     # Specific outcomes
