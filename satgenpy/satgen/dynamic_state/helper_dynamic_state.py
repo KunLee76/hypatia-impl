@@ -67,6 +67,7 @@ def worker(args):
                                   # "algorithm_free_one_only_over_isls"
                                   # "algorithm_free_gs_one_sat_many_only_over_isls"
                                   # "algorithm_paired_many_only_over_isls"
+                                  # "algorithm_hierarchical"
         print_logs
     )
 
