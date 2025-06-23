@@ -27,17 +27,22 @@ def algorithm_hierarchical(
     if enable_verbose_logs:
         print("\nALGORITHM: HIERARCHICAL")
 
+    n_orbits, n_sats_per_orbit = _infer_orbit_structure(satellites)
     # 計算 master 之間的路徑 (下面各註解部分尚未完成，記得要再細部定義!!)
-    master_nodes = select_master_nodes(satellites)
-    master_graph = build_master_graph(master_nodes, sat_net_graph_only_satellites_with_isls)
+    master_nodes = select_master_nodes(satellites, n_orbits, n_sats_per_orbit)
+    # master_graph = build_master_graph(master_nodes, sat_net_graph_only_satellites_with_isls)
 
     # 群外forwarding，決定各 master 的下一個 master
-    master_fstate = compute_master_forwarding(master_graph, master_nodes)
+    master_fstate = compute_master_forwarding(sat_net_graph_only_satellites_with_isls,
+        master_nodes, sat_neighbor_to_if)
 
     # 群內forwarding，從 master 到邊界衛星
     group_fstate = compute_intra_group_paths(
-        satellites, master_nodes, sat_net_graph_only_satellites_with_isls,
-        num_isls_per_sat, sat_neighbor_to_if
+        satellites,
+        master_nodes,
+        sat_net_graph_only_satellites_with_isls,
+        n_sats_per_orbit,
+        sat_neighbor_to_if
     )
 
     # 合併兩種 forwarding state
@@ -48,6 +53,14 @@ def algorithm_hierarchical(
     write_fstate_to_file(fstate, output_filename)
 
     return {"fstate": fstate}
+
+def _infer_orbit_structure(satellites):
+    """Infer number of orbits and satellites per orbit from TLE data."""
+    raans = sorted({round(s._raan, 6) for s in satellites})
+    n_orbits = len(raans) if raans else 1
+    if len(satellites) % n_orbits != 0:
+        raise ValueError("Cannot infer satellites per orbit from TLEs")
+    return n_orbits, len(satellites) // n_orbits
 
 def select_master_nodes(satellites, n_orbits, n_sats_per_orbit):
     # 用TLE依軌道編號遞增，挑選第一顆 master 衛星
@@ -79,26 +92,24 @@ def build_master_graph(masters, full_graph):
             master_graph.add_edge(m1, m2, weight=distance)
     return master_graph
 
-def compute_master_forwarding(master_graph, masters):
+def compute_master_forwarding(full_graph, masters, sat_neighbor_to_if):
     # 計算 masters 之間的路徑 (最短路徑...等等)
     # 用邊權重為距離，算最短路徑，並取得第一個master下一跳
     # 先計算 master_graph 內的兩兩最短路徑
-    shortest_paths = dict(nx.all_pairs_dijkstra_path(master_graph, weight="weight"))
-
+    paths = dict(nx.all_pairs_dijkstra_path(full_graph, weight="weight"))
     forwarding = {}
     for src in masters:
         for dst in masters:
             if src == dst:
                 continue
-
-            # 最短路徑是 src -> ... -> dst
-            path = shortest_paths[src][dst]
+            path = paths[src][dst]
             if len(path) >= 2:
-                next_hop = path[1]  # 取第一個節點作為下一跳
-                forwarding[(src, dst)] = next_hop
-            else:
-                # 2個 master 同一節點或不可達，可依需求忽略或標記
-                forwarding[(src, dst)] = None
+                nxt = path[1]
+                forwarding[(src, dst)] = (
+                    nxt,
+                    sat_neighbor_to_if[(src, nxt)],
+                    sat_neighbor_to_if[(nxt, src)]
+                )
 
     return forwarding
 
@@ -106,24 +117,16 @@ def group_of(sid, n_sats_per_orbit):
     """回傳衛星 sid 所屬的群組(軌道)編號。"""
     return sid // n_sats_per_orbit
 
-def compute_intra_group_paths(sats, masters, full_graph, sat_neighbor_to_if):
+def compute_intra_group_paths(sats, masters, full_graph, n_sats_per_orbit, sat_neighbor_to_if):
     # 在各群內決定 master 到邊界衛星的路由
     # full_graph 含有all衛星與 ISL 的圖
-    dist = nx.floyd_warshall_numpy(full_graph)
-
     forwarding = {}
     for master in masters:
-
-        # 找出與該 master 同群組的衛星
-        group_nodes = [n for n in range(len(sats))
-                       if group_of(n) == group_of(master)]
-
+        group_nodes = [n for n in range(len(sats)) if group_of(n, n_sats_per_orbit) == group_of(master, n_sats_per_orbit)]
         for dst in group_nodes:
             if dst == master:
                 continue
-
-            # 取最短路徑並取得下一跳衛星
-            path = nx.reconstruct_path(master, dst, dist)
+            path = nx.shortest_path(full_graph, master, dst, weight="weight")
             if len(path) >= 2:
                 nxt = path[1]
                 forwarding[(master, dst)] = (
