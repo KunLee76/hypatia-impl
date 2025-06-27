@@ -49,6 +49,35 @@ def algorithm_hierarchical(
     fstate = merge_fstate(master_fstate, group_fstate)
 
     # 輸出檔案
+      # --------
+    # 接口頻寬狀態
+    # --------
+    # 此演算法目前同樣假設所有節點僅具備一個 GSL 介面，且在 t=0 時分配完整頻寬
+    gid_to_sat_gsl_if_idx = [0] * len(ground_stations)
+    prev_fstate = None
+    if prev_output is not None:
+        prev_fstate = prev_output.get("fstate")
+
+    gs_fstate = calculate_fstate_shortest_path_without_gs_relaying(
+        output_dynamic_state_dir,
+        time_since_epoch_ns,
+        len(satellites),
+        len(ground_stations),
+        sat_net_graph_only_satellites_with_isls,
+        num_isls_per_sat,
+        gid_to_sat_gsl_if_idx,
+        ground_station_satellites_in_range,
+        sat_neighbor_to_if,
+        prev_fstate,
+        enable_verbose_logs,
+    )
+
+    # Merge satellite-to-satellite with ground-station related forwarding state
+    fstate.update(gs_fstate)
+
+    # --------
+    # 輸出 forwarding state
+    # --------
     output_filename = output_dynamic_state_dir + f"/fstate_{time_since_epoch_ns}.txt"
     write_fstate_to_file(fstate, output_filename)
 

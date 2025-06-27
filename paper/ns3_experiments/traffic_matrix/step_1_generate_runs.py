@@ -73,7 +73,7 @@ for traffic_mode in ["specific", "general"]:
             satellite_conflicts_set = set()
             with open(
                 "../../satgenpy_analysis/data/"
-                "kuiper_630_isls_plus_grid_ground_stations_top_100_algorithm_free_one_only_over_isls/100ms_for_200s/"
+                "kuiper_630_isls_plus_grid_ground_stations_top_100_algorithm_hierarchical/100ms_for_200s/"
                 "manual/data/networkx_path_1174_to_1229.txt", "r"
             ) as f_in:
 
@@ -98,7 +98,7 @@ for traffic_mode in ["specific", "general"]:
                 # Resulting path filename
                 resulting_path_filename = (
                         "extra_satgenpy_analysis_data/"
-                        "kuiper_630_isls_plus_grid_ground_stations_top_100_algorithm_free_one_only_over_isls/"
+                        "kuiper_630_isls_plus_grid_ground_stations_top_100_algorithm_hierarchical/"
                         "100ms_for_200s/manual/data/networkx_path_" + str(p[0]) + "_to_" + str(p[1]) + ".txt"
                 )
 
@@ -108,7 +108,7 @@ for traffic_mode in ["specific", "general"]:
                         "cd ../../../satgenpy; python -m satgen.post_analysis.main_print_routes_and_rtt "
                         "../paper/ns3_experiments/traffic_matrix/extra_satgenpy_analysis_data "
                         "../paper/satellite_networks_state/gen_data/"
-                        "kuiper_630_isls_plus_grid_ground_stations_top_100_algorithm_free_one_only_over_isls "
+                        "kuiper_630_isls_plus_grid_ground_stations_top_100_algorithm_hierarchical "
                         "100 200 " + str(p[0]) + " " + str(p[1])
                     )
 

@@ -43,6 +43,13 @@ commands_to_run = []
 # Manual
 print("Generating commands for manually selected endpoints pair (printing of routes and RTT over time)...")
 
+# Rio de Janeiro to St. Petersburg with algorithm_hierarchical on Kuiper
+commands_to_run.append("cd ../../satgenpy; python -m satgen.post_analysis.main_print_routes_and_rtt "
+                       "../paper/satgenpy_analysis/data ../paper/satellite_networks_state/gen_data/"
+                       "kuiper_630_isls_plus_grid_ground_stations_top_100_algorithm_hierarchical "
+                       "100 200 1174 1229 "
+                       "> ../paper/satgenpy_analysis/data/command_logs/manual_hierarchical_1174_to_1229.log 2>&1")
+
 # Rio de Janeiro to St. Petersburg with only ISLs on Kuiper
 commands_to_run.append("cd ../../satgenpy; python -m satgen.post_analysis.main_print_routes_and_rtt "
                        "../paper/satgenpy_analysis/data ../paper/satellite_networks_state/gen_data/"

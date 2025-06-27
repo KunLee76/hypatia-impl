@@ -37,7 +37,8 @@ dynamic_state = "dynamic_state_" + str(dynamic_state_update_interval_ms) + "ms_f
 # > Manila (1173) to Dalian (1241)
 # > Istanbul (1170) to Nairobi (1252)
 # > Paris (1180 (1156 for the Paris-Moscow GS relays)) to Moscow (1177 (1232 for the Paris-Moscow GS relays))
-full_satellite_network_isls = "kuiper_630_isls_plus_grid_ground_stations_top_100_algorithm_free_one_only_over_isls"
+# full_satellite_network_isls = "kuiper_630_isls_plus_grid_ground_stations_top_100_algorithm_free_one_only_over_isls"
+full_satellite_network_isls = "kuiper_630_isls_plus_grid_ground_stations_top_100_algorithm_hierarchical"
 full_satellite_network_gs_relay = "kuiper_630_isls_none_ground_stations_paris_moscow_grid_algorithm_free_one_only_gs_relays"
 chosen_pairs = [
     ("kuiper_630_isls", 1174, 1229, "TcpNewReno", full_satellite_network_isls),
