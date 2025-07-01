@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from .fstate_calculation import *
+from .fstate_calculation import calculate_fstate_shortest_path_without_gs_relaying
 
 
 def algorithm_paired_many_only_over_isls(

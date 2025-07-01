@@ -122,13 +122,17 @@ def compute_path_length_without_graph(path, epoch, time_since_epoch_ns, satellit
 
 def get_path(src, dst, forward_state):
 
-    if forward_state[(src, dst)] == -1:  # No path exists
+    # if forward_state[(src, dst)] == -1:  # No path exists
+    if forward_state.get((src, dst), -1) == -1:  # No path exists
         return None
 
     curr = src
     path = [src]
     while curr != dst:
-        next_hop = forward_state[(curr, dst)]
+        # next_hop = forward_state[(curr, dst)]
+        next_hop = forward_state.get((curr, dst), -1)
+        if next_hop == -1:
+            return None
         path.append(next_hop)
         curr = next_hop
     return path
@@ -136,13 +140,17 @@ def get_path(src, dst, forward_state):
 
 def get_path_with_weights(src, dst, forward_state, sat_net_graph_with_gs):
 
-    if forward_state[(src, dst)] == -1:  # No path exists
+    # if forward_state[(src, dst)] == -1:  # No path exists
+    if forward_state.get((src, dst), -1) == -1:  # No path exists
         return None
 
     curr = src
     path = []
     while curr != dst:
-        next_hop = forward_state[(curr, dst)]
+        # next_hop = forward_state[(curr, dst)]
+        next_hop = forward_state.get((curr, dst), -1)
+        if next_hop == -1:
+            return None
         w = sat_net_graph_with_gs.get_edge_data(curr, next_hop)["weight"]
         path.append((curr, next_hop, w))
         curr = next_hop

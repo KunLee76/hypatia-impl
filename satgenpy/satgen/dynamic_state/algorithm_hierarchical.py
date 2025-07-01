@@ -48,11 +48,27 @@ def algorithm_hierarchical(
     # 合併兩種 forwarding state
     fstate = merge_fstate(master_fstate, group_fstate)
 
-    # 輸出檔案
       # --------
     # 接口頻寬狀態
     # --------
-    # 此演算法目前同樣假設所有節點僅具備一個 GSL 介面，且在 t=0 時分配完整頻寬
+    
+    output_filename = (
+        output_dynamic_state_dir + f"/gsl_if_bandwidth_{time_since_epoch_ns}.txt"
+    )
+    if enable_verbose_logs:
+        print("  > Writing interface bandwidth state to: " + output_filename)
+    with open(output_filename, "w+") as f_out:
+        if time_since_epoch_ns == 0:
+            for node_id, info in enumerate(list_gsl_interfaces_info):
+                num_if = info["number_of_interfaces"]
+                bw = info["aggregate_max_bandwidth"] / float(num_if)
+                for idx in range(num_if):
+                    if node_id < len(satellites):
+                        if_id = num_isls_per_sat[node_id] + idx
+                    else:
+                        if_id = idx
+                    f_out.write("%d,%d,%f\n" % (node_id, if_id, bw))
+                    
     gid_to_sat_gsl_if_idx = [0] * len(ground_stations)
     prev_fstate = None
     if prev_output is not None:
