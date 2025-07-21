@@ -51,8 +51,8 @@ chosen_pairs = [
     # ("kuiper_630_isls", 1170, 1252, "TcpVegas", full_satellite_network_isls),
     # ("kuiper_630_isls", 1180, 1177, "TcpNewReno", full_satellite_network_isls),
     # ("kuiper_630_gs_relays", 1156, 1232, "TcpNewReno", full_satellite_network_gs_relay),
-    ("25x25_isls", 0, 1, "TcpNewReno", full_satellite_network_isls),
-    ("25x25_isls", 0, 2, "TcpVegas", full_satellite_network_isls),
+    ("25x25_isls", 625, 626, "TcpNewReno", full_satellite_network_isls),
+    ("25x25_isls", 625, 627, "TcpVegas", full_satellite_network_isls),
 ]
 
 

@@ -7,7 +7,7 @@
 <body>
   <div id="cesiumContainer" style="width: 100%; height:100%"></div>
   <script>
-    Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJjMDdjMWVlNC1iOTQzLTQ0MzctYjFmMC1mNjEzNmM4ZGYxMzYiLCJpZCI6MjY5OTg4LCJpYXQiOjE3Mzg0MjMxMzZ9.B-t6HRpi7yCBitTpvYfMkCMaPwJqfKU_0S0HiTDVY-w';
+    Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIyMThmMDBkZi1mYjFlLTQxZjAtOThiMy1kNDExZDM1YjhhYjgiLCJpZCI6Mjg3NTc2LCJpYXQiOjE3NDI5MTI0NTF9.Fx6CA247U291YXpo6jGEvsBTnXyQxpqUThqu65tCPFI';
     var viewer = new Cesium.Viewer('cesiumContainer', {
     skyBox : false,
     skyAtmosphere: false,
@@ -47,7 +47,9 @@ var tonerLayer = globe.imageryLayers.addImageryProvider(
 );
 tonerLayer.alpha = 0.3;
 tonerLayer.brightness = 3;
-tonerLayer.contrast = 0.7;var redSphere = viewer.entities.add({name : '', position: Cesium.Cartesian3.fromDegrees(-99.68822286098022, 0.40979558206873584, 630000.0), ellipsoid : {radii : new Cesium.Cartesian3(20000.0, 20000.0, 20000.0), material : Cesium.Color.BLACK.withAlpha(1),}});
+tonerLayer.contrast = 0.7;
+
+var redSphere = viewer.entities.add({name : '', position: Cesium.Cartesian3.fromDegrees(-99.68822286098022, 0.40979558206873584, 630000.0), ellipsoid : {radii : new Cesium.Cartesian3(20000.0, 20000.0, 20000.0), material : Cesium.Color.BLACK.withAlpha(1),}});
 var redSphere = viewer.entities.add({name : '', position: Cesium.Cartesian3.fromDegrees(-93.09660536848685, 8.721403664392167, 630000.0), ellipsoid : {radii : new Cesium.Cartesian3(20000.0, 20000.0, 20000.0), material : Cesium.Color.BLACK.withAlpha(1),}});
 var redSphere = viewer.entities.add({name : '', position: Cesium.Cartesian3.fromDegrees(-86.20368091094753, 16.91661638531572, 630000.0), ellipsoid : {radii : new Cesium.Cartesian3(20000.0, 20000.0, 20000.0), material : Cesium.Color.BLACK.withAlpha(1),}});
 var redSphere = viewer.entities.add({name : '', position: Cesium.Cartesian3.fromDegrees(-78.68920923893705, 24.86235132416268, 630000.0), ellipsoid : {radii : new Cesium.Cartesian3(20000.0, 20000.0, 20000.0), material : Cesium.Color.BLACK.withAlpha(1),}});
