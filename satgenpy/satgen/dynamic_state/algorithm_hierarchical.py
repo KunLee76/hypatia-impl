@@ -74,7 +74,7 @@ def algorithm_hierarchical(
     if prev_output is not None:
         prev_fstate = prev_output.get("fstate")
 
-    gs_fstate = calculate_fstate_shortest_path_without_gs_relaying(
+    gs_fstate = calculate_hierarchical_path_through_masters(
         output_dynamic_state_dir,
         time_since_epoch_ns,
         len(satellites),
@@ -86,6 +86,8 @@ def algorithm_hierarchical(
         sat_neighbor_to_if,
         prev_fstate,
         enable_verbose_logs,
+        master_nodes,  # 增加 master 節點列表
+        n_sats_per_orbit,  # 增加軌道結構信息
     )
 
     # Merge satellite-to-satellite with ground-station related forwarding state
@@ -98,6 +100,221 @@ def algorithm_hierarchical(
     write_fstate_to_file(fstate, output_filename)
 
     return {"fstate": fstate}
+
+def calculate_hierarchical_path_through_masters(
+        output_dynamic_state_dir,
+        time_since_epoch_ns,
+        num_satellites,
+        num_ground_stations,
+        sat_net_graph_only_satellites_with_isls,
+        num_isls_per_sat,
+        gid_to_sat_gsl_if_idx,
+        ground_station_satellites_in_range,
+        sat_neighbor_to_if,
+        prev_fstate,
+        enable_verbose_logs,
+        master_nodes,
+        n_sats_per_orbit,
+):
+    """
+    計算地面站之間通過層次化路由的轉發狀態
+    
+    與原始方案不同：
+    1. 地面站可連接任何可見衛星
+    2. 群組內採用最短路徑路由
+    3. 跨群組通信需要經過 master 衛星
+    """
+    if enable_verbose_logs:
+        print("  > Calculating forwarding state for ground stations (hierarchical with flexible uplink)")
+    
+    # 結果字典: (src, dst) -> (next_hop, src_if, next_hop_if)
+    fstate = {}
+    
+    # 確定每個衛星所屬的軌道/群組
+    sat_to_group = {sid: sid // n_sats_per_orbit for sid in range(num_satellites)}
+    
+    # 確定每個群組的 master 衛星
+    group_to_master = {}
+    for master in master_nodes:
+        group = sat_to_group[master]
+        group_to_master[group] = master
+    
+    # 找出每個地面站可以到達的衛星
+    gs_to_reachable_sats = {}
+    for gid in range(num_ground_stations):
+        sat_id_list = []
+        if gid < len(ground_station_satellites_in_range):
+            for sid in range(num_satellites):
+                # 防止索引越界
+                try:
+                    if ground_station_satellites_in_range[gid][sid]:
+                        sat_id_list.append(sid)
+                except IndexError:
+                    # 越界時跳過該衛星
+                    continue
+        gs_to_reachable_sats[gid] = sat_id_list
+    
+    # 為每對地面站計算轉發路徑
+    for src_gid in range(num_ground_stations):
+        for dst_gid in range(num_ground_stations):
+            if src_gid == dst_gid:
+                continue
+            
+            src_node_id = num_satellites + src_gid
+            dst_node_id = num_satellites + dst_gid
+            
+            # 檢查源地面站和目標地面站是否有可達的衛星
+            src_reachable = gs_to_reachable_sats[src_gid]
+            dst_reachable = gs_to_reachable_sats[dst_gid]
+            
+            if not src_reachable or not dst_reachable:
+                continue  # 若無可達衛星則跳過
+            
+            # 為源和目標地面站選擇最佳可達衛星（此處可用各種策略，如最短距離）
+            # 這裡簡單地選第一個可達衛星
+            src_sat = src_reachable[0]
+            dst_sat = dst_reachable[0]
+            
+            # 確定源和目標衛星所屬群組
+            src_group = sat_to_group[src_sat]
+            dst_group = sat_to_group[dst_sat]
+            
+            # 地面站到初始衛星的轉發
+            fstate[(src_node_id, dst_node_id)] = (
+                src_sat,
+                gid_to_sat_gsl_if_idx[src_gid],
+                num_isls_per_sat[src_sat] + 0 # 假設每個衛星只有一個接口連接地面站
+            )
+            
+            # 如果源和目標在同一群組，使用群組內路由
+            if src_group == dst_group:
+                try:
+                    # 計算群組內的最短路徑
+                    path = nx.shortest_path(
+                        sat_net_graph_only_satellites_with_isls,
+                        src_sat,
+                        dst_sat,
+                        weight="weight"
+                    )
+                    
+                    # 設置群組內路由
+                    for i in range(len(path) - 1):
+                        curr = path[i]
+                        next_hop = path[i + 1]
+                        
+                        if (curr, next_hop) not in fstate:
+                            fstate[(curr, next_hop)] = (
+                                next_hop,
+                                sat_neighbor_to_if[(curr, next_hop)],
+                                sat_neighbor_to_if[(next_hop, curr)]
+                            )
+                except nx.NetworkXNoPath:
+                    continue  # 如果找不到路徑則跳過
+            else:
+                # 不同群組，需要通過 master 衛星
+                src_master = group_to_master[src_group]
+                dst_master = group_to_master[dst_group]
+                
+                try:
+                    # 1. 源衛星到源 master 的路徑
+                    if src_sat != src_master:
+                        path1 = nx.shortest_path(
+                            sat_net_graph_only_satellites_with_isls,
+                            src_sat,
+                            src_master,
+                            weight="weight"
+                        )
+                        
+                        for i in range(len(path1) - 1):
+                            curr = path1[i]
+                            next_hop = path1[i + 1]
+                            
+                            if (curr, next_hop) not in fstate:
+                                fstate[(curr, next_hop)] = (
+                                    next_hop,
+                                    sat_neighbor_to_if[(curr, next_hop)],
+                                    sat_neighbor_to_if[(next_hop, curr)]
+                                )
+                    
+                    # 2. 源 master 到目標 master 的路徑
+                    path2 = nx.shortest_path(
+                        sat_net_graph_only_satellites_with_isls,
+                        src_master,
+                        dst_master,
+                        weight="weight"
+                    )
+                    
+                    for i in range(len(path2) - 1):
+                        curr = path2[i]
+                        next_hop = path2[i + 1]
+                        
+                        if (curr, next_hop) not in fstate:
+                            fstate[(curr, next_hop)] = (
+                                next_hop,
+                                sat_neighbor_to_if[(curr, next_hop)],
+                                sat_neighbor_to_if[(next_hop, curr)]
+                            )
+                    
+                    # 3. 目標 master 到目標衛星的路徑
+                    if dst_master != dst_sat:
+                        path3 = nx.shortest_path(
+                            sat_net_graph_only_satellites_with_isls,
+                            dst_master,
+                            dst_sat,
+                            weight="weight"
+                        )
+                        
+                        for i in range(len(path3) - 1):
+                            curr = path3[i]
+                            next_hop = path3[i + 1]
+                            
+                            if (curr, next_hop) not in fstate:
+                                fstate[(curr, next_hop)] = (
+                                    next_hop,
+                                    sat_neighbor_to_if[(curr, next_hop)],
+                                    sat_neighbor_to_if[(next_hop, curr)]
+                                )
+                    
+                    # 4. 最後目標衛星到地面站的轉發
+                    fstate[(dst_sat, dst_node_id)] = (
+                        dst_node_id,
+                        num_isls_per_sat[dst_sat] + ground_station_satellites_in_range[dst_gid].index(True),
+                        gid_to_sat_gsl_if_idx[dst_gid]
+                    )
+                    
+                except nx.NetworkXNoPath:
+                    # 若無法建立完整路徑，嘗試使用全局最短路徑作為備用
+                    try:
+                        # 計算全局最短路徑（不考慮層次化結構）
+                        path = nx.shortest_path(
+                            sat_net_graph_only_satellites_with_isls,
+                            src_sat,
+                            dst_sat,
+                            weight="weight"
+                        )
+                        
+                        # 設置路由
+                        for i in range(len(path) - 1):
+                            curr = path[i]
+                            next_hop = path[i + 1]
+                            
+                            if (curr, next_hop) not in fstate:
+                                fstate[(curr, next_hop)] = (
+                                    next_hop,
+                                    sat_neighbor_to_if[(curr, next_hop)],
+                                    sat_neighbor_to_if[(next_hop, curr)]
+                                )
+                        
+                        # 設置到地面站的最後跳
+                        fstate[(dst_sat, dst_node_id)] = (
+                            dst_node_id,
+                            num_isls_per_sat[dst_sat] + ground_station_satellites_in_range[dst_gid].index(True),
+                            gid_to_sat_gsl_if_idx[dst_gid]
+                        )
+                    except nx.NetworkXNoPath:
+                        continue  # 如果連備用路徑也找不到，則跳過
+    
+    return fstate
 
 def _infer_orbit_structure(satellites):
     """Infer number of orbits and satellites per orbit from TLE data."""
