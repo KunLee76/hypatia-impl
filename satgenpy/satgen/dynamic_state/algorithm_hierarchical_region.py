@@ -51,8 +51,8 @@ def algorithm_hierarchical_region(
     enable_verbose_logs: bool = False,
     *,
     sat_lat_lon: Optional[List[Tuple[float, float]]] = None,
-    region_lat_step: float = 5.0,
-    region_lon_step: float = 5.0,
+    region_lat_step: float = 10.0,
+    region_lon_step: float = 10.0,
     use_region_grouping: bool = False,
 ) -> Dict[str, Dict[Tuple[int, int], Tuple[int, int, int]]]:
     """Compute hierarchical forwarding state with optional region grouping.
