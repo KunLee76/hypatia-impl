@@ -270,10 +270,13 @@ def calculate_hierarchical_path_through_masters(
                                 sat_neighbor_to_if[(nxt, curr)],
                             )
                     # Final hop down to the destination ground station.
+                    try:
+                        downlink_idx = ground_station_satellites_in_range[dst_gid].index(True)
+                    except ValueError:
+                        continue
                     fstate[(dst_sat, dst_node_id)] = (
                         dst_node_id,
-                        num_isls_per_sat[dst_sat]
-                        + ground_station_satellites_in_range[dst_gid].index(True),
+                        num_isls_per_sat[dst_sat] + downlink_idx,
                         gid_to_sat_gsl_if_idx[dst_gid],
                     )
                 except nx.NetworkXNoPath:
@@ -343,10 +346,13 @@ def calculate_hierarchical_path_through_masters(
                     except nx.NetworkXNoPath:
                         pass
                 # 4. Downlink from dst_sat to ground station.
+                try:
+                    downlink_idx = ground_station_satellites_in_range[dst_gid].index(True)
+                except ValueError:
+                    continue
                 fstate[(dst_sat, dst_node_id)] = (
                     dst_node_id,
-                    num_isls_per_sat[dst_sat]
-                    + ground_station_satellites_in_range[dst_gid].index(True),
+                    num_isls_per_sat[dst_sat] + downlink_idx,
                     gid_to_sat_gsl_if_idx[dst_gid],
                 )
 
