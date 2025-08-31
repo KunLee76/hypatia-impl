@@ -109,6 +109,16 @@ def generate_dynamic_state_at(
         print("  > Time since epoch....... " + str(time_since_epoch_ns) + " ns")
         print("  > Absolute time.......... " + str(time))
 
+    # Calculate satellite lat/lon for region grouping
+    sat_lat_lon = []
+    if dynamic_state_algorithm == "algorithm_hierarchical_region":
+        import math
+        for satellite in satellites:
+            satellite.compute(str(time), epoch=str(epoch))
+            lat_deg = math.degrees(satellite.sublat)
+            lon_deg = math.degrees(satellite.sublong)
+            sat_lat_lon.append((lat_deg, lon_deg))
+
     # Graphs
     sat_net_graph_only_satellites_with_isls = nx.Graph()
     sat_net_graph_all_with_only_gsls = nx.Graph()
@@ -299,6 +309,7 @@ def generate_dynamic_state_at(
         list_gsl_interfaces_info,
         prev_output,
         enable_verbose_logs,
+        sat_lat_lon=sat_lat_lon,
         use_region_grouping=True,
     )
 

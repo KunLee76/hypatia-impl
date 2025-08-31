@@ -29,14 +29,12 @@ This function returns a dictionary containing the computed forwarding state mapp
 import math
 import networkx as nx
 from typing import Dict, Iterable, List, Optional, Tuple
-from astropy import units as u
 
 from .fstate_calculation import calculate_fstate_shortest_path_without_gs_relaying  # noqa: F401
 from .region_grouping import (
     assign_satellites_to_regions,
     select_master_for_regions,
 )
-from ..distance_tools import distance_m_ground_station_to_satellite
 
 
 def algorithm_hierarchical_region(
@@ -51,11 +49,11 @@ def algorithm_hierarchical_region(
     list_gsl_interfaces_info: List[Dict[str, float]],
     prev_output: Optional[Dict[str, Dict[Tuple[int, int], Tuple[int, int, int]]]] = None,
     enable_verbose_logs: bool = False,
+    *,
     sat_lat_lon: Optional[List[Tuple[float, float]]] = None,
-    region_lat_step: float = 5.0,
-    region_lon_step: float = 5.0,
-    use_region_grouping: bool = True,
-    fast_mode: bool = False,  # New parameter for performance optimization
+    region_lat_step: float = 20.0,
+    region_lon_step: float = 20.0,
+    use_region_grouping: bool = False,
 ) -> Dict[str, Dict[Tuple[int, int], Tuple[int, int, int]]]:
     """Compute hierarchical forwarding state with optional region grouping.
 
@@ -83,12 +81,6 @@ def algorithm_hierarchical_region(
     """
     if enable_verbose_logs:
         print("\nALGORITHM: HIERARCHICAL REGION")
-    
-    # Convert iterables to lists for indexing
-    satellites = list(satellites)
-    ground_stations = list(ground_stations)
-    num_satellites = len(satellites)
-    num_ground_stations = len(ground_stations)
 
     # Determine grouping and master satellites.
     sat_to_group: Dict[int, int] = {}
@@ -117,24 +109,6 @@ def algorithm_hierarchical_region(
         
         if enable_verbose_logs:
             print(f"  > Geographic grouping: {len(region_to_sats)} regions, masters: {master_nodes}")
-            # Debug: Check region-to-master consistency
-            print(f"  > DEBUG: region_to_sats has {len(region_to_sats)} regions")
-            print(f"  > DEBUG: group_to_master has {len(group_to_master)} masters")
-            print(f"  > DEBUG: unique masters count: {len(set(master_nodes))}")
-            print(f"  > DEBUG: sat_net_graph has {len(sat_net_graph_only_satellites_with_isls.nodes())} satellites with ISLs")
-            
-            # Check region size distribution
-            region_sizes = [len(sat_list) for sat_list in region_to_sats.values()]
-            print(f"  > DEBUG: region sizes - min: {min(region_sizes)}, max: {max(region_sizes)}, avg: {sum(region_sizes)/len(region_sizes):.1f}")
-            
-            # Check total satellites in regions
-            total_sats_in_regions = sum(region_sizes)
-            print(f"  > DEBUG: total satellites in all regions: {total_sats_in_regions}")
-            
-            # Check for empty regions
-            empty_regions = sum(1 for sat_list in region_to_sats.values() if not sat_list)
-            non_empty_regions = len(region_to_sats) - empty_regions
-            print(f"  > DEBUG: empty regions: {empty_regions}, non-empty: {non_empty_regions}")
         
         # Since the grouping is geographic, ``n_sats_per_orbit`` is not used.
     else:
@@ -205,26 +179,10 @@ def algorithm_hierarchical_region(
         # Pass dynamic grouping mappings for downstream use.
         sat_to_group=sat_to_group,
         group_to_master=group_to_master,
-        fast_mode=fast_mode,  # Pass fast_mode to the calculation function
-        satellites=satellites,
-        ground_stations=ground_stations,
-        epoch=None,  # TODO: Need to get epoch from caller
-        max_gsl_length_m=None,  # TODO: Need to get max_gsl_length_m from config
     )
 
     # Combine satellite‑to‑satellite and ground‑station related forwarding state.
-    if enable_verbose_logs:
-        print(f"  > Generated {len(gs_fstate)} ground station routes")
-        # Show a few example routes
-        gs_examples = list(gs_fstate.items())[:5]
-        for (src, dst), (next_hop, src_if, dst_if) in gs_examples:
-            print(f"    Route {src}→{dst}: next_hop={next_hop}")
     fstate.update(gs_fstate)
-
-    # Debug: Check fstate before writing to file
-    if enable_verbose_logs and (625, 626) in fstate:
-        route_info = fstate[(625, 626)]
-        print(f"    Route 625→626: next_hop={route_info[0]}")
 
     # --------
     # Output forwarding state table.
@@ -233,131 +191,6 @@ def algorithm_hierarchical_region(
     write_fstate_to_file(fstate, fstate_filename)
 
     return {"fstate": fstate}
-
-
-def select_optimal_uplink_satellite(
-    reachable_sats: List[int],
-    target_group: int,
-    sat_to_group: Dict[int, int],
-    group_to_master: Dict[int, int],
-    sat_net_graph: nx.Graph,
-    ground_station_id: int = None,
-    ground_stations = None,
-    satellites = None,
-    epoch = None,
-    time_since_epoch_ns: int = 0,
-    max_gsl_length_m: float = None,
-    enable_verbose_logs: bool = False
-) -> int:
-    """Select the optimal uplink satellite based on group connectivity.
-    
-    Priority order:
-    1. Satellite in the same group as the target
-    2. Satellite whose group master has direct connection to target group master
-    3. Satellite with shortest path to target group master
-    4. Satellite with most connections (highest degree)
-    5. Fallback to first reachable satellite
-    
-    Args:
-        reachable_sats: List of satellites reachable from the ground station
-        target_group: Group ID of the target ground station's satellite
-        sat_to_group: Mapping from satellite ID to group ID
-        group_to_master: Mapping from group ID to master satellite ID
-        sat_net_graph: Satellite network graph
-    
-    Returns:
-        Selected satellite ID for uplink
-    """
-    if not reachable_sats:
-        raise ValueError("No reachable satellites provided")
-    
-    # Filter out satellites that are too far (exceed GSL range)
-    valid_reachable_sats = reachable_sats
-    if (ground_station_id is not None and ground_stations is not None and 
-        satellites is not None and epoch is not None and max_gsl_length_m is not None):
-        
-        valid_reachable_sats = []
-        time = epoch + time_since_epoch_ns * u.ns
-        ground_station = ground_stations[ground_station_id]
-        
-        for sat_id in reachable_sats:
-            try:
-                distance_m = distance_m_ground_station_to_satellite(
-                    ground_station, satellites[sat_id], str(epoch), str(time)
-                )
-                if distance_m <= max_gsl_length_m:
-                    valid_reachable_sats.append(sat_id)
-                else:
-                    if enable_verbose_logs:
-                        print(f"Warning: Satellite {sat_id} too far from GS {ground_station_id}: {distance_m:.0f}m > {max_gsl_length_m:.0f}m")
-            except Exception as e:
-                if enable_verbose_logs:
-                    print(f"Warning: Failed to compute distance from GS {ground_station_id} to satellite {sat_id}: {e}")
-                # If distance computation fails, exclude this satellite for safety
-                continue
-        
-        if not valid_reachable_sats:
-            # If no satellites are within range, fall back to original list but issue warning
-            print(f"Warning: No satellites within GSL range for GS {ground_station_id}, using closest available")
-            valid_reachable_sats = reachable_sats
-    
-    target_master = group_to_master.get(target_group)
-    
-    # Priority 1: Satellite in the same group as target
-    same_group_sats = [sat for sat in valid_reachable_sats 
-                       if sat_to_group.get(sat, 0) == target_group]
-    if same_group_sats:
-        return same_group_sats[0]
-    
-    # Priority 2: Satellite whose group master has direct connection to target master
-    if target_master is not None:
-        for sat in valid_reachable_sats:
-            sat_group = sat_to_group.get(sat, 0)
-            sat_master = group_to_master.get(sat_group)
-            if (sat_master is not None and 
-                sat_master in sat_net_graph and 
-                target_master in sat_net_graph and
-                sat_net_graph.has_edge(sat_master, target_master)):
-                return sat
-    
-    # Priority 3: Satellite with shortest path to target master
-    if target_master is not None:
-        best_sat = None
-        min_distance = float('inf')
-        
-        for sat in valid_reachable_sats:
-            if sat not in sat_net_graph or target_master not in sat_net_graph:
-                continue
-            try:
-                distance = nx.shortest_path_length(
-                    sat_net_graph, sat, target_master, weight="weight"
-                )
-                if distance < min_distance:
-                    min_distance = distance
-                    best_sat = sat
-            except nx.NetworkXNoPath:
-                continue
-        
-        if best_sat is not None:
-            return best_sat
-    
-    # Priority 4: Satellite with most connections (highest degree)
-    # This helps select well-connected satellites that can reach more destinations
-    best_sat = None
-    max_degree = -1
-    
-    for sat in valid_reachable_sats:
-        if sat in sat_net_graph:
-            degree = sat_net_graph.degree(sat)
-            if degree > max_degree:
-                max_degree = degree
-                best_sat = sat
-    
-    if best_sat is not None:
-        return best_sat
-    
-    # Priority 5: Fallback to first reachable satellite
-    return valid_reachable_sats[0]
 
 
 def calculate_hierarchical_path_through_masters(
@@ -377,11 +210,6 @@ def calculate_hierarchical_path_through_masters(
     *,
     sat_to_group: Dict[int, int],
     group_to_master: Dict[int, int],
-    fast_mode: bool = False,
-    satellites = None,
-    ground_stations = None,
-    epoch = None,
-    max_gsl_length_m: float = None,
 ) -> Dict[Tuple[int, int], Tuple[int, int, int]]:
     """Compute forwarding state between ground stations via hierarchical routing.
 
@@ -408,73 +236,28 @@ def calculate_hierarchical_path_through_masters(
     for gid in range(num_ground_stations):
         sat_id_list: List[int] = []
         if gid < len(ground_station_satellites_in_range):
-            # ground_station_satellites_in_range[gid] is a list of (distance_m, sid) tuples
-            for (distance_m, sid) in ground_station_satellites_in_range[gid]:
-                sat_id_list.append(sid)
+            for sid in range(num_satellites):
+                try:
+                    if ground_station_satellites_in_range[gid][sid]:
+                        sat_id_list.append(sid)
+                except IndexError:
+                    continue
         gs_to_reachable_sats[gid] = sat_id_list
 
     # Compute forwarding paths for each pair of ground stations.
-    total_pairs = num_ground_stations * (num_ground_stations - 1)
-    computed_pairs = 0
-    
-    if fast_mode:
-        # In fast mode, only compute routes for important ground stations to reduce O(n²) complexity
-        important_gids = [0, 1, 2]  # Tokyo, Delhi, Shanghai
-        if enable_verbose_logs:
-            print(f"  > Fast mode enabled: Only computing routes involving {len(important_gids)} important ground stations")
-    
     for src_gid in range(num_ground_stations):
         for dst_gid in range(num_ground_stations):
             if src_gid == dst_gid:
                 continue
-                
-            # In fast mode, skip routes that don't involve important stations
-            if fast_mode and src_gid not in important_gids and dst_gid not in important_gids:
-                continue
-                
             src_node_id = num_satellites + src_gid
             dst_node_id = num_satellites + dst_gid
             src_reachable = gs_to_reachable_sats.get(src_gid, [])
             dst_reachable = gs_to_reachable_sats.get(dst_gid, [])
             if not src_reachable or not dst_reachable:
                 continue
-            
-            computed_pairs += 1
-            
-            # Improved satellite selection based on group optimization
-            dst_sat = dst_reachable[0]  # Keep destination satellite selection simple
-            dst_group = sat_to_group.get(dst_sat, 0)
-            
-            # For different destinations, try to use different target groups to encourage diversity
-            # This is a heuristic to avoid all traffic going through the same uplink satellite
-            if dst_gid == 1:  # Delhi
-                # Use the destination satellite's group
-                target_group = dst_group
-            elif dst_gid == 2:  # Shanghai  
-                # For Shanghai, prefer a different group to encourage route diversity
-                # Try to find an alternative group among reachable satellites
-                alt_groups = [sat_to_group.get(s, 0) for s in src_reachable if sat_to_group.get(s, 0) != dst_group]
-                target_group = alt_groups[0] if alt_groups else dst_group
-            else:
-                target_group = dst_group
-            
-            # For source satellite, prefer one that can reach the target group efficiently
-            src_sat = select_optimal_uplink_satellite(
-                src_reachable, target_group, sat_to_group, group_to_master, 
-                sat_net_graph_only_satellites_with_isls,
-                ground_station_id=src_gid,
-                ground_stations=ground_stations,
-                satellites=satellites,
-                epoch=epoch,
-                time_since_epoch_ns=time_since_epoch_ns,
-                max_gsl_length_m=max_gsl_length_m,
-                enable_verbose_logs=enable_verbose_logs
-            )
-            
-            if enable_verbose_logs and src_gid == 0 and dst_gid in [1, 2]:  # Tokyo to Delhi/Shanghai
-                src_groups = [sat_to_group.get(s, -1) for s in src_reachable[:5]]
-                # Enable verbose logging for specific ground station pairs
-                # if enable_verbose_logs and src_gid in [0, 1, 2]:  # Example: Tokyo, Delhi, Shanghai
+            # Pick the first reachable satellite for each ground station as uplink/downlink.
+            src_sat = src_reachable[0]
+            dst_sat = dst_reachable[0]
             src_group = sat_to_group.get(src_sat, 0)
             dst_group = sat_to_group.get(dst_sat, 0)
             # Link from ground station to its uplink satellite.
@@ -503,9 +286,8 @@ def calculate_hierarchical_path_through_masters(
                             )
                     # Final hop down to the destination ground station.
                     try:
-                        # Find the index of dst_sat in the ground station's reachable satellites list
-                        downlink_idx = next(i for i, (_, sid) in enumerate(ground_station_satellites_in_range[dst_gid]) if sid == dst_sat)
-                    except (ValueError, StopIteration):
+                        downlink_idx = ground_station_satellites_in_range[dst_gid].index(True)
+                    except ValueError:
                         continue
                     fstate[(dst_sat, dst_node_id)] = (
                         dst_node_id,
@@ -580,9 +362,8 @@ def calculate_hierarchical_path_through_masters(
                         pass
                 # 4. Downlink from dst_sat to ground station.
                 try:
-                    # Find the index of dst_sat in the ground station's reachable satellites list
-                    downlink_idx = next(i for i, (_, sid) in enumerate(ground_station_satellites_in_range[dst_gid]) if sid == dst_sat)
-                except (ValueError, StopIteration):
+                    downlink_idx = ground_station_satellites_in_range[dst_gid].index(True)
+                except ValueError:
                     continue
                 fstate[(dst_sat, dst_node_id)] = (
                     dst_node_id,
@@ -590,169 +371,19 @@ def calculate_hierarchical_path_through_masters(
                     gid_to_sat_gsl_if_idx[dst_gid],
                 )
 
-    # Fix: Ensure uplink satellites have routing to all ground stations
-    # This is essential for satellite-to-ground communication
-    # _ensure_uplink_satellite_routing(
-    #     fstate, 
-    #     num_satellites, 
-    #     num_ground_stations, 
-    #     sat_net_graph_only_satellites_with_isls,
-    #     sat_neighbor_to_if,
-    #     sat_to_group,
-    #     group_to_master
-    # )
-    
-    # New approach: Generate downlink routes for all satellites directly
-    print("Generating satellite-to-ground station downlink routes...")
-    # print(f"DEBUG: num_satellites={num_satellites}, num_ground_stations={num_ground_stations}")
-    downlink_routes_added = 0
-    
-    for sat_id in range(num_satellites):
-        for gid in range(num_ground_stations):
-            gs_node_id = num_satellites + gid
-            
-            # Check if this satellite can connect to this ground station directly
-            sat_can_reach_gs = any(sid == sat_id for (_, sid) in ground_station_satellites_in_range[gid])
-            if sat_can_reach_gs:
-                # Direct downlink connection - satellite to ground station
-                try:
-                    # Find the index of this satellite in the reachable list for this ground station
-                    satellite_index = next(idx for idx, (_, sid) in enumerate(ground_station_satellites_in_range[gid]) if sid == sat_id)
-                    
-                    # Only create satellite->ground_station routes, not ground_station->ground_station
-                    if sat_id < num_satellites:  # Ensure sat_id is actually a satellite
-                        # if sat_id >= 625 or gs_node_id <= 625:  # Debug check
-                            # print(f"DEBUG: Suspicious route creation: sat_id={sat_id}, gs_node_id={gs_node_id}")
-                        fstate[(sat_id, gs_node_id)] = (
-                            gs_node_id,
-                            num_isls_per_sat[sat_id] + 0,  # Use interface 0 for GSL
-                            gid_to_sat_gsl_if_idx[gid],
-                        )
-                        downlink_routes_added += 1
-                except (ValueError, IndexError) as e:
-                    print(f"Error creating route {sat_id}→{gs_node_id}: {e}")
-                    continue
-    
-    print(f"Added {downlink_routes_added} direct satellite-to-ground station routes")
-    
-    # Generate indirect satellite-to-ground station routes (essential for connectivity)
-    indirect_routes_added = 0
-    print("Generating comprehensive indirect satellite-to-ground station routes...")
-    
-    # We need to add indirect routes for ALL satellites that might be in routing paths
-    # This includes:
-    # 1. Uplink satellites (first hop from ground stations)
-    # 2. Intermediate satellites in routing paths between satellites
-    
-    # Get all satellites that are reachable in the ISL graph
-    all_satellites_in_isl = set(sat_net_graph_only_satellites_with_isls.nodes())
-    
-    print(f"Processing {len(all_satellites_in_isl)} satellites for comprehensive indirect routes")
-    
-    for sat_id in all_satellites_in_isl:
-        for gid in range(num_ground_stations):
-            gs_node_id = num_satellites + gid
-            
-            # Skip if direct route already exists
-            if (sat_id, gs_node_id) in fstate:
-                continue
-                
-            # Find a satellite that can directly reach this ground station
-            direct_satellites = []
-            for (_, direct_sat_id) in ground_station_satellites_in_range[gid]:
-                direct_satellites.append(direct_sat_id)
-            
-            if not direct_satellites:
-                continue  # No satellite can reach this ground station
-                
-            # Find path using satellite-only ISL graph
-            for target_sat in direct_satellites[:3]:  # Try top 3 candidates
-                try:
-                    # Get next hop from satellite ISL graph
-                    path = nx.shortest_path(sat_net_graph_only_satellites_with_isls, sat_id, target_sat)
-                    if len(path) >= 2:
-                        next_hop = path[1]  # Next satellite in the path
-                        
-                        fstate[(sat_id, gs_node_id)] = (
-                            next_hop,
-                            sat_neighbor_to_if.get((sat_id, next_hop), 0),
-                            3   # Hop type: ISL to another satellite
-                        )
-                        indirect_routes_added += 1
-                        break
-                except (nx.NetworkXNoPath, nx.NodeNotFound):
-                    continue  # Try next candidate
-    
-    print(f"Added {indirect_routes_added} essential indirect satellite-to-ground station routes")
+    # Fix: Ensure all satellites have routing entries for all destinations
+    # This addresses the issue where some satellites (like satellite 0) have no routing rules
+    _ensure_complete_satellite_routing(
+        fstate, 
+        num_satellites, 
+        num_ground_stations, 
+        sat_net_graph_only_satellites_with_isls,
+        sat_neighbor_to_if,
+        sat_to_group,
+        group_to_master
+    )
 
     return fstate
-
-
-def _ensure_uplink_satellite_routing(
-    fstate: Dict[Tuple[int, int], Tuple[int, int, int]],
-    num_satellites: int,
-    num_ground_stations: int,
-    sat_net_graph: nx.Graph,
-    sat_neighbor_to_if: Dict[Tuple[int, int], int],
-    sat_to_group: Dict[int, int],
-    group_to_master: Dict[int, int],
-) -> None:
-    """Ensure uplink satellites can route to ground stations."""
-    
-    print("Ensuring uplink satellite routing to ground stations...")
-    
-    # Find satellites that are actually used as uplinks in ground station routes
-    uplink_satellites = set()
-    for (src, dst), (next_hop, if_idx, distance) in fstate.items():
-        if src >= num_satellites and dst >= num_satellites:  # Ground station to ground station
-            uplink_satellites.add(next_hop)  # The satellite used as next hop
-    
-    print(f"Found {len(uplink_satellites)} uplink satellites: {sorted(uplink_satellites)}")
-    
-    # Simple approach: For each uplink satellite, use existing downlink routes from fstate
-    # and try to route through intermediate satellites if direct routes don't exist
-    
-    routes_added = 0
-    for sat_id in uplink_satellites:
-        for dst_gs in range(num_satellites, num_satellites + num_ground_stations):
-            if (sat_id, dst_gs) not in fstate:
-                # Strategy 1: Find a direct route if this satellite can reach the ground station
-                # by checking if there's already a route from this satellite to this GS
-                found_route = False
-                
-                # Strategy 2: Find any satellite that has a route to this ground station
-                # and route through it
-                for candidate_sat in range(num_satellites):
-                    if (candidate_sat, dst_gs) in fstate:
-                        # This satellite has a route to the destination GS
-                        if sat_id in sat_net_graph and candidate_sat in sat_net_graph.neighbors(sat_id):
-                            # Direct connection to candidate satellite
-                            if_idx = sat_neighbor_to_if.get((sat_id, candidate_sat), 0)
-                            fstate[(sat_id, dst_gs)] = (candidate_sat, if_idx, 2)  # 2 hops: sat->candidate->GS
-                            routes_added += 1
-                            found_route = True
-                            print(f"Route {sat_id}→{dst_gs}: next_hop={candidate_sat} (via neighbor)")
-                            break
-                        elif sat_id in sat_net_graph and candidate_sat in sat_net_graph:
-                            # Find shortest path to candidate satellite
-                            try:
-                                path = nx.shortest_path(sat_net_graph, sat_id, candidate_sat, weight="weight")
-                                if len(path) >= 2:
-                                    next_hop = path[1]
-                                    if_idx = sat_neighbor_to_if.get((sat_id, next_hop), 0)
-                                    distance = len(path)  # path length to candidate + 1 for GS
-                                    fstate[(sat_id, dst_gs)] = (next_hop, if_idx, distance)
-                                    routes_added += 1
-                                    found_route = True
-                                    print(f"Route {sat_id}→{dst_gs}: next_hop={next_hop} (path length {distance})")
-                                    break
-                            except nx.NetworkXNoPath:
-                                continue
-                
-                if not found_route:
-                    print(f"No path found from satellite {sat_id} to ground station {dst_gs}")
-    
-    print(f"Added {routes_added} satellite-to-ground station routes. Total routes now: {len(fstate)}")
 
 
 def _ensure_complete_satellite_routing(
@@ -850,6 +481,21 @@ def _ensure_complete_satellite_routing(
                 continue
     
     print(f"Essential satellite routing completed. Total routes: {len(fstate)}")
+                else:
+                    # This satellite is a master or no master defined, route directly
+                    # Use interface 0 as a placeholder for ground station downlink
+                    fstate[(src_sat, dst_node_id)] = (
+                        dst_node_id,  # Direct to ground station
+                        0,  # GSL interface (placeholder)
+                        0,  # Return interface (placeholder)
+                    )
+            except (nx.NetworkXNoPath, KeyError):
+                # No path available, create a default route
+                fstate[(src_sat, dst_node_id)] = (
+                    dst_node_id,  # Direct to ground station
+                    0,  # GSL interface (placeholder)
+                    0,  # Return interface (placeholder)
+                )
 
 
 # Helper functions reused from the original hierarchical algorithm.  These are
@@ -904,17 +550,9 @@ def select_regional_master_by_connectivity(
     """
     region_to_master: Dict[int, int] = {}
     
-    empty_regions_count = 0
-    processed_regions_count = 0
-    empty_region_ids = []
-    
     for region_id, sat_ids in region_to_sats.items():
         if not sat_ids:
-            empty_regions_count += 1
-            empty_region_ids.append(region_id)
             continue
-        
-        processed_regions_count += 1
             
         best_master = None
         max_connectivity = -1
@@ -959,29 +597,11 @@ def select_regional_master_by_connectivity(
         if best_master is None:
             best_master = min(sat_ids)
             
-            
         region_to_master[region_id] = best_master
     
-    # Debug output
-    print(f"  > MASTER_DEBUG: total regions: {len(region_to_sats)}, empty: {empty_regions_count}, processed: {processed_regions_count}, masters: {len(region_to_master)}")
-    if empty_regions_count > 0:
-        print(f"  > MASTER_DEBUG: first 10 empty region IDs: {empty_region_ids[:10]}")
-    
-    # Additional check: verify ISL graph satellite count
-    isl_satellites = set(sat_net_graph.nodes())
-    print(f"  > MASTER_DEBUG: ISL graph has {len(isl_satellites)} satellites")
-    
-    # Check which satellites from regions are missing in ISL graph
-    all_region_satellites = set()
-    for sat_list in region_to_sats.values():
-        all_region_satellites.update(sat_list)
-    
-    missing_in_isl = all_region_satellites - isl_satellites
-    print(f"  > MASTER_DEBUG: {len(missing_in_isl)} satellites in regions but not in ISL graph")
-    if len(missing_in_isl) > 0:
-        print(f"  > MASTER_DEBUG: first 10 missing satellites: {sorted(list(missing_in_isl))[:10]}")
-
     return region_to_master
+
+
 def compute_master_forwarding(
     full_graph: nx.Graph,
     masters: Iterable[int],

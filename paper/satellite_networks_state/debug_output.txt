@@ -1,0 +1,257 @@
+Generating ground stations...
+Generating TLEs...
+Generating ISLs...
+Generating description...
+Generating GSL interfaces info..
+Generating forwarding state...
+Thread 0 does interval [0.00 ms, 100.00 ms]
+Thread 1 does interval [100.00 ms, 200.00 ms]
+Thread 2 does interval [200.00 ms, 300.00 ms]
+Thread 3 does interval [300.00 ms, 400.00 ms]
+Thread 4 does interval [400.00 ms, 500.00 ms]
+Thread 5 does interval [500.00 ms, 600.00 ms]
+Thread 6 does interval [600.00 ms, 700.00 ms]
+Thread 7 does interval [700.00 ms, 800.00 ms]
+Thread 8 does interval [800.00 ms, 900.00 ms]
+Thread 9 does interval [900.00 ms, 1000.00 ms]
+Thread 10 does interval [1000.00 ms, 1000.00 ms]
+Thread 11 does interval [1000.00 ms, 1000.00 ms]
+Thread 12 does interval [1000.00 ms, 1000.00 ms]
+Thread 13 does interval [1000.00 ms, 1000.00 ms]
+Thread 14 does interval [1000.00 ms, 1000.00 ms]
+Thread 15 does interval [1000.00 ms, 1000.00 ms]
+Thread 16 does interval [1000.00 ms, 1000.00 ms]
+Thread 17 does interval [1000.00 ms, 1000.00 ms]
+Thread 18 does interval [1000.00 ms, 1000.00 ms]
+Thread 19 does interval [1000.00 ms, 1000.00 ms]
+FORWARDING STATE AT T = 0ns (= 0.0 seconds)
+
+BASIC INFORMATION
+  > Epoch.................. 2018-06-10 14:19:34.624
+  > Time since epoch....... 0 ns
+  > Absolute time.......... 2018-06-10 14:19:34.624
+FORWARDING STATE AT T = 100000000ns (= 0.1 seconds)
+
+BASIC INFORMATION
+  > Epoch.................. 2018-06-10 14:19:34.624
+  > Time since epoch....... 100000000 ns
+  > Absolute time.......... 2018-06-10 14:19:34.724
+FORWARDING STATE AT T = 200000000ns (= 0.2 seconds)
+
+BASIC INFORMATION
+  > Epoch.................. 2018-06-10 14:19:34.624
+  > Time since epoch....... 200000000 ns
+  > Absolute time.......... 2018-06-10 14:19:34.824
+  > Satellites............. 625
+  > Ground stations........ 100
+  > Max. range GSL......... 1089686m
+  > Max. range ISL......... 1000000000m
+
+ISL INFORMATION
+FORWARDING STATE AT T = 300000000ns (= 0.3 seconds)
+
+BASIC INFORMATION
+  > Epoch.................. 2018-06-10 14:19:34.624
+  > Time since epoch....... 300000000 ns
+  > Absolute time.......... 2018-06-10 14:19:34.924
+FORWARDING STATE AT T = 400000000ns (= 0.4 seconds)
+
+BASIC INFORMATION
+  > Epoch.................. 2018-06-10 14:19:34.624
+  > Time since epoch....... 400000000 ns
+  > Absolute time.......... 2018-06-10 14:19:35.024
+  > Satellites............. 625
+  > Ground stations........ 100
+  > Max. range GSL......... 1089686m
+  > Max. range ISL......... 1000000000m
+
+ISL INFORMATION
+FORWARDING STATE AT T = 500000000ns (= 0.5 seconds)
+
+BASIC INFORMATION
+  > Epoch.................. 2018-06-10 14:19:34.624
+  > Time since epoch....... 500000000 ns
+  > Absolute time.......... 2018-06-10 14:19:35.124
+FORWARDING STATE AT T = 600000000ns (= 0.6 seconds)
+
+BASIC INFORMATION
+  > Epoch.................. 2018-06-10 14:19:34.624
+  > Time since epoch....... 600000000 ns
+  > Absolute time.......... 2018-06-10 14:19:35.224
+  > Satellites............. 625
+  > Ground stations........ 100
+  > Max. range GSL......... 1089686m
+  > Max. range ISL......... 1000000000m
+
+ISL INFORMATION
+FORWARDING STATE AT T = 700000000ns (= 0.7 seconds)
+
+BASIC INFORMATION
+  > Epoch.................. 2018-06-10 14:19:34.624
+  > Time since epoch....... 700000000 ns
+  > Absolute time.......... 2018-06-10 14:19:35.324
+  > Satellites............. 625
+  > Ground stations........ 100
+  > Max. range GSL......... 1089686m
+  > Max. range ISL......... 1000000000m
+
+ISL INFORMATION
+FORWARDING STATE AT T = 800000000ns (= 0.8 seconds)
+
+BASIC INFORMATION
+  > Epoch.................. 2018-06-10 14:19:34.624
+  > Time since epoch....... 800000000 ns
+  > Absolute time.......... 2018-06-10 14:19:35.424
+  > Satellites............. 625
+  > Ground stations........ 100
+  > Max. range GSL......... 1089686m
+  > Max. range ISL......... 1000000000m
+
+ISL INFORMATION
+FORWARDING STATE AT T = 900000000ns (= 0.9 seconds)
+
+BASIC INFORMATION
+  > Epoch.................. 2018-06-10 14:19:34.624
+  > Time since epoch....... 900000000 ns
+  > Absolute time.......... 2018-06-10 14:19:35.524
+  > Satellites............. 625
+  > Ground stations........ 100
+  > Max. range GSL......... 1089686m
+  > Max. range ISL......... 1000000000m
+
+ISL INFORMATION
+  > Total ISLs............. 1250
+  > Min. ISLs/satellite.... 4
+  > Max. ISLs/satellite.... 4
+
+GSL INTERFACE INFORMATION
+  > Min. GSL IFs/satellite........ 1
+  > Max. GSL IFs/satellite........ 1
+  > Min. GSL IFs/ground station... 1
+  > Max. GSL IFs/ground_station... 1
+
+GSL IN-RANGE INFORMATION
+  > Satellites............. 625
+  > Ground stations........ 100
+  > Max. range GSL......... 1089686m
+  > Max. range ISL......... 1000000000m
+
+ISL INFORMATION
+FORWARDING STATE AT T = 1000000000ns (= 1.0 seconds)
+
+BASIC INFORMATION
+  > Epoch.................. 2018-06-10 14:19:34.624
+  > Time since epoch....... 1000000000 ns
+  > Absolute time.......... 2018-06-10 14:19:35.624
+FORWARDING STATE AT T = 1000000000ns (= 1.0 seconds)
+
+BASIC INFORMATION
+  > Epoch.................. 2018-06-10 14:19:34.624
+  > Time since epoch....... 1000000000 ns
+  > Absolute time.......... 2018-06-10 14:19:35.624
+  > Satellites............. 625
+  > Ground stations........ 100
+  > Max. range GSL......... 1089686m
+  > Max. range ISL......... 1000000000m
+
+ISL INFORMATION
+  > Total ISLs............. 1250
+  > Min. ISLs/satellite.... 4
+  > Max. ISLs/satellite.... 4
+
+GSL INTERFACE INFORMATION
+  > Min. GSL IFs/satellite........ 1
+  > Max. GSL IFs/satellite........ 1
+  > Min. GSL IFs/ground station... 1
+  > Max. GSL IFs/ground_station... 1
+
+GSL IN-RANGE INFORMATION
+  > Satellites............. 625
+  > Ground stations........ 100
+  > Max. range GSL......... 1089686m
+  > Max. range ISL......... 1000000000m
+
+ISL INFORMATION
+  > Satellites............. 625
+  > Ground stations........ 100
+  > Max. range GSL......... 1089686m
+  > Max. range ISL......... 1000000000m
+
+ISL INFORMATION
+FORWARDING STATE AT T = 1000000000ns (= 1.0 seconds)
+
+BASIC INFORMATION
+  > Epoch.................. 2018-06-10 14:19:34.624
+  > Time since epoch....... 1000000000 ns
+  > Absolute time.......... 2018-06-10 14:19:35.624
+  > Satellites............. 625
+  > Ground stations........ 100
+  > Max. range GSL......... 1089686m
+  > Max. range ISL......... 1000000000m
+
+ISL INFORMATION
+  > Total ISLs............. 1250
+  > Min. ISLs/satellite.... 4
+  > Max. ISLs/satellite.... 4
+
+GSL INTERFACE INFORMATION
+  > Min. GSL IFs/satellite........ 1
+  > Max. GSL IFs/satellite........ 1
+  > Min. GSL IFs/ground station... 1
+  > Max. GSL IFs/ground_station... 1
+
+GSL IN-RANGE INFORMATION
+FORWARDING STATE AT T = 1000000000ns (= 1.0 seconds)
+
+BASIC INFORMATION
+  > Epoch.................. 2018-06-10 14:19:34.624
+  > Time since epoch....... 1000000000 ns
+  > Absolute time.......... 2018-06-10 14:19:35.624
+FORWARDING STATE AT T = 1000000000ns (= 1.0 seconds)
+
+BASIC INFORMATION
+  > Epoch.................. 2018-06-10 14:19:34.624
+  > Time since epoch....... 1000000000 ns
+  > Absolute time.......... 2018-06-10 14:19:35.624
+  > Satellites............. 625
+  > Ground stations........ 100
+  > Max. range GSL......... 1089686m
+  > Max. range ISL......... 1000000000m
+
+ISL INFORMATION
+FORWARDING STATE AT T = 1000000000ns (= 1.0 seconds)
+
+BASIC INFORMATION
+  > Epoch.................. 2018-06-10 14:19:34.624
+  > Time since epoch....... 1000000000 ns
+  > Absolute time.......... 2018-06-10 14:19:35.624
+FORWARDING STATE AT T = 1000000000ns (= 1.0 seconds)
+
+BASIC INFORMATION
+  > Epoch.................. 2018-06-10 14:19:34.624
+  > Time since epoch....... 1000000000 ns
+  > Absolute time.......... 2018-06-10 14:19:35.624
+  > Satellites............. 625
+  > Ground stations........ 100
+  > Max. range GSL......... 1089686m
+  > Max. range ISL......... 1000000000m
+
+ISL INFORMATION
+  > Satellites............. 625
+  > Ground stations........ 100
+  > Max. range GSL......... 1089686m
+  > Max. range ISL......... 1000000000m
+
+ISL INFORMATION
+  > Satellites............. 625
+  > Ground stations........ 100
+  > Max. range GSL......... 1089686m
+  > Max. range ISL......... 1000000000m
+
+ISL INFORMATION
+  > Satellites............. 625
+  > Ground stations........ 100
+  > Max. range GSL......... 1089686m
+  > Max. range ISL......... 1000000000m
+
+ISL INFORMATION
