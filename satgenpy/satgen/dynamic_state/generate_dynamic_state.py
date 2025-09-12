@@ -58,7 +58,9 @@ def generate_dynamic_state(
     total_iterations = ((simulation_end_time_ns - offset_ns) / time_step_ns)
     for time_since_epoch_ns in range(offset_ns, simulation_end_time_ns, time_step_ns):
         if not enable_verbose_logs:
-            if i % int(math.floor(total_iterations) / 10.0) == 0:
+            # Avoid division by zero for small iteration counts
+            progress_interval = max(1, int(math.floor(total_iterations) / 10.0))
+            if i % progress_interval == 0:
                 print("Progress: calculating for T=%d (time step granularity is still %d ms)" % (
                     time_since_epoch_ns, time_step_ns / 1000000
                 ))

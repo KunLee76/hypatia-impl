@@ -2,11 +2,10 @@
 Hierarchical routing algorithm with optional geographic region grouping.
 
 This module extends the hierarchical routing approach by supporting dynamic grouping
-of satellites based on fixed geographic regions (e.g. 5°×5° latitude/longitude cells).
+of satellites based on fixed geographic regions (e.g. 5°×5° cells).
 When region grouping is enabled, satellites are clustered by the sub‑satellite
 positions supplied at each time step, and the smallest indexed satellite in each
-cluster is elected as the master for inter‑cluster routing.  Otherwise the
-traditional orbit‑plane grouping is used.
+cluster is elected as the master for inter‑cluster routing.
 
 Usage:
 
@@ -15,27 +14,17 @@ Usage:
     # Provide ``sat_lat_lon`` as a list of (lat, lon) tuples corresponding to the
     # ground projection of each satellite at the current time.  If not provided,
     # orbit‑based grouping will be used instead.
-    result = algorithm_hierarchical_region(
-        output_dynamic_state_dir=..., time_since_epoch_ns=..., satellites=..., ground_stations=...,
-        sat_net_graph_only_satellites_with_isls=..., ground_station_satellites_in_range=...,
-        num_isls_per_sat=..., sat_neighbor_to_if=..., list_gsl_interfaces_info=...,
-        prev_output=..., enable_verbose_logs=True, sat_lat_lon=current_satellite_positions,
-        region_lat_step=5.0, region_lon_step=5.0, use_region_grouping=True
-    )
 
 This function returns a dictionary containing the computed forwarding state mapping.
 """
 
 import math
+import os
 import networkx as nx
 from typing import Dict, Iterable, List, Optional, Tuple
 from astropy import units as u
 
-from .fstate_calculation import calculate_fstate_shortest_path_without_gs_relaying  # noqa: F401
-from .region_grouping import (
-    assign_satellites_to_regions,
-    select_master_for_regions,
-)
+from .region_grouping import assign_satellites_to_regions
 from ..distance_tools import distance_m_ground_station_to_satellite
 
 
@@ -52,13 +41,12 @@ def algorithm_hierarchical_region(
     prev_output: Optional[Dict[str, Dict[Tuple[int, int], Tuple[int, int, int]]]] = None,
     enable_verbose_logs: bool = False,
     sat_lat_lon: Optional[List[Tuple[float, float]]] = None,
-    region_lat_step: float = 5.0,
-    region_lon_step: float = 5.0,
+    region_lat_step: float = 10.0,  # Increased to 10 degrees for proper grouping
+    region_lon_step: float = 10.0,  # Increased to 10 degrees for proper grouping
     use_region_grouping: bool = True,
     fast_mode: bool = False,  # New parameter for performance optimization
 ) -> Dict[str, Dict[Tuple[int, int], Tuple[int, int, int]]]:
     """Compute hierarchical forwarding state with optional region grouping.
-
     Args:
         output_dynamic_state_dir: Directory for writing dynamic state files.
         time_since_epoch_ns: Current simulation time in nanoseconds.
@@ -81,14 +69,20 @@ def algorithm_hierarchical_region(
     Returns:
         A dictionary containing the forwarding state under the key ``"fstate"``.
     """
+    # Check environment variables for optimization settings
+    fast_mode = fast_mode or os.environ.get('SATGEN_FAST_MODE', '').lower() in ('1', 'true', 'yes')
+    use_cache = os.environ.get('SATGEN_USE_CACHE', '').lower() in ('1', 'true', 'yes')
+    
     if enable_verbose_logs:
         print("\nALGORITHM: HIERARCHICAL REGION")
+        if fast_mode:
+            print("  > Fast mode: ENABLED")
+        if use_cache:
+            print("  > Cache mode: ENABLED")
     
     # Convert iterables to lists for indexing
     satellites = list(satellites)
     ground_stations = list(ground_stations)
-    num_satellites = len(satellites)
-    num_ground_stations = len(ground_stations)
 
     # Determine grouping and master satellites.
     sat_to_group: Dict[int, int] = {}
@@ -96,22 +90,76 @@ def algorithm_hierarchical_region(
     master_nodes: List[int] = []
     n_sats_per_orbit: Optional[int] = None
 
+    # Performance optimization: track previous state for incremental updates
+    region_to_sats = None
+    sat_to_region_cache = None
+    should_recompute_grouping = True
+    prev_masters = None
+    
+    # Check if we can reuse previous grouping (for fast mode or cache mode)
+    if (fast_mode or use_cache) and prev_output and "region_to_sats" in prev_output:
+        # In fast/cache mode, only recompute grouping occasionally
+        if time_since_epoch_ns % (10 * 100000000) != 0:  # Every 1 second instead of 100ms
+            should_recompute_grouping = False
+            region_to_sats = prev_output["region_to_sats"]
+            sat_to_region_cache = prev_output.get("sat_to_region_cache")
+    
+    if prev_output and "group_to_master" in prev_output:
+        prev_masters = prev_output["group_to_master"]
+
     if use_region_grouping and sat_lat_lon is not None:
         # Assign satellites to geographic regions and select masters.
-        sat_to_group, region_to_sats = assign_satellites_to_regions(
-            sat_lat_lon, lat_step=region_lat_step, lon_step=region_lon_step
-        )
+        if should_recompute_grouping:
+            sat_to_group, region_to_sats = assign_satellites_to_regions(
+                sat_lat_lon, lat_step=region_lat_step, lon_step=region_lon_step
+            )
+            
+            # Enhanced debugging for region grouping
+            if enable_verbose_logs:
+                print(f"  > REGION_DEBUG: Using grid size {region_lat_step}° × {region_lon_step}°")
+                print(f"  > REGION_DEBUG: Total regions created: {len(region_to_sats)}")
+                print(f"  > REGION_DEBUG: Total satellites assigned: {len(sat_to_group)}")
+                
+                # Show sample satellite positions
+                if sat_lat_lon:
+                    print(f"  > REGION_DEBUG: Sample satellite positions:")
+                    for i, (lat, lon) in enumerate(sat_lat_lon[:10]):
+                        print(f"    SAT-{i}: ({lat:6.2f}°, {lon:7.2f}°)")
+                    
+                    # Show position statistics
+                    lats = [pos[0] for pos in sat_lat_lon]
+                    lons = [pos[1] for pos in sat_lat_lon]
+                    print(f"  > REGION_DEBUG: Lat range: {min(lats):.2f}° to {max(lats):.2f}° (span: {max(lats)-min(lats):.2f}°)")
+                    print(f"  > REGION_DEBUG: Lon range: {min(lons):.2f}° to {max(lons):.2f}° (span: {max(lons)-min(lons):.2f}°)")
+                
+                # Show region distribution
+                region_sizes = [len(sats) for sats in region_to_sats.values()]
+                if region_sizes:
+                    print(f"  > REGION_DEBUG: Region sizes - min: {min(region_sizes)}, max: {max(region_sizes)}, avg: {sum(region_sizes)/len(region_sizes):.1f}")
+                
+                # Show sample regions
+                for i, (region_id, sat_ids) in enumerate(list(region_to_sats.items())[:5]):
+                    print(f"  > REGION_DEBUG: Region {region_id}: {len(sat_ids)} satellites {sat_ids[:3]}{'...' if len(sat_ids) > 3 else ''}")
+            
+            # Build satellite to region cache for performance
+            sat_to_region_cache = {}
+            for region_id, sat_ids in region_to_sats.items():
+                for sat_id in sat_ids:
+                    sat_to_region_cache[sat_id] = region_id
+        else:
+            # Use cached grouping and build sat_to_group from region_to_sats
+            sat_to_group = {}
+            for region_id, sat_ids in region_to_sats.items():
+                for sat_id in sat_ids:
+                    sat_to_group[sat_id] = region_id
         
         # Use connectivity-based master selection for better inter-region routing
-        prev_masters = None
-        if prev_output and "fstate" in prev_output:
-            # Extract previous master assignments for stability
-            prev_masters = {}  # Could be extracted from previous output if needed
-        
         group_to_master = select_regional_master_by_connectivity(
             region_to_sats, 
             sat_net_graph_only_satellites_with_isls,
-            prev_masters
+            prev_masters,
+            fast_mode,
+            sat_to_region_cache
         )
         master_nodes = list(group_to_master.values())
         
@@ -189,7 +237,6 @@ def algorithm_hierarchical_region(
 
     # Compute hierarchical path between ground stations via masters.
     gs_fstate = calculate_hierarchical_path_through_masters(
-        output_dynamic_state_dir,
         time_since_epoch_ns,
         len(satellites),
         len(ground_stations),
@@ -198,13 +245,9 @@ def algorithm_hierarchical_region(
         gid_to_sat_gsl_if_idx,
         ground_station_satellites_in_range,
         sat_neighbor_to_if,
-        prev_fstate,
         enable_verbose_logs,
-        master_nodes,
-        n_sats_per_orbit if n_sats_per_orbit is not None else 1,
-        # Pass dynamic grouping mappings for downstream use.
-        sat_to_group=sat_to_group,
-        group_to_master=group_to_master,
+        sat_to_group,
+        group_to_master,
         fast_mode=fast_mode,  # Pass fast_mode to the calculation function
         satellites=satellites,
         ground_stations=ground_stations,
@@ -232,7 +275,17 @@ def algorithm_hierarchical_region(
     fstate_filename = output_dynamic_state_dir + f"/fstate_{time_since_epoch_ns}.txt"
     write_fstate_to_file(fstate, fstate_filename)
 
-    return {"fstate": fstate}
+    # Return state with caching information for performance optimization
+    result = {"fstate": fstate}
+    
+    # Include caching information for next iteration
+    if use_region_grouping and region_to_sats is not None:
+        result["region_to_sats"] = region_to_sats
+        result["group_to_master"] = group_to_master
+        if sat_to_region_cache is not None:
+            result["sat_to_region_cache"] = sat_to_region_cache
+
+    return result
 
 
 def select_optimal_uplink_satellite(
@@ -361,7 +414,6 @@ def select_optimal_uplink_satellite(
 
 
 def calculate_hierarchical_path_through_masters(
-    output_dynamic_state_dir: str,
     time_since_epoch_ns: int,
     num_satellites: int,
     num_ground_stations: int,
@@ -370,11 +422,7 @@ def calculate_hierarchical_path_through_masters(
     gid_to_sat_gsl_if_idx: List[int],
     ground_station_satellites_in_range: List[List[bool]],
     sat_neighbor_to_if: Dict[Tuple[int, int], int],
-    prev_fstate: Optional[Dict[Tuple[int, int], Tuple[int, int, int]]],
     enable_verbose_logs: bool,
-    master_nodes: List[int],
-    n_sats_per_orbit: int,
-    *,
     sat_to_group: Dict[int, int],
     group_to_master: Dict[int, int],
     fast_mode: bool = False,
@@ -418,18 +466,17 @@ def calculate_hierarchical_path_through_masters(
     computed_pairs = 0
     
     if fast_mode:
-        # In fast mode, only compute routes for important ground stations to reduce O(n²) complexity
-        important_gids = [0, 1, 2]  # Tokyo, Delhi, Shanghai
+        # In fast mode, compute routes for all ground stations but use optimization techniques
+        # This ensures connectivity while still providing performance benefits
         if enable_verbose_logs:
-            print(f"  > Fast mode enabled: Only computing routes involving {len(important_gids)} important ground stations")
+            print(f"  > Fast mode enabled: Computing routes for all {num_ground_stations} ground stations with optimizations")
     
     for src_gid in range(num_ground_stations):
         for dst_gid in range(num_ground_stations):
             if src_gid == dst_gid:
                 continue
                 
-            # In fast mode, skip routes that don't involve important stations
-            if fast_mode and src_gid not in important_gids and dst_gid not in important_gids:
+            # In fast mode, we still compute all routes but use other optimizations
                 continue
                 
             src_node_id = num_satellites + src_gid
@@ -445,18 +492,32 @@ def calculate_hierarchical_path_through_masters(
             dst_sat = dst_reachable[0]  # Keep destination satellite selection simple
             dst_group = sat_to_group.get(dst_sat, 0)
             
-            # For different destinations, try to use different target groups to encourage diversity
-            # This is a heuristic to avoid all traffic going through the same uplink satellite
-            if dst_gid == 1:  # Delhi
-                # Use the destination satellite's group
+            # Generic route diversity strategy for all ground station pairs
+            # Use a deterministic but varied approach based on source and destination IDs
+            route_diversity_factor = (src_gid + dst_gid) % 3
+            
+            if route_diversity_factor == 0:
+                # Strategy 1: Use destination satellite's group (direct approach)
                 target_group = dst_group
-            elif dst_gid == 2:  # Shanghai  
-                # For Shanghai, prefer a different group to encourage route diversity
-                # Try to find an alternative group among reachable satellites
+            elif route_diversity_factor == 1:
+                # Strategy 2: Prefer alternative group from reachable satellites (diversity)
                 alt_groups = [sat_to_group.get(s, 0) for s in src_reachable if sat_to_group.get(s, 0) != dst_group]
                 target_group = alt_groups[0] if alt_groups else dst_group
             else:
-                target_group = dst_group
+                # Strategy 3: Use the most connected group among reachable satellites
+                group_connectivity = {}
+                for sat in src_reachable:
+                    group = sat_to_group.get(sat, 0)
+                    if group not in group_connectivity:
+                        group_connectivity[group] = 0
+                    # Count satellites in this group that are reachable
+                    group_connectivity[group] += 1
+                
+                # Select group with most reachable satellites
+                if group_connectivity:
+                    target_group = max(group_connectivity, key=group_connectivity.get)
+                else:
+                    target_group = dst_group
             
             # For source satellite, prefer one that can reach the target group efficiently
             src_sat = select_optimal_uplink_satellite(
@@ -471,8 +532,9 @@ def calculate_hierarchical_path_through_masters(
                 enable_verbose_logs=enable_verbose_logs
             )
             
-            if enable_verbose_logs and src_gid == 0 and dst_gid in [1, 2]:  # Tokyo to Delhi/Shanghai
+            if enable_verbose_logs and (src_gid < 10 and dst_gid < 10):  # Debug first 10 ground stations
                 src_groups = [sat_to_group.get(s, -1) for s in src_reachable[:5]]
+                print(f"DEBUG: GS {src_gid} -> GS {dst_gid}: selected sat {src_sat}, strategy {route_diversity_factor}, target_group {target_group}, reachable groups: {src_groups}")
                 # Enable verbose logging for specific ground station pairs
                 # if enable_verbose_logs and src_gid in [0, 1, 2]:  # Example: Tokyo, Delhi, Shanghai
             src_group = sat_to_group.get(src_sat, 0)
@@ -887,7 +949,9 @@ def select_master_nodes(
 def select_regional_master_by_connectivity(
     region_to_sats: Dict[int, List[int]],
     sat_net_graph: nx.Graph,
-    group_to_current_master: Optional[Dict[int, int]] = None
+    group_to_current_master: Optional[Dict[int, int]] = None,
+    fast_mode: bool = False,
+    sat_to_region_cache: Optional[Dict[int, int]] = None
 ) -> Dict[int, int]:
     """Select master satellites for each region based on connectivity.
     
@@ -898,11 +962,20 @@ def select_regional_master_by_connectivity(
         region_to_sats: Mapping from region ID to list of satellite IDs in that region.
         sat_net_graph: Graph containing satellites and their ISL connections.
         group_to_current_master: Optional current master assignments for stability.
+        fast_mode: If True, use simplified and faster master selection.
+        sat_to_region_cache: Pre-computed mapping from satellite ID to region ID.
     
     Returns:
         Mapping from region ID to selected master satellite ID.
     """
     region_to_master: Dict[int, int] = {}
+    
+    # Build satellite to region mapping if not provided
+    if sat_to_region_cache is None:
+        sat_to_region_cache = {}
+        for region_id, sat_ids in region_to_sats.items():
+            for sat_id in sat_ids:
+                sat_to_region_cache[sat_id] = region_id
     
     empty_regions_count = 0
     processed_regions_count = 0
@@ -915,7 +988,34 @@ def select_regional_master_by_connectivity(
             continue
         
         processed_regions_count += 1
+        
+        # Fast mode: simple fallback strategies
+        if fast_mode:
+            # Strategy 1: Keep current master if available and still in region
+            if (group_to_current_master and 
+                region_id in group_to_current_master and 
+                group_to_current_master[region_id] in sat_ids):
+                region_to_master[region_id] = group_to_current_master[region_id]
+                continue
             
+            # Strategy 2: Choose satellite with most ISL connections (quick)
+            best_master = None
+            max_connections = -1
+            for sat_id in sat_ids:
+                if sat_id in sat_net_graph:
+                    connections = len(list(sat_net_graph.neighbors(sat_id)))
+                    if connections > max_connections:
+                        max_connections = connections
+                        best_master = sat_id
+            
+            # Strategy 3: Fallback to smallest ID
+            if best_master is None:
+                best_master = min(sat_ids)
+            
+            region_to_master[region_id] = best_master
+            continue
+            
+        # Full mode: detailed connectivity analysis
         best_master = None
         max_connectivity = -1
         
@@ -929,16 +1029,10 @@ def select_regional_master_by_connectivity(
             # 2. Connectivity to other regions' satellites
             direct_neighbors = len(list(sat_net_graph.neighbors(sat_id)))
             
-            # Count connections to satellites in other regions
+            # Count connections to satellites in other regions (optimized)
             inter_region_connections = 0
             for neighbor in sat_net_graph.neighbors(sat_id):
-                # Check if neighbor belongs to a different region
-                neighbor_region = None
-                for other_region_id, other_sats in region_to_sats.items():
-                    if neighbor in other_sats:
-                        neighbor_region = other_region_id
-                        break
-                
+                neighbor_region = sat_to_region_cache.get(neighbor)
                 if neighbor_region is not None and neighbor_region != region_id:
                     inter_region_connections += 1
             
@@ -958,7 +1052,6 @@ def select_regional_master_by_connectivity(
         # Fallback to smallest ID if no connectivity found
         if best_master is None:
             best_master = min(sat_ids)
-            
             
         region_to_master[region_id] = best_master
     
