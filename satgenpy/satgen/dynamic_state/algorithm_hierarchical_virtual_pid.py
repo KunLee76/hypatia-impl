@@ -30,10 +30,55 @@ logic with PID‑level decisions.
 
 from typing import Dict, List, Optional, Set, Tuple
 import math
+import os
+import pickle
 import ephem
 from datetime import datetime, timezone
 from astropy.time import Time
 import numpy as np
+import networkx as nx
+
+# PathCache: 每個 time step 重建一次，避免 GS×GS 迴圈重複呼叫 nx.shortest_path
+class PathCache:  # [NEW]
+    def __init__(self, graph: nx.Graph, agents: List[int], num_sats: int):
+        self.graph = graph
+        self.num_sats = num_sats
+
+        # Agent ↔ Agent 全對全最短路徑
+        all_pairs = nx.all_pairs_dijkstra_path(graph, weight="weight")
+        self.agent_paths = {u: v for u, v in all_pairs}
+
+        # to_agent[a][src] = src 往 agent a 的下一跳
+        self.to_agent: Dict[int, Dict[int, int]] = {}
+        # from_agent[a][dst] = agent a 往 dst 的下一跳
+        self.from_agent: Dict[int, Dict[int, int]] = {}
+
+        for a in agents:
+            if a is None or a not in graph:
+                continue
+            # 從 agent 出發的單源樹
+            lengths, paths = nx.single_source_dijkstra(graph, a, weight="weight")
+            self.from_agent[a] = {}
+            for dst, path in paths.items():
+                if len(path) >= 2:
+                    self.from_agent[a][dst] = path[1]
+
+            # 反向 (sat→agent)
+            lengths, paths = nx.single_source_dijkstra(graph, a, weight="weight")
+            self.to_agent[a] = {}
+            for src, path in paths.items():
+                if len(path) >= 2:
+                    self.to_agent[a][src] = path[-2]  # 倒數第二個點是往 agent 方向的下一跳
+    
+        self.to_downlink: Dict[int, Dict[int, int]] = {}  # to_downlink[dst_sat][src_sat] = 下一跳
+        for dst in range(num_sats):
+            if dst not in graph: continue
+            _, paths = nx.single_source_dijkstra(graph, dst, weight="weight")
+            self.to_downlink[dst] = {}
+            for src, path in paths.items():
+                if len(path) >= 2:
+                    self.to_downlink[dst][src] = path[-2]  # src 往 dst 的下一跳
+
 
 def _to_ephem_date(epoch_obj):
     # 已經是 ephem.Date
@@ -87,7 +132,7 @@ def _to_ephem_date(epoch_obj):
 class VirtualPIDRouter:
     """Virtual PID-based router for hierarchical LEO routing."""
 
-    def __init__(self, grid_deg: int = 10, lon_min: int = -180, lon_max: int = 180,
+    def __init__(self, grid_deg: int = 15, lon_min: int = -180, lon_max: int = 180,
                  lat_min: int = -90, lat_max: int = 90, allow_diagonal_neighbor: bool = True) -> None:
         self.grid_deg = grid_deg
         self.lon_min, self.lon_max = lon_min, lon_max
@@ -278,46 +323,183 @@ def algorithm_hierarchical_virtual_pid(
         return (lat, lon)
     latlon_cache = [get_latlon_by_ephem(sid, step) for sid in sat_ids]
 
-    router = VirtualPIDRouter(grid_deg=10)
+    router = VirtualPIDRouter(grid_deg=15)
     router.get_sat_latlon = lambda sid, _t: latlon_cache[sid]
     router.get_sat_neighbors = lambda sid, _t: list(sat_net_graph_only_satellites_with_isls.neighbors(sid))
     router.update_pid_members_and_agents(step, sat_ids)
     pid_to_sats, pid_to_agent = router.pid_members, router.pid_agent_sat
     sat_neighbor_to_if_map = sat_neighbor_to_if
 
-    # 優化: 預先計算 PID→PID 表
-    pid_next = router.build_pid_next_table(step)
-    valid_pids = [pid for pid, ag in pid_to_agent.items() if ag is not None and pid_to_sats[pid]]
-
-    # 預先計算 src→pid agent 的 next hop
-    src_pid_next_hop = {}
-    for src in sat_ids:
-        for pid in valid_pids:
-            nh = router.next_hop_sat(step, src, pid, pid_next=pid_next)
-            src_pid_next_hop[(src, pid)] = nh
-
-    # 展開成 fstate
+    # 展開成 fstate - 衛星間路由
     fstate = {}
-    for pid in valid_pids:
-        members = pid_to_sats[pid]
-        for src in sat_ids:
-            nh = src_pid_next_hop[(src, pid)]
-            if nh is None: continue
-            out_if = sat_neighbor_to_if_map.get((src, nh))
-            in_if = sat_neighbor_to_if_map.get((nh, src))
-            if out_if is None or in_if is None: continue
-            for dst in members:
-                if dst == src: continue
-                fstate[(src, dst)] = (nh, out_if, in_if)
 
-    # 先暫定 GSL 帶寬，每個衛星對應一個 GSL interface，1.0代表
+    # 添加地面站路由支持
+    num_satellites = len(sat_ids)
+    num_ground_stations = len(ground_stations)
+
+    def first_reachable_sat(gs_id: int) -> Optional[int]:
+        # ground_station_satellites_in_range[gs_id] 形式通常是 [(dist_m, sat_id), ...]
+        if gs_id < len(ground_station_satellites_in_range):
+            lst = ground_station_satellites_in_range[gs_id]
+        else:
+            lst = []
+        return lst[0][1] if lst else None
+
+    def gsl_if_index_on_sat_for_gs(sat_id: int, gs_id: int) -> Optional[int]:
+        """
+        回傳「衛星端」連到該地面站的 GSL 介面索引。 
+        規則：ISL 介面先佔用 [0 .. num_isls_per_sat[sat)-1]，
+            GSL 介面從 num_isls_per_sat[sat] 起算。
+        若同一顆衛星允許多個 GSL 介面，這裡用地面站在可視列表中的次序當偏移（可重現）。
+        """
+        base = num_isls_per_sat[sat_id]
+        if gs_id < len(ground_station_satellites_in_range):
+            lst = ground_station_satellites_in_range[gs_id]
+        else:
+            lst = []
+        for idx, (_, sid) in enumerate(lst):
+            if sid == sat_id:
+                return base + idx
+        return None  # 找不到代表不在可視列表（理論上不會走到這）
+
+    def pid_of_sat(sat_id: int) -> Optional[int]:
+        lat, lon = router.get_sat_latlon(sat_id, step)
+        return router.latlon_to_pid(lat, lon)
+
+    def stitch_sat_path(path_nodes: List[int], final_dst_gs_id: int):
+        """
+        沿著節點序列 (n0 -> n1 -> ... -> nk)，
+        以 (u, 最終目的地地面站) 為 key 寫入第一跳 (v, out_if, in_if)。
+        """
+        for i in range(len(path_nodes) - 1):
+            u = path_nodes[i]
+            v = path_nodes[i + 1]
+            out_if = sat_neighbor_to_if_map.get((u, v))
+            in_if  = sat_neighbor_to_if_map.get((v, u))
+            if out_if is None or in_if is None:
+                continue
+            if (u, final_dst_gs_id) not in fstate:
+                fstate[(u, final_dst_gs_id)] = (v, out_if, in_if)
+
+    # [NEW] 建立 PathCache
+    agents = [ag for ag in pid_to_agent.values() if ag is not None]
+    cache = PathCache(sat_net_graph_only_satellites_with_isls, agents, len(sat_ids))
+
+    # GS×GS 迴圈
+    for src_gid in range(num_ground_stations):
+        for dst_gid in range(num_ground_stations):
+            if src_gid == dst_gid:
+                continue
+
+            src_gs_id = num_satellites + src_gid
+            dst_gs_id = num_satellites + dst_gid
+
+            src_uplink_sat = first_reachable_sat(src_gid)
+            dst_downlink_sat = first_reachable_sat(dst_gid)
+            if src_uplink_sat is None or dst_downlink_sat is None:
+                continue
+
+            # (1) GS→Sat 上行
+            gs_out_if = 0
+            sat_in_if = num_isls_per_sat[src_uplink_sat]
+            fstate[(src_gs_id, dst_gs_id)] = (src_uplink_sat, gs_out_if, sat_in_if)
+
+            src_pid = pid_of_sat(src_uplink_sat)
+            dst_pid = pid_of_sat(dst_downlink_sat)
+
+            # (2) Sat↔Sat 段
+            if src_pid is not None and dst_pid is not None and src_pid == dst_pid:
+                if dst_downlink_sat in cache.to_downlink:
+                    nh = cache.to_downlink[dst_downlink_sat].get(src_uplink_sat)
+                    if nh:
+                        out_if = sat_neighbor_to_if.get((src_uplink_sat, nh))
+                        in_if = sat_neighbor_to_if.get((nh, src_uplink_sat))
+                        if out_if is not None and in_if is not None:
+                            fstate[(src_uplink_sat, dst_gs_id)] = (nh, out_if, in_if)
+            else:
+                src_agent = pid_to_agent.get(src_pid) if src_pid is not None else None
+                dst_agent = pid_to_agent.get(dst_pid) if dst_pid is not None else None
+
+                # uplink → src_agent
+                if src_agent is not None and src_uplink_sat != src_agent:
+                    nh = cache.to_agent.get(src_agent, {}).get(src_uplink_sat)
+                    if nh:
+                        out_if = sat_neighbor_to_if.get((src_uplink_sat, nh))
+                        in_if = sat_neighbor_to_if.get((nh, src_uplink_sat))
+                        if out_if is not None and in_if is not None:
+                            fstate[(src_uplink_sat, dst_gs_id)] = (nh, out_if, in_if)
+
+                # src_agent → dst_agent
+                if src_agent is not None and dst_agent is not None and src_agent != dst_agent:
+                    agent_path = cache.agent_paths.get(src_agent, {}).get(dst_agent)
+                    if agent_path:
+                        stitch_sat_path(agent_path, dst_gs_id)
+
+                # dst_agent → downlink
+                if dst_agent is not None and dst_agent != dst_downlink_sat:
+                    nh = cache.from_agent.get(dst_agent, {}).get(dst_downlink_sat)
+                    if nh:
+                        out_if = sat_neighbor_to_if.get((dst_agent, nh))
+                        in_if = sat_neighbor_to_if.get((nh, dst_agent))
+                        if out_if is not None and in_if is not None:
+                            fstate[(dst_agent, dst_gs_id)] = (nh, out_if, in_if)
+
+            # (3) Sat→GS 下行
+            sat_out_if = gsl_if_index_on_sat_for_gs(dst_downlink_sat, dst_gid)
+            if sat_out_if is None:
+                continue
+            gs_in_if = 0
+            fstate[(dst_downlink_sat, dst_gs_id)] = (dst_gs_id, sat_out_if, gs_in_if)
+
+    # GSL 帶寬設定
     gsl_if_bandwidth = {}
     for sat in sat_ids:
         gsl_if_bandwidth[(sat, 0)] = 1.0
+    
+    # 地面站 GSL 帶寬
+    for gid in range(num_ground_stations):
+        gsl_if_bandwidth[(num_satellites + gid, 0)] = 1.0
+
+    # 寫入 fstate 文件
+    output_filename_fstate = output_dynamic_state_dir + "/fstate_" + str(time_since_epoch_ns) + ".txt"
+    if enable_verbose_logs:
+        print(f"  > Writing fstate to: {output_filename_fstate}")
+    with open(output_filename_fstate, "w+") as f_out:
+        for (src, dst), (next_hop, out_if, in_if) in fstate.items():
+            f_out.write(f"{src},{dst},{next_hop},{out_if},{in_if}\n")
+
+    # 寫入 GSL 帶寬文件
+    output_filename_gsl = output_dynamic_state_dir + "/gsl_if_bandwidth_" + str(time_since_epoch_ns) + ".txt"
+    if enable_verbose_logs:
+        print(f"  > Writing GSL bandwidth to: {output_filename_gsl}")
+    with open(output_filename_gsl, "w+") as f_out:
+        for (sat, if_idx), bandwidth in gsl_if_bandwidth.items():
+            f_out.write(f"{sat},{if_idx},{bandwidth}\n")
+
+    if enable_verbose_logs:
+        print(f"  > Virtual PID routing: {len(fstate)} fstate entries written")
+        print(f"  > Virtual PID routing: {len(gsl_if_bandwidth)} GSL bandwidth entries written")
+
+    # 在第一個時間步驟時保存群組數據供分析使用
+    if time_since_epoch_ns == 0:
+        data_dir = output_dynamic_state_dir.replace("dynamic_state_", "").replace("100ms_for_10s", "").replace("100ms_for_50s", "").replace("100ms_for_200s", "").replace("50ms_for_100s", "")
+        data_dir = data_dir.rstrip("/") + "/data"
+        os.makedirs(data_dir, exist_ok=True)
+        
+        # 保存群組分配數據
+        with open(os.path.join(data_dir, "satellite_groups.pickle"), 'wb') as f:
+            pickle.dump(pid_to_sats, f)
+        
+        # 保存master分配數據
+        with open(os.path.join(data_dir, "satellite_group_to_master.pickle"), 'wb') as f:
+            pickle.dump(pid_to_agent, f)
+        
+        if enable_verbose_logs:
+            print(f"  > Saved group data to: {data_dir}")
 
     return {
-    "fstate": fstate,
-    "region_to_sats": pid_to_sats,
-    "group_to_master": pid_to_agent,
-    "gsl_if_bandwidth": gsl_if_bandwidth,
-}
+        "fstate": fstate,
+        "region_to_sats": pid_to_sats,
+        "group_to_master": pid_to_agent,
+        "gsl_if_bandwidth": gsl_if_bandwidth,
+    }
