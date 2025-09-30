@@ -92,6 +92,7 @@ def calculate_fast(duration_s, time_step_ms, dynamic_state_algorithm, num_thread
     if dynamic_state_algorithm == "algorithm_free_one_only_over_isls" \
             or dynamic_state_algorithm == "algorithm_free_one_only_gs_relays" \
             or dynamic_state_algorithm == "algorithm_hierarchical_virtual_pid" \
+            or dynamic_state_algorithm == "algorithm_hierarchical_virtual_pid_clean_fixed" \
             or dynamic_state_algorithm == "algorithm_hierarchical_region":
         gsl_interfaces_per_satellite = 1
     elif dynamic_state_algorithm == "algorithm_paired_many_only_over_isls":
@@ -182,6 +183,7 @@ def main():
         "algorithm_paired_many_only_over_isls",
         "algorithm_hierarchical_region",
         "algorithm_hierarchical_virtual_pid",
+        "algorithm_hierarchical_virtual_pid_clean_fixed",
     ]
     
     if args.algorithm not in valid_algorithms:

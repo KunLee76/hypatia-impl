@@ -31,7 +31,8 @@ from .algorithm_paired_many_only_over_isls import algorithm_paired_many_only_ove
 from .algorithm_free_gs_one_sat_many_only_over_isls import algorithm_free_gs_one_sat_many_only_over_isls
 from .algorithm_hierarchical import algorithm_hierarchical
 from .algorithm_hierarchical_region import algorithm_hierarchical_region
-from .algorithm_hierarchical_virtual_pid import algorithm_hierarchical_virtual_pid
+from .algorithm_hierarchical_virtual_pid_backup import algorithm_hierarchical_virtual_pid
+from .algorithm_hierarchical_virtual_pid_clean_fixed import algorithm_hierarchical_virtual_pid_clean
 
 
 def generate_dynamic_state(
@@ -334,6 +335,26 @@ def generate_dynamic_state_at(
             enable_verbose_logs,
             sat_lat_lon=None, 
             use_region_grouping=False, # 跟 region 區分，明確指定
+            time_step_ns=time_step_ns,
+            epoch=epoch
+        )
+
+    elif dynamic_state_algorithm == "algorithm_hierarchical_virtual_pid_clean_fixed":
+
+        return algorithm_hierarchical_virtual_pid_clean(
+            output_dynamic_state_dir,
+            time_since_epoch_ns,
+            satellites,
+            ground_stations,
+            sat_net_graph_only_satellites_with_isls,
+            ground_station_satellites_in_range,
+            num_isls_per_sat,
+            sat_neighbor_to_if,
+            list_gsl_interfaces_info,
+            prev_output,
+            enable_verbose_logs,
+            sat_lat_lon=None, 
+            use_region_grouping=False,
             time_step_ns=time_step_ns,
             epoch=epoch
         )
