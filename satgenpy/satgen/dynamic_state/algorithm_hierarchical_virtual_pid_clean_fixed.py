@@ -10,11 +10,7 @@ import os
 import pickle
 import ephem
 from datetime import datetime, timezone
-try:
-    from astropy.time import Time
-    ASTROPY_AVAILABLE = True
-except ImportError:
-    ASTROPY_AVAILABLE = False
+from astropy.time import Time
 import numpy as np
 import networkx as nx
 
@@ -78,14 +74,13 @@ def _to_ephem_date(epoch_obj):
         return epoch_obj
 
     # Astropy Time
-    if ASTROPY_AVAILABLE:
-        try:
-            if isinstance(epoch_obj, Time):
-                t_utc = epoch_obj.utc
-                dt = t_utc.to_datetime()
-                return ephem.Date(dt)
-        except Exception:
-            pass
+    try:
+        if isinstance(epoch_obj, Time):
+            t_utc = epoch_obj.utc
+            dt = t_utc.to_datetime()
+            return ephem.Date(dt)
+    except Exception:
+        pass
 
     # 直接丟給 ephem.Date (支援 datetime/字串)
     try:
@@ -149,6 +144,25 @@ class VirtualPIDRouter:
 
         self._build_static_pid_grid()
 
+    def _get_pid_grid_center(self, pid: int) -> tuple:
+        """計算PID對應網格的幾何中心座標"""
+        lon_bins = len(range(self.lon_min, self.lon_max, self.grid_deg))  # 24個經度區間
+        
+        # 從PID反推網格索引
+        gi = pid // lon_bins  # 緯度索引
+        gj = pid % lon_bins   # 經度索引
+        
+        # 計算網格邊界
+        lat_start = self.lat_min + gi * self.grid_deg
+        lat_end = lat_start + self.grid_deg
+        lon_start = self.lon_min + gj * self.grid_deg  
+        lon_end = lon_start + self.grid_deg
+        
+        # 返回網格中心
+        center_lat = (lat_start + lat_end) / 2
+        center_lon = (lon_start + lon_end) / 2
+        return center_lat, center_lon
+
     def _build_static_pid_grid(self):
         lat_bins = list(range(self.lat_min, self.lat_max, self.grid_deg))
         lon_bins = list(range(self.lon_min, self.lon_max, self.grid_deg))
@@ -191,7 +205,20 @@ class VirtualPIDRouter:
         for u in range(len(self.pids)):
             members = self.pid_members[u]
             if members:
-                new_agents[u] = min(members)
+                # 🎯 選擇最接近網格幾何中心的衛星作為master
+                grid_center_lat, grid_center_lon = self._get_pid_grid_center(u)
+                best_agent = None
+                min_distance = float('inf')
+                
+                for sat_id in members:
+                    sat_lat, sat_lon = self.get_sat_latlon(sat_id, t)
+                    # 計算到網格中心的距離（簡化的歐幾里得距離）
+                    distance = ((sat_lat - grid_center_lat) ** 2 + (sat_lon - grid_center_lon) ** 2) ** 0.5
+                    if distance < min_distance:
+                        min_distance = distance
+                        best_agent = sat_id
+                
+                new_agents[u] = best_agent if best_agent is not None else min(members)
             else:
                 prev = self._prev_pid_agent_sat.get(u)
                 new_agents[u] = prev if prev is not None else None
@@ -368,6 +395,69 @@ def algorithm_hierarchical_virtual_pid_clean(
         else:
             lst = []
         return lst[0][1] if lst else None
+    
+    def find_optimal_gsl_satellite(src_sat: int, dst_gs_idx: int) -> Optional[int]:
+        """
+        動態選擇最佳的GSL衛星連接到目標地面站
+        參考Free One算法的動態選擇機制
+        """
+        if dst_gs_idx >= len(ground_station_satellites_in_range):
+            return None
+            
+        possible_dst_sats = ground_station_satellites_in_range[dst_gs_idx]
+        if not possible_dst_sats:
+            return None
+        
+        # 計算Floyd-Warshall距離（如果還沒計算過）
+        if not hasattr(find_optimal_gsl_satellite, '_dist_cache'):
+            find_optimal_gsl_satellite._dist_cache = nx.floyd_warshall_numpy(sat_net_graph_only_satellites_with_isls)
+        
+        dist_sat_net = find_optimal_gsl_satellite._dist_cache
+        
+        # 尋找總距離最短的目標衛星
+        possibilities = []
+        for gsl_distance, sat_id in possible_dst_sats:
+            if not math.isinf(dist_sat_net[(src_sat, sat_id)]):  # 必須可達
+                total_distance = dist_sat_net[(src_sat, sat_id)] + gsl_distance
+                possibilities.append((total_distance, sat_id))
+        
+        if not possibilities:
+            return None
+        
+        # 返回總距離最短的衛星
+        possibilities.sort()
+        return possibilities[0][1]
+    
+    def find_optimal_source_gsl_satellite(src_gs_idx: int, dst_sat: int) -> Optional[int]:
+        """
+        動態選擇最佳的源GSL衛星連接
+        """
+        if src_gs_idx >= len(ground_station_satellites_in_range):
+            return None
+            
+        possible_src_sats = ground_station_satellites_in_range[src_gs_idx]
+        if not possible_src_sats:
+            return None
+        
+        # 使用已計算的距離矩陣
+        if not hasattr(find_optimal_gsl_satellite, '_dist_cache'):
+            find_optimal_gsl_satellite._dist_cache = nx.floyd_warshall_numpy(sat_net_graph_only_satellites_with_isls)
+        
+        dist_sat_net = find_optimal_gsl_satellite._dist_cache
+        
+        # 尋找到目標衛星總距離最短的源衛星
+        possibilities = []
+        for gsl_distance, sat_id in possible_src_sats:
+            if not math.isinf(dist_sat_net[(sat_id, dst_sat)]):  # 必須可達
+                total_distance = gsl_distance + dist_sat_net[(sat_id, dst_sat)]
+                possibilities.append((total_distance, sat_id))
+        
+        if not possibilities:
+            return None
+        
+        # 返回總距離最短的衛星
+        possibilities.sort()
+        return possibilities[0][1]
 
     def gsl_if_index_on_sat_for_gs(sat_id: int, gs_idx: int) -> Optional[int]:
         """回傳「衛星端」連到該地面站的 GSL 介面索引"""
@@ -420,10 +510,20 @@ def algorithm_hierarchical_virtual_pid_clean(
             src_gs_node_id = gs_idx_to_node_id(src_gid)
             dst_gs_node_id = gs_idx_to_node_id(dst_gid)
             
-            src_uplink_sat = first_reachable_sat(src_gid)
-            dst_downlink_sat = first_reachable_sat(dst_gid)
-            if src_uplink_sat is None or dst_downlink_sat is None:
+            # 🎯 動態GSL選擇：先選擇一個基礎源衛星，然後動態優化目標衛星
+            base_src_sat = first_reachable_sat(src_gid)
+            if base_src_sat is None:
                 continue
+                
+            # 動態選擇最佳目標衛星
+            dst_downlink_sat = find_optimal_gsl_satellite(base_src_sat, dst_gid)
+            if dst_downlink_sat is None:
+                continue
+            
+            # 基於最佳目標衛星，重新優化源衛星選擇
+            src_uplink_sat = find_optimal_source_gsl_satellite(src_gid, dst_downlink_sat)
+            if src_uplink_sat is None:
+                src_uplink_sat = base_src_sat  # 回退到基礎選擇
 
             # (1) GS→Sat 上行連接
             gs_out_if = 0
@@ -530,6 +630,68 @@ def algorithm_hierarchical_virtual_pid_clean(
                 continue
             gs_in_if = 0
             fstate[(dst_downlink_sat, dst_gs_node_id)] = (dst_gs_node_id, sat_out_if, gs_in_if)
+
+    # 🎯 新增：動態衛星到地面站路由生成（參考Free One算法）
+    # 確保距離矩陣已計算
+    if not hasattr(find_optimal_gsl_satellite, '_dist_cache'):
+        find_optimal_gsl_satellite._dist_cache = nx.floyd_warshall_numpy(sat_net_graph_only_satellites_with_isls)
+    
+    # 為每個衛星生成到所有地面站的動態路由
+    for curr_sat in range(num_satellites):
+        for dst_gid in range(num_ground_stations):
+            dst_gs_node_id = gs_idx_to_node_id(dst_gid)
+            
+            # 如果已經有路由（來自GS→GS處理），跳過
+            if (curr_sat, dst_gs_node_id) in fstate:
+                continue
+            
+            # 動態選擇最佳目標衛星
+            optimal_dst_sat = find_optimal_gsl_satellite(curr_sat, dst_gid)
+            if optimal_dst_sat is None:
+                continue
+            
+            # 如果當前衛星就是最佳目標衛星，直接連接到地面站
+            if curr_sat == optimal_dst_sat:
+                sat_out_if = gsl_if_index_on_sat_for_gs(curr_sat, dst_gid)
+                if sat_out_if is not None:
+                    fstate[(curr_sat, dst_gs_node_id)] = (dst_gs_node_id, sat_out_if, 0)
+                continue
+            
+            # 否則，計算到最佳目標衛星的路由
+            try:
+                # 檢查是否在同一個PID
+                curr_pid = pid_of_sat(curr_sat)
+                dst_pid = pid_of_sat(optimal_dst_sat)
+                
+                if curr_pid == dst_pid and curr_pid is not None:
+                    # 同PID內：使用子圖最短路徑
+                    pid_subgraph = sat_net_graph_only_satellites_with_isls.subgraph(pid_to_sats[curr_pid])
+                    path = nx.shortest_path(pid_subgraph, curr_sat, optimal_dst_sat, weight="weight")
+                    stitch_sat_path(path, dst_gs_node_id)
+                else:
+                    # 跨PID或其他情況：使用全局最短路徑
+                    try:
+                        path = nx.shortest_path(
+                            sat_net_graph_only_satellites_with_isls, 
+                            curr_sat, 
+                            optimal_dst_sat, 
+                            weight="weight"
+                        )
+                        stitch_sat_path(path, dst_gs_node_id)
+                    except nx.NetworkXNoPath:
+                        # 如果全局路徑不存在，嘗試使用PID級別路由
+                        if curr_pid is not None and dst_pid is not None and pid_graph.has_path(curr_pid, dst_pid):
+                            # 這裡可以添加PID級別的路由邏輯，暫時跳過
+                            pass
+                
+                # 添加目標衛星到地面站的下行連接
+                if (optimal_dst_sat, dst_gs_node_id) not in fstate:
+                    sat_out_if = gsl_if_index_on_sat_for_gs(optimal_dst_sat, dst_gid)
+                    if sat_out_if is not None:
+                        fstate[(optimal_dst_sat, dst_gs_node_id)] = (dst_gs_node_id, sat_out_if, 0)
+                        
+            except nx.NetworkXNoPath:
+                continue
 
     # GSL 帶寬設定
     gsl_if_bandwidth = {}
