@@ -1,0 +1,1418 @@
+2025-10-06 14:10:01.358Z [PID] router init
+2025-10-06 14:10:01.764Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:10:02.155Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:10:03.093Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:10:03.539Z [PID] neighbors stats
+2025-10-06 14:10:03.599Z [SP] constrained_graph edge stats
+2025-10-06 14:10:03.488Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:10:03.924Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:10:03.963Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:10:04.298Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:10:04.166Z [PID] neighbors stats
+2025-10-06 14:10:04.222Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:10:04.582Z [SP] constrained_graph edge stats
+2025-10-06 14:10:04.578Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:10:04.830Z [PID] neighbors stats
+2025-10-06 14:10:04.794Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:10:04.971Z [SP] constrained_graph edge stats
+2025-10-06 14:10:04.976Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:10:04.942Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:10:05.299Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:10:05.594Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:10:05.365Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:10:05.421Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:10:05.792Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:10:06.129Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:10:05.990Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:10:06.300Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:10:06.498Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:10:06.165Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:10:06.460Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:10:06.427Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:10:06.550Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:10:06.514Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:10:06.580Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 4, 2: 4, 3: 2, 4: 3, 5: 3, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:10:06.600Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:10:06.739Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:10:06.697Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:10:06.703Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:10:06.775Z [PID] neighbors stats
+2025-10-06 14:10:06.776Z [PID] neighbors stats
+2025-10-06 14:10:06.765Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:10:06.760Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:10:06.808Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:10:06.814Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 4, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:10:06.745Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:10:06.824Z [SP] constrained_graph edge stats
+2025-10-06 14:10:06.857Z [SP] constrained_graph edge stats
+2025-10-06 14:10:06.882Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:10:06.820Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:10:06.829Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:10:06.911Z [SP] constrained_graph |V|=625 |E|=677
+2025-10-06 14:10:06.842Z [PID] neighbors stats
+2025-10-06 14:10:06.895Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:10:06.932Z [PID] neighbors stats
+2025-10-06 14:10:06.900Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:10:06.952Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:10:06.900Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 5, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:10:06.937Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:10:06.962Z [SP] constrained_graph edge stats
+2025-10-06 14:10:06.963Z [PID] neighbors stats
+2025-10-06 14:10:06.948Z [SP] constrained_graph edge stats
+2025-10-06 14:10:06.962Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:10:06.900Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:10:06.970Z [PID] neighbors stats
+2025-10-06 14:10:06.973Z [SP] constrained_graph edge stats
+2025-10-06 14:10:06.964Z [SP] constrained_graph |V|=625 |E|=677
+2025-10-06 14:10:06.963Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:10:06.980Z [SP] constrained_graph edge stats
+2025-10-06 14:10:06.984Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:10:06.973Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:10:06.977Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:10:06.996Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:10:06.988Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:10:06.988Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:10:06.973Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:10:07.001Z [PID] neighbors stats
+2025-10-06 14:10:07.002Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:10:07.003Z [SP] constrained_graph |V|=625 |E|=688
+2025-10-06 14:10:07.003Z [SP] constrained_graph |V|=625 |E|=670
+2025-10-06 14:10:07.002Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:10:07.002Z [SP] constrained_graph |V|=625 |E|=673
+2025-10-06 14:10:07.004Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:10:07.008Z [SP] constrained_graph edge stats
+2025-10-06 14:10:07.003Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:10:07.003Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:10:07.004Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:10:07.009Z [SP] constrained_graph |V|=625 |E|=673
+2025-10-06 14:10:07.008Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:10:07.014Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:10:07.010Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:10:07.010Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:10:07.011Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 5, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:10:07.010Z [SP] constrained_graph |V|=625 |E|=688
+2025-10-06 14:10:07.015Z [SP] constrained_graph |V|=625 |E|=670
+2025-10-06 14:10:07.014Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:10:07.015Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:10:07.015Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:10:07.016Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 5, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:10:07.016Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:10:07.015Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:10:07.016Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:10:07.017Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:10:07.016Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:10:07.017Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:10:07.016Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:10:07.017Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:10:07.018Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:10:07.019Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 5, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:10:07.018Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:10:07.018Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:10:07.020Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 4, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:10:07.021Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:10:07.021Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:10:07.022Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 4, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:10:07.021Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 5, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:10:07.022Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:10:07.022Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:10:07.022Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:10:07.023Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:10:07.024Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 4, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:10:07.024Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:10:10.313Z [SP] done; fstate ready
+2025-10-06 14:10:10.866Z [SP] done; fstate ready
+2025-10-06 14:10:11.312Z [SP] done; fstate ready
+2025-10-06 14:10:11.519Z [SP] done; fstate ready
+2025-10-06 14:10:11.715Z [SP] done; fstate ready
+2025-10-06 14:10:11.762Z [SP] done; fstate ready
+2025-10-06 14:10:12.349Z [SP] done; fstate ready
+2025-10-06 14:10:12.798Z [SP] done; fstate ready
+2025-10-06 14:10:15.198Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:10:15.743Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:10:16.332Z [PID] neighbors stats
+2025-10-06 14:10:16.831Z [SP] constrained_graph edge stats
+2025-10-06 14:10:17.250Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:10:17.554Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:10:17.801Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:10:18.639Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:10:19.123Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:10:19.146Z [SP] done; fstate ready
+2025-10-06 14:10:19.167Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:10:19.215Z [SP] done; fstate ready
+2025-10-06 14:10:19.443Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:10:19.829Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:10:20.027Z [PID] neighbors stats
+2025-10-06 14:10:20.332Z [SP] constrained_graph edge stats
+2025-10-06 14:10:20.327Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 4, 2: 4, 3: 2, 4: 3, 5: 3, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:10:20.802Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:10:20.769Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:10:21.051Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:10:21.377Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:10:21.435Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:10:21.636Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:10:21.715Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:10:22.060Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:10:22.385Z [PID] neighbors stats
+2025-10-06 14:10:22.557Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:10:22.895Z [SP] constrained_graph edge stats
+2025-10-06 14:10:22.934Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:10:23.154Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:10:23.108Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 4, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:10:23.360Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:10:23.293Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:10:23.585Z [PID] neighbors stats
+2025-10-06 14:10:23.366Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:10:23.639Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:10:23.585Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:10:23.844Z [SP] constrained_graph edge stats
+2025-10-06 14:10:23.855Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:10:24.073Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:10:24.049Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:10:24.215Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:10:24.225Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:10:24.215Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:10:24.342Z [PID] neighbors stats
+2025-10-06 14:10:24.368Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:10:24.477Z [SP] constrained_graph edge stats
+2025-10-06 14:10:24.442Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:10:24.657Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:10:24.555Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:10:24.676Z [PID] neighbors stats
+2025-10-06 14:10:24.736Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:10:24.773Z [SP] constrained_graph edge stats
+2025-10-06 14:10:24.764Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:10:24.722Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:10:24.778Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:10:24.875Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:10:24.762Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 5, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:10:24.825Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:10:24.896Z [PID] neighbors stats
+2025-10-06 14:10:24.825Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:10:24.922Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:10:24.851Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:10:24.948Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:10:24.988Z [SP] constrained_graph edge stats
+2025-10-06 14:10:25.019Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:10:25.086Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:10:24.974Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:10:25.019Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:10:25.143Z [PID] neighbors stats
+2025-10-06 14:10:25.186Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:10:25.122Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 5, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:10:25.246Z [SP] constrained_graph edge stats
+2025-10-06 14:10:25.217Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:10:25.217Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:10:25.294Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:10:25.339Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:10:25.304Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:10:25.273Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:10:25.355Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:10:25.407Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:10:25.407Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:10:25.407Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:10:25.446Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:10:25.503Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:10:25.472Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 5, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:10:25.514Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:10:25.598Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:10:25.672Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:10:25.604Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 5, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:10:25.688Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:10:25.731Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:10:25.731Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:10:25.710Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 5, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:10:25.868Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:10:25.885Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:10:25.954Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 4, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:10:26.097Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:10:26.369Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:10:26.404Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:10:26.405Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:10:26.404Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:10:26.412Z [PID] neighbors stats
+2025-10-06 14:10:26.420Z [PID] neighbors stats
+2025-10-06 14:10:26.424Z [SP] constrained_graph edge stats
+2025-10-06 14:10:26.431Z [SP] constrained_graph edge stats
+2025-10-06 14:10:26.435Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:10:26.436Z [SP] constrained_graph |V|=625 |E|=667
+2025-10-06 14:10:26.439Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:10:26.440Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:10:26.440Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:10:26.441Z [SP] constrained_graph |V|=625 |E|=667
+2025-10-06 14:10:26.441Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:10:26.441Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:10:26.441Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:10:26.442Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 4, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:10:26.441Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:10:26.442Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:10:26.442Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:10:26.443Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:10:26.443Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 4, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:10:26.445Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:10:28.747Z [SP] done; fstate ready
+2025-10-06 14:10:29.273Z [SP] done; fstate ready
+2025-10-06 14:10:31.080Z [SP] done; fstate ready
+2025-10-06 14:10:31.947Z [SP] done; fstate ready
+2025-10-06 14:10:32.647Z [SP] done; fstate ready
+2025-10-06 14:10:32.813Z [SP] done; fstate ready
+2025-10-06 14:10:33.737Z [SP] done; fstate ready
+2025-10-06 14:10:34.936Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:10:35.424Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:10:35.775Z [PID] neighbors stats
+2025-10-06 14:10:35.960Z [SP] constrained_graph edge stats
+2025-10-06 14:10:35.990Z [SP] done; fstate ready
+2025-10-06 14:10:36.172Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:10:36.375Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:10:36.322Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:10:36.591Z [SP] done; fstate ready
+2025-10-06 14:10:36.703Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:10:36.700Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:10:37.163Z [PID] neighbors stats
+2025-10-06 14:10:37.174Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:10:37.323Z [SP] constrained_graph edge stats
+2025-10-06 14:10:37.780Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:10:37.699Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:10:37.949Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:10:38.066Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:10:38.331Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:10:38.486Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 4, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:10:38.742Z [SP] done; fstate ready
+2025-10-06 14:10:38.844Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:10:38.767Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:10:39.377Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:10:39.767Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:10:40.058Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:10:40.315Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 5, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:10:40.355Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:10:41.101Z [PID] neighbors stats
+2025-10-06 14:10:40.888Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:10:41.300Z [SP] constrained_graph edge stats
+2025-10-06 14:10:41.369Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:10:41.550Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:10:41.699Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:10:41.981Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:10:42.115Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:10:42.252Z [PID] neighbors stats
+2025-10-06 14:10:42.468Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:10:42.474Z [SP] constrained_graph edge stats
+2025-10-06 14:10:42.426Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:10:42.717Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:10:42.651Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:10:42.844Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:10:42.687Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:10:43.019Z [PID] neighbors stats
+2025-10-06 14:10:43.065Z [SP] constrained_graph edge stats
+2025-10-06 14:10:43.190Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:10:43.087Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:10:43.040Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:10:43.331Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:10:43.404Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 4, 2: 4, 3: 2, 4: 3, 5: 3, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:10:43.490Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:10:43.589Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:10:43.693Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:10:43.772Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:10:43.841Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:10:43.969Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:10:44.124Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:10:44.124Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 4, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:10:44.151Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:10:44.325Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:10:44.314Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:10:44.340Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:10:44.611Z [PID] neighbors stats
+2025-10-06 14:10:44.500Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 5, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:10:44.789Z [SP] constrained_graph edge stats
+2025-10-06 14:10:44.871Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:10:44.940Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:10:45.071Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:10:45.123Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:10:45.178Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:10:45.259Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:10:45.453Z [PID] neighbors stats
+2025-10-06 14:10:45.494Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:10:45.538Z [SP] constrained_graph edge stats
+2025-10-06 14:10:45.473Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:10:45.581Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:10:45.638Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:10:45.676Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:10:45.740Z [PID] neighbors stats
+2025-10-06 14:10:45.746Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:10:45.766Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:10:45.835Z [SP] constrained_graph edge stats
+2025-10-06 14:10:45.798Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:10:45.797Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:10:45.824Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:10:45.891Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:10:45.890Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 5, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:10:45.923Z [PID] neighbors stats
+2025-10-06 14:10:45.863Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:10:45.924Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:10:45.937Z [SP] constrained_graph edge stats
+2025-10-06 14:10:45.934Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:10:45.953Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:10:45.984Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:10:46.017Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:10:46.005Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:10:46.026Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:10:46.002Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:10:46.027Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:10:46.027Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:10:46.027Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:10:46.030Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:10:46.028Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:10:46.030Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 5, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:10:46.030Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:10:46.042Z [PID] neighbors stats
+2025-10-06 14:10:46.031Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:10:46.043Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 4, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:10:46.043Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:10:46.050Z [SP] constrained_graph edge stats
+2025-10-06 14:10:46.055Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:10:46.049Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:10:46.056Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:10:46.058Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:10:46.057Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 5, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:10:46.059Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:10:46.059Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:10:46.061Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:10:46.063Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:10:46.064Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:10:46.065Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 4, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:10:46.065Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:10:48.475Z [SP] done; fstate ready
+2025-10-06 14:10:48.899Z [SP] done; fstate ready
+2025-10-06 14:10:49.672Z [SP] done; fstate ready
+2025-10-06 14:10:50.717Z [SP] done; fstate ready
+2025-10-06 14:10:52.584Z [SP] done; fstate ready
+2025-10-06 14:10:52.799Z [SP] done; fstate ready
+2025-10-06 14:10:54.285Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:10:54.618Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:10:55.176Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:10:55.296Z [PID] neighbors stats
+2025-10-06 14:10:55.452Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:10:55.640Z [SP] constrained_graph edge stats
+2025-10-06 14:10:55.820Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:10:55.775Z [PID] neighbors stats
+2025-10-06 14:10:56.058Z [SP] constrained_graph edge stats
+2025-10-06 14:10:56.028Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:10:56.162Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:10:56.177Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:10:56.589Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:10:56.481Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:10:56.724Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:10:56.775Z [SP] done; fstate ready
+2025-10-06 14:10:56.909Z [SP] done; fstate ready
+2025-10-06 14:10:56.780Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:10:56.924Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:10:56.825Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:10:56.834Z [SP] done; fstate ready
+2025-10-06 14:10:57.068Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:10:57.227Z [PID] neighbors stats
+2025-10-06 14:10:57.105Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:10:57.279Z [SP] constrained_graph edge stats
+2025-10-06 14:10:57.305Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:10:57.443Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:10:57.412Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 4, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:10:57.493Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:10:57.553Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:10:57.608Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:10:57.527Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:10:57.687Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:10:57.739Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:10:57.822Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 4, 2: 4, 3: 2, 4: 3, 5: 3, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:10:57.929Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:10:58.002Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:10:58.074Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:10:58.074Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:10:58.218Z [PID] neighbors stats
+2025-10-06 14:10:58.223Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 5, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:10:58.368Z [SP] constrained_graph edge stats
+2025-10-06 14:10:58.511Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:10:58.579Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:10:58.459Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:10:58.654Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:10:58.781Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:10:59.019Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:10:59.264Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:10:59.496Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 4, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:10:59.719Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:10:59.745Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:10:59.957Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:11:00.270Z [PID] neighbors stats
+2025-10-06 14:11:00.514Z [SP] constrained_graph edge stats
+2025-10-06 14:11:00.658Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:11:00.895Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:11:00.845Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:01.065Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:11:01.042Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:11:01.320Z [PID] neighbors stats
+2025-10-06 14:11:01.246Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:01.471Z [SP] constrained_graph edge stats
+2025-10-06 14:11:01.524Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:11:01.600Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:11:01.673Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:11:01.722Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:01.888Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 5, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:11:01.937Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:11:02.132Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:11:02.220Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:02.315Z [SP] done; fstate ready
+2025-10-06 14:11:02.390Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:11:02.622Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:11:02.922Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 5, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:11:03.136Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:11:03.911Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:11:04.058Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:11:04.020Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:11:04.180Z [PID] neighbors stats
+2025-10-06 14:11:04.201Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:11:04.186Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:11:04.221Z [SP] constrained_graph edge stats
+2025-10-06 14:11:04.258Z [PID] neighbors stats
+2025-10-06 14:11:04.267Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:11:04.277Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:11:04.332Z [SP] constrained_graph edge stats
+2025-10-06 14:11:04.332Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:04.364Z [PID] neighbors stats
+2025-10-06 14:11:04.367Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:11:04.383Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:11:04.415Z [SP] constrained_graph edge stats
+2025-10-06 14:11:04.411Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:04.458Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:11:04.463Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:04.481Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:04.474Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:11:04.486Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:11:04.502Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:11:04.503Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:04.519Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:11:04.542Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:04.542Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:11:04.590Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 5, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:11:04.606Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:11:04.616Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:11:04.681Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:11:04.710Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 4, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:11:04.698Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:11:04.792Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:11:04.786Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 4, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:11:04.891Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:11:05.339Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:11:05.340Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:11:05.348Z [PID] neighbors stats
+2025-10-06 14:11:05.354Z [SP] constrained_graph edge stats
+2025-10-06 14:11:05.360Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:11:05.361Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:05.361Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:11:05.361Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:05.361Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:11:05.361Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:11:05.363Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 5, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:11:05.363Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:11:06.890Z [SP] done; fstate ready
+2025-10-06 14:11:07.556Z [SP] done; fstate ready
+2025-10-06 14:11:09.008Z [SP] done; fstate ready
+2025-10-06 14:11:10.504Z [SP] done; fstate ready
+2025-10-06 14:11:10.655Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:11:10.789Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:11:11.022Z [PID] neighbors stats
+2025-10-06 14:11:11.083Z [SP] constrained_graph edge stats
+2025-10-06 14:11:11.190Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:11:11.330Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:11.509Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:11:11.783Z [SP] done; fstate ready
+2025-10-06 14:11:11.807Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:12.087Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:11:12.330Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:11:12.564Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:11:12.662Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 4, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:11:12.777Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:11:12.979Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:11:13.129Z [PID] neighbors stats
+2025-10-06 14:11:13.317Z [SP] constrained_graph edge stats
+2025-10-06 14:11:13.613Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:11:13.920Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:14.143Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:11:14.350Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:11:14.570Z [SP] done; fstate ready
+2025-10-06 14:11:14.430Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:14.565Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:11:14.696Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:11:14.856Z [PID] neighbors stats
+2025-10-06 14:11:14.921Z [SP] constrained_graph edge stats
+2025-10-06 14:11:14.881Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:11:15.055Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:11:15.132Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 4, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:11:15.197Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:15.274Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:11:15.333Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:11:15.544Z [SP] done; fstate ready
+2025-10-06 14:11:15.620Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:15.820Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:11:16.003Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:11:16.241Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:11:16.223Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 5, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:11:16.404Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:11:16.404Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:11:16.799Z [PID] neighbors stats
+2025-10-06 14:11:16.912Z [SP] constrained_graph edge stats
+2025-10-06 14:11:17.099Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:11:17.256Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:17.369Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:11:17.350Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:11:17.505Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:11:17.563Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:17.706Z [PID] neighbors stats
+2025-10-06 14:11:17.741Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:11:17.823Z [SP] constrained_graph edge stats
+2025-10-06 14:11:17.835Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:11:17.992Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:11:17.912Z [SP] done; fstate ready
+2025-10-06 14:11:18.096Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:18.090Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 5, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:11:18.338Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:11:18.397Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:11:18.614Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:18.892Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:11:19.404Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:11:19.357Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:11:19.583Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 4, 2: 4, 3: 2, 4: 3, 5: 3, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:11:19.558Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:11:19.743Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:11:19.732Z [SP] done; fstate ready
+2025-10-06 14:11:19.868Z [PID] neighbors stats
+2025-10-06 14:11:20.111Z [SP] constrained_graph edge stats
+2025-10-06 14:11:20.259Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:11:20.396Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:20.330Z [SP] done; fstate ready
+2025-10-06 14:11:20.500Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:11:20.712Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:11:20.690Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:20.815Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:11:21.003Z [PID] neighbors stats
+2025-10-06 14:11:20.923Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:11:21.090Z [SP] constrained_graph edge stats
+2025-10-06 14:11:21.095Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:11:21.169Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:11:21.308Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:21.314Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 4, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:11:21.402Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:11:21.468Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:11:21.624Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:21.768Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:11:21.842Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:11:22.027Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 5, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:11:22.172Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:11:22.943Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:11:23.045Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:11:23.166Z [PID] neighbors stats
+2025-10-06 14:11:23.238Z [SP] constrained_graph edge stats
+2025-10-06 14:11:23.350Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:11:23.406Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:23.495Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:11:23.637Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:23.754Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:11:23.917Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:11:24.054Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 5, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:11:24.134Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:11:24.172Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:11:24.225Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:11:24.291Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:11:24.294Z [PID] neighbors stats
+2025-10-06 14:11:24.300Z [SP] constrained_graph edge stats
+2025-10-06 14:11:24.300Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:11:24.303Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:11:24.311Z [PID] neighbors stats
+2025-10-06 14:11:24.316Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:24.317Z [SP] constrained_graph edge stats
+2025-10-06 14:11:24.321Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:11:24.322Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:24.318Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:11:24.322Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:11:24.323Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:24.323Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:24.323Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:11:24.323Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:11:24.323Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:11:24.323Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:11:24.324Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 4, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:11:24.324Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 4, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:11:24.325Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:11:24.325Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:11:25.600Z [SP] done; fstate ready
+2025-10-06 14:11:26.967Z [SP] done; fstate ready
+2025-10-06 14:11:27.230Z [SP] done; fstate ready
+2025-10-06 14:11:28.770Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:11:28.861Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:11:29.142Z [PID] neighbors stats
+2025-10-06 14:11:29.255Z [SP] constrained_graph edge stats
+2025-10-06 14:11:29.416Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:11:29.554Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:29.527Z [SP] done; fstate ready
+2025-10-06 14:11:29.669Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:11:30.091Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:30.495Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:11:30.783Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:11:31.265Z [SP] done; fstate ready
+2025-10-06 14:11:31.280Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 4, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:11:31.546Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:11:32.370Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:11:32.230Z [SP] done; fstate ready
+2025-10-06 14:11:32.591Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:11:32.502Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:11:32.491Z [SP] done; fstate ready
+2025-10-06 14:11:32.672Z [PID] neighbors stats
+2025-10-06 14:11:32.774Z [SP] constrained_graph edge stats
+2025-10-06 14:11:32.653Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:11:32.861Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:11:32.892Z [PID] neighbors stats
+2025-10-06 14:11:32.952Z [SP] constrained_graph edge stats
+2025-10-06 14:11:32.948Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:33.020Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:11:33.084Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:33.016Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:11:33.219Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:11:33.299Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:33.353Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:33.499Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:11:33.460Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:11:33.773Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:11:33.794Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:11:33.995Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 5, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:11:34.039Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 4, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:11:34.158Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:11:34.218Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:11:35.439Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:11:35.671Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:11:35.966Z [PID] neighbors stats
+2025-10-06 14:11:36.093Z [SP] constrained_graph edge stats
+2025-10-06 14:11:36.292Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:11:36.525Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:36.607Z [SP] done; fstate ready
+2025-10-06 14:11:36.672Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:11:36.819Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:11:36.886Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:37.000Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:11:36.938Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:11:37.276Z [PID] neighbors stats
+2025-10-06 14:11:37.241Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:11:37.365Z [SP] constrained_graph edge stats
+2025-10-06 14:11:37.400Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 4, 2: 4, 3: 2, 4: 3, 5: 3, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:11:37.512Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:11:37.583Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:37.577Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:11:37.709Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:11:37.909Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:11:37.929Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:38.068Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:11:38.146Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:11:38.108Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:11:38.225Z [PID] neighbors stats
+2025-10-06 14:11:38.275Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:11:38.353Z [SP] constrained_graph edge stats
+2025-10-06 14:11:38.258Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:11:38.424Z [PID] neighbors stats
+2025-10-06 14:11:38.462Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:11:38.470Z [SP] constrained_graph edge stats
+2025-10-06 14:11:38.532Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:11:38.519Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:38.519Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 4, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:11:38.717Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:38.745Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:11:38.852Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:11:38.800Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:11:38.869Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:38.902Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:38.975Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:11:39.012Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:11:39.101Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:11:39.219Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 5, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:11:39.238Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:11:39.291Z [SP] done; fstate ready
+2025-10-06 14:11:39.325Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:11:39.342Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 5, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:11:39.359Z [SP] done; fstate ready
+2025-10-06 14:11:39.449Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:11:40.024Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:11:40.122Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:11:40.300Z [PID] neighbors stats
+2025-10-06 14:11:40.394Z [SP] constrained_graph edge stats
+2025-10-06 14:11:40.482Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:11:40.561Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:40.654Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:11:40.807Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:41.017Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:11:41.162Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:11:41.348Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 4, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:11:41.535Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:11:42.603Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:11:42.632Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:11:42.632Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:11:42.632Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:11:42.641Z [PID] neighbors stats
+2025-10-06 14:11:42.648Z [PID] neighbors stats
+2025-10-06 14:11:42.656Z [SP] constrained_graph edge stats
+2025-10-06 14:11:42.666Z [SP] constrained_graph edge stats
+2025-10-06 14:11:42.666Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:11:42.671Z [SP] constrained_graph |V|=625 |E|=678
+2025-10-06 14:11:42.671Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:11:42.672Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:42.672Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:11:42.672Z [SP] constrained_graph |V|=625 |E|=678
+2025-10-06 14:11:42.672Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:11:42.672Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:11:42.673Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:42.673Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:11:42.674Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:11:42.673Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 5, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:11:42.674Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:11:42.674Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:11:42.675Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 4, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:11:42.678Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:11:43.913Z [SP] done; fstate ready
+2025-10-06 14:11:44.663Z [SP] done; fstate ready
+2025-10-06 14:11:45.543Z [SP] done; fstate ready
+2025-10-06 14:11:47.706Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:11:47.820Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:11:48.196Z [PID] neighbors stats
+2025-10-06 14:11:48.361Z [SP] constrained_graph edge stats
+2025-10-06 14:11:48.548Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:11:48.752Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:48.694Z [SP] done; fstate ready
+2025-10-06 14:11:48.947Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:11:49.243Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:49.396Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:11:49.453Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:11:49.453Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:11:49.764Z [PID] neighbors stats
+2025-10-06 14:11:49.773Z [SP] done; fstate ready
+2025-10-06 14:11:49.817Z [SP] done; fstate ready
+2025-10-06 14:11:49.825Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:11:49.941Z [SP] constrained_graph edge stats
+2025-10-06 14:11:50.048Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:11:50.151Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:50.099Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 5, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:11:50.208Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:11:50.314Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:50.309Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:11:50.488Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:11:50.623Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:11:50.737Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:11:50.760Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 4, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:11:50.852Z [SP] done; fstate ready
+2025-10-06 14:11:50.864Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:11:50.837Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:11:50.958Z [PID] neighbors stats
+2025-10-06 14:11:51.088Z [SP] constrained_graph edge stats
+2025-10-06 14:11:51.247Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:11:51.400Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:51.481Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:11:51.683Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:51.934Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:11:52.171Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:11:52.418Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 5, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:11:52.722Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:11:54.670Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:11:54.981Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:11:55.308Z [PID] neighbors stats
+2025-10-06 14:11:55.436Z [SP] constrained_graph edge stats
+2025-10-06 14:11:55.539Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:11:55.564Z [SP] done; fstate ready
+2025-10-06 14:11:55.688Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:56.043Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:11:55.846Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:11:56.143Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:56.161Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:11:56.401Z [PID] neighbors stats
+2025-10-06 14:11:56.345Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:11:56.368Z [SP] done; fstate ready
+2025-10-06 14:11:56.595Z [SP] constrained_graph edge stats
+2025-10-06 14:11:56.739Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:11:56.820Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:56.727Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:11:56.919Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:11:56.935Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:11:56.869Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:11:56.922Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 4, 2: 4, 3: 2, 4: 3, 5: 3, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:11:56.986Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:11:57.052Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:11:56.962Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:11:57.117Z [PID] neighbors stats
+2025-10-06 14:11:57.052Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:57.198Z [PID] neighbors stats
+2025-10-06 14:11:57.215Z [SP] constrained_graph edge stats
+2025-10-06 14:11:57.286Z [SP] constrained_graph edge stats
+2025-10-06 14:11:57.215Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:11:57.346Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:11:57.406Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:11:57.375Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:11:57.426Z [SP] constrained_graph |V|=625 |E|=672
+2025-10-06 14:11:57.476Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:57.523Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 4, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:11:57.586Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:11:57.624Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:11:57.651Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:11:57.769Z [SP] constrained_graph |V|=625 |E|=672
+2025-10-06 14:11:57.928Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:11:57.922Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:11:58.042Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:11:58.133Z [SP] done; fstate ready
+2025-10-06 14:11:58.111Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:11:58.177Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 5, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:11:58.285Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:11:58.372Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:11:58.443Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 5, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:11:58.602Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:11:59.935Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:12:00.027Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:12:00.138Z [PID] neighbors stats
+2025-10-06 14:12:00.208Z [SP] constrained_graph edge stats
+2025-10-06 14:12:00.357Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:12:00.437Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:00.578Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:12:00.511Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:12:00.606Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:12:00.651Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:00.723Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:12:00.725Z [PID] neighbors stats
+2025-10-06 14:12:00.885Z [SP] constrained_graph edge stats
+2025-10-06 14:12:00.779Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:12:00.914Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:12:00.958Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:00.964Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 4, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:12:01.018Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:12:01.035Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:12:01.086Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:01.164Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:12:01.240Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:12:01.306Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 5, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:12:01.365Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:12:01.365Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:12:01.366Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:12:01.376Z [PID] neighbors stats
+2025-10-06 14:12:01.385Z [SP] constrained_graph edge stats
+2025-10-06 14:12:01.390Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:12:01.391Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:01.391Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:12:01.392Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:01.392Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:12:01.392Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:12:01.392Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 4, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:12:01.393Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:12:02.649Z [SP] done; fstate ready
+2025-10-06 14:12:04.038Z [SP] done; fstate ready
+2025-10-06 14:12:05.107Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:12:05.222Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:12:05.270Z [SP] done; fstate ready
+2025-10-06 14:12:05.480Z [PID] neighbors stats
+2025-10-06 14:12:05.524Z [SP] constrained_graph edge stats
+2025-10-06 14:12:05.567Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:12:05.713Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:05.860Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:12:06.134Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:06.139Z [SP] done; fstate ready
+2025-10-06 14:12:06.271Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:12:06.481Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:12:06.719Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 4, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:12:06.953Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:12:07.023Z [SP] done; fstate ready
+2025-10-06 14:12:08.872Z [SP] done; fstate ready
+2025-10-06 14:12:08.906Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:12:09.039Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:12:09.502Z [PID] neighbors stats
+2025-10-06 14:12:09.619Z [SP] done; fstate ready
+2025-10-06 14:12:09.750Z [SP] constrained_graph edge stats
+2025-10-06 14:12:09.998Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:12:10.183Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:10.288Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:12:10.596Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:10.878Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:12:11.220Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:12:11.499Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 5, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:12:12.052Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:12:12.245Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:12:12.377Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:12:12.618Z [PID] neighbors stats
+2025-10-06 14:12:12.845Z [SP] constrained_graph edge stats
+2025-10-06 14:12:13.008Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:12:13.277Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:13.495Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:12:13.390Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:12:13.751Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:13.722Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:12:14.103Z [PID] neighbors stats
+2025-10-06 14:12:14.070Z [SP] done; fstate ready
+2025-10-06 14:12:14.092Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:12:14.247Z [SP] constrained_graph edge stats
+2025-10-06 14:12:14.296Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:12:14.381Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:12:14.402Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:12:14.496Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:14.465Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:12:14.475Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 4, 2: 4, 3: 2, 4: 3, 5: 3, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:12:14.741Z [PID] neighbors stats
+2025-10-06 14:12:14.822Z [SP] constrained_graph edge stats
+2025-10-06 14:12:14.683Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:12:14.645Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:12:14.911Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:12:14.993Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:14.907Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:15.087Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:12:15.098Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:12:15.228Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:15.438Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:12:15.329Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:12:15.435Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:12:15.534Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:12:15.524Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 5, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:12:15.550Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:12:15.588Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:12:15.641Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:12:15.687Z [PID] neighbors stats
+2025-10-06 14:12:15.697Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:12:15.697Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 4, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:12:15.808Z [SP] constrained_graph edge stats
+2025-10-06 14:12:15.784Z [PID] neighbors stats
+2025-10-06 14:12:15.936Z [SP] constrained_graph edge stats
+2025-10-06 14:12:15.864Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:12:15.972Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:12:16.036Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:12:16.107Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:16.121Z [SP] constrained_graph |V|=625 |E|=672
+2025-10-06 14:12:16.214Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:12:16.206Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:12:16.335Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:16.481Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:12:16.471Z [SP] constrained_graph |V|=625 |E|=672
+2025-10-06 14:12:16.575Z [SP] done; fstate ready
+2025-10-06 14:12:16.588Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:12:16.600Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:12:16.645Z [SP] done; fstate ready
+2025-10-06 14:12:16.692Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:12:16.697Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 5, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:12:16.794Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:12:16.795Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 5, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:12:16.885Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:12:17.644Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:12:17.716Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:12:17.862Z [PID] neighbors stats
+2025-10-06 14:12:17.971Z [SP] constrained_graph edge stats
+2025-10-06 14:12:18.033Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:12:18.112Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:18.199Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:12:18.374Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:18.497Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:12:18.578Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:12:18.665Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 5, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:12:18.815Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:12:19.971Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:12:20.028Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:12:20.092Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:12:20.104Z [PID] neighbors stats
+2025-10-06 14:12:20.111Z [SP] constrained_graph edge stats
+2025-10-06 14:12:20.109Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:12:20.117Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:12:20.128Z [PID] neighbors stats
+2025-10-06 14:12:20.129Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:20.135Z [SP] constrained_graph edge stats
+2025-10-06 14:12:20.141Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:12:20.136Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:12:20.141Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:20.142Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:20.142Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:12:20.143Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:12:20.143Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:20.143Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:12:20.144Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:12:20.144Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 4, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:12:20.145Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:12:20.145Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:12:20.145Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 4, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:12:20.147Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:12:21.011Z [SP] done; fstate ready
+2025-10-06 14:12:22.608Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:12:22.610Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:12:22.621Z [PID] neighbors stats
+2025-10-06 14:12:22.628Z [SP] constrained_graph edge stats
+2025-10-06 14:12:22.633Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:12:22.635Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:22.635Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:12:22.635Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:22.635Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:12:22.636Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:12:22.637Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 4, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:12:22.637Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:12:23.101Z [SP] done; fstate ready
+2025-10-06 14:12:24.634Z [SP] done; fstate ready
+2025-10-06 14:12:25.170Z [SP] done; fstate ready
+2025-10-06 14:12:25.496Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:12:25.546Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:12:25.708Z [PID] neighbors stats
+2025-10-06 14:12:25.784Z [SP] constrained_graph edge stats
+2025-10-06 14:12:25.760Z [SP] done; fstate ready
+2025-10-06 14:12:26.038Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:12:26.209Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:26.385Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:12:26.610Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:26.999Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:12:27.138Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:12:27.309Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 5, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:12:27.331Z [SP] done; fstate ready
+2025-10-06 14:12:27.520Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:12:27.820Z [SP] done; fstate ready
+2025-10-06 14:12:29.095Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:12:29.252Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:12:29.511Z [PID] neighbors stats
+2025-10-06 14:12:29.689Z [SP] constrained_graph edge stats
+2025-10-06 14:12:29.735Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:12:29.816Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:12:29.969Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:29.884Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:12:30.181Z [PID] neighbors stats
+2025-10-06 14:12:30.070Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:12:30.312Z [SP] constrained_graph edge stats
+2025-10-06 14:12:30.421Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:12:30.579Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:30.325Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:30.743Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:12:30.792Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:12:31.001Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:12:31.266Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 4, 2: 4, 3: 2, 4: 3, 5: 3, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:12:31.231Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:31.598Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:12:31.671Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:12:31.915Z [SP] done; fstate ready
+2025-10-06 14:12:32.115Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:12:32.033Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:12:32.207Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:12:32.324Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 4, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:12:32.493Z [PID] neighbors stats
+2025-10-06 14:12:32.588Z [SP] constrained_graph edge stats
+2025-10-06 14:12:32.588Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:12:32.702Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:12:32.889Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:33.099Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:12:33.143Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:12:33.305Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:12:33.344Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:33.750Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:12:33.723Z [PID] neighbors stats
+2025-10-06 14:12:33.699Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:12:33.849Z [SP] constrained_graph edge stats
+2025-10-06 14:12:33.820Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:12:33.810Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:12:33.848Z [SP] done; fstate ready
+2025-10-06 14:12:33.928Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:12:34.006Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:33.967Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 5, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:12:34.021Z [PID] neighbors stats
+2025-10-06 14:12:34.074Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:12:34.162Z [SP] constrained_graph edge stats
+2025-10-06 14:12:34.206Z [SP] done; fstate ready
+2025-10-06 14:12:34.133Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:12:34.282Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:12:34.228Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:34.351Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:34.419Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:12:34.522Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:12:34.588Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:12:34.724Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:34.777Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 5, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:12:34.962Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:12:35.008Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:12:35.141Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:12:35.414Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 5, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:12:35.594Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:12:36.017Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:12:36.093Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:12:36.184Z [PID] neighbors stats
+2025-10-06 14:12:36.306Z [SP] constrained_graph edge stats
+2025-10-06 14:12:36.416Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:12:36.563Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:36.630Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:12:36.786Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:36.912Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:12:37.055Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:12:37.154Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 5, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:12:37.154Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:12:37.738Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:12:37.821Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:12:37.895Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:12:37.912Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:12:37.937Z [PID] neighbors stats
+2025-10-06 14:12:37.932Z [PID] neighbors stats
+2025-10-06 14:12:38.004Z [SP] constrained_graph edge stats
+2025-10-06 14:12:38.026Z [SP] constrained_graph edge stats
+2025-10-06 14:12:38.051Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:12:38.067Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:12:38.080Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:38.104Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:38.107Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:12:38.124Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:38.124Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:12:38.154Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:12:38.171Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:38.186Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:12:38.224Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 4, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:12:38.231Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:12:38.280Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:12:38.277Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:12:38.320Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 4, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:12:38.352Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:12:38.362Z [SP] done; fstate ready
+2025-10-06 14:12:39.974Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:12:39.975Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:12:40.131Z [PID] neighbors stats
+2025-10-06 14:12:40.137Z [SP] constrained_graph edge stats
+2025-10-06 14:12:40.143Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:12:40.144Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:40.145Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:12:40.145Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:40.146Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:12:40.146Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:12:40.147Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 4, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:12:40.148Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:12:40.868Z [SP] done; fstate ready
+2025-10-06 14:12:43.003Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:12:43.056Z [SP] done; fstate ready
+2025-10-06 14:12:43.061Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:12:43.116Z [PID] neighbors stats
+2025-10-06 14:12:43.143Z [SP] constrained_graph edge stats
+2025-10-06 14:12:43.194Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:12:43.233Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:43.231Z [SP] done; fstate ready
+2025-10-06 14:12:43.278Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:12:43.457Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:43.662Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:12:44.027Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:12:44.262Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 5, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:12:44.497Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:12:44.811Z [SP] done; fstate ready
+2025-10-06 14:12:47.415Z [SP] done; fstate ready
+2025-10-06 14:12:47.630Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:12:47.617Z [SP] done; fstate ready
+2025-10-06 14:12:47.796Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:12:47.739Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:12:47.842Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:12:47.867Z [PID] neighbors stats
+2025-10-06 14:12:47.926Z [PID] neighbors stats
+2025-10-06 14:12:47.971Z [SP] constrained_graph edge stats
+2025-10-06 14:12:47.994Z [SP] constrained_graph edge stats
+2025-10-06 14:12:48.033Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:12:48.077Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:12:48.093Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:48.155Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:48.149Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:12:48.211Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:12:48.238Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:48.347Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:48.359Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:12:48.577Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:12:48.729Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:12:48.674Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:12:48.788Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 4, 2: 4, 3: 2, 4: 3, 5: 3, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:12:48.878Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:12:48.898Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:12:49.061Z [PID] neighbors stats
+2025-10-06 14:12:48.973Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:12:49.208Z [SP] constrained_graph edge stats
+2025-10-06 14:12:49.188Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 4, 2: 4, 3: 2, 4: 3, 5: 3, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:12:49.338Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:12:49.333Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:12:49.476Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:49.673Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:12:49.973Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:50.180Z [SP] done; fstate ready
+2025-10-06 14:12:50.193Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:12:50.588Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:12:50.922Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 5, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:12:51.506Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:12:51.535Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:12:51.349Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:12:51.593Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:12:51.731Z [PID] neighbors stats
+2025-10-06 14:12:51.660Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:12:51.717Z [SP] done; fstate ready
+2025-10-06 14:12:51.869Z [PID] neighbors stats
+2025-10-06 14:12:51.838Z [SP] constrained_graph edge stats
+2025-10-06 14:12:51.977Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:12:51.987Z [SP] constrained_graph edge stats
+2025-10-06 14:12:52.036Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:52.099Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:12:52.151Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:52.104Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:12:52.265Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:12:52.283Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:52.464Z [SP] done; fstate ready
+2025-10-06 14:12:52.515Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:12:52.544Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:52.640Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:12:52.772Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:12:52.818Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 5, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:12:52.918Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:12:53.130Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:12:53.162Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 5, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:12:53.493Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:12:54.542Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:12:54.633Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:12:54.838Z [PID] neighbors stats
+2025-10-06 14:12:54.985Z [SP] constrained_graph edge stats
+2025-10-06 14:12:55.087Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:12:55.186Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:55.269Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:12:55.337Z [SP] done; fstate ready
+2025-10-06 14:12:55.455Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:12:55.410Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:55.517Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:12:55.552Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:12:55.716Z [PID] neighbors stats
+2025-10-06 14:12:55.647Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:12:55.786Z [SP] constrained_graph edge stats
+2025-10-06 14:12:55.832Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 5, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:12:55.909Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:12:56.039Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:55.952Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:12:56.112Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:12:56.243Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:12:56.281Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:56.327Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:12:56.362Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:12:56.494Z [PID] neighbors stats
+2025-10-06 14:12:56.447Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:12:56.554Z [SP] constrained_graph edge stats
+2025-10-06 14:12:56.585Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 4, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:12:56.638Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:12:56.650Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:56.650Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:12:56.694Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:12:56.802Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:56.908Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:12:56.978Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:12:57.065Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 4, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:12:57.141Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:12:57.257Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:12:57.258Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:12:57.268Z [PID] neighbors stats
+2025-10-06 14:12:57.274Z [SP] constrained_graph edge stats
+2025-10-06 14:12:57.278Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:12:57.279Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:57.279Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:12:57.279Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:57.279Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:12:57.279Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:12:57.280Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 4, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:12:57.280Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:12:58.266Z [SP] done; fstate ready
+2025-10-06 14:12:59.649Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:12:59.650Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:12:59.664Z [PID] neighbors stats
+2025-10-06 14:12:59.685Z [SP] constrained_graph edge stats
+2025-10-06 14:12:59.727Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:12:59.754Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:59.762Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:12:59.812Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:12:59.853Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:12:59.891Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:12:59.996Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 5, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:13:00.103Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:13:00.239Z [SP] done; fstate ready
+2025-10-06 14:13:00.751Z [SP] done; fstate ready
+2025-10-06 14:13:01.600Z [SP] done; fstate ready
+2025-10-06 14:13:02.614Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:13:02.716Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:13:02.882Z [PID] neighbors stats
+2025-10-06 14:13:03.104Z [SP] constrained_graph edge stats
+2025-10-06 14:13:03.217Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:13:03.320Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:13:03.411Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:13:03.524Z [SP] done; fstate ready
+2025-10-06 14:13:03.564Z [SP] done; fstate ready
+2025-10-06 14:13:03.546Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:13:03.640Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:13:03.827Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:13:04.022Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 4, 2: 4, 3: 2, 4: 3, 5: 3, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:13:04.208Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:13:05.198Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:13:05.377Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:13:05.764Z [PID] neighbors stats
+2025-10-06 14:13:05.844Z [SP] constrained_graph edge stats
+2025-10-06 14:13:06.023Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:13:06.250Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:13:06.426Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:13:06.781Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:13:06.960Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:13:07.080Z [SP] done; fstate ready
+2025-10-06 14:13:07.034Z [SP] done; fstate ready
+2025-10-06 14:13:07.255Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:13:07.577Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 5, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:13:08.097Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:13:08.152Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:13:08.015Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:13:08.218Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:13:08.193Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:13:08.278Z [PID] neighbors stats
+2025-10-06 14:13:08.283Z [PID] neighbors stats
+2025-10-06 14:13:08.333Z [SP] constrained_graph edge stats
+2025-10-06 14:13:08.351Z [SP] constrained_graph edge stats
+2025-10-06 14:13:08.383Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:13:08.451Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:13:08.581Z [SP] constrained_graph |V|=625 |E|=672
+2025-10-06 14:13:08.590Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:13:08.636Z [SP] done; fstate ready
+2025-10-06 14:13:08.735Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:13:08.725Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:13:08.862Z [SP] done; fstate ready
+2025-10-06 14:13:08.953Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:13:09.002Z [SP] constrained_graph |V|=625 |E|=672
+2025-10-06 14:13:09.122Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:13:09.171Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:13:09.303Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:13:09.492Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:13:09.532Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 5, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:13:09.684Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 5, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:13:09.718Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:13:09.935Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:13:12.221Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:13:12.346Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:13:12.386Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:13:12.440Z [PID] neighbors stats
+2025-10-06 14:13:12.445Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:13:12.530Z [SP] constrained_graph edge stats
+2025-10-06 14:13:12.582Z [PID] neighbors stats
+2025-10-06 14:13:12.614Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:13:12.659Z [SP] constrained_graph edge stats
+2025-10-06 14:13:12.683Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:13:12.716Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:13:12.738Z [SP] delegating to step(payload) with constrained PID routing
+2025-10-06 14:13:12.739Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:13:12.739Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:13:12.740Z [MODE] SP_OVER_PID_QUOTIENT=True
+2025-10-06 14:13:12.740Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:13:12.751Z [PID] neighbors stats
+2025-10-06 14:13:12.759Z [SP] constrained_graph edge stats
+2025-10-06 14:13:12.746Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:13:12.760Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:13:12.764Z [SP] relaxed inter-PID edges appended
+2025-10-06 14:13:12.765Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:13:12.760Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:13:12.765Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:13:12.766Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:13:12.766Z [SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph
+2025-10-06 14:13:12.767Z [SP] constrained_graph |V|=625 |E|=666
+2025-10-06 14:13:12.766Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:13:12.766Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 5, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:13:12.769Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:13:12.769Z [DEBUG] num_sats=625, num_gs=100
+2025-10-06 14:13:12.769Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 4, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:13:12.769Z [DEBUG] raw_gs_range type=<class 'list'>
+2025-10-06 14:13:12.772Z [SP] gs_range_norm_full total_keys=100 empty_keys=0 non_empty_sample={0: 4, 1: 4, 2: 4, 3: 2, 4: 3, 5: 2, 6: 3, 7: 2, 8: 2, 9: 4}
+2025-10-06 14:13:12.771Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:13:12.772Z [DEBUG] gid_to_sat_gsl_if_idx: type=<class 'list'>, len=100, sample=[0, 0, 0, 0, 0]
+2025-10-06 14:13:13.394Z [SP] done; fstate ready
+2025-10-06 14:13:14.210Z [SP] done; fstate ready
+2025-10-06 14:13:15.186Z [SP] done; fstate ready
+2025-10-06 14:13:16.499Z [SP] done; fstate ready
+2025-10-06 14:13:16.785Z [SP] done; fstate ready
+2025-10-06 14:13:16.963Z [SP] done; fstate ready
+2025-10-06 14:13:17.478Z [SP] done; fstate ready
+2025-10-06 14:13:17.482Z [SP] done; fstate ready

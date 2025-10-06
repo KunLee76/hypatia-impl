@@ -144,6 +144,108 @@ class VirtualPIDRouter:
 
         self._build_static_pid_grid()
 
+    def create_geo_optimized_graph(self, original_graph: nx.Graph, target_gs_lat: float, target_gs_lon: float, t: float) -> nx.Graph:
+        """
+        創建地理優化的圖副本，用於特定目標的路由計算
+        🎯 謹慎實現：只對跨軌道ISL進行溫和的權重調整
+        
+        Args:
+            original_graph: 原始NetworkX圖
+            target_gs_lat: 目標地面站緯度
+            target_gs_lon: 目標地面站經度
+            t: 時間戳
+            
+        Returns:
+            權重優化後的圖副本
+        """
+        # 複製原圖
+        optimized_graph = original_graph.copy()
+        base_weight = 1000000.0
+        
+        # 只對跨軌道ISL進行地理權重優化
+        for src_sat, dst_sat, data in optimized_graph.edges(data=True):
+            if self._is_cross_orbit_isl(src_sat, dst_sat):
+                try:
+                    # 獲取衛星位置
+                    src_lat, src_lon = self.get_sat_latlon(src_sat, t)
+                    dst_lat, dst_lon = self.get_sat_latlon(dst_sat, t)
+                    
+                    # 計算ISL方向向量和理想方向向量
+                    isl_direction = self._calculate_direction_vector(src_lat, src_lon, dst_lat, dst_lon)
+                    ideal_direction = self._calculate_direction_vector(src_lat, src_lon, target_gs_lat, target_gs_lon)
+                    
+                    # 計算方向相似度
+                    similarity = self._calculate_direction_similarity(isl_direction, ideal_direction)
+                    
+                    # 🎯 增強的地理權重調整 - 更積極但仍然溫和
+                    if similarity > 0.5:    # 很好的方向
+                        final_factor = 0.5   # 50%獎勵
+                    elif similarity > 0.2:  # 好的方向
+                        final_factor = 0.7   # 30%獎勵
+                    elif similarity > -0.2: # 中性方向
+                        final_factor = 1.0   # 無變化
+                    elif similarity > -0.5: # 較差方向
+                        final_factor = 1.5   # 50%懲罰
+                    else:                   # 很差方向
+                        final_factor = 2.0   # 100%懲罰
+                    
+                    # 更新邊權重
+                    data['weight'] = base_weight * final_factor
+                        
+                except Exception:
+                    # 如果計算失敗，保持原權重
+                    data['weight'] = base_weight
+            else:
+                # 同軌道ISL保持原權重
+                data['weight'] = base_weight
+                
+        return optimized_graph
+
+    def _is_cross_orbit_isl(self, src_sat: int, dst_sat: int) -> bool:
+        """
+        判斷是否為跨軌道ISL
+        Plus Grid拓撲：每個軌道25顆衛星，25個軌道
+        """
+        satellites_per_orbit = 25
+        
+        # 檢查軌道ID
+        src_orbit = src_sat // satellites_per_orbit
+        dst_orbit = dst_sat // satellites_per_orbit
+        
+        return src_orbit != dst_orbit
+
+    @staticmethod
+    def _calculate_direction_vector(lat1, lon1, lat2, lon2):
+        """
+        計算從點1到點2的方向向量（東西分量, 南北分量）
+        返回標準化的方向向量
+        """
+        def rad(x):
+            return x * math.pi / 180.0
+        
+        # 計算方向分量（使用球面投影到平面的近似）
+        dlat = lat2 - lat1  # 南北方向：正值向北
+        dlon = (lon2 - lon1) * math.cos(rad((lat1 + lat2) / 2))  # 東西方向：正值向東
+        
+        # 計算向量長度
+        length = math.sqrt(dlat * dlat + dlon * dlon)
+        if length < 1e-10:  # 避免除零
+            return 0.0, 0.0
+            
+        # 返回標準化方向向量
+        return dlon / length, dlat / length
+
+    @staticmethod 
+    def _calculate_direction_similarity(vec1, vec2):
+        """
+        計算兩個方向向量的相似度（點積）
+        返回值：-1（完全相反）到 1（完全相同）
+        """
+        if not vec1 or not vec2:
+            return 0.0
+        
+        return vec1[0] * vec2[0] + vec1[1] * vec2[1]
+
     def _get_pid_grid_center(self, pid: int) -> tuple:
         """計算PID對應網格的幾何中心座標"""
         lon_bins = len(range(self.lon_min, self.lon_max, self.grid_deg))  # 24個經度區間

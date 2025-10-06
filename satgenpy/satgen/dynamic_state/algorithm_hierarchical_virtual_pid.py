@@ -1,0 +1,1118 @@
+# ============================================
+# algorithm_hierarchical_virtual_pid_clean_fixed.py
+# ============================================
+
+from typing import Dict, Set, Tuple, List, Optional, Callable
+import math
+import networkx as nx
+from .fstate_calculation import calculate_fstate_shortest_path_without_gs_relaying
+import os
+import tempfile
+import datetime as _dt
+
+# -------------------------------
+# 全域設定（可依實驗需要調整）
+# -------------------------------
+GRID_DEG = 15                           # 15°×15° 地理網格
+ALLOW_DIAGONAL_NEIGHBOR = True          # ★ PID 8-鄰（含對角）以對應斜向跨面 ISL
+ALLOW_GLOBAL_FALLBACK = False           # ★ 預設關閉全域最短路兜底（PID 圖斷了才開）
+K_BEST_GATEWAYS = 8                     # 每對相鄰 PID 保留的 gateway 候選數
+GEO_ALPHA = 0.08                        # 地理方向偏好係數（小：不拉歪主成本，建議 0.05~0.1）
+MIN_AGENT_HOLD_STEPS = 2                # agent 抖動抑制步數（若你需要 agent）
+EARTH_R_KM = 6371.0
+MODE_SP_OVER_PID_QUOTIENT = True        # 要逐跳分層，把它改成 False
+
+# -------------------------------
+# 小工具
+# -------------------------------
+def _wrap_lon_deg(lon: float) -> float:
+    return (lon + 180.0) % 360.0 - 180.0
+
+def haversine_km(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
+    phi1, phi2 = math.radians(lat1), math.radians(lat2)
+    dphi = phi2 - phi1
+    dl = math.radians(_wrap_lon_deg(lon2 - lon1))
+    a = math.sin(dphi/2)**2 + math.cos(phi1)*math.cos(phi2)*math.sin(dl/2)**2
+    return 2*EARTH_R_KM*math.asin(math.sqrt(a))
+
+def _gcache_is_gateway_edge(gcache, pa, pb, u, v) -> bool:
+    """Compat helper: 根據 GatewayCache 可能的多種內部結構判定 (u,v) 是否為 pa<->pb 的 gateway 邊。"""
+    if gcache is None:
+        return False
+
+    # 若類別本來就有 is_gateway_edge，就直接用
+    if hasattr(gcache, "is_gateway_edge") and callable(getattr(gcache, "is_gateway_edge")):
+        try:
+            return gcache.is_gateway_edge(pa, pb, u, v)
+        except Exception:
+            pass
+
+    key_ab = (pa, pb)
+    key_ba = (pb, pa)
+    key_ud = (u, v)
+    key_du = (v, u)
+
+    # 常見：pair -> set of (u,v)
+    for attr in ("edges_by_pid_pair", "pid_pair_to_edges", "gateway_edges", "edge_index"):
+        if hasattr(gcache, attr):
+            mapping = getattr(gcache, attr, None)
+            if isinstance(mapping, dict):
+                edges = mapping.get(key_ab) or mapping.get(key_ba)
+                if edges:
+                    if isinstance(edges, set):
+                        return key_ud in edges or key_du in edges
+                    if isinstance(edges, list):
+                        return key_ud in edges or key_du in edges
+
+    # 次常見：pair -> {u: set(vs)} 或 {v: set(us)}
+    for attr in ("adj_by_pid_pair", "pid_pair_adj"):
+        if hasattr(gcache, attr):
+            mapping = getattr(gcache, attr, None)
+            if isinstance(mapping, dict):
+                adj = mapping.get(key_ab) or mapping.get(key_ba)
+                if isinstance(adj, dict):
+                    sv = adj.get(u)
+                    if isinstance(sv, set) and v in sv:
+                        return True
+                    sv = adj.get(v)
+                    if isinstance(sv, set) and u in sv:
+                        return True
+
+    # 最保守：pair -> set of gateway nodes（只要端點在 gateway 集合內就放行）
+    for attr in ("gateways_by_pid_pair", "pid_pair_to_gateways"):
+        if hasattr(gcache, attr):
+            mapping = getattr(gcache, attr, None)
+            if isinstance(mapping, dict):
+                gset = mapping.get(key_ab) or mapping.get(key_ba)
+                if isinstance(gset, (set, list, tuple)):
+                    return (u in gset) or (v in gset)
+
+    return False
+
+# -------------------------------
+# VirtualPIDRouter：網格、動態歸戶、子圖/分量
+# -------------------------------
+class VirtualPIDRouter:
+    def __init__(self, grid_deg=GRID_DEG, lon_min=-180, lon_max=180, lat_min=-90, lat_max=90,
+                 allow_diagonal_neighbor=ALLOW_DIAGONAL_NEIGHBOR):
+        self.grid_deg = grid_deg
+        self.lon_min, self.lon_max = lon_min, lon_max
+        self.lat_min, self.lat_max = lat_min, lat_max
+        self.num_lon = int((lon_max - lon_min) // grid_deg)  # 360/15 = 24
+        self.num_lat = int((lat_max - lat_min) // grid_deg)  # 180/15 = 12
+        self.num_pid = self.num_lon * self.num_lat
+        self.allow_diag = allow_diagonal_neighbor
+
+        # 先把「動態狀態」初始化好
+        self.pid_members: Dict[int, Set[int]] = {pid: set() for pid in range(self.num_pid)}
+        self.pid_subgraphs: Dict[int, nx.Graph] = {}
+        self.pid_sat_comp: Dict[int, Dict[int, int]] = {}
+
+        # 若要 agent，可用下列兩個欄位
+        self.pid_agent_sat: Dict[int, Optional[int]] = {}
+        self._agent_hold_counter: Dict[int, int] = {}
+
+        # 靜態：PID 鄰接（4 或 8 鄰）
+        self.pid_neighbors: Dict[int, Set[int]] = self._build_pid_neighbors()
+        _alog("[PID] router init", {
+            "grid_deg": self.grid_deg,
+            "allow_diagonal_neighbor": self.allow_diag,
+            "num_pids": self.num_pid,})
+
+        # 動態：每 snapshot 更新
+        self.pid_members: Dict[int, Set[int]] = {pid: set() for pid in range(self.num_pid)}
+        self.pid_subgraphs: Dict[int, nx.Graph] = {}
+        self.pid_sat_comp: Dict[int, Dict[int, int]] = {}
+
+        # 若要 agent，可用下列兩個欄位
+        self.pid_agent_sat: Dict[int, Optional[int]] = {}
+        self._agent_hold_counter: Dict[int, int] = {}
+
+    def _wrap_lon_idx(self, i: int) -> int:
+        return i % self.num_lon
+
+    def pid_of(self, lat: float, lon: float) -> int:
+        lon_adj = lon
+        if lon_adj < self.lon_min:
+            lon_adj += 360
+        if lon_adj >= self.lon_max:
+            lon_adj -= 360
+        lon_idx = int((lon_adj - self.lon_min) // self.grid_deg)
+        lat_clamped = max(self.lat_min, min(self.lat_max - 1e-9, lat))
+        lat_idx = int((lat_clamped - self.lat_min) // self.grid_deg)
+        lon_idx = self._wrap_lon_idx(lon_idx)
+        return lat_idx * self.num_lon + lon_idx
+
+    def _build_pid_neighbors(self) -> Dict[int, Set[int]]:
+        neigh = {pid: set() for pid in range(self.num_pid)}
+        dirs = [(-1,0),(1,0),(0,-1),(0,1)]
+        if self.allow_diag:
+            dirs += [(-1,-1),(-1,1),(1,-1),(1,1)]
+        for lat_idx in range(self.num_lat):
+            for lon_idx in range(self.num_lon):
+                pid = lat_idx * self.num_lon + lon_idx
+                for dx, dy in dirs:
+                    nlon = self._wrap_lon_idx(lon_idx + dx)
+                    nlat = lat_idx + dy
+                    if 0 <= nlat < self.num_lat:
+                        npid = nlat * self.num_lon + nlon
+                        neigh[pid].add(npid)
+        return neigh
+
+    def _pid_center(self, pid: int) -> Tuple[float, float]:
+        lat_idx = pid // self.num_lon
+        lon_idx = pid % self.num_lon
+        lat_c = self.lat_min + (lat_idx + 0.5) * self.grid_deg
+        lon_c = _wrap_lon_deg(self.lon_min + (lon_idx + 0.5) * self.grid_deg)
+        return lat_c, lon_c
+
+    def refresh_pid_members_and_subgraphs(self,
+                                          sat_ids: List[int],
+                                          sat_nadir_latlon: Dict[int, Tuple[float,float]],
+                                          G_sat_isls: nx.Graph) -> Dict[int, int]:
+        # 依當下位置重建 PID 成員
+        for pid in range(self.num_pid):
+            self.pid_members[pid].clear()
+
+        sat_pid: Dict[int, int] = {}
+        for s in sat_ids:
+            lat = lon = None
+            # 1) 先用 caller 傳進來的 sat_nadir_latlon
+            if s in sat_nadir_latlon:
+                lat, lon = sat_nadir_latlon[s]
+            else:
+                # 2) fallback：從圖節點屬性撈
+                data = G_sat_isls.nodes[s] if G_sat_isls.has_node(s) else {}
+                for klat, klon in [("nadir_lat_deg","nadir_lon_deg"),
+                                ("nadir_lat","nadir_lon"),
+                                ("lat_deg","lon_deg"),
+                                ("lat","lon"),
+                                ("latitude","longitude")]:
+                    if klat in data and klon in data:
+                        lat, lon = data[klat], data[klon]
+                        break
+
+            if lat is None or lon is None:
+                print(f"[WARNING] Satellite {s} missing position; skip PID assignment this snapshot")
+                continue
+
+            p = self.pid_of(float(lat), float(lon))
+            self.pid_members[p].add(s)
+            sat_pid[s] = p
+
+        # 建子圖與連通分量
+        self.pid_subgraphs.clear()
+        self.pid_sat_comp.clear()
+        for pid, members in self.pid_members.items():
+            if not members:
+                self.pid_subgraphs[pid] = nx.Graph()
+                self.pid_sat_comp[pid] = {}
+                continue
+            Gp = G_sat_isls.subgraph(members).copy()
+            self.pid_subgraphs[pid] = Gp
+            comp_map: Dict[int,int] = {}
+            for cid, comp in enumerate(nx.connected_components(Gp)):
+                for s in comp:
+                    comp_map[s] = cid
+            self.pid_sat_comp[pid] = comp_map
+        _alog("[PID] neighbors stats", {
+            "num_pids": len(self.pid_members),
+            "nonempty_neighbor_sets": sum(1 for k, v in self.pid_neighbors.items() if v),
+            "sample": {k: sorted(list(v))[:4] for k, v in list(self.pid_neighbors.items())[:4]},})
+        
+        return sat_pid
+
+    # （可選）agent：以幾何中心選最近的衛星 + 抖動抑制
+    def select_pid_agents_by_geo_center(self,
+                                        sat_nadir_latlon: Dict[int, Tuple[float,float]],
+                                        dist_switch_threshold_km: float = 100.0):
+        new_agents: Dict[int, Optional[int]] = {}
+        for pid, members in self.pid_members.items():
+            if not members:
+                new_agents[pid] = None
+                self._agent_hold_counter[pid] = 0
+                continue
+            lat_c, lon_c = self._pid_center(pid)
+            best_sat, best_d = None, float('inf')
+            for s in members:
+                lat, lon = sat_nadir_latlon[s]
+                d = haversine_km(lat, lon, lat_c, lon_c)
+                if d < best_d:
+                    best_d, best_sat = d, s
+            old = self.pid_agent_sat.get(pid)
+            if old in members and old is not None:
+                held = self._agent_hold_counter.get(pid, 0)
+                lat_o, lon_o = sat_nadir_latlon[old]
+                d_old = haversine_km(lat_o, lon_o, lat_c, lon_c)
+                if held < MIN_AGENT_HOLD_STEPS or best_d + dist_switch_threshold_km >= d_old:
+                    new_agents[pid] = old
+                    self._agent_hold_counter[pid] = held + 1
+                    continue
+            new_agents[pid] = best_sat
+            self._agent_hold_counter[pid] = 1
+        self.pid_agent_sat = new_agents
+
+# -------------------------------
+# GatewayCache：依「當下 ISL」重建跨 PID 候選
+# -------------------------------
+class GatewayCache:
+    def __init__(self, k_best=K_BEST_GATEWAYS):
+        self.k_best = k_best
+        self.candidates: Dict[Tuple[int,int], List[Tuple[int,int,float]]] = {}
+
+    def rebuild(self,
+                G_sat_isls: nx.Graph,
+                sat_pid: Dict[int,int],
+                pid_neighbors: Dict[int, Set[int]],
+                edge_cost_func: Callable[[int,int,dict], float]) -> None:
+        self.candidates.clear()
+        for u, v, data in G_sat_isls.edges(data=True):
+            pa, pb = sat_pid.get(u), sat_pid.get(v)
+            if pa is None or pb is None or pa == pb:
+                continue
+            nbrs = pid_neighbors.get(pa, set())
+            if nbrs and pb not in nbrs:
+                continue
+            c = edge_cost_func(u, v, data)
+            self._push(pa, pb, (u, v, c))
+            self._push(pb, pa, (v, u, c))
+        for key, lst in list(self.candidates.items()):
+            self.candidates[key] = sorted(lst, key=lambda x: x[2])[:self.k_best]
+
+    def _push(self, pa, pb, triplet):
+        self.candidates.setdefault((pa, pb), []).append(triplet)
+
+    def get(self, pa, pb) -> List[Tuple[int,int,float]]:
+        return self.candidates.get((pa, pb), [])
+
+# -------------------------------
+# 單源樹快取（群內 shortest）
+# -------------------------------
+class SSSPCache:
+    def __init__(self):
+        self.cache: Dict[Tuple[int,int], Dict[int,int]] = {}  # (pid, src) -> prev dict
+
+    def clear_all(self):
+        """清掉所有單源樹快取（每個 snapshot 建議呼叫一次）。"""
+        self.cache.clear()
+    
+    def get_path(self, Gp: nx.Graph, pid: int, src: int, dst: int) -> List[int]:
+        key = (pid, src)
+        if key not in self.cache:
+            # 只在快取缺少時計算，直接存入快取
+            self.cache[key] = nx.single_source_dijkstra_path(Gp, src, weight="weight")
+
+        paths = self.cache[key]  # 之後一律從快取讀
+        if dst not in paths:
+            raise nx.NetworkXNoPath(f"no path {src}->{dst} in pid {pid}")
+        return paths[dst]
+
+    def invalidate_pid(self, pid: int):
+        keys = [k for k in self.cache.keys() if k[0] == pid]
+        for k in keys:
+            self.cache.pop(k, None)
+
+# -------------------------------
+# 方向偏好（弱化的地理權重）
+# -------------------------------
+def reset_edge_weights_to_geo(G: nx.Graph) -> None:
+    """把圖上所有邊的 weight 重置為 geo_len_m（若有），避免跨 pair 累積偏重。"""
+    for u, v, d in G.edges(data=True):
+        if "geo_len_m" in d:
+            d["weight"] = d["geo_len_m"]
+
+def apply_directional_weights(G_sat_isls: nx.Graph,
+                              sat_pos_xy: Dict[int, Tuple[float,float]],
+                              dst_xy: Tuple[float,float],
+                              alpha: float = GEO_ALPHA):
+    """
+    sat_pos_xy: 衛星在平面上的投影（可用經緯度投影或直接 (lon,lat)）
+    dst_xy: 目標方向參考（例如 dst_downlink_sat 的地面投影）
+    alpha: 小係數；越小越不影響主成本
+    """
+    def _norm(x,y):
+        n = math.hypot(x,y)
+        return (x/n, y/n) if n>0 else (0.0,0.0)
+
+    for u, v, data in G_sat_isls.edges(data=True):
+        base = data.get("geo_len_m", data.get("weight", 1.0))
+        if u not in sat_pos_xy or v not in sat_pos_xy:
+            data["weight"] = base
+            continue
+        ux, uy = sat_pos_xy[u]
+        vx, vy = sat_pos_xy[v]
+        dx, dy = dst_xy[0] - ux, dst_xy[1] - uy    # 目的方向（from u）
+        uvx, uvy = vx - ux, vy - uy               # 邊向量（u→v）
+        dux, duy = _norm(dx, dy)
+        eux, euy = _norm(uvx, uvy)
+        cos_theta = max(-1.0, min(1.0, dux*eux + duy*euy))
+        dir_penalty = 1.0 + alpha * (1.0 - cos_theta)  # 越朝向目標 → 越接近 1
+        data["weight"] = base * dir_penalty
+
+# -------------------------------
+# 資料面寫入 + 診斷
+# -------------------------------
+def stitch_sat_path(path_nodes: List[int],
+                    dst_gs_node_id: int,
+                    sat_neighbor_to_if_map: Dict[Tuple[int,int], Tuple[int,int]],
+                    fstate: Dict[Tuple[int,int], Tuple[int, int, int]],
+                    stitch_skip_samples: List[Tuple[int,int,int]],
+                    max_samples: int = 20):
+    for i in range(len(path_nodes) - 1):
+        u, v = path_nodes[i], path_nodes[i+1]
+        if (u, v) not in sat_neighbor_to_if_map or (v, u) not in sat_neighbor_to_if_map:
+            if len(stitch_skip_samples) < max_samples:
+                stitch_skip_samples.append((u, v, dst_gs_node_id))
+            print(f"[STITCH-SKIP] missing ifs for edge {u}->{v} (dst_gs={dst_gs_node_id})")
+            continue
+        out_if, in_if = sat_neighbor_to_if_map[(u, v)][0], sat_neighbor_to_if_map[(v, u)][1]
+        if (u, dst_gs_node_id) not in fstate:
+            fstate[(u, dst_gs_node_id)] = (v, out_if, in_if)
+
+# -------------------------------
+# 單對 GS 路由（階層式核心）
+# -------------------------------
+def route_one_pair(router: VirtualPIDRouter,
+                   gcache: GatewayCache,
+                   sssp_cache: SSSPCache,
+                   sat_graph: nx.Graph,             # 全衛星圖（edge["weight"] 已設）
+                   pid_graph: nx.Graph,             # PID 商圖（由 router.pid_neighbors 建）
+                   pid_of_sat: Callable[[int], int],
+                   pid_subgraphs: Dict[int, nx.Graph],
+                   pid_sat_comp: Dict[int, Dict[int,int]],
+                   sat_neighbor_to_if_map: Dict[Tuple[int,int], Tuple[int,int]],
+                   fstate: Dict[Tuple[int,int], Tuple[int,int,int]],
+                   src_uplink_sat: int,
+                   dst_downlink_sat: int,
+                   src_pid: int,
+                   dst_pid: int,
+                   dst_gs_node_id: int,
+                   t_label: str = "t=0"):
+    stitch_skip_samples: List[Tuple[int,int,int]] = []
+
+    def intra(pid: int, a: int, b: int) -> List[int]:
+        if a == b:
+            return [a]
+        Gp = pid_subgraphs[pid]
+        try:
+            return sssp_cache.get_path(Gp, pid, a, b)
+        except nx.NetworkXNoPath:
+            inA = (a in Gp)
+            inB = (b in Gp)
+            comp_a = pid_sat_comp[pid].get(a)
+            comp_b = pid_sat_comp[pid].get(b)
+            print(
+                f"[NOPATH] PID={pid} subgraph|V|={Gp.number_of_nodes()} "
+                f"no path {a}->{b} (inA={inA}, inB={inB}, comp_a={comp_a}, comp_b={comp_b})"
+            )
+            raise
+
+    # 1) 同 PID：直接群內到 downlink（最高效率）
+    if src_pid == dst_pid:
+        path = intra(src_pid, src_uplink_sat, dst_downlink_sat)
+        stitch_sat_path(path, dst_gs_node_id, sat_neighbor_to_if_map, fstate, stitch_skip_samples)
+        return
+
+    # 2) PID 商圖上找 src_pid → dst_pid 的路徑（相鄰 PID 早退 + 標準跨區）
+    try:
+        pid_path = nx.shortest_path(pid_graph, src_pid, dst_pid)
+    except nx.NetworkXNoPath:
+        # 3) 兜底（僅當允許）：全域最短
+        if ALLOW_GLOBAL_FALLBACK:
+            print(f"[FALLBACK] PID graph disconnected {src_pid}->{dst_pid}, using global shortest.")
+            path_nodes = nx.shortest_path(sat_graph, src_uplink_sat, dst_downlink_sat, weight="weight")
+            stitch_sat_path(path_nodes, dst_gs_node_id, sat_neighbor_to_if_map, fstate, stitch_skip_samples)
+        else:
+            print(f"[NOPATH] PID-graph disconnected {src_pid}->{dst_pid}")
+        return
+
+    current_sat = src_uplink_sat
+    current_pid = src_pid
+
+    for next_pid in pid_path[1:]:
+        # 若在迭代中已進入 dst_pid，立刻 Early-Exit
+        if current_pid == dst_pid:
+            final_path = intra(dst_pid, current_sat, dst_downlink_sat)
+            stitch_sat_path(final_path, dst_gs_node_id, sat_neighbor_to_if_map, fstate, stitch_skip_samples)
+            break
+
+        # 候選 gateways
+        candidates = gcache.get(current_pid, next_pid)
+
+        # --- 同分量過濾 ---
+        comp_cur = pid_sat_comp[current_pid].get(current_sat)
+        comp_dst = pid_sat_comp[dst_pid].get(dst_downlink_sat) if next_pid == dst_pid else None
+
+        def ok(trip):
+            a, b, c = trip
+            comp_a = pid_sat_comp[current_pid].get(a)
+            if comp_cur is None or comp_a is None or comp_a != comp_cur:
+                return False
+            if comp_dst is not None:
+                comp_b = pid_sat_comp[dst_pid].get(b)
+                if comp_b is None or comp_b != comp_dst:
+                    return False
+            # 必須真有實體 ISL（雙向 if）
+            if (a,b) not in sat_neighbor_to_if_map or (b,a) not in sat_neighbor_to_if_map:
+                return False
+            return True
+
+        filtered = [g for g in candidates if ok(g)]
+
+        # --- 可達集合 fallback ---
+        if not filtered:
+            try:
+                reachable = nx.single_source_shortest_path_length(pid_subgraphs[current_pid], current_sat)
+            except Exception:
+                reachable = {current_sat: 0}
+            best = None
+            for u in reachable.keys():
+                for v in sat_graph.neighbors(u):
+                    if pid_of_sat(v) != next_pid:
+                        continue
+                    if (u, v) not in sat_neighbor_to_if_map or (v, u) not in sat_neighbor_to_if_map:
+                        continue
+                    # 分量約束（嚴格）
+                    comp_u = pid_sat_comp[current_pid].get(u)
+                    if comp_cur is None or comp_u is None or comp_u != comp_cur:
+                        continue
+                    if next_pid == dst_pid:
+                        comp_v = pid_sat_comp[dst_pid].get(v)
+                        if comp_v is None or comp_dst is None or comp_v != comp_dst:
+                            continue
+                    w = sat_graph[u][v].get("weight", 1.0)
+                    cand = (u, v, w)
+                    if best is None or w < best[2]:
+                        best = cand
+            if best:
+                filtered = [best]
+
+        # --- 還是沒有？改用「替代 next_pid」：在 current_pid 的其他鄰 PID 找可行 gateway ---
+        if not filtered:
+            alternatives = []
+            for alt_pid in router.pid_neighbors[current_pid]:
+                # 必須確保 alt_pid 在 PID 圖上仍能到 dst_pid
+                try:
+                    _ = nx.shortest_path(pid_graph, alt_pid, dst_pid)
+                except nx.NetworkXNoPath:
+                    continue
+                # 從 (current_pid, alt_pid) 候選中找符合分量且真實 ISL 的
+                for (a, b, c) in gcache.get(current_pid, alt_pid):
+                    comp_a = pid_sat_comp[current_pid].get(a)
+                    if comp_cur is None or comp_a is None or comp_a != comp_cur:
+                        continue
+                    if (a, b) not in sat_neighbor_to_if_map or (b, a) not in sat_neighbor_to_if_map:
+                        continue
+                    alternatives.append((alt_pid, a, b, c))
+            if alternatives:
+                # 取成本最低的替代鄰 PID
+                alt_pid, a, b, c = min(alternatives, key=lambda x: x[3])
+                print(f"[ALT-NEXTPID] change {current_pid}->{next_pid} to {current_pid}->{alt_pid} due to no gateway from current component")
+                next_pid = alt_pid
+                filtered = [(a, b, c)]
+
+        if not filtered:
+            # 真正無解才報 NOPATH（現在比原本更早攔住不通情況）
+            print(f"[NOPATH] no usable gateway {current_pid}->{next_pid} from {current_sat} (comp={comp_cur})")
+            return
+
+        gw_used = None
+        for (a, b, c) in filtered:
+            # 成員資格檢查
+            if (a not in pid_subgraphs[current_pid]) or (b not in pid_subgraphs.get(next_pid, nx.Graph())):
+                continue
+            # 分量一致（安全再檢一次，避免任何不同步）
+            comp_a = pid_sat_comp[current_pid].get(a)
+            if comp_cur is None or comp_a is None or comp_a != comp_cur:
+                continue
+            if next_pid == dst_pid:
+                comp_b = pid_sat_comp[dst_pid].get(b)
+                if comp_dst is None or comp_b is None or comp_b != comp_dst:
+                    continue
+            # 實體 ISL 存在（雙向 if）
+            if (a, b) not in sat_neighbor_to_if_map or (b, a) not in sat_neighbor_to_if_map:
+                continue
+            gw_used = (a, b)
+            break
+
+        if gw_used is None:
+            print(f"[NOPATH] filtered gateways unusable after membership/comp checks {current_pid}->{next_pid} from {current_sat}")
+            return
+
+        satA, satB = gw_used
+
+        # 群內到 satA
+        if current_sat != satA:
+            try:
+                pathA = intra(current_pid, current_sat, satA)
+                stitch_sat_path(pathA, dst_gs_node_id, sat_neighbor_to_if_map, fstate, stitch_skip_samples)
+            except nx.NetworkXNoPath:
+                return
+
+        # 跨 gateway 一跳
+        assert (satA, satB) in sat_neighbor_to_if_map and (satB, satA) in sat_neighbor_to_if_map, \
+            f"Gateway {satA}->{satB} has no physical ISL"
+        print(f"[GATEWAY] {t_label} PID {current_pid}->{next_pid} via {satA}->{satB}")
+        stitch_sat_path([satA, satB], dst_gs_node_id, sat_neighbor_to_if_map, fstate, stitch_skip_samples)
+
+        # 前進
+        current_sat = satB
+        current_pid = next_pid
+
+        # 進入 dst_pid → 立刻 Early-Exit
+        if current_pid == dst_pid:
+            try:
+                final_path = intra(dst_pid, current_sat, dst_downlink_sat)
+                stitch_sat_path(final_path, dst_gs_node_id, sat_neighbor_to_if_map, fstate, stitch_skip_samples)
+            except nx.NetworkXNoPath:
+                pass
+            break
+
+    if len(stitch_skip_samples) > 0:
+        print(f"[STITCH] Skipped edges: {len(stitch_skip_samples)} (showing up to 20 samples)")
+
+# -------------------------------
+# 建 PID 商圖（from router.pid_neighbors）
+# -------------------------------
+def build_pid_graph(router: VirtualPIDRouter) -> nx.Graph:
+    Gp = nx.Graph()
+    Gp.add_nodes_from(range(router.num_pid))
+    for a, neighs in router.pid_neighbors.items():
+        for b in neighs:
+            Gp.add_edge(a, b)  # 無權重；表示相鄰允許
+    return Gp
+
+def build_pid_constrained_sat_graph(
+    G_sat_isls: nx.Graph,
+    sat_pid: Dict[int, int],
+    gateway_cache: Optional["GatewayCache"],
+    router: VirtualPIDRouter
+) -> nx.Graph:
+    """
+    基於分群規則建立「受限衛星圖」：
+      - 保留所有 Intra-PID 的 ISL
+      - Inter-PID 僅保留 GatewayCache 的 k-best 實體 ISL（雙向）
+    如此可把分層語義轉為“邊限制”，再交給最短路引擎。
+    """
+    Gc = nx.Graph()
+    Gc.add_nodes_from(G_sat_isls.nodes(data=True))
+    skipped_edges = 0
+    hit_gateway = 0
+    inter_total = 0
+
+    # 檢查哪些衛星沒有被分到 PID（避免 KeyError，並幫你定位資料缺口）
+    unassigned = [n for n in G_sat_isls.nodes if n not in sat_pid]
+    if unassigned:
+        _alog("[WARN] satellites without PID; edges involving them will be skipped",
+              {"count": len(unassigned), "sample": unassigned[:8]})
+    
+    # Intra-PID 全保留
+    for u, v, data in G_sat_isls.edges(data=True):
+        pa = sat_pid.get(u)
+        pb = sat_pid.get(v)
+        if pa is None or pb is None:
+            # 任一端未被分到 PID，跳過這條邊
+            skipped_edges += 1
+            continue
+
+        if pa == pb:
+            # Intra-PID: keep
+            Gc.add_edge(u, v, **data)
+            continue
+
+        # Inter-PID: 只有當 (u,v) 是 GatewayCache 允許的跨群邊，才保留
+        inter_total += 1
+        if _gcache_is_gateway_edge(gateway_cache, pa, pb, u, v):
+            Gc.add_edge(u, v, **data)
+            hit_gateway += 1
+
+    # 在函式結尾或建完圖後，加個診斷 log（只在有跳過時印）
+    if skipped_edges or inter_total:
+        _alog("[SP] constrained_graph edge stats",
+                {"skipped_unassigned": skipped_edges,
+                "intra_edges_kept": (Gc.number_of_edges() - hit_gateway),  # 近似：此時已加入的多為群內 + 命中
+                "inter_edges_total": inter_total,
+                "inter_edges_hits": hit_gateway})
+
+    # Inter-PID：只放 Gateway 候選（注意相鄰檢查）
+    if gateway_cache is not None and getattr(gateway_cache, "candidates", None):
+        for (pa, pb), lst in gateway_cache.candidates.items():
+            nbrs = router.pid_neighbors.get(pa, set())
+            if nbrs and (pb not in nbrs):
+                continue
+            for (a, b, _) in lst:
+                if G_sat_isls.has_edge(a, b):
+                    data = G_sat_isls.get_edge_data(a, b).copy()
+                    Gc.add_edge(a, b, **data)
+    
+    MIN_EDGES = max(1000, int(G_sat_isls.number_of_nodes() * 2))  # 閾值可調
+    if Gc.number_of_edges() < MIN_EDGES:
+        added_relaxed = 0
+        for u, v, data in G_sat_isls.edges(data=True):
+            pa = sat_pid.get(u)
+            pb = sat_pid.get(v)
+            if pa is None or pb is None or pa == pb:
+                continue
+            # 只放「相鄰 PID」之間的 ISL
+            nbrs = router.pid_neighbors.get(pa, set())
+            if (not nbrs) or (pb in nbrs):
+                if not Gc.has_edge(u, v):
+                    Gc.add_edge(u, v, **data)
+                    added_relaxed += 1
+        _alog("[SP] relaxed inter-PID edges appended",
+              {"before": (Gc.number_of_edges() - added_relaxed),
+               "added_relaxed": added_relaxed,
+               "after": Gc.number_of_edges(),
+               "threshold": MIN_EDGES})
+
+    _alog("[SP] constrained_graph |V|={} |E|={}".format(Gc.number_of_nodes(), Gc.number_of_edges()), {})
+    
+    return Gc
+
+# -------------------------------
+# 主入口：每個 snapshot 呼叫一次
+# -------------------------------
+def route_all_gs_pairs(
+        router: VirtualPIDRouter,
+        gcache: GatewayCache,
+        sssp_cache: SSSPCache,
+        sat_ids: List[int],
+        sat_nadir_latlon: Dict[int, Tuple[float,float]],
+        sat_pos_xy: Dict[int, Tuple[float,float]],  # 給方向偏好用；沒有可傳 {} 跳過
+        G_sat_isls: nx.Graph,                        # 全衛星圖（edge["weight"] 建議為 delay 或 geo）
+        sat_neighbor_to_if_map: Dict[Tuple[int,int], Tuple[int,int]],
+        gs_pairs: List[Tuple[int,int,int,int,int]],  # (src_gs, dst_gs, src_uplink_sat, dst_downlink_sat, t_int)
+        fstate: Dict[Tuple[int,int], Tuple[int,int,int]]
+    ):
+    """
+    外部把原本 GS×GS 迴圈中的資訊包成 gs_pairs 傳入。
+    """
+    # 1) 依當下位置重建 PID 成員與子圖/分量
+    # 每個 snapshot 先重置邊權重為幾何長度
+    reset_edge_weights_to_geo(G_sat_isls)
+    sat_pid = router.refresh_pid_members_and_subgraphs(sat_ids, sat_nadir_latlon, G_sat_isls)
+    
+    # 清空群內 single-source shortest path 快取，避免用到上一個 snapshot
+    sssp_cache.clear_all()
+
+    # 2) （可選）選 agent（若其他模組要用）
+    router.select_pid_agents_by_geo_center(sat_nadir_latlon)
+
+    # 3) 重建 Gateway 候選（以當下實體 ISL）
+    def edge_cost(u, v, data):
+        return data.get("weight", data.get("geo_len_m", 1.0))
+    gcache.rebuild(G_sat_isls, sat_pid, router.pid_neighbors, edge_cost)
+
+    # 4) 建 PID 商圖（相鄰允許）
+    pid_graph = build_pid_graph(router)
+
+    def _pid_of_sat(s: int) -> int:
+        return sat_pid[s]
+
+    # 5) 路由每對 GS
+    for (src_gs_node_id, dst_gs_node_id, src_uplink_sat, dst_downlink_sat, t_int) in gs_pairs:
+        # 對「目的地」施加弱化方向偏好（僅當 sat_pos_xy 可用）
+        if dst_downlink_sat in sat_pos_xy:
+            apply_directional_weights(G_sat_isls, sat_pos_xy, sat_pos_xy[dst_downlink_sat], alpha=GEO_ALPHA)
+
+        # 這些變數只在迴圈內才有
+        src_pid = _pid_of_sat(src_uplink_sat)
+        dst_pid = _pid_of_sat(dst_downlink_sat)
+        t_label = f"t={t_int}"
+
+        # 子圖更新後，清掉該兩個 PID 的群內快取，避免使用舊 prev
+        sssp_cache.invalidate_pid(src_pid)
+        sssp_cache.invalidate_pid(dst_pid)
+
+        route_one_pair(router, gcache, sssp_cache,
+                       G_sat_isls, pid_graph, _pid_of_sat,
+                       router.pid_subgraphs, router.pid_sat_comp,
+                       sat_neighbor_to_if_map, fstate,
+                       src_uplink_sat, dst_downlink_sat,
+                       src_pid, dst_pid, dst_gs_node_id,
+                       t_label=t_label)
+
+_ROUTER = None
+_GCACHE = None
+_SSSP = None
+
+def init(config=None):
+    """主程式在模擬開始時呼叫一次。"""
+    global _ROUTER, _GCACHE, _SSSP
+    _ROUTER = VirtualPIDRouter(grid_deg=GRID_DEG, allow_diagonal_neighbor=ALLOW_DIAGONAL_NEIGHBOR)
+    _GCACHE = GatewayCache(k_best=K_BEST_GATEWAYS)
+    _SSSP = SSSPCache()
+    return {"ok": True, "msg": "algorithm_hierarchical_virtual_pid initialized"}
+
+def _alog(msg: str, payload: Optional[dict] = None):
+    ts = _dt.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3] + "Z"
+    line = f"{ts} {msg}\n"
+
+    # 1) 優先寫到 Hypatia 的輸出資料夾（最容易找到）
+    paths = []
+    if payload and "output_dynamic_state_dir" in payload and payload["output_dynamic_state_dir"]:
+        odir = payload["output_dynamic_state_dir"]
+        try:
+            os.makedirs(odir, exist_ok=True)
+        except Exception:
+            pass
+        paths.append(os.path.join(odir, "alg_mode.log"))
+
+    # 2) 專案工作目錄
+    paths.append(os.path.join(os.getcwd(), "alg_mode.log"))
+    # 3) 系統暫存
+    paths.append(os.path.join(tempfile.gettempdir(), "alg_mode.log"))
+
+    for p in paths:
+        try:
+            with open(p, "a", encoding="utf-8") as f:
+                f.write(line)
+        except Exception:
+            continue  # 換下一個路徑
+
+
+
+def step(payload: dict):
+    """
+    主程式每個 snapshot/time-step 呼叫一次。
+    若 MODE_SP_OVER_PID_QUOTIENT=True → 走 Hypatia 最短路（在 PID 受限圖上）。
+    否則 → 走原本逐跳分層（stitch）流程。
+    """
+    assert _ROUTER and _GCACHE and _SSSP, "Call init() first."
+
+    # 讓 log 一眼看出現在跑哪種模式
+    print(f"[MODE] SP_OVER_PID_QUOTIENT={MODE_SP_OVER_PID_QUOTIENT}")
+
+    _alog(f"[MODE] SP_OVER_PID_QUOTIENT={MODE_SP_OVER_PID_QUOTIENT}", payload)
+
+    # 名稱對齊：有些 main 給的是 sat_neighbor_to_if_map，把它對齊成 Hypatia 的 key
+    if "sat_neighbor_to_if" not in payload and "sat_neighbor_to_if_map" in payload:
+        payload["sat_neighbor_to_if"] = payload["sat_neighbor_to_if_map"]
+
+    if MODE_SP_OVER_PID_QUOTIENT:
+        # 在 SP 模式下，若缺少 Hypatia 需要的欄位，就明確列出並「不要」悄悄回退到逐跳
+        required_keys = [
+            "output_dynamic_state_dir",
+            "time_since_epoch_ns",
+            "satellites",
+            "ground_stations",
+            "G_sat_isls",
+            "ground_station_satellites_in_range",
+            "num_isls_per_sat",
+            "sat_neighbor_to_if",
+            "list_gsl_interfaces_info",
+            "sat_ids",
+            "sat_nadir_latlon",
+        ]
+        missing = [k for k in required_keys if k not in payload]
+        if missing:
+            _alog(f"[SP-FALLBACK-BLOCKED] Missing keys for SP-mode: {missing}", payload)
+            # ★ 直接返回，不回退到逐跳，避免混淆
+            return {"ok": False, "error": f"missing keys: {missing}"}
+
+        # ---------- SP over PID-quotient ----------
+        sat_ids = payload["sat_ids"]
+        sat_nadir_latlon = payload["sat_nadir_latlon"]
+        G_sat_isls = payload["G_sat_isls"]
+
+        # （新增）SP 模式也先把權重重置回幾何長度，確保受限圖的基線一致
+        reset_edge_weights_to_geo(G_sat_isls)
+
+        # (1) 分群 / 子圖 / 分量
+        sat_pid = _ROUTER.refresh_pid_members_and_subgraphs(sat_ids, sat_nadir_latlon, G_sat_isls)
+
+        # (2) Gateway 候選
+        def edge_cost(u, v, data):
+            return data.get("weight", data.get("geo_len_m", 1.0))
+        _GCACHE.rebuild(G_sat_isls, sat_pid, _ROUTER.pid_neighbors, edge_cost)
+
+        # (3) 受限圖
+        G_constrained = build_pid_constrained_sat_graph(G_sat_isls, sat_pid, _GCACHE, _ROUTER)
+
+        # (4) Hypatia 最短路
+        _alog("[SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph", payload)
+        _alog(f"[SP] constrained_graph |V|={G_constrained.number_of_nodes()} |E|={G_constrained.number_of_edges()}", payload)
+        
+        # 調試：檢查原始的 ground_station_satellites_in_range 格式
+        raw_gs_range = payload.get("ground_station_satellites_in_range")
+        num_sats = len(payload["satellites"]) if not isinstance(payload["satellites"], int) else payload["satellites"]
+        num_gs = len(payload["ground_stations"]) if not isinstance(payload["ground_stations"], int) else payload["ground_stations"]
+        
+        _alog(f"[DEBUG] num_sats={num_sats}, num_gs={num_gs}", payload)
+        if isinstance(raw_gs_range, dict):
+            sample_keys = list(raw_gs_range.keys())[:5]
+            _alog(f"[DEBUG] raw_gs_range type=dict, sample_keys={sample_keys}, total_keys={len(raw_gs_range)}", payload)
+        else:
+            _alog(f"[DEBUG] raw_gs_range type={type(raw_gs_range)}", payload)
+        
+        gs_range_norm = _normalize_gs_range_candidates(
+            raw_gs_range,
+            payload["satellites"],
+            payload["ground_stations"],
+        )
+        
+        gs_range_norm_full = {i: list(gs_range_norm.get(i, [])) for i in range(num_gs)}
+        
+        try:
+            empty_keys = sum(1 for k,v in gs_range_norm_full.items() if not v)
+            non_empty_sample = {k: len(v) for k, v in list(gs_range_norm_full.items())[:10] if v}
+            _alog(f"[SP] gs_range_norm_full total_keys={len(gs_range_norm_full)} "
+                  f"empty_keys={empty_keys} non_empty_sample={non_empty_sample}", payload)
+        except Exception as e:
+            _alog(f"[DEBUG] Error in gs_range logging: {e}", payload)
+        
+        # Convert list_gsl_interfaces_info to the expected format
+        # gid_to_sat_gsl_if_idx should be a list where gid_to_sat_gsl_if_idx[gid] = GSL interface index
+        list_gsl_info = payload["list_gsl_interfaces_info"]
+        if isinstance(list_gsl_info, list):
+            # Simple case: assume one GSL interface per ground station (index 0)
+            gid_to_sat_gsl_if_idx = [0] * num_gs
+        elif isinstance(list_gsl_info, dict):
+            # Convert dict to list format
+            gid_to_sat_gsl_if_idx = [list_gsl_info.get(i, 0) for i in range(num_gs)]
+        else:
+            # Fallback: assume one GSL interface per ground station
+            gid_to_sat_gsl_if_idx = [0] * num_gs
+        
+        _alog(f"[DEBUG] gid_to_sat_gsl_if_idx: type={type(gid_to_sat_gsl_if_idx)}, len={len(gid_to_sat_gsl_if_idx)}, sample={gid_to_sat_gsl_if_idx[:5]}", payload)
+
+        prev_for_sp = None
+
+        fstate = calculate_fstate_shortest_path_without_gs_relaying(
+                payload["output_dynamic_state_dir"],
+                payload["time_since_epoch_ns"],
+                len(payload["satellites"]),                         # num_satellites
+                len(payload["ground_stations"]),                    # num_ground_stations
+                G_constrained,                                      # sat_net_graph_only_satellites_with_isls
+                payload["num_isls_per_sat"],                        # num_isls_per_sat
+                gid_to_sat_gsl_if_idx,                              # gid_to_sat_gsl_if_idx (converted to list)
+                gs_range_norm_full,                                 # ground_station_satellites_in_range_candidates
+                payload["sat_neighbor_to_if"],                      # sat_neighbor_to_if
+                prev_for_sp,                                        # prev_fstate
+                payload.get("enable_verbose_logs", False)           # enable_verbose_logs
+        )
+        _alog("[SP] done; fstate ready", payload)
+        return {"ok": True, "fstate": fstate}
+
+    # ---------- 逐跳（stitch） ----------
+    _alog("[STITCH] running route_all_gs_pairs()", payload)
+    route_all_gs_pairs(
+        _ROUTER,
+        _GCACHE,
+        _SSSP,
+        payload["sat_ids"],
+        payload["sat_nadir_latlon"],
+        payload.get("sat_pos_xy", {}),
+        payload["G_sat_isls"],
+        payload.get("sat_neighbor_to_if_map") or payload.get("sat_neighbor_to_if"),
+        payload["gs_pairs"],
+        payload["fstate"],
+    )
+    _alog("[STITCH] done", payload)
+    return {"ok": True}
+
+def _normalize_gs_range_candidates(raw_map, satellites, ground_stations):
+    """
+    規範化成 {0..(num_gs-1): [sat_id,...]}。
+    支援：
+      - key 是 0-based gid（0..num_gs-1）
+      - key 是全域 node id（num_sats..num_sats+num_gs-1）
+      - raw_map 是 list/tuple，長度 = num_gs
+    值若是 set/tuple 會轉 list。
+    """
+    num_sats = len(satellites) if not isinstance(satellites, int) else satellites
+    num_gs   = len(ground_stations) if not isinstance(ground_stations, int) else ground_stations
+
+    # 預先建好完整 0..num_gs-1 的鍵，避免 KeyError
+    out = {i: [] for i in range(num_gs)}
+
+    if raw_map is None:
+        return out
+
+    # Case 1: list/tuple（索引就是 0-based gid）
+    if isinstance(raw_map, (list, tuple)):
+        for gid0 in range(min(len(raw_map), num_gs)):
+            vals = raw_map[gid0]
+            out[gid0] = list(vals) if not isinstance(vals, list) else vals
+        return out
+
+    # Case 2: dict
+    if isinstance(raw_map, dict) and raw_map:
+        ks = list(raw_map.keys())
+        
+        if not ks:
+            return out
+
+        # 2a) 已是 0-based gid (0..num_gs-1)
+        if all(isinstance(k, int) and 0 <= k < num_gs for k in ks):
+            for gid0 in range(num_gs):
+                vals = raw_map.get(gid0, [])
+                out[gid0] = list(vals) if not isinstance(vals, list) else vals
+            return out
+
+        # 2b) 全域 node id：num_sats..num_sats+num_gs-1 (例如: 625-724 for GS)
+        if all(isinstance(k, int) and num_sats <= k < num_sats + num_gs for k in ks):
+            for gnode, vals in raw_map.items():
+                gid0 = gnode - num_sats  # 625 -> 0, 626 -> 1, ..., 724 -> 99
+                if 0 <= gid0 < num_gs:
+                    out[gid0] = list(vals) if not isinstance(vals, list) else vals
+            return out
+        
+        # 2c) 混合情況或部分符合：嘗試智能轉換
+        for key, vals in raw_map.items():
+            if not isinstance(key, int):
+                continue
+            
+            # 如果 key 在 0-based 範圍內，直接使用
+            if 0 <= key < num_gs:
+                out[key] = list(vals) if not isinstance(vals, list) else vals
+            # 如果 key 在全域 node ID 範圍內，轉換
+            elif num_sats <= key < num_sats + num_gs:
+                gid0 = key - num_sats
+                out[gid0] = list(vals) if not isinstance(vals, list) else vals
+
+    # 其它未知型態：回預設 out（全鍵存在，但皆為空）
+    return out
+
+# 常見別名（有些執行器會找不同名字）
+def route_snapshot(payload: dict):
+    return step(payload)
+
+def run(payload: dict):
+    return step(payload)
+
+def run_algorithm(payload: dict):
+    return step(payload)
+
+# ===== Hypatia 系統適配器函數 =====
+def algorithm_hierarchical_virtual_pid(
+    output_dynamic_state_dir,
+    time_since_epoch_ns,
+    satellites,
+    ground_stations,
+    sat_net_graph_only_satellites_with_isls,
+    ground_station_satellites_in_range,
+    num_isls_per_sat,
+    sat_neighbor_to_if,
+    list_gsl_interfaces_info,
+    prev_output,
+    enable_verbose_logs,
+    sat_lat_lon=None,
+    use_region_grouping=False,
+    epoch=None,
+    time_step_ns=None
+):
+    """
+    Hypatia 系統適配器：直接使用 main_25x25_fast.py 已計算好的數據
+    """
+    global _ROUTER, _GCACHE, _SSSP
+    
+    # 初始化（如果還沒初始化）
+    if _ROUTER is None or _GCACHE is None or _SSSP is None:
+        init()
+    
+    # 準備必要欄位
+    num_sats = len(satellites) if not isinstance(satellites, int) else satellites
+    sat_ids = list(range(num_sats))
+
+    # ★ 權重歸零，避免跨 pair 累積
+    reset_edge_weights_to_geo(sat_net_graph_only_satellites_with_isls)
+
+    # ★ 智能提取衛星位置數據
+    def _best_effort_sat_latlon(
+        sat_lat_lon_in,
+        satellites,
+        G_sat_isls: nx.Graph
+    ) -> Dict[int, Tuple[float, float]]:
+        """
+        優先使用呼叫者提供的 sat_lat_lon；
+        否則嘗試從圖節點屬性或 satellites 物件上擷取 (lat, lon)。
+        回傳 {sat_id: (lat, lon)}；擷取不到則回 {}。
+        """
+        # 1) 呼叫者已提供
+        if isinstance(sat_lat_lon_in, dict) and sat_lat_lon_in:
+            return sat_lat_lon_in
+        
+        out = {}
+
+        # 2) 從圖節點屬性撈
+        cand_keys = [
+            ("nadir_lat_deg", "nadir_lon_deg"),
+            ("lat", "lon"),
+            ("nadir_lat", "nadir_lon"),
+            ("lat_deg", "lon_deg"),
+            ("latitude", "longitude"),
+        ]
+
+        try:
+            for nid, data in G_sat_isls.nodes(data=True):
+                lat = lon = None
+                for klat, klon in cand_keys:
+                    if klat in data and klon in data:
+                        lat, lon = data[klat], data[klon]
+                        break
+                if lat is not None and lon is not None:
+                    out[nid] = (float(lat), float(lon))
+        except Exception:
+            pass
+
+        # 3) satellites 物件撈（如果 out 不完整）
+        try:
+            # 可迭代時才逐一嘗試
+            for sid, sat in enumerate(satellites):
+                if sid in out:
+                    continue
+                lat = lon = None
+                for klat, klon in cand_keys:
+                    lat = getattr(sat, klat, None)
+                    lon = getattr(sat, klon, None)
+                    if lat is not None and lon is not None:
+                        out[sid] = (float(lat), float(lon))
+                        break
+        except TypeError:
+            # satellites 不是 iterable（可能是一個數字），略過
+            pass
+        except Exception:
+            pass
+
+        # 4) 絕不塞 (0,0)；允許 out 是部分鍵
+        return out
+
+    sat_nadir_latlon = sat_lat_lon if isinstance(sat_lat_lon, dict) and sat_lat_lon else None
+    if not sat_nadir_latlon:
+        sat_nadir_latlon = _best_effort_sat_latlon(
+            sat_lat_lon, satellites, sat_net_graph_only_satellites_with_isls
+        )
+
+    if not sat_nadir_latlon:
+        _alog("[WARNING] No satellite position data available from caller/graph/satellite objects; continue with empty mapping.",
+            {"output_dynamic_state_dir": output_dynamic_state_dir})
+
+    payload = {
+        "output_dynamic_state_dir": output_dynamic_state_dir,
+        "time_since_epoch_ns": time_since_epoch_ns,
+        "satellites": satellites,
+        "ground_stations": ground_stations,
+        "G_sat_isls": sat_net_graph_only_satellites_with_isls,
+        "ground_station_satellites_in_range": ground_station_satellites_in_range,
+        "num_isls_per_sat": num_isls_per_sat,
+        "sat_neighbor_to_if": sat_neighbor_to_if,
+        "list_gsl_interfaces_info": list_gsl_interfaces_info,
+        "prev_output": prev_output,
+        "enable_verbose_logs": enable_verbose_logs,
+
+        # 分群輸入
+        "sat_ids": sat_ids,
+        "sat_nadir_latlon": sat_nadir_latlon,
+
+        # 逐跳模式用不到，但保留
+        "sat_pos_xy": {},
+        "gs_pairs": [],
+        "fstate": {},
+    }
+
+    _alog("[SP] delegating to step(payload) with constrained PID routing",
+        {"has_sat_nadir_latlon": bool(sat_nadir_latlon)})
+    ret = step(payload)
+    return ret if isinstance(ret, dict) else {"fstate": {}}
+

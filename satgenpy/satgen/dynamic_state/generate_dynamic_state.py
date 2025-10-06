@@ -31,7 +31,7 @@ from .algorithm_paired_many_only_over_isls import algorithm_paired_many_only_ove
 from .algorithm_free_gs_one_sat_many_only_over_isls import algorithm_free_gs_one_sat_many_only_over_isls
 from .algorithm_hierarchical import algorithm_hierarchical
 from .algorithm_hierarchical_region import algorithm_hierarchical_region
-from .algorithm_hierarchical_virtual_pid_backup import algorithm_hierarchical_virtual_pid
+from .algorithm_hierarchical_virtual_pid import algorithm_hierarchical_virtual_pid  # 你的新算法
 from .algorithm_hierarchical_virtual_pid_clean_fixed import algorithm_hierarchical_virtual_pid_clean
 
 
@@ -118,12 +118,21 @@ def generate_dynamic_state_at(
     # Calculate satellite lat/lon for region grouping
     sat_lat_lon = []
     if dynamic_state_algorithm == "algorithm_hierarchical_region":
-        import math
         for satellite in satellites:
             satellite.compute(str(time), epoch=str(epoch))
             lat_deg = math.degrees(satellite.sublat)
             lon_deg = math.degrees(satellite.sublong)
             sat_lat_lon.append((lat_deg, lon_deg))
+
+    def _build_sat_lat_lon_dict_for_lohi(satellites, epoch_obj, time_obj):
+        out = {}
+        for sid, satellite in enumerate(satellites):
+            # 用與上面一致的 propagate 方式
+            satellite.compute(str(time_obj), epoch=str(epoch_obj))
+            lat_deg = math.degrees(satellite.sublat)
+            lon_deg = math.degrees(satellite.sublong)
+            out[sid] = (lat_deg, lon_deg)
+        return out
 
     # Graphs
     sat_net_graph_only_satellites_with_isls = nx.Graph()
@@ -321,6 +330,8 @@ def generate_dynamic_state_at(
     
     elif dynamic_state_algorithm == "algorithm_hierarchical_virtual_pid":
 
+        sat_lat_lon_dict = _build_sat_lat_lon_dict_for_lohi(satellites, epoch, time)
+        
         return algorithm_hierarchical_virtual_pid(
             output_dynamic_state_dir,
             time_since_epoch_ns,
@@ -333,13 +344,15 @@ def generate_dynamic_state_at(
             list_gsl_interfaces_info,
             prev_output,
             enable_verbose_logs,
-            sat_lat_lon=None, 
+            sat_lat_lon=sat_lat_lon_dict,
             use_region_grouping=False, # 跟 region 區分，明確指定
             time_step_ns=time_step_ns,
             epoch=epoch
         )
 
     elif dynamic_state_algorithm == "algorithm_hierarchical_virtual_pid_clean_fixed":
+
+        sat_lat_lon_dict = _build_sat_lat_lon_dict_for_lohi(satellites, epoch, time)
 
         return algorithm_hierarchical_virtual_pid_clean(
             output_dynamic_state_dir,
