@@ -119,15 +119,6 @@ class VirtualPIDRouter:
             "allow_diagonal_neighbor": self.allow_diag,
             "num_pids": self.num_pid,})
 
-        # 動態：每 snapshot 更新
-        self.pid_members: Dict[int, Set[int]] = {pid: set() for pid in range(self.num_pid)}
-        self.pid_subgraphs: Dict[int, nx.Graph] = {}
-        self.pid_sat_comp: Dict[int, Dict[int, int]] = {}
-
-        # 若要 agent，可用下列兩個欄位
-        self.pid_agent_sat: Dict[int, Optional[int]] = {}
-        self._agent_hold_counter: Dict[int, int] = {}
-
     def _wrap_lon_idx(self, i: int) -> int:
         return i % self.num_lon
 
@@ -266,18 +257,26 @@ class GatewayCache:
                 pid_neighbors: Dict[int, Set[int]],
                 edge_cost_func: Callable[[int,int,dict], float]) -> None:
         self.candidates.clear()
+        cross_cnt = 0
         for u, v, data in G_sat_isls.edges(data=True):
             pa, pb = sat_pid.get(u), sat_pid.get(v)
             if pa is None or pb is None or pa == pb:
                 continue
-            nbrs = pid_neighbors.get(pa, set())
-            if nbrs and pb not in nbrs:
-                continue
             c = edge_cost_func(u, v, data)
             self._push(pa, pb, (u, v, c))
             self._push(pb, pa, (v, u, c))
+            cross_cnt += 1
+
+        # 針對每個 PID 對挑 k-best
         for key, lst in list(self.candidates.items()):
             self.candidates[key] = sorted(lst, key=lambda x: x[2])[:self.k_best]
+
+        _alog("[GW] rebuild done", {
+            "k_best": self.k_best,
+            "cross_pid_isl_edges": cross_cnt,
+            "num_pid_pairs": len(self.candidates),
+            "avg_candidates_per_pair": (sum(len(v) for v in self.candidates.values()) / max(1, len(self.candidates))),
+        })
 
     def _push(self, pa, pb, triplet):
         self.candidates.setdefault((pa, pb), []).append(triplet)
@@ -596,56 +595,38 @@ def build_pid_constrained_sat_graph(
     """
     Gc = nx.Graph()
     Gc.add_nodes_from(G_sat_isls.nodes(data=True))
-    skipped_edges = 0
-    hit_gateway = 0
-    inter_total = 0
-
-    # 檢查哪些衛星沒有被分到 PID（避免 KeyError，並幫你定位資料缺口）
-    unassigned = [n for n in G_sat_isls.nodes if n not in sat_pid]
-    if unassigned:
-        _alog("[WARN] satellites without PID; edges involving them will be skipped",
-              {"count": len(unassigned), "sample": unassigned[:8]})
     
-    # Intra-PID 全保留
-    for u, v, data in G_sat_isls.edges(data=True):
-        pa = sat_pid.get(u)
-        pb = sat_pid.get(v)
-        if pa is None or pb is None:
-            # 任一端未被分到 PID，跳過這條邊
-            skipped_edges += 1
-            continue
-
-        if pa == pb:
-            # Intra-PID: keep
-            Gc.add_edge(u, v, **data)
-            continue
-
-        # Inter-PID: 只有當 (u,v) 是 GatewayCache 允許的跨群邊，才保留
-        inter_total += 1
-        if _gcache_is_gateway_edge(gateway_cache, pa, pb, u, v):
-            Gc.add_edge(u, v, **data)
-            hit_gateway += 1
-
-    # 在函式結尾或建完圖後，加個診斷 log（只在有跳過時印）
-    if skipped_edges or inter_total:
-        _alog("[SP] constrained_graph edge stats",
-                {"skipped_unassigned": skipped_edges,
-                "intra_edges_kept": (Gc.number_of_edges() - hit_gateway),  # 近似：此時已加入的多為群內 + 命中
-                "inter_edges_total": inter_total,
-                "inter_edges_hits": hit_gateway})
-
     # Inter-PID：只放 Gateway 候選（注意相鄰檢查）
+    intra_e, inter_e = 0, 0
+
+    # Intra-PID：同群邊全留
+    for u, v, data in G_sat_isls.edges(data=True):
+        pa, pb = sat_pid.get(u), sat_pid.get(v)
+        if pa is not None and pb is not None and pa == pb:
+            Gc.add_edge(u, v, **data)
+            intra_e += 1
+
+    # Inter-PID：從 Gateway 候選加入（鄰接集合為空 ⇒ 放寬）
     if gateway_cache is not None and getattr(gateway_cache, "candidates", None):
         for (pa, pb), lst in gateway_cache.candidates.items():
-            nbrs = router.pid_neighbors.get(pa, set())
-            if nbrs and (pb not in nbrs):
+            nbrs = router.pid_neighbors.get(pa, None)
+            if nbrs is not None and len(nbrs) > 0 and (pb not in nbrs):
                 continue
             for (a, b, _) in lst:
                 if G_sat_isls.has_edge(a, b):
                     data = G_sat_isls.get_edge_data(a, b).copy()
-                    Gc.add_edge(a, b, **data)
-    
-    MIN_EDGES = max(1000, int(G_sat_isls.number_of_nodes() * 2))  # 閾值可調
+                    if not Gc.has_edge(a, b):
+                        Gc.add_edge(a, b, **data)
+                        inter_e += 1
+
+    _alog("[SP] constrained_graph edge stats", {
+        "intra_edges": intra_e,
+        "inter_edges": inter_e,
+        "total_edges": Gc.number_of_edges(),
+    })
+
+    # === 保底放寬：邊太少就把「相鄰 PID 的實體 ISL」補回來（鄰接集合為空 ⇒ 放寬）===
+    MIN_EDGES = max(1000, int(G_sat_isls.number_of_nodes() * 2))
     if Gc.number_of_edges() < MIN_EDGES:
         added_relaxed = 0
         for u, v, data in G_sat_isls.edges(data=True):
@@ -653,7 +634,6 @@ def build_pid_constrained_sat_graph(
             pb = sat_pid.get(v)
             if pa is None or pb is None or pa == pb:
                 continue
-            # 只放「相鄰 PID」之間的 ISL
             nbrs = router.pid_neighbors.get(pa, set())
             if (not nbrs) or (pb in nbrs):
                 if not Gc.has_edge(u, v):
@@ -666,7 +646,6 @@ def build_pid_constrained_sat_graph(
                "threshold": MIN_EDGES})
 
     _alog("[SP] constrained_graph |V|={} |E|={}".format(Gc.number_of_nodes(), Gc.number_of_edges()), {})
-    
     return Gc
 
 # -------------------------------
