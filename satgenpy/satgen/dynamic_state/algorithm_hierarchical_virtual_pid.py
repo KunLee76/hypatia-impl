@@ -21,6 +21,9 @@ GEO_ALPHA = 0.08                        # 地理方向偏好係數（小：不�
 MIN_AGENT_HOLD_STEPS = 2                # agent 抖動抑制步數（若你需要 agent）
 EARTH_R_KM = 6371.0
 MODE_SP_OVER_PID_QUOTIENT = True        # 要逐跳分層，把它改成 False
+GWC_REBUILD_PERIOD_SNAPSHOTS = 10      # 每 10 個 snapshot（~1s）才重建候選
+GWC_EMA_ALPHA = 0.8                    # 成本EMA的舊值權重
+GWC_PUBLISH_JACCARD_THRESHOLD = 0.15   # 新舊top-k集合Jaccard差異門檻（超過才升版）
 
 # -------------------------------
 # 小工具
@@ -34,60 +37,6 @@ def haversine_km(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
     dl = math.radians(_wrap_lon_deg(lon2 - lon1))
     a = math.sin(dphi/2)**2 + math.cos(phi1)*math.cos(phi2)*math.sin(dl/2)**2
     return 2*EARTH_R_KM*math.asin(math.sqrt(a))
-
-def _gcache_is_gateway_edge(gcache, pa, pb, u, v) -> bool:
-    """Compat helper: 根據 GatewayCache 可能的多種內部結構判定 (u,v) 是否為 pa<->pb 的 gateway 邊。"""
-    if gcache is None:
-        return False
-
-    # 若類別本來就有 is_gateway_edge，就直接用
-    if hasattr(gcache, "is_gateway_edge") and callable(getattr(gcache, "is_gateway_edge")):
-        try:
-            return gcache.is_gateway_edge(pa, pb, u, v)
-        except Exception:
-            pass
-
-    key_ab = (pa, pb)
-    key_ba = (pb, pa)
-    key_ud = (u, v)
-    key_du = (v, u)
-
-    # 常見：pair -> set of (u,v)
-    for attr in ("edges_by_pid_pair", "pid_pair_to_edges", "gateway_edges", "edge_index"):
-        if hasattr(gcache, attr):
-            mapping = getattr(gcache, attr, None)
-            if isinstance(mapping, dict):
-                edges = mapping.get(key_ab) or mapping.get(key_ba)
-                if edges:
-                    if isinstance(edges, set):
-                        return key_ud in edges or key_du in edges
-                    if isinstance(edges, list):
-                        return key_ud in edges or key_du in edges
-
-    # 次常見：pair -> {u: set(vs)} 或 {v: set(us)}
-    for attr in ("adj_by_pid_pair", "pid_pair_adj"):
-        if hasattr(gcache, attr):
-            mapping = getattr(gcache, attr, None)
-            if isinstance(mapping, dict):
-                adj = mapping.get(key_ab) or mapping.get(key_ba)
-                if isinstance(adj, dict):
-                    sv = adj.get(u)
-                    if isinstance(sv, set) and v in sv:
-                        return True
-                    sv = adj.get(v)
-                    if isinstance(sv, set) and u in sv:
-                        return True
-
-    # 最保守：pair -> set of gateway nodes（只要端點在 gateway 集合內就放行）
-    for attr in ("gateways_by_pid_pair", "pid_pair_to_gateways"):
-        if hasattr(gcache, attr):
-            mapping = getattr(gcache, attr, None)
-            if isinstance(mapping, dict):
-                gset = mapping.get(key_ab) or mapping.get(key_ba)
-                if isinstance(gset, (set, list, tuple)):
-                    return (u in gset) or (v in gset)
-
-    return False
 
 # -------------------------------
 # VirtualPIDRouter：網格、動態歸戶、子圖/分量
@@ -249,40 +198,115 @@ class VirtualPIDRouter:
 class GatewayCache:
     def __init__(self, k_best=K_BEST_GATEWAYS):
         self.k_best = k_best
+        # 建構期暫存（本次重建的原始候選，未必發布）
         self.candidates: Dict[Tuple[int,int], List[Tuple[int,int,float]]] = {}
+        # 已發布（VA對外生效的候選）
+        self.published_candidates: Dict[Tuple[int,int], List[Tuple[int,int,float]]] = {}
+        self.published_version: int = 0
+        # EMA 成本（跨重建持久化）
+        self._ema_cost: Dict[Tuple[int,int], float] = {}
+        # 診斷
+        self._last_rebuild_stats = {}
 
     def rebuild(self,
                 G_sat_isls: nx.Graph,
                 sat_pid: Dict[int,int],
                 pid_neighbors: Dict[int, Set[int]],
                 edge_cost_func: Callable[[int,int,dict], float]) -> None:
+        # 說明：此處不做鄰接過濾（避免前置擋掉），蒐集所有跨PID的ISL，
+        # 實際是否採用由建圖時（或此後）依鄰接規則決定。
         self.candidates.clear()
         cross_cnt = 0
         for u, v, data in G_sat_isls.edges(data=True):
             pa, pb = sat_pid.get(u), sat_pid.get(v)
             if pa is None or pb is None or pa == pb:
                 continue
-            c = edge_cost_func(u, v, data)
-            self._push(pa, pb, (u, v, c))
-            self._push(pb, pa, (v, u, c))
+            c = float(edge_cost_func(u, v, data))
+            # 先做一次EMA成本累積（邊方向視為有向）
+            key_uv = (u, v)
+            if key_uv in self._ema_cost:
+                self._ema_cost[key_uv] = GWC_EMA_ALPHA * self._ema_cost[key_uv] + (1.0 - GWC_EMA_ALPHA) * c
+            else:
+                self._ema_cost[key_uv] = c
+            self._push(pa, pb, (u, v, self._ema_cost[key_uv]))
+
+            # 對稱方向
+            key_vu = (v, u)
+            if key_vu in self._ema_cost:
+                self._ema_cost[key_vu] = GWC_EMA_ALPHA * self._ema_cost[key_vu] + (1.0 - GWC_EMA_ALPHA) * c
+            else:
+                self._ema_cost[key_vu] = c
+            self._push(pb, pa, (v, u, self._ema_cost[key_vu]))
             cross_cnt += 1
 
-        # 針對每個 PID 對挑 k-best
-        for key, lst in list(self.candidates.items()):
-            self.candidates[key] = sorted(lst, key=lambda x: x[2])[:self.k_best]
+        # 對每個PID對挑選top-k（依EMA後成本）
+        new_candidates: Dict[Tuple[int,int], List[Tuple[int,int,float]]] = {}
+        for key, lst in self.candidates.items():
+            new_candidates[key] = sorted(lst, key=lambda x: x[2])[:self.k_best]
 
-        _alog("[GW] rebuild done", {
-            "k_best": self.k_best,
+        # 決定是否「發布」：比較新top-k與已發布的top-k集合差異（Jaccard）
+        def _topk_set(d):
+            # 用無向識別避免 (u,v)/(v,u) 同時出現；這裡仍保留方向性，對集合用tuple固定方向
+            return { (u, v) for (u, v, _) in d }
+
+        changed_pairs = 0
+        jacc_sum = 0.0
+        pair_cnt = 0
+
+        for key, lst in new_candidates.items():
+            new_set = _topk_set(lst)
+            old_set = _topk_set(self.published_candidates.get(key, []))
+            if not old_set and not new_set:
+                continue
+            inter = len(new_set & old_set)
+            union = len(new_set | old_set) or 1
+            jacc = 1.0 - (inter / union)
+            jacc_sum += jacc
+            pair_cnt += 1
+            if old_set != new_set and jacc >= GWC_PUBLISH_JACCARD_THRESHOLD:
+                # 超過門檻 → 更新此pair的已發布候選
+                self.published_candidates[key] = lst
+                changed_pairs += 1
+
+        if (self.published_version == 0) and new_candidates:
+            # 冷啟動：直接發布所有
+            self.published_candidates = new_candidates
+            self.published_version = 1
+            _alog("[GW] publish init", {"pairs": len(self.published_candidates)})
+        elif changed_pairs > 0:
+            self.published_version += 1
+            _alog("[GW] publish update", {
+                "version": self.published_version,
+                "changed_pairs": changed_pairs,
+                "avg_jaccard_delta": (jacc_sum / max(1, pair_cnt)) if pair_cnt else 0.0,
+                "pairs_total": len(new_candidates),
+            })
+        else:
+            _alog("[GW] publish keep", {
+                "version": self.published_version,
+                "pairs_total": len(new_candidates),
+                "avg_jaccard_delta": (jacc_sum / max(1, pair_cnt)) if pair_cnt else 0.0,
+            })
+
+        self._last_rebuild_stats = {
             "cross_pid_isl_edges": cross_cnt,
-            "num_pid_pairs": len(self.candidates),
-            "avg_candidates_per_pair": (sum(len(v) for v in self.candidates.values()) / max(1, len(self.candidates))),
-        })
+            "num_pid_pairs": len(new_candidates),
+            "avg_candidates_per_pair": (sum(len(v) for v in new_candidates.values()) / max(1, len(new_candidates))),
+        }
 
     def _push(self, pa, pb, triplet):
         self.candidates.setdefault((pa, pb), []).append(triplet)
 
-    def get(self, pa, pb) -> List[Tuple[int,int,float]]:
-        return self.candidates.get((pa, pb), [])
+    def get(self, pa, pb, published: bool = True) -> List[Tuple[int,int,float]]:
+        # 回傳「已發布」候選（預設）；如必要可 published=False 取本次重建的暫存
+        base = self.published_candidates if published else self.candidates
+        return base.get((pa, pb), [])
+    
+    def need_rebuild(self, pid_adj_fp):
+        return getattr(self, "_last_pid_adj_fp", None) != pid_adj_fp
+
+    def commit(self, pid_adj_fp):
+        self._last_pid_adj_fp = pid_adj_fp
 
 # -------------------------------
 # 單源樹快取（群內 shortest）
@@ -606,24 +630,24 @@ def build_pid_constrained_sat_graph(
             Gc.add_edge(u, v, **data)
             intra_e += 1
 
-    # Inter-PID：從 Gateway 候選加入（鄰接集合為空 ⇒ 放寬）
-    if gateway_cache is not None and getattr(gateway_cache, "candidates", None):
-        for (pa, pb), lst in gateway_cache.candidates.items():
-            nbrs = router.pid_neighbors.get(pa, None)
-            if nbrs is not None and len(nbrs) > 0 and (pb not in nbrs):
-                continue
-            for (a, b, _) in lst:
-                if G_sat_isls.has_edge(a, b):
-                    data = G_sat_isls.get_edge_data(a, b).copy()
-                    if not Gc.has_edge(a, b):
-                        Gc.add_edge(a, b, **data)
-                        inter_e += 1
-
-    _alog("[SP] constrained_graph edge stats", {
-        "intra_edges": intra_e,
-        "inter_edges": inter_e,
-        "total_edges": Gc.number_of_edges(),
-    })
+    # Inter-PID：優先使用「已發布」候選，若尚未發布則 fallback 到暫存 candidates
+    if gateway_cache is not None:
+        cand_src = None
+        if getattr(gateway_cache, "published_candidates", None):
+            cand_src = gateway_cache.published_candidates
+        elif getattr(gateway_cache, "candidates", None):
+            cand_src = gateway_cache.candidates  # 冷啟動 fallback
+        if cand_src:
+            for (pa, pb), lst in cand_src.items():
+                nbrs = router.pid_neighbors.get(pa, None)
+                if nbrs is not None and len(nbrs) > 0 and (pb not in nbrs):
+                    continue
+                for (a, b, _) in lst:
+                    if G_sat_isls.has_edge(a, b):
+                        data = G_sat_isls.get_edge_data(a, b).copy()
+                        if not Gc.has_edge(a, b):
+                            Gc.add_edge(a, b, **data)
+                            inter_e += 1
 
     # === 保底放寬：邊太少就把「相鄰 PID 的實體 ISL」補回來（鄰接集合為空 ⇒ 放寬）===
     MIN_EDGES = max(1000, int(G_sat_isls.number_of_nodes() * 2))
@@ -689,7 +713,7 @@ def route_all_gs_pairs(
         return sat_pid[s]
 
     # 5) 路由每對 GS
-    for (src_gs_node_id, dst_gs_node_id, src_uplink_sat, dst_downlink_sat, t_int) in gs_pairs:
+    for (_src_gs_node_id, dst_gs_node_id, src_uplink_sat, dst_downlink_sat, t_int) in gs_pairs:
         # 對「目的地」施加弱化方向偏好（僅當 sat_pos_xy 可用）
         if dst_downlink_sat in sat_pos_xy:
             apply_directional_weights(G_sat_isls, sat_pos_xy, sat_pos_xy[dst_downlink_sat], alpha=GEO_ALPHA)
@@ -718,13 +742,24 @@ _SSSP = None
 def init(config=None):
     """主程式在模擬開始時呼叫一次。"""
     global _ROUTER, _GCACHE, _SSSP
-    _ROUTER = VirtualPIDRouter(grid_deg=GRID_DEG, allow_diagonal_neighbor=ALLOW_DIAGONAL_NEIGHBOR)
-    _GCACHE = GatewayCache(k_best=K_BEST_GATEWAYS)
+    cfg = config or {}
+    grid_deg = cfg.get("grid_deg", GRID_DEG)
+    allow_diag = cfg.get("allow_diagonal_neighbor", ALLOW_DIAGONAL_NEIGHBOR)
+    k_best = cfg.get("k_best_gateways", K_BEST_GATEWAYS)
+
+    # （可選）覆寫 VA 發布節奏參數
+    global GWC_REBUILD_PERIOD_SNAPSHOTS, GWC_EMA_ALPHA, GWC_PUBLISH_JACCARD_THRESHOLD
+    GWC_REBUILD_PERIOD_SNAPSHOTS = cfg.get("gwc_rebuild_period_snapshots", GWC_REBUILD_PERIOD_SNAPSHOTS)
+    GWC_EMA_ALPHA = cfg.get("gwc_ema_alpha", GWC_EMA_ALPHA)
+    GWC_PUBLISH_JACCARD_THRESHOLD = cfg.get("gwc_publish_jaccard_threshold", GWC_PUBLISH_JACCARD_THRESHOLD)
+
+    _ROUTER = VirtualPIDRouter(grid_deg=grid_deg, allow_diagonal_neighbor=allow_diag)
+    _GCACHE = GatewayCache(k_best=k_best)
     _SSSP = SSSPCache()
     return {"ok": True, "msg": "algorithm_hierarchical_virtual_pid initialized"}
 
 def _alog(msg: str, payload: Optional[dict] = None):
-    ts = _dt.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3] + "Z"
+    ts = _dt.datetime.now(_dt.timezone.utc).strftime("%Y-%m-%d %H:%M:%S.%f")[:-3] + "Z"
     line = f"{ts} {msg}\n"
 
     # 1) 優先寫到 Hypatia 的輸出資料夾（最容易找到）
@@ -800,13 +835,37 @@ def step(payload: dict):
         # (1) 分群 / 子圖 / 分量
         sat_pid = _ROUTER.refresh_pid_members_and_subgraphs(sat_ids, sat_nadir_latlon, G_sat_isls)
 
-        # (2) Gateway 候選
-        def edge_cost(u, v, data):
-            return data.get("weight", data.get("geo_len_m", 1.0))
-        _GCACHE.rebuild(G_sat_isls, sat_pid, _ROUTER.pid_neighbors, edge_cost)
+        # 以 snapshot 為節拍：每 N 個 snapshot 才重建候選；其餘沿用已發布版本
+        time_ns = payload["time_since_epoch_ns"]
+        time_step_ns = payload.get("time_step_ns", 100_000_000)  # 若未提供，預設 100ms
+        snapshot_idx = int(time_ns // time_step_ns)
 
-        # (3) 受限圖
+        # （可選）若偵測到PID成員變更很大，也可觸發重建；這裡先簡化只看節拍
+        pid_neighbors = _ROUTER.pid_neighbors
+        pid_adj_fingerprint = tuple(sorted((a, tuple(sorted(list(bs)))) for a, bs in pid_neighbors.items()))
+        period_hit = (snapshot_idx % GWC_REBUILD_PERIOD_SNAPSHOTS == 0)
+        first_time = (_GCACHE.published_version == 0)
+        adj_changed = _GCACHE.need_rebuild(pid_adj_fingerprint)
+
+        if first_time or period_hit or adj_changed:
+            _alog("[GW] rebuild trigger", {
+                "snapshot": snapshot_idx, "first": first_time, "period_hit": period_hit, "adj_changed": adj_changed
+            })
+            _GCACHE.rebuild(
+                G_sat_isls=G_sat_isls,
+                sat_pid=sat_pid,
+                pid_neighbors=pid_neighbors,
+                edge_cost_func=lambda u, v, data: float(data.get("geo_len_m", 1.0))
+            )
+            _GCACHE.commit(pid_adj_fingerprint)
+        else:
+            _alog("[GW] rebuild skip", {
+                "snapshot": snapshot_idx, "version": _GCACHE.published_version, "adj_changed": False
+            })
+
         G_constrained = build_pid_constrained_sat_graph(G_sat_isls, sat_pid, _GCACHE, _ROUTER)
+        _alog("[SP] constrained_graph |V|={} |E|={}".format(G_constrained.number_of_nodes(), G_constrained.number_of_edges()), {})
+
 
         # (4) Hypatia 最短路
         _alog("[SP] calling calculate_fstate_shortest_path_without_gs_relaying on constrained graph", payload)
