@@ -136,7 +136,9 @@ class MainHelper:
         )
         if dynamic_state_algorithm == "algorithm_free_one_only_gs_relays" \
                 or dynamic_state_algorithm == "algorithm_free_one_only_over_isls" \
-                or dynamic_state_algorithm == "algorithm_hierarchical":
+                or dynamic_state_algorithm == "algorithm_hierarchical" \
+                or dynamic_state_algorithm == "algorithm_hierarchical_virtual_pid" \
+                or dynamic_state_algorithm == "algorithm_free_one_only_over_isls_with_stats":
             # One GSL interface per satellite
             gsl_interfaces_per_satellite = 1
         elif dynamic_state_algorithm == "algorithm_paired_many_only_over_isls":

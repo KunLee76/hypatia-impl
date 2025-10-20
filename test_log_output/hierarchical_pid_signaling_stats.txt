@@ -1,0 +1,51 @@
+=== 控制信令統計摘要 ===
+總事件數: 39
+總字節數: 7240
+
+各類型事件:
+  routing_update: 20 次, 5680 字節
+  gateway_update: 10 次, 840 字節
+  pid_rebuild: 4 次, 240 字節
+  topology_change: 5 次, 480 字節
+
+=== 事件時間軸 ===
+snapshot,time_ms,event_type,count,bytes,detail
+0,0,routing_update,1,192,"{'changed_entries': 20, 'total_entries': 1000}"
+0,0,gateway_update,1,84,"{'num_gateways': 5, 'num_pids': 25}"
+0,0,pid_rebuild,1,60,"{'num_pids': 25, 'changed_pids': 3}"
+0,0,topology_change,1,80,"{'delta_isl': 5, 'delta_gsl': 0}"
+5,500,routing_update,1,232,"{'changed_entries': 25, 'total_entries': 1000}"
+10,1000,routing_update,1,272,"{'changed_entries': 30, 'total_entries': 1000}"
+10,1000,gateway_update,1,84,"{'num_gateways': 5, 'num_pids': 25}"
+15,1500,routing_update,1,312,"{'changed_entries': 35, 'total_entries': 1000}"
+20,2000,routing_update,1,352,"{'changed_entries': 40, 'total_entries': 1000}"
+20,2000,gateway_update,1,84,"{'num_gateways': 5, 'num_pids': 25}"
+20,2000,topology_change,1,112,"{'delta_isl': 5, 'delta_gsl': -2}"
+25,2500,routing_update,1,392,"{'changed_entries': 45, 'total_entries': 1000}"
+25,2500,pid_rebuild,1,60,"{'num_pids': 25, 'changed_pids': 3}"
+30,3000,routing_update,1,192,"{'changed_entries': 20, 'total_entries': 1000}"
+30,3000,gateway_update,1,84,"{'num_gateways': 5, 'num_pids': 25}"
+35,3500,routing_update,1,232,"{'changed_entries': 25, 'total_entries': 1000}"
+40,4000,routing_update,1,272,"{'changed_entries': 30, 'total_entries': 1000}"
+40,4000,gateway_update,1,84,"{'num_gateways': 5, 'num_pids': 25}"
+40,4000,topology_change,1,96,"{'delta_isl': 5, 'delta_gsl': -1}"
+45,4500,routing_update,1,312,"{'changed_entries': 35, 'total_entries': 1000}"
+50,5000,routing_update,1,352,"{'changed_entries': 40, 'total_entries': 1000}"
+50,5000,gateway_update,1,84,"{'num_gateways': 5, 'num_pids': 25}"
+50,5000,pid_rebuild,1,60,"{'num_pids': 25, 'changed_pids': 3}"
+55,5500,routing_update,1,392,"{'changed_entries': 45, 'total_entries': 1000}"
+60,6000,routing_update,1,192,"{'changed_entries': 20, 'total_entries': 1000}"
+60,6000,gateway_update,1,84,"{'num_gateways': 5, 'num_pids': 25}"
+60,6000,topology_change,1,80,"{'delta_isl': 5, 'delta_gsl': 0}"
+65,6500,routing_update,1,232,"{'changed_entries': 25, 'total_entries': 1000}"
+70,7000,routing_update,1,272,"{'changed_entries': 30, 'total_entries': 1000}"
+70,7000,gateway_update,1,84,"{'num_gateways': 5, 'num_pids': 25}"
+75,7500,routing_update,1,312,"{'changed_entries': 35, 'total_entries': 1000}"
+75,7500,pid_rebuild,1,60,"{'num_pids': 25, 'changed_pids': 3}"
+80,8000,routing_update,1,352,"{'changed_entries': 40, 'total_entries': 1000}"
+80,8000,gateway_update,1,84,"{'num_gateways': 5, 'num_pids': 25}"
+80,8000,topology_change,1,112,"{'delta_isl': 5, 'delta_gsl': -2}"
+85,8500,routing_update,1,392,"{'changed_entries': 45, 'total_entries': 1000}"
+90,9000,routing_update,1,192,"{'changed_entries': 20, 'total_entries': 1000}"
+90,9000,gateway_update,1,84,"{'num_gateways': 5, 'num_pids': 25}"
+95,9500,routing_update,1,232,"{'changed_entries': 25, 'total_entries': 1000}"

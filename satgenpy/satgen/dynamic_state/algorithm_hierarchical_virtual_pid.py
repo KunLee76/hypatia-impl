@@ -2,13 +2,16 @@
 # algorithm_hierarchical_virtual_pid_clean_fixed.py
 # ============================================
 
-from typing import Dict, Set, Tuple, List, Optional, Callable
+from typing import Dict, Set, Tuple, List, Optional, Callable, Any
+from dataclasses import dataclass
 import math
 import networkx as nx
 from .fstate_calculation import calculate_fstate_shortest_path_without_gs_relaying
 import os
+import sys
 import tempfile
 import datetime as _dt
+import csv, json
 
 # -------------------------------
 # 全域設定（可依實驗需要調整）
@@ -24,6 +27,236 @@ MODE_SP_OVER_PID_QUOTIENT = True        # 要逐跳分層，把它改成 False
 GWC_REBUILD_PERIOD_SNAPSHOTS = 10      # 每 10 個 snapshot（~1s）才重建候選
 GWC_EMA_ALPHA = 0.8                    # 成本EMA的舊值權重
 GWC_PUBLISH_JACCARD_THRESHOLD = 0.15   # 新舊top-k集合Jaccard差異門檻（超過才升版）
+
+# -------------------------------
+# 控制信令統計
+# -------------------------------
+@dataclass
+class EventRow:
+    snapshot: int
+    sim_time_ms: int
+    event: str
+    count: int = 1
+    detail: Optional[Dict[str, Any]] = None
+    bytes: int = 0
+
+class ControlSignalingStats:
+    def __init__(self):
+        self.reset()
+    
+    def reset(self):
+        """重置統計數據"""
+        self.routing_updates = 0        # 路由表更新次數
+        self.gateway_updates = 0        # Gateway 候選更新次數
+        self.pid_rebuilds = 0          # PID 重建次數
+        self.topology_changes = 0       # 拓撲變化次數
+        self.total_messages = 0         # 總控制信令數
+        self.total_bytes = 0
+        self.timeline: List[EventRow] = []
+    
+    def _append(self, row: EventRow):
+        self.total_messages += row.count
+        self.total_bytes += row.bytes
+        self.timeline.append(row)
+    
+    def record_routing_update(self, snapshot, sim_time_ms,
+                              changed_entries:int, total_entries:int, bytes_per_entry:int=16):
+        """記錄路由表更新"""
+        self.routing_updates += 1
+        b = changed_entries * bytes_per_entry
+        self.total_messages += 1
+        self._append(EventRow(snapshot, sim_time_ms, "routing_update",
+                              count=1,
+                              detail={"changed_entries": changed_entries,
+                                      "total_entries": total_entries,
+                                      "diff_ratio": (changed_entries/total_entries if total_entries else 0.0)},
+                              bytes=b))
+    
+    def record_gateway_update(self, snapshot, sim_time_ms,
+                              changed_pairs:int, k_published:int=None,
+                              bytes=None, base_bytes:int=48, per_edge_bytes:int=24):
+        """
+        記錄 Gateway 更新
+        
+        Args:
+            snapshot: 快照索引
+            sim_time_ms: 模擬時間（毫秒）
+            changed_pairs: 變更的 PID 對數量
+            k_published: 發布的 k-best 數量
+            bytes: 如果提供，直接使用；否則用預設公式計算
+            base_bytes: 每對 PID 的基礎開銷
+            per_edge_bytes: 每條邊的開銷
+        """
+        self.gateway_updates += changed_pairs
+        
+        if bytes is None:
+            # 預設計算邏輯
+            k_used = k_published or 0
+            bytes = changed_pairs * (base_bytes + k_used * per_edge_bytes)
+        
+        self._append(EventRow(snapshot, sim_time_ms, "gateway_update",
+                              count=changed_pairs,
+                              detail={"k": k_published} if k_published is not None else None,
+                              bytes=bytes))
+    
+    def record_pid_rebuild(self, snapshot, sim_time_ms,
+                           changed_pids:int, per_pid_bytes:int=64):
+        """記錄 PID 重建"""
+        self.pid_rebuilds += 1
+        b = changed_pids * per_pid_bytes
+        self._append(EventRow(snapshot, sim_time_ms, "pid_rebuild",
+                              count=1,
+                              detail={"changed_pids": changed_pids},
+                              bytes=b))
+    
+    def record_topology_change(self, snapshot, sim_time_ms,
+                               delta_isl:int, delta_gsl:int, per_edge_bytes:int=16):
+        """記錄拓撲變化"""
+        self.topology_changes += 1
+        b = (abs(delta_isl) + abs(delta_gsl)) * per_edge_bytes
+        self._append(EventRow(snapshot, sim_time_ms, "topology_change",
+                              count=1,
+                              detail={"delta_isl": delta_isl, "delta_gsl": delta_gsl},
+                              bytes=b))
+    
+    def record_event(self, event_type, snapshot, sim_time_ms, count=1, bytes=0, detail=None):
+        """
+        通用事件記錄器，給需要自定義計算的場合使用
+        
+        Args:
+            event_type: 事件類型字符串
+            snapshot: 快照索引
+            sim_time_ms: 模擬時間（毫秒）
+            count: 事件數量
+            bytes: 控制信令字節數
+            detail: 額外詳細信息
+        """
+        # 更新對應的計數器
+        if event_type == "routing_update":
+            self.routing_updates += count
+        elif event_type == "gateway_update":
+            self.gateway_updates += count
+        elif event_type == "pid_rebuild":
+            self.pid_rebuilds += count
+        elif event_type == "topology_change":
+            self.topology_changes += count
+        
+        self._append(EventRow(snapshot, sim_time_ms, event_type, count, detail, bytes))
+    
+    def get_stats_summary(self, start_time_ms=None, end_time_ms=None):
+        """
+        獲取統計摘要，可以指定時間窗口
+        
+        Args:
+            start_time_ms: 開始時間（毫秒）
+            end_time_ms: 結束時間（毫秒）
+        
+        Returns:
+            包含統計信息的字典
+        """
+        # 如果指定時間窗口，則過濾事件
+        events = self.timeline
+        if start_time_ms is not None:
+            events = [e for e in events if e.time_ms >= start_time_ms]
+        if end_time_ms is not None:
+            events = [e for e in events if e.time_ms <= end_time_ms]
+        
+        # 計算統計數據
+        by_type = {}
+        total_bytes = 0
+        total_count = 0
+        
+        for event in events:
+            if event.event not in by_type:
+                by_type[event.event] = {"count": 0, "bytes": 0}
+            by_type[event.event]["count"] += event.count
+            by_type[event.event]["bytes"] += event.bytes
+            total_bytes += event.bytes
+            total_count += event.count
+        
+        return {
+            "total_events": total_count,
+            "total_bytes": total_bytes,
+            "by_type": by_type,
+            "time_window": {
+                "start_ms": start_time_ms,
+                "end_ms": end_time_ms,
+                "duration_ms": (end_time_ms - start_time_ms) if start_time_ms and end_time_ms else None
+            }
+        }
+    
+    def get_timeline_csv(self):
+        """獲取時間軸數據的CSV格式字符串"""
+        import io
+        output = io.StringIO()
+        output.write("snapshot,time_ms,event_type,count,bytes,detail\n")
+        for event in self.timeline:
+            detail_str = str(event.detail) if event.detail else ""
+            output.write(f"{event.snapshot},{event.time_ms},{event.event},{event.count},{event.bytes},\"{detail_str}\"\n")
+        return output.getvalue()
+    
+    def save_stats_to_file(self, filepath, include_timeline=True):
+        """將統計數據保存到文件"""
+        with open(filepath, 'w', encoding='utf-8') as f:
+            f.write("=== 控制信令統計摘要 ===\n")
+            summary = self.get_stats_summary()
+            f.write(f"總事件數: {summary['total_events']}\n")
+            f.write(f"總字節數: {summary['total_bytes']}\n")
+            f.write("\n各類型事件:\n")
+            for event_type, stats in summary['by_type'].items():
+                f.write(f"  {event_type}: {stats['count']} 次, {stats['bytes']} 字節\n")
+            
+            if include_timeline:
+                f.write("\n=== 事件時間軸 ===\n")
+                f.write(self.get_timeline_csv())
+    
+    def get_stats(self):
+        """獲取基本統計數據（向後兼容）"""
+        return {
+            "routing_updates": self.routing_updates,
+            "gateway_updates": self.gateway_updates,
+            "pid_rebuilds": self.pid_rebuilds,
+            "topology_changes": self.topology_changes,
+            "total_messages": self.total_messages,
+            "total_bytes": self.total_bytes
+        }
+    
+    def save_csv(self, timeline_path, summary_path):
+        """獲取統計數據"""
+        with open(timeline_path, "w", newline="") as f:
+            w = csv.writer(f)
+            w.writerow(["snapshot","sim_time_ms","event","count","bytes","detail_json"])
+            for r in self.timeline:
+                w.writerow([r.snapshot, r.sim_time_ms, r.event, r.count, r.bytes,
+                            (json.dumps(r.detail, ensure_ascii=False) if r.detail else "{}")])
+        with open(summary_path, "w", newline="") as f:
+            w = csv.writer(f)
+            w.writerow(["routing_updates","gateway_updates","pid_rebuilds","topology_changes","total_messages","total_bytes"])
+            w.writerow([self.routing_updates,self.gateway_updates,self.pid_rebuilds,self.topology_changes,self.total_messages,self.total_bytes])
+    
+    def save_to_file(self, filepath_txt: str, timeline_path: str = None, summary_path: str = None):
+        """保存統計數據到文件"""
+        stats = {
+            "routing_updates": self.routing_updates,
+            "gateway_updates": self.gateway_updates,
+            "pid_rebuilds": self.pid_rebuilds,
+            "topology_changes": self.topology_changes,
+            "total_messages": self.total_messages,
+            "total_bytes": self.total_bytes,
+        }
+        with open(filepath_txt, "w", encoding="utf-8") as f:
+            f.write("# Control Signaling Statistics (summary)\n")
+            for k, v in stats.items():
+                f.write(f"{k}={v}\n")
+            f.write("\n# Timeline (latest 20)\n")
+            for row in self.timeline[-20:]:
+                f.write(f"{row.snapshot},{row.sim_time_ms},{row.event},count={row.count},bytes={row.bytes},detail={row.detail}\n")
+        # 可選：若有傳入，順便輸出 CSV
+        if timeline_path and summary_path:
+            self.save_csv(timeline_path, summary_path)
+
+# 全域統計實例
+_SIGNALING_STATS = ControlSignalingStats()
 
 # -------------------------------
 # 小工具
@@ -160,6 +393,28 @@ class VirtualPIDRouter:
             "nonempty_neighbor_sets": sum(1 for k, v in self.pid_neighbors.items() if v),
             "sample": {k: sorted(list(v))[:4] for k, v in list(self.pid_neighbors.items())[:4]},})
         
+        # [SIGNALING_HOOK 1: PID rebuild done]
+        try:
+            snapshot = getattr(self, "_snapshot_index", 0)
+            sim_time_ms = snapshot * getattr(self, "_snapshot_ms", 100)
+            changed_pids = 0
+            if hasattr(self, "_prev_sat_to_pid") and self._prev_sat_to_pid:
+                prev = self._prev_sat_to_pid
+                changed_pid_set = set()
+                for s, pid_now in sat_pid.items():
+                    pid_prev = prev.get(s)
+                    if pid_prev is not None and pid_prev != pid_now:
+                        changed_pid_set.add(pid_now); changed_pid_set.add(pid_prev)
+                changed_pids = len(changed_pid_set)
+            else:
+                changed_pids = len(self.pid_members)  # 冷啟動：以全部 PID 視為一次 rebuild
+            _SIGNALING_STATS.record_pid_rebuild(snapshot, sim_time_ms,
+                                               changed_pids=changed_pids,
+                                               per_pid_bytes=64)
+            self._prev_sat_to_pid = dict(sat_pid)
+        except Exception:
+            pass
+
         return sat_pid
 
     # （可選）agent：以幾何中心選最近的衛星 + 抖動抑制
@@ -272,9 +527,43 @@ class GatewayCache:
             # 冷啟動：直接發布所有
             self.published_candidates = new_candidates
             self.published_version = 1
+
+            # [SIGNALING_HOOK 2: Gateway publish (init)]
+            try:
+                snapshot = getattr(self, "_snapshot_index", 0)
+                sim_time_ms = snapshot * getattr(self, "_snapshot_ms", 100)
+                changed_pairs = len(self.published_candidates)
+                # 估一個本輪使用的 k（取所有 pair 的最大長度）
+                k_used = 0
+                for lst in self.published_candidates.values():
+                    if lst:
+                        k_used = max(k_used, len(lst))
+                _SIGNALING_STATS.record_gateway_update(snapshot, sim_time_ms,
+                                                       changed_pairs=changed_pairs,
+                                                       k_published=k_used,
+                                                       base_bytes=48, per_edge_bytes=24)
+            except Exception:
+                pass
+            # [END HOOK 2]
             _alog("[GW] publish init", {"pairs": len(self.published_candidates)})
         elif changed_pairs > 0:
             self.published_version += 1
+            # [SIGNALING_HOOK 2: Gateway publish (update)]
+            try:
+                snapshot = getattr(self, "_snapshot_index", 0)
+                sim_time_ms = snapshot * getattr(self, "_snapshot_ms", 100)
+                # 估本輪 k（以 new_candidates 的最大長度）
+                k_used = 0
+                for lst in new_candidates.values():
+                    if lst:
+                        k_used = max(k_used, len(lst))
+                _SIGNALING_STATS.record_gateway_update(snapshot, sim_time_ms,
+                                                       changed_pairs=changed_pairs,
+                                                       k_published=k_used,
+                                                       base_bytes=48, per_edge_bytes=24)
+            except Exception:
+                pass
+            # [END HOOK 2]
             _alog("[GW] publish update", {
                 "version": self.published_version,
                 "changed_pairs": changed_pairs,
@@ -741,7 +1030,7 @@ _SSSP = None
 
 def init(config=None):
     """主程式在模擬開始時呼叫一次。"""
-    global _ROUTER, _GCACHE, _SSSP
+    global _ROUTER, _GCACHE, _SSSP, _SIGNALING_STATS
     cfg = config or {}
     grid_deg = cfg.get("grid_deg", GRID_DEG)
     allow_diag = cfg.get("allow_diagonal_neighbor", ALLOW_DIAGONAL_NEIGHBOR)
@@ -756,33 +1045,25 @@ def init(config=None):
     _ROUTER = VirtualPIDRouter(grid_deg=grid_deg, allow_diagonal_neighbor=allow_diag)
     _GCACHE = GatewayCache(k_best=k_best)
     _SSSP = SSSPCache()
+    
+    # 重置統計數據
+    _SIGNALING_STATS.reset()
+    
     return {"ok": True, "msg": "algorithm_hierarchical_virtual_pid initialized"}
 
 def _alog(msg: str, payload: Optional[dict] = None):
     ts = _dt.datetime.now(_dt.timezone.utc).strftime("%Y-%m-%d %H:%M:%S.%f")[:-3] + "Z"
     line = f"{ts} {msg}\n"
 
-    # 1) 優先寫到 Hypatia 的輸出資料夾（最容易找到）
-    paths = []
-    if payload and "output_dynamic_state_dir" in payload and payload["output_dynamic_state_dir"]:
-        odir = payload["output_dynamic_state_dir"]
-        try:
-            os.makedirs(odir, exist_ok=True)
-        except Exception:
-            pass
-        paths.append(os.path.join(odir, "alg_mode.log"))
-
-    # 2) 專案工作目錄
-    paths.append(os.path.join(os.getcwd(), "alg_mode.log"))
-    # 3) 系統暫存
-    paths.append(os.path.join(tempfile.gettempdir(), "alg_mode.log"))
-
-    for p in paths:
-        try:
-            with open(p, "a", encoding="utf-8") as f:
-                f.write(line)
-        except Exception:
-            continue  # 換下一個路徑
+    # 在當前目錄生成日誌（應該是 paper/satellite_networks_state）
+    log_file = "alg_mode.log"
+    
+    try:
+        with open(log_file, "a", encoding="utf-8") as f:
+            f.write(line)
+    except Exception as e:
+        # 如果失敗，只輸出到 stderr 作為備用
+        print(f"Warning: Could not write to log file: {e}", file=sys.stderr)
 
 
 
@@ -840,6 +1121,12 @@ def step(payload: dict):
         time_step_ns = payload.get("time_step_ns", 100_000_000)  # 若未提供，預設 100ms
         snapshot_idx = int(time_ns // time_step_ns)
 
+        # 將 snapshot 時間資訊掛到物件，供各種 signaling hooks 使用
+        _ROUTER._snapshot_index = snapshot_idx
+        _ROUTER._snapshot_ms = int(time_step_ns // 1_000_000) if time_step_ns else 100
+        _GCACHE._snapshot_index = snapshot_idx
+        _GCACHE._snapshot_ms = getattr(_ROUTER, "_snapshot_ms", 100)
+
         # （可選）若偵測到PID成員變更很大，也可觸發重建；這裡先簡化只看節拍
         pid_neighbors = _ROUTER.pid_neighbors
         pid_adj_fingerprint = tuple(sorted((a, tuple(sorted(list(bs)))) for a, bs in pid_neighbors.items()))
@@ -864,6 +1151,35 @@ def step(payload: dict):
             })
 
         G_constrained = build_pid_constrained_sat_graph(G_sat_isls, sat_pid, _GCACHE, _ROUTER)
+        # [SIGNALING_HOOK 3: Topology change detection]
+        try:
+            snapshot = getattr(_ROUTER, "_snapshot_index", 0)
+            sim_time_ms = snapshot * getattr(_ROUTER, "_snapshot_ms", 100)
+            isl_now, gsl_now = set(), set()
+            for (u, v, d) in G_constrained.edges(data=True):
+                et = d.get("type")
+                a, b = (u, v) if u <= v else (v, u)
+                if et == "isl":
+                    isl_now.add((a, b))
+                elif et == "gsl":
+                    gsl_now.add((a, b))
+            delta_isl = 0; delta_gsl = 0
+            if hasattr(_ROUTER, "_prev_isl_edges"):
+                isl_prev = _ROUTER._prev_isl_edges
+                delta_isl = len(isl_now - isl_prev) - len(isl_prev - isl_now)
+            if hasattr(_ROUTER, "_prev_gsl_edges"):
+                gsl_prev = _ROUTER._prev_gsl_edges
+                delta_gsl = len(gsl_now - gsl_prev) - len(gsl_prev - gsl_now)
+            if (not hasattr(_ROUTER, "_prev_isl_edges")) or isl_now != getattr(_ROUTER, "_prev_isl_edges") \
+               or (not hasattr(_ROUTER, "_prev_gsl_edges")) or gsl_now != getattr(_ROUTER, "_prev_gsl_edges"):
+                _SIGNALING_STATS.record_topology_change(snapshot, sim_time_ms,
+                                                        delta_isl=delta_isl, delta_gsl=delta_gsl,
+                                                        per_edge_bytes=16)
+            _ROUTER._prev_isl_edges = isl_now
+            _ROUTER._prev_gsl_edges = gsl_now
+        except Exception:
+            pass
+        # [END HOOK 3]
         _alog("[SP] constrained_graph |V|={} |E|={}".format(G_constrained.number_of_nodes(), G_constrained.number_of_edges()), {})
 
 
@@ -929,7 +1245,77 @@ def step(payload: dict):
                 prev_for_sp,                                        # prev_fstate
                 payload.get("enable_verbose_logs", False)           # enable_verbose_logs
         )
+        # [SIGNALING_HOOK 4: FIB diff / routing update]
+        try:
+            snapshot = getattr(_ROUTER, "_snapshot_index", 0)
+            sim_time_ms = snapshot * getattr(_ROUTER, "_snapshot_ms", 100)
+            # 以「節點→下一跳」的簡化 map 來比較（視你的 fstate 結構調整）
+            current = {}
+            for (u, dst), triple in fstate.items():
+                # 這裡選用 (u,dst)->next_hop 的顆粒度；若你想比 per-node 的 default nexthop，也可改寫
+                next_hop = triple[0]
+                current[(u, dst)] = int(next_hop)
+            total = len(current)
+            changed = 0
+            if hasattr(_ROUTER, "_prev_fstate_simple") and _ROUTER._prev_fstate_simple:
+                prev = _ROUTER._prev_fstate_simple
+                keys = set(prev.keys()) | set(current.keys())
+                for k in keys:
+                    if prev.get(k) != current.get(k):
+                        changed += 1
+                if changed > 0:
+                    _SIGNALING_STATS.record_routing_update(snapshot, sim_time_ms,
+                                                           changed_entries=changed,
+                                                           total_entries=total,
+                                                           bytes_per_entry=16)
+            else:
+                if total > 0:
+                    _SIGNALING_STATS.record_routing_update(snapshot, sim_time_ms,
+                                                           changed_entries=total,
+                                                           total_entries=total,
+                                                           bytes_per_entry=16)
+            _ROUTER._prev_fstate_simple = current
+        except Exception:
+            pass
+        # [END HOOK 4]
         _alog("[SP] done; fstate ready", payload)
+        
+        # 添加 Terminal 統計輸出
+        if payload.get("enable_verbose_logs", False):
+            stats_summary = _SIGNALING_STATS.get_stats_summary()
+            print(f"  > [SIGNALING] 累計統計: {stats_summary['total_events']} 事件, {stats_summary['total_bytes']} 字節")
+        
+        # 統一輸出統計文件到當前目錄（paper/satellite_networks_state）
+        stats_output_dir = "."
+        stats_file = os.path.join(stats_output_dir, "hierarchical_pid_signaling_stats.json")
+        
+        try:
+            
+            # 保存詳細統計到 JSON 文件
+            detailed_stats = {
+                "algorithm": "algorithm_hierarchical_virtual_pid",
+                "timestamp": _dt.datetime.now().isoformat(),
+                "summary": _SIGNALING_STATS.get_stats_summary(),
+                "timeline": [
+                    {
+                        "snapshot": row.snapshot,
+                        "time_ms": row.sim_time_ms,
+                        "event": row.event,
+                        "count": row.count,
+                        "bytes": row.bytes,
+                        "detail": row.detail
+                    }
+                    for row in _SIGNALING_STATS.timeline
+                ]
+            }
+            
+            with open(stats_file, 'w', encoding='utf-8') as f:
+                json.dump(detailed_stats, f, indent=2, ensure_ascii=False)
+                
+            _alog(f"[STATS] Saved signaling stats to {stats_file}", payload)
+        except Exception as e:
+            _alog(f"[STATS-ERROR] Failed to save stats: {e}", payload)
+        
         return {"ok": True, "fstate": fstate}
 
     # ---------- 逐跳（stitch） ----------
@@ -947,6 +1333,43 @@ def step(payload: dict):
         payload["fstate"],
     )
     _alog("[STITCH] done", payload)
+    
+    # 添加 Terminal 統計輸出
+    if payload.get("enable_verbose_logs", False):
+        stats_summary = _SIGNALING_STATS.get_stats_summary()
+        print(f"  > [SIGNALING] 累計統計: {stats_summary['total_events']} 事件, {stats_summary['total_bytes']} 字節")
+    
+    # 統一輸出統計文件到當前目錄（paper/satellite_networks_state）
+    stats_output_dir = "."
+    stats_file = os.path.join(stats_output_dir, "hierarchical_pid_signaling_stats.json")
+    
+    try:
+        
+        # 保存詳細統計到 JSON 文件
+        detailed_stats = {
+            "algorithm": "algorithm_hierarchical_virtual_pid",
+            "timestamp": _dt.datetime.now().isoformat(),
+            "summary": _SIGNALING_STATS.get_stats_summary(),
+            "timeline": [
+                {
+                    "snapshot": row.snapshot,
+                    "time_ms": row.sim_time_ms,
+                    "event": row.event,
+                    "count": row.count,
+                    "bytes": row.bytes,
+                    "detail": row.detail
+                }
+                for row in _SIGNALING_STATS.timeline
+            ]
+        }
+        
+        with open(stats_file, 'w', encoding='utf-8') as f:
+            json.dump(detailed_stats, f, indent=2, ensure_ascii=False)
+            
+        _alog(f"[STATS] Saved signaling stats to {stats_file}", payload)
+    except Exception as e:
+        _alog(f"[STATS-ERROR] Failed to save stats: {e}", payload)
+    
     return {"ok": True}
 
 def _normalize_gs_range_candidates(raw_map, satellites, ground_stations):
@@ -1021,6 +1444,16 @@ def run(payload: dict):
 
 def run_algorithm(payload: dict):
     return step(payload)
+
+def get_signaling_stats():
+    """獲取控制信令統計數據"""
+    global _SIGNALING_STATS
+    return _SIGNALING_STATS.get_stats()
+
+def save_signaling_stats(filepath):
+    """保存控制信令統計數據到文件"""
+    global _SIGNALING_STATS
+    _SIGNALING_STATS.save_to_file(filepath)
 
 # ===== Hypatia 系統適配器函數 =====
 def algorithm_hierarchical_virtual_pid(

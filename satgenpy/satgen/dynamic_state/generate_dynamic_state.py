@@ -32,7 +32,7 @@ from .algorithm_free_gs_one_sat_many_only_over_isls import algorithm_free_gs_one
 from .algorithm_hierarchical import algorithm_hierarchical
 from .algorithm_hierarchical_region import algorithm_hierarchical_region
 from .algorithm_hierarchical_virtual_pid import algorithm_hierarchical_virtual_pid  # 你的新算法
-from .algorithm_hierarchical_virtual_pid_clean_fixed import algorithm_hierarchical_virtual_pid_clean
+from .algorithm_free_one_only_over_isls_with_stats import algorithm_free_one_only_over_isls  # 基線算法with stats
 
 
 def generate_dynamic_state(
@@ -350,11 +350,11 @@ def generate_dynamic_state_at(
             epoch=epoch
         )
 
-    elif dynamic_state_algorithm == "algorithm_hierarchical_virtual_pid_clean_fixed":
-
-        sat_lat_lon_dict = _build_sat_lat_lon_dict_for_lohi(satellites, epoch, time)
-
-        return algorithm_hierarchical_virtual_pid_clean(
+    elif dynamic_state_algorithm == "algorithm_free_one_only_over_isls_with_stats":
+        # Floyd-Warshall 基線算法 (帶統計功能)
+        from .algorithm_free_one_only_over_isls_with_stats import algorithm_free_one_only_over_isls
+        
+        return algorithm_free_one_only_over_isls(
             output_dynamic_state_dir,
             time_since_epoch_ns,
             satellites,
@@ -365,11 +365,7 @@ def generate_dynamic_state_at(
             sat_neighbor_to_if,
             list_gsl_interfaces_info,
             prev_output,
-            enable_verbose_logs,
-            sat_lat_lon=None, 
-            use_region_grouping=False,
-            time_step_ns=time_step_ns,
-            epoch=epoch
+            enable_verbose_logs
         )
 
     else:
