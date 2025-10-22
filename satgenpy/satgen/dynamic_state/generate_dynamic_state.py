@@ -32,6 +32,7 @@ from .algorithm_free_gs_one_sat_many_only_over_isls import algorithm_free_gs_one
 from .algorithm_hierarchical import algorithm_hierarchical
 from .algorithm_hierarchical_region import algorithm_hierarchical_region
 from .algorithm_hierarchical_virtual_pid import algorithm_hierarchical_virtual_pid  # 你的新算法
+from .algorithm_hierarchical_virtual_pid_dijkstra import algorithm_hierarchical_virtual_pid as algorithm_hierarchical_virtual_pid_dijkstra  # Dijkstra優化版
 from .algorithm_free_one_only_over_isls_with_stats import algorithm_free_one_only_over_isls  # 基線算法with stats
 
 
@@ -346,6 +347,28 @@ def generate_dynamic_state_at(
             enable_verbose_logs,
             sat_lat_lon=sat_lat_lon_dict,
             use_region_grouping=False, # 跟 region 區分，明確指定
+            time_step_ns=time_step_ns,
+            epoch=epoch
+        )
+
+    elif dynamic_state_algorithm == "algorithm_hierarchical_virtual_pid_dijkstra":
+        # Dijkstra 優化版本：使用 Dijkstra 替代 Floyd-Warshall
+        sat_lat_lon_dict = _build_sat_lat_lon_dict_for_lohi(satellites, epoch, time)
+        
+        return algorithm_hierarchical_virtual_pid_dijkstra(
+            output_dynamic_state_dir,
+            time_since_epoch_ns,
+            satellites,
+            ground_stations,
+            sat_net_graph_only_satellites_with_isls,
+            ground_station_satellites_in_range,
+            num_isls_per_sat,
+            sat_neighbor_to_if,
+            list_gsl_interfaces_info,
+            prev_output,
+            enable_verbose_logs,
+            sat_lat_lon=sat_lat_lon_dict,
+            use_region_grouping=False,
             time_step_ns=time_step_ns,
             epoch=epoch
         )

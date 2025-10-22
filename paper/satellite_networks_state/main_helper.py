@@ -138,6 +138,7 @@ class MainHelper:
                 or dynamic_state_algorithm == "algorithm_free_one_only_over_isls" \
                 or dynamic_state_algorithm == "algorithm_hierarchical" \
                 or dynamic_state_algorithm == "algorithm_hierarchical_virtual_pid" \
+                or dynamic_state_algorithm == "algorithm_hierarchical_virtual_pid_dijkstra" \
                 or dynamic_state_algorithm == "algorithm_free_one_only_over_isls_with_stats":
             # One GSL interface per satellite
             gsl_interfaces_per_satellite = 1
