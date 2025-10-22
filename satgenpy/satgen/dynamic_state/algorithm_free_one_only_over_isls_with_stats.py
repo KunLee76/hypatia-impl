@@ -33,8 +33,8 @@ from datetime import datetime
 class EventRow:
     """單個控制信令事件記錄"""
     snapshot: int         # 快照索引
-    time_ms: int         # 模擬時間（毫秒）
-    event_type: str      # 事件類型
+    sim_time_ms: int     # 模擬時間（毫秒） - 統一字段名稱
+    event: str           # 事件類型 - 統一字段名稱
     count: int = 1       # 事件數量
     detail: Optional[Dict[str, Any]] = None  # 詳細信息
     bytes: int = 0       # 控制信令字節數
@@ -54,7 +54,7 @@ class ControlSignalingStats:
         self.timeline: List[EventRow] = []
     
     def _append(self, event: EventRow):
-        """添加事件到時間軸"""
+        """添加事件到時間軸 - 統一邏輯，避免雙重累加"""
         self.timeline.append(event)
         self.total_messages += event.count
         self.total_bytes += event.bytes
@@ -70,6 +70,7 @@ class ControlSignalingStats:
         else:
             b = bytes
         
+        # 不再雙重累加 - _append 已經處理 count 增加
         self._append(EventRow(snapshot, sim_time_ms, "routing_update",
                               count=1,
                               detail={"changed_entries": changed_entries, 
@@ -101,10 +102,10 @@ class ControlSignalingStats:
         total_count = 0
         
         for event in events:
-            if event.event_type not in by_type:
-                by_type[event.event_type] = {"count": 0, "bytes": 0}
-            by_type[event.event_type]["count"] += event.count
-            by_type[event.event_type]["bytes"] += event.bytes
+            if event.event not in by_type:
+                by_type[event.event] = {"count": 0, "bytes": 0}
+            by_type[event.event]["count"] += event.count
+            by_type[event.event]["bytes"] += event.bytes
             total_bytes += event.bytes
             total_count += event.count
         
@@ -122,7 +123,7 @@ class ControlSignalingStats:
         output.write("snapshot,time_ms,event_type,count,bytes,detail\n")
         for event in self.timeline:
             detail_str = str(event.detail) if event.detail else ""
-            output.write(f"{event.snapshot},{event.time_ms},{event.event_type},{event.count},{event.bytes},\"{detail_str}\"\n")
+            output.write(f"{event.snapshot},{event.sim_time_ms},{event.event},{event.count},{event.bytes},\"{detail_str}\"\n")
         return output.getvalue()
     
     def save_stats_to_file(self, filepath, include_timeline=True):
@@ -323,8 +324,8 @@ def algorithm_free_one_only_over_isls(
             "timeline": [
                 {
                     "snapshot": row.snapshot,
-                    "time_ms": row.time_ms,
-                    "event": row.event_type,
+                    "time_ms": row.sim_time_ms,
+                    "event": row.event,
                     "count": row.count,
                     "bytes": row.bytes,
                     "detail": row.detail

@@ -106,17 +106,15 @@ class HypatiaSignalingAnalyzer:
     
     def generate_visualization(self, hierarchical_data, baseline_data, output_path):
         """生成可視化圖表"""
-        # 設置中文字體
-        plt.rcParams['font.sans-serif'] = ['SimHei', 'DejaVu Sans', 'Arial Unicode MS']
-        plt.rcParams['axes.unicode_minus'] = False
+        # Use default font (no need for Chinese font configuration)
         
         fig, axes = plt.subplots(2, 2, figsize=(16, 12))
-        fig.suptitle('Hypatia 控制信令開銷分析', fontsize=16)
+        fig.suptitle('Hypatia Control Signaling Overhead Analysis', fontsize=16)
         
         h_summary = hierarchical_data['summary']
         b_summary = baseline_data['summary']
         
-        # 1. 總體比較柱狀圖
+        # Chart 1: Overall Comparison
         ax1 = axes[0, 0]
         algorithms = ['Hierarchical PID', 'Floyd-Warshall']
         total_bytes = [h_summary['total_bytes'], b_summary['total_bytes']]
@@ -126,15 +124,20 @@ class HypatiaSignalingAnalyzer:
         width = 0.35
         
         ax1_twin = ax1.twinx()
-        bars1 = ax1.bar(x - width/2, total_bytes, width, label='總字節數', alpha=0.8, color='skyblue')
-        bars2 = ax1_twin.bar(x + width/2, total_events, width, label='總事件數', alpha=0.8, color='lightcoral')
+        bars1 = ax1.bar(x - width/2, total_bytes, width, label='Total Bytes', alpha=0.8, color='skyblue')
+        bars2 = ax1_twin.bar(x + width/2, total_events, width, label='Total Events', alpha=0.8, color='lightcoral')
         
-        ax1.set_xlabel('算法')
-        ax1.set_ylabel('總字節數', color='blue')
-        ax1_twin.set_ylabel('總事件數', color='red')
-        ax1.set_title('控制信令總開銷比較')
+        ax1.set_xlabel('Algorithm')
+        ax1.set_ylabel('Total Bytes', color='blue')
+        ax1_twin.set_ylabel('Total Events', color='red')
+        ax1.set_title('Control Signaling Total Overhead Comparison')
         ax1.set_xticks(x)
         ax1.set_xticklabels(algorithms)
+        
+        # Combine legends from both axes and display on the right
+        lines1, labels1 = ax1.get_legend_handles_labels()
+        lines2, labels2 = ax1_twin.get_legend_handles_labels()
+        ax1.legend(lines1 + lines2, labels1 + labels2, loc='upper right')
         
         # 添加數值標籤
         for bar, value in zip(bars1, total_bytes):
@@ -145,7 +148,7 @@ class HypatiaSignalingAnalyzer:
             ax1_twin.text(bar.get_x() + bar.get_width()/2, bar.get_height() + max(total_events)*0.01,
                          f'{value:,}', ha='center', va='bottom')
         
-        # 2. 時間軸分析
+        # Chart 2: Timeline Analysis
         ax2 = axes[0, 1]
         
         # 轉換時間軸數據
@@ -162,13 +165,13 @@ class HypatiaSignalingAnalyzer:
                     ax2.plot(df_sorted['time_ms']/1000, cumulative_bytes, 
                             label=algo_name, color=color, linewidth=2)
         
-        ax2.set_title('累積控制開銷隨時間變化')
-        ax2.set_xlabel('時間 (秒)')
-        ax2.set_ylabel('累積字節數')
+        ax2.set_title('Cumulative Control Overhead Over Time')
+        ax2.set_xlabel('Time (seconds)')
+        ax2.set_ylabel('Cumulative Bytes')
         ax2.legend()
         ax2.grid(True, alpha=0.3)
         
-        # 3. 事件類型分布
+        # Chart 3: Event Type Distribution
         ax3 = axes[1, 0]
         
         # 收集所有事件類型
@@ -190,18 +193,18 @@ class HypatiaSignalingAnalyzer:
             ax3.bar(x - width/2, h_counts, width, label='Hierarchical PID', alpha=0.8)
             ax3.bar(x + width/2, b_counts, width, label='Floyd-Warshall', alpha=0.8)
             
-            ax3.set_title('各類型事件數量比較')
-            ax3.set_xlabel('事件類型')
-            ax3.set_ylabel('事件數量')
+            ax3.set_title('Event Count Comparison by Type')
+            ax3.set_xlabel('Event Type')
+            ax3.set_ylabel('Event Count')
             ax3.set_xticks(x)
             ax3.set_xticklabels(all_event_types, rotation=45, ha='right')
             ax3.legend()
             ax3.grid(True, alpha=0.3)
         else:
-            ax3.text(0.5, 0.5, '暫無事件類型數據', ha='center', va='center', transform=ax3.transAxes)
-            ax3.set_title('各類型事件數量比較')
+            ax3.text(0.5, 0.5, 'No Event Type Data', ha='center', va='center', transform=ax3.transAxes)
+            ax3.set_title('Event Count Comparison by Type')
         
-        # 4. 改進百分比
+        # Chart 4: Improvement Percentage
         ax4 = axes[1, 1]
         
         if b_summary['total_bytes'] > 0:
@@ -209,20 +212,30 @@ class HypatiaSignalingAnalyzer:
                              b_summary['total_bytes'] * 100)
             
             colors = ['green' if improvement_pct > 0 else 'red']
-            bars = ax4.bar(['控制開銷改進'], [improvement_pct], color=colors, alpha=0.7)
+            # Make the bar narrower by setting width parameter and positioning
+            bars = ax4.bar([0], [improvement_pct], 
+                          color=colors, alpha=0.7, width=0.3)
             
-            ax4.set_title('Hierarchical PID 相對改進')
-            ax4.set_ylabel('改進百分比 (%)')
+            ax4.set_title('Hierarchical PID Relative Improvement')
+            ax4.set_ylabel('Improvement Percentage (%)')
             ax4.axhline(y=0, color='black', linestyle='-', linewidth=0.5)
+            
+            # Set x-axis limits to make the bar appear narrower
+            ax4.set_xlim(-1, 1)
+            ax4.set_xticks([0])
+            ax4.set_xticklabels(['Control Overhead\nImprovement'])
+            
+            # Set y-axis limit to 90% to make the bar appear shorter
+            ax4.set_ylim(0, 90)
             
             # 添加數值標籤
             for bar in bars:
                 height = bar.get_height()
-                ax4.text(bar.get_x() + bar.get_width()/2., height + (1 if height >= 0 else -1),
-                        f'{height:.1f}%', ha='center', va='bottom' if height >= 0 else 'top')
+                ax4.text(bar.get_x() + bar.get_width()/2., height + 2,
+                        f'{height:.1f}%', ha='center', va='bottom')
         else:
-            ax4.text(0.5, 0.5, '無法計算改進比例', ha='center', va='center', transform=ax4.transAxes)
-            ax4.set_title('Hierarchical PID 相對改進')
+            ax4.text(0.5, 0.5, 'Cannot Calculate Improvement Ratio', ha='center', va='center', transform=ax4.transAxes)
+            ax4.set_title('Hierarchical PID Relative Improvement')
         
         plt.tight_layout()
         

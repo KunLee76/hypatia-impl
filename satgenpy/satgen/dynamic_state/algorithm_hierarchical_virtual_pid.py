@@ -8,6 +8,7 @@ import math
 import networkx as nx
 from .fstate_calculation import calculate_fstate_shortest_path_without_gs_relaying
 import os
+import io
 import sys
 import tempfile
 import datetime as _dt
@@ -60,17 +61,18 @@ class ControlSignalingStats:
         self.timeline.append(row)
     
     def record_routing_update(self, snapshot, sim_time_ms,
-                              changed_entries:int, total_entries:int, bytes_per_entry:int=16):
+                              changed_pairs:int, k_published:int=None,
+                              bytes=None, base_bytes:int=48, per_edge_bytes:int=24):
         """記錄路由表更新"""
         self.routing_updates += 1
         b = changed_entries * bytes_per_entry
-        self.total_messages += 1
+        # 不要在這裡再自增 total_messages；_append 會依 count 增加一次
         self._append(EventRow(snapshot, sim_time_ms, "routing_update",
-                              count=1,
-                              detail={"changed_entries": changed_entries,
-                                      "total_entries": total_entries,
-                                      "diff_ratio": (changed_entries/total_entries if total_entries else 0.0)},
-                              bytes=b))
+                            count=1,
+                            detail={"changed_entries": changed_entries,
+                                    "total_entries": total_entries,
+                                    "diff_ratio": (changed_entries/total_entries if total_entries else 0.0)},
+                            bytes=b))
     
     def record_gateway_update(self, snapshot, sim_time_ms,
                               changed_pairs:int, k_published:int=None,
@@ -87,17 +89,17 @@ class ControlSignalingStats:
             base_bytes: 每對 PID 的基礎開銷
             per_edge_bytes: 每條邊的開銷
         """
-        self.gateway_updates += changed_pairs
+        self.gateway_updates += 1
         
         if bytes is None:
-            # 預設計算邏輯
+            # 預設計算邏輯：bytes 仍依 changed_pairs 估算，因為每對 PID 都會帶資料
             k_used = k_published or 0
             bytes = changed_pairs * (base_bytes + k_used * per_edge_bytes)
         
         self._append(EventRow(snapshot, sim_time_ms, "gateway_update",
-                              count=changed_pairs,
-                              detail={"k": k_published} if k_published is not None else None,
-                              bytes=bytes))
+                            count=1,
+                            detail={"k": k_published, "changed_pairs": changed_pairs},
+                            bytes=bytes))
     
     def record_pid_rebuild(self, snapshot, sim_time_ms,
                            changed_pids:int, per_pid_bytes:int=64):
@@ -157,9 +159,9 @@ class ControlSignalingStats:
         # 如果指定時間窗口，則過濾事件
         events = self.timeline
         if start_time_ms is not None:
-            events = [e for e in events if e.time_ms >= start_time_ms]
+            events = [e for e in events if e.sim_time_ms >= start_time_ms]
         if end_time_ms is not None:
-            events = [e for e in events if e.time_ms <= end_time_ms]
+            events = [e for e in events if e.sim_time_ms <= end_time_ms]
         
         # 計算統計數據
         by_type = {}
@@ -187,12 +189,11 @@ class ControlSignalingStats:
     
     def get_timeline_csv(self):
         """獲取時間軸數據的CSV格式字符串"""
-        import io
         output = io.StringIO()
         output.write("snapshot,time_ms,event_type,count,bytes,detail\n")
         for event in self.timeline:
             detail_str = str(event.detail) if event.detail else ""
-            output.write(f"{event.snapshot},{event.time_ms},{event.event},{event.count},{event.bytes},\"{detail_str}\"\n")
+            output.write(f"{event.snapshot},{event.sim_time_ms},{event.event},{event.count},{event.bytes},\"{detail_str}\"\n")
         return output.getvalue()
     
     def save_stats_to_file(self, filepath, include_timeline=True):
