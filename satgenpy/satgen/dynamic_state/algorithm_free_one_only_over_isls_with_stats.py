@@ -310,8 +310,9 @@ def algorithm_free_one_only_over_isls(
         stats_summary = _BASELINE_SIGNALING_STATS.get_stats_summary()
         print(f"  > [SIGNALING] 累計統計: {stats_summary['total_events']} 事件, {stats_summary['total_bytes']} 字節")
 
-    # 統一輸出統計文件到當前目錄（paper/satellite_networks_state）
-    stats_output_dir = "."
+    # 統一輸出統計文件到 analytic_result 目錄
+    stats_output_dir = "analytic_result"
+    os.makedirs(stats_output_dir, exist_ok=True)
     stats_file = os.path.join(stats_output_dir, "baseline_floyd_warshall_signaling_stats.json")
     
     try:
@@ -319,6 +320,7 @@ def algorithm_free_one_only_over_isls(
         # 保存詳細統計到 JSON 文件
         detailed_stats = {
             "algorithm": "algorithm_free_one_only_over_isls_with_stats",
+            "algorithm_display_name": "Floyd-Warshall Baseline",
             "timestamp": datetime.now().isoformat(),
             "summary": _BASELINE_SIGNALING_STATS.get_stats_summary(),
             "timeline": [

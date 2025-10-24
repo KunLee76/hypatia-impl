@@ -50,7 +50,7 @@ class ControlSignalingStats:
         """重置統計數據"""
         self.routing_updates = 0        # 路由表更新次數
         self.gateway_updates = 0        # Gateway 候選更新次數
-        self.pid_rebuilds = 0          # PID 重建次數
+        self.pid_rebuilds = 0           # PID 重建次數
         self.topology_changes = 0       # 拓撲變化次數
         self.total_messages = 0         # 總控制信令數
         self.total_bytes = 0
@@ -1287,15 +1287,21 @@ def step(payload: dict):
             stats_summary = _SIGNALING_STATS.get_stats_summary()
             print(f"  > [SIGNALING] 累計統計: {stats_summary['total_events']} 事件, {stats_summary['total_bytes']} 字節")
         
-        # 統一輸出統計文件到當前目錄（paper/satellite_networks_state）
-        stats_output_dir = "."
-        stats_file = os.path.join(stats_output_dir, "hierarchical_pid_dijkstra_signaling_stats.json")
+        # 統一輸出統計文件到 analytic_result 目錄
+        # 獲取網格大小
+        grid_size = getattr(_ROUTER, 'grid_deg', None) or GRID_DEG
+        
+        stats_output_dir = "analytic_result"
+        os.makedirs(stats_output_dir, exist_ok=True)
+        stats_file = os.path.join(stats_output_dir, f"hierarchical_gid_dijkstra_{grid_size}deg_signaling_stats.json")
         
         try:
             
             # 保存詳細統計到 JSON 文件
             detailed_stats = {
                 "algorithm": "algorithm_hierarchical_virtual_pid_dijkstra",
+                "algorithm_display_name": f"Hierarchical GID Dijkstra ({grid_size}°)",
+                "grid_deg": grid_size,
                 "timestamp": _dt.datetime.now().isoformat(),
                 "summary": _SIGNALING_STATS.get_stats_summary(),
                 "timeline": [
@@ -1341,15 +1347,21 @@ def step(payload: dict):
         stats_summary = _SIGNALING_STATS.get_stats_summary()
         print(f"  > [SIGNALING] 累計統計: {stats_summary['total_events']} 事件, {stats_summary['total_bytes']} 字節")
     
-    # 統一輸出統計文件到當前目錄（paper/satellite_networks_state）
-    stats_output_dir = "."
-    stats_file = os.path.join(stats_output_dir, "hierarchical_pid_dijkstra_signaling_stats.json")
+    # 統一輸出統計文件到 analytic_result 目錄
+    # 獲取網格大小
+    grid_size = getattr(_ROUTER, 'grid_deg', None) or GRID_DEG
+    
+    stats_output_dir = "analytic_result"
+    os.makedirs(stats_output_dir, exist_ok=True)
+    stats_file = os.path.join(stats_output_dir, f"hierarchical_gid_dijkstra_{grid_size}deg_signaling_stats.json")
     
     try:
         
         # 保存詳細統計到 JSON 文件
         detailed_stats = {
             "algorithm": "algorithm_hierarchical_virtual_pid_dijkstra",
+            "algorithm_display_name": f"Hierarchical GID Dijkstra ({grid_size}°)",
+            "grid_deg": grid_size,
             "timestamp": _dt.datetime.now().isoformat(),
             "summary": _SIGNALING_STATS.get_stats_summary(),
             "timeline": [

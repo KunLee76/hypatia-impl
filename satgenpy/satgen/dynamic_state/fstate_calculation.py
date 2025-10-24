@@ -369,8 +369,11 @@ def calculate_fstate_dijkstra_based(
                             edge_weight = sat_net_graph_only_satellites_with_isls.edges[(curr, neighbor_id)].get("weight", 1.0)
                             
                             # 鄰居到目標衛星的距離
-                            if dst_sat in dst_sat_distances.get(neighbor_id, {}):
-                                neighbor_to_dst = dst_sat_distances[neighbor_id][dst_sat]
+                            # 注意：dst_sat_distances[dst_sat] 包含從 dst_sat 到各節點的距離（反向）
+                            # 所以 neighbor_id 在其中表示從 dst_sat 到 neighbor_id 的距離
+                            # 在無向圖中，這等於從 neighbor_id 到 dst_sat 的距離
+                            if neighbor_id in dst_sat_distances.get(dst_sat, {}):
+                                neighbor_to_dst = dst_sat_distances[dst_sat][neighbor_id]
                             elif neighbor_id == dst_sat:
                                 neighbor_to_dst = 0
                             else:

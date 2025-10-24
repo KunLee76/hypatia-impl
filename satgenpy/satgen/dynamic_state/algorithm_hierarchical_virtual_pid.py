@@ -1286,15 +1286,20 @@ def step(payload: dict):
             stats_summary = _SIGNALING_STATS.get_stats_summary()
             print(f"  > [SIGNALING] 累計統計: {stats_summary['total_events']} 事件, {stats_summary['total_bytes']} 字節")
         
-        # 統一輸出統計文件到當前目錄（paper/satellite_networks_state）
-        stats_output_dir = "."
-        stats_file = os.path.join(stats_output_dir, "hierarchical_pid_signaling_stats.json")
+        # 統一輸出統計文件到 analytic_result 目錄
+        # 文件名包含網格大小以便區分不同配置
+        stats_output_dir = "analytic_result"
+        os.makedirs(stats_output_dir, exist_ok=True)
+        grid_size = _ROUTER.grid_deg if _ROUTER else GRID_DEG
+        stats_file = os.path.join(stats_output_dir, f"hierarchical_gid_{grid_size}deg_signaling_stats.json")
         
         try:
             
             # 保存詳細統計到 JSON 文件
             detailed_stats = {
                 "algorithm": "algorithm_hierarchical_virtual_pid",
+                "algorithm_display_name": f"Hierarchical GID ({grid_size}°)",
+                "grid_deg": grid_size,
                 "timestamp": _dt.datetime.now().isoformat(),
                 "summary": _SIGNALING_STATS.get_stats_summary(),
                 "timeline": [
@@ -1340,15 +1345,20 @@ def step(payload: dict):
         stats_summary = _SIGNALING_STATS.get_stats_summary()
         print(f"  > [SIGNALING] 累計統計: {stats_summary['total_events']} 事件, {stats_summary['total_bytes']} 字節")
     
-    # 統一輸出統計文件到當前目錄（paper/satellite_networks_state）
-    stats_output_dir = "."
-    stats_file = os.path.join(stats_output_dir, "hierarchical_pid_signaling_stats.json")
+    # 統一輸出統計文件到 analytic_result 目錄
+    # 文件名包含網格大小以便區分不同配置
+    stats_output_dir = "analytic_result"
+    os.makedirs(stats_output_dir, exist_ok=True)
+    grid_size = _ROUTER.grid_deg if _ROUTER else GRID_DEG
+    stats_file = os.path.join(stats_output_dir, f"hierarchical_gid_{grid_size}deg_signaling_stats.json")
     
     try:
         
         # 保存詳細統計到 JSON 文件
         detailed_stats = {
             "algorithm": "algorithm_hierarchical_virtual_pid",
+            "algorithm_display_name": f"Hierarchical GID ({grid_size}°)",
+            "grid_deg": grid_size,
             "timestamp": _dt.datetime.now().isoformat(),
             "summary": _SIGNALING_STATS.get_stats_summary(),
             "timeline": [
