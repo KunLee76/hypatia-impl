@@ -203,10 +203,11 @@ class MultiAlgorithmAnalyzer:
         num_algos = len(algorithms_data)
         
         # 根據算法數量調整圖表大小
-        fig_width = max(16, num_algos * 1.5)
-        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(fig_width, 8))
+        fig_width = max(20, num_algos * 1.5)
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(fig_width, 9))
         
         names = [algo['name'] for algo in algorithms_data]
+        labels_for_plot = [name.replace(' (', '\n(') for name in names]
         total_bytes = [algo['data']['summary']['total_bytes'] for algo in algorithms_data]
         total_events = [algo['data']['summary']['total_events'] for algo in algorithms_data]
         
@@ -228,7 +229,7 @@ class MultiAlgorithmAnalyzer:
                 colors.append(plt.cm.Greens(intensity))
         
         # 左圖：總字節數
-        bars1 = ax1.bar(range(len(names)), total_bytes, color=colors, alpha=0.85, edgecolor='black', linewidth=0.5)
+        bars1 = ax1.bar(range(len(names)), total_bytes, color=colors, alpha=0.85, edgecolor='black', linewidth=0.5, width=0.5)
         ax1.set_xlabel('Algorithm', fontsize=13, fontweight='bold')
         ax1.set_ylabel('Total Bytes', fontsize=13, fontweight='bold')
         ax1.set_title('Total Control Signaling Bytes', fontsize=15, fontweight='bold')
@@ -236,9 +237,9 @@ class MultiAlgorithmAnalyzer:
         
         # 優化 x 軸標籤顯示
         if num_algos > 6:
-            ax1.set_xticklabels(names, rotation=60, ha='right', fontsize=8)
+            ax1.set_xticklabels(labels_for_plot, rotation=45, ha='right', fontsize=8, multialignment='center')
         else:
-            ax1.set_xticklabels(names, rotation=45, ha='right', fontsize=10)
+            ax1.set_xticklabels(labels_for_plot, rotation=0, ha='center', fontsize=10, multialignment='center')
         
         ax1.grid(True, alpha=0.3, axis='y', linestyle='--')
         
@@ -247,19 +248,19 @@ class MultiAlgorithmAnalyzer:
             for bar, value in zip(bars1, total_bytes):
                 height = bar.get_height()
                 ax1.text(bar.get_x() + bar.get_width()/2, height,
-                        f'{value:,}', ha='center', va='bottom', fontsize=8, rotation=0)
+                        f'{value:,}', ha='center', va='bottom', fontsize=10, rotation=0)
         
         # 右圖：總事件數
-        bars2 = ax2.bar(range(len(names)), total_events, color=colors, alpha=0.85, edgecolor='black', linewidth=0.5)
+        bars2 = ax2.bar(range(len(names)), total_events, color=colors, alpha=0.85, edgecolor='black', linewidth=0.5, width=0.5)
         ax2.set_xlabel('Algorithm', fontsize=13, fontweight='bold')
         ax2.set_ylabel('Total Events', fontsize=13, fontweight='bold')
         ax2.set_title('Total Control Signaling Events', fontsize=15, fontweight='bold')
         ax2.set_xticks(range(len(names)))
         
         if num_algos > 6:
-            ax2.set_xticklabels(names, rotation=60, ha='right', fontsize=8)
+            ax2.set_xticklabels(labels_for_plot, rotation=45, ha='right', fontsize=8, multialignment='center')
         else:
-            ax2.set_xticklabels(names, rotation=45, ha='right', fontsize=10)
+            ax2.set_xticklabels(labels_for_plot, rotation=0, ha='center', fontsize=10, multialignment='center')
         
         ax2.grid(True, alpha=0.3, axis='y', linestyle='--')
         
@@ -273,7 +274,7 @@ class MultiAlgorithmAnalyzer:
         plt.tight_layout()
         chart_file = output_path / "multi_chart1_overall_comparison.png"
         plt.savefig(chart_file, dpi=300, bbox_inches='tight')
-        plt.close()
+        plt.close(fig)
         print(f"  📊 圖表1已保存: {chart_file.name}")
     
     def _chart2_timeline_multi(self, algorithms_data, output_path):
@@ -327,7 +328,7 @@ class MultiAlgorithmAnalyzer:
         plt.tight_layout()
         chart_file = output_path / "multi_chart2_timeline_analysis.png"
         plt.savefig(chart_file, dpi=300, bbox_inches='tight')
-        plt.close()
+        plt.close(fig)
         print(f"  📊 圖表2已保存: {chart_file.name}")
     
     def _chart3_event_types_multi(self, algorithms_data, output_path):
@@ -350,54 +351,75 @@ class MultiAlgorithmAnalyzer:
         
         x = np.arange(len(all_event_types))
         num_algorithms = len(algorithms_data)
-        width = 0.75 / num_algorithms
+        width = 0.8 / num_algorithms  # 統一使用固定基準寬度 0.5（與圖表1一致）
+        
+        # 預處理算法名稱：將括號部分移到下一行（統一命名）
+        names = [algo['name'] for algo in algorithms_data]
+        labels_for_plot = [name.replace(' (', '\n(') for name in names]
+        
+        # 改進的顏色編碼：與圖表1完全一致
+        colors = []
+        for algo in algorithms_data:
+            if algo['category'] == 'baseline':
+                colors.append('coral')
+            elif algo['category'] == 'hierarchical_dijkstra':
+                # Dijkstra 系列使用藍色系
+                grid_deg = algo.get('grid_deg', 15)
+                intensity = 0.4 + (grid_deg / 30.0) * 0.6
+                colors.append(plt.cm.Blues(intensity))
+            else:
+                # Floyd-Warshall hierarchical 使用綠色系
+                grid_deg = algo.get('grid_deg', 15)
+                intensity = 0.4 + (grid_deg / 30.0) * 0.6
+                colors.append(plt.cm.Greens(intensity))
         
         for idx, algo in enumerate(algorithms_data):
             summary = algo['data']['summary']
             counts = []
+            has_data_flags = []  # 記錄是否有數據
+            
             for event_type in all_event_types:
                 if 'by_type' in summary and event_type in summary['by_type']:
                     counts.append(summary['by_type'][event_type]['count'])
+                    has_data_flags.append(True)
                 else:
                     counts.append(0)
+                    has_data_flags.append(False)
             
             offset = (idx - num_algorithms/2) * width + width/2
             
-            # 顏色選擇
-            if algo['category'] == 'baseline':
-                color = 'coral'
-            elif algo['category'] == 'hierarchical_dijkstra':
-                grid_deg = algo.get('grid_deg', 15)
-                intensity = 0.4 + (grid_deg / 30.0) * 0.6
-                color = plt.cm.Blues(intensity)
-            else:
-                grid_deg = algo.get('grid_deg', 15)
-                intensity = 0.4 + (grid_deg / 30.0) * 0.6
-                color = plt.cm.Greens(intensity)
-            
             bars = ax.bar(x + offset, counts, width,
-                         label=algo['name'],
-                         color=color,
+                         label=labels_for_plot[idx],  # 使用預處理後的標籤
+                         color=colors[idx],
                          alpha=0.85,
                          edgecolor='black',
                          linewidth=0.5)
             
-            # 添加數值標籤（只在算法數量較少時）
+            # 添加數值標籤或 N/A 標記
             if num_algos <= 6:
-                for bar, count in zip(bars, counts):
+                for bar_idx, (bar, count, has_data) in enumerate(zip(bars, counts, has_data_flags)):
                     if count > 0:
+                        # 有數值：顯示數字
                         height = bar.get_height()
                         ax.text(bar.get_x() + bar.get_width()/2., height,
                                f'{int(count)}',
-                               ha='center', va='bottom', fontsize=7, fontweight='bold')
+                               ha='center', va='bottom', fontsize=10, fontweight='bold')
+                    elif not has_data and count == 0:
+                        # N/A：在柱子位置上方顯示 "N/A"
+                        # 獲取當前 y 軸的範圍，將 N/A 放在適當高度
+                        y_max = ax.get_ylim()[1]
+                        ax.text(bar.get_x() + bar.get_width()/2., y_max * 0.02,
+                               'N/A',
+                               ha='center', va='bottom', fontsize=10, 
+                               color='black', style='italic')
         
         ax.set_title('Event Count Comparison by Type', fontsize=15, fontweight='bold')
         ax.set_xlabel('Event Type', fontsize=13, fontweight='bold')
         ax.set_ylabel('Event Count', fontsize=13, fontweight='bold')
         ax.set_xticks(x)
-        ax.set_xticklabels(all_event_types, rotation=45, ha='right', fontsize=11)
+        ax.set_xticklabels(all_event_types, rotation=0, ha='center', fontsize=11)
         
-        # 優化圖例
+        # 優化圖例：根據算法數量調整圖例標籤顯示
         if num_algos > 8:
             ax.legend(loc='upper right', fontsize=8, ncol=2, framealpha=0.9)
         else:
@@ -408,7 +430,7 @@ class MultiAlgorithmAnalyzer:
         plt.tight_layout()
         chart_file = output_path / "multi_chart3_event_type_distribution.png"
         plt.savefig(chart_file, dpi=300, bbox_inches='tight')
-        plt.close()
+        plt.close(fig)
         print(f"  📊 圖表3已保存: {chart_file.name}")
     
     def _chart4_improvement_multi(self, algorithms_data, output_path):
@@ -426,7 +448,7 @@ class MultiAlgorithmAnalyzer:
         
         names = []
         improvements = []
-        colors_list = []
+        colors = []  # 統一使用 colors 而非 colors_list
         grid_degs = []
         
         for algo in algorithms_data:
@@ -440,22 +462,32 @@ class MultiAlgorithmAnalyzer:
             improvements.append(improvement)
             grid_degs.append(algo.get('grid_deg', None))
             
-            # 顏色根據改進程度
-            if improvement > 0:
-                colors_list.append('green')
+            # 使用與圖表1相同的顏色邏輯：根據算法類別和網格大小
+            if algo['category'] == 'hierarchical_dijkstra':
+                # Dijkstra 系列使用藍色系
+                grid_deg = algo.get('grid_deg', 15)
+                intensity = 0.4 + (grid_deg / 30.0) * 0.6
+                colors.append(plt.cm.Blues(intensity))
             else:
-                colors_list.append('red')
+                # Floyd-Warshall hierarchical 使用綠色系
+                grid_deg = algo.get('grid_deg', 15)
+                intensity = 0.4 + (grid_deg / 30.0) * 0.6
+                colors.append(plt.cm.Greens(intensity))
         
         if not names:
             print("  ⚠️  沒有可比較的算法，跳過圖表4")
             return
         
+        # 預處理名稱：將括號部分移到下一行
+        labels_for_plot = [name.replace(' (', '\n(') for name in names]
+        
         num_algos = len(names)
-        fig_width = max(12, num_algos * 0.8)
+        # 根據算法數量動態調整圖表寬度，與圖表1保持一致的比例
+        fig_width = max(16, num_algos * 1.5)  # 每個算法 1.5 英寸，最小 16 英寸
         fig, ax = plt.subplots(figsize=(fig_width, 8))
         
-        bars = ax.bar(range(len(names)), improvements, color=colors_list, alpha=0.75, 
-                     edgecolor='black', linewidth=0.8)
+        bars = ax.bar(range(len(names)), improvements, color=colors, alpha=0.85, 
+                     edgecolor='black', linewidth=0.5, width=0.2)  # 縮小寬度至 0.35
         
         ax.set_title('Improvement Relative to Floyd-Warshall Baseline', fontsize=15, fontweight='bold')
         ax.set_ylabel('Improvement Percentage (%)', fontsize=13, fontweight='bold')
@@ -463,11 +495,11 @@ class MultiAlgorithmAnalyzer:
         ax.axhline(y=0, color='black', linestyle='-', linewidth=1)
         ax.set_xticks(range(len(names)))
         
-        # 優化 x 軸標籤
+        # 優化 x 軸標籤顯示：統一使用與圖表1相同的邏輯
         if num_algos > 6:
-            ax.set_xticklabels(names, rotation=60, ha='right', fontsize=9)
+            ax.set_xticklabels(labels_for_plot, rotation=45, ha='right', fontsize=8, multialignment='center')
         else:
-            ax.set_xticklabels(names, rotation=45, ha='right', fontsize=10)
+            ax.set_xticklabels(labels_for_plot, rotation=0, ha='center', fontsize=10, multialignment='center')
         
         ax.grid(True, alpha=0.3, axis='y', linestyle='--')
         
@@ -486,7 +518,7 @@ class MultiAlgorithmAnalyzer:
         plt.tight_layout()
         chart_file = output_path / "multi_chart4_improvement_percentage.png"
         plt.savefig(chart_file, dpi=300, bbox_inches='tight')
-        plt.close()
+        plt.close(fig)
         print(f"  📊 圖表4已保存: {chart_file.name}")
 
 def main():

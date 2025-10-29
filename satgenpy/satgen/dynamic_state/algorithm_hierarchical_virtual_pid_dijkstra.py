@@ -18,7 +18,8 @@ import csv, json
 # -------------------------------
 # 全域設定（可依實驗需要調整）
 # -------------------------------
-GRID_DEG = 15                           # 15°×15° 地理網格
+# 優先從環境變數讀取，否則使用預設值
+GRID_DEG = int(os.environ.get('SATGEN_GRID_DEG', 15))  # 可從外部指定網格大小
 ALLOW_DIAGONAL_NEIGHBOR = True          # ★ PID 8-鄰（含對角）以對應斜向跨面 ISL
 ALLOW_GLOBAL_FALLBACK = False           # ★ 預設關閉全域最短路兜底（PID 圖斷了才開）
 K_BEST_GATEWAYS = 8                     # 每對相鄰 PID 保留的 gateway 候選數
@@ -929,7 +930,8 @@ def build_pid_constrained_sat_graph(
         elif getattr(gateway_cache, "candidates", None):
             cand_src = gateway_cache.candidates  # 冷啟動 fallback
         if cand_src:
-            for (pa, pb), lst in cand_src.items():
+            # 創建副本以避免迭代時修改字典
+            for (pa, pb), lst in list(cand_src.items()):
                 nbrs = router.pid_neighbors.get(pa, None)
                 if nbrs is not None and len(nbrs) > 0 and (pb not in nbrs):
                     continue
@@ -1034,7 +1036,8 @@ def init(config=None):
     """主程式在模擬開始時呼叫一次。"""
     global _ROUTER, _GCACHE, _SSSP, _SIGNALING_STATS
     cfg = config or {}
-    grid_deg = cfg.get("grid_deg", GRID_DEG)
+    # 優先從環境變數讀取 grid_deg（支援自動化腳本動態設定）
+    grid_deg = cfg.get("grid_deg", int(os.environ.get('SATGEN_GRID_DEG', GRID_DEG)))
     allow_diag = cfg.get("allow_diagonal_neighbor", ALLOW_DIAGONAL_NEIGHBOR)
     k_best = cfg.get("k_best_gateways", K_BEST_GATEWAYS)
 
@@ -1288,8 +1291,8 @@ def step(payload: dict):
             print(f"  > [SIGNALING] 累計統計: {stats_summary['total_events']} 事件, {stats_summary['total_bytes']} 字節")
         
         # 統一輸出統計文件到 analytic_result 目錄
-        # 獲取網格大小
-        grid_size = getattr(_ROUTER, 'grid_deg', None) or GRID_DEG
+        # 從 ROUTER 讀取網格大小（init() 時已正確設定）
+        grid_size = _ROUTER.grid_deg
         
         stats_output_dir = "analytic_result"
         os.makedirs(stats_output_dir, exist_ok=True)
@@ -1348,8 +1351,8 @@ def step(payload: dict):
         print(f"  > [SIGNALING] 累計統計: {stats_summary['total_events']} 事件, {stats_summary['total_bytes']} 字節")
     
     # 統一輸出統計文件到 analytic_result 目錄
-    # 獲取網格大小
-    grid_size = getattr(_ROUTER, 'grid_deg', None) or GRID_DEG
+    # 從 ROUTER 讀取網格大小（init() 時已正確設定）
+    grid_size = _ROUTER.grid_deg
     
     stats_output_dir = "analytic_result"
     os.makedirs(stats_output_dir, exist_ok=True)

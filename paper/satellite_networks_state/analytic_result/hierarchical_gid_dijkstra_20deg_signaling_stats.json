@@ -1,19 +1,19 @@
 {
   "algorithm": "algorithm_hierarchical_virtual_pid_dijkstra",
-  "algorithm_display_name": "Hierarchical GID Dijkstra (15°)",
-  "grid_deg": 15,
-  "timestamp": "2025-10-28T22:49:27.929189",
+  "algorithm_display_name": "Hierarchical GID Dijkstra (20°)",
+  "grid_deg": 20,
+  "timestamp": "2025-10-28T02:24:18.960335",
   "summary": {
-    "total_events": 238,
-    "total_bytes": 3493056,
+    "total_events": 233,
+    "total_bytes": 3034752,
     "by_type": {
       "pid_rebuild": {
         "count": 209,
-        "bytes": 1038336
+        "bytes": 571392
       },
       "gateway_update": {
-        "count": 28,
-        "bytes": 2454720
+        "count": 23,
+        "bytes": 2463360
       },
       "topology_change": {
         "count": 1,
@@ -32,67 +32,25 @@
       "time_ms": 0,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 18432,
+      "bytes": 10368,
       "detail": {
-        "changed_pids": 288
+        "changed_pids": 162
       }
     },
     {
-      "snapshot": 40,
-      "time_ms": 4000,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 3072,
-      "detail": {
-        "changed_pids": 48
-      }
-    },
-    {
-      "snapshot": 80,
-      "time_ms": 8000,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 7680,
-      "detail": {
-        "changed_pids": 120
-      }
-    },
-    {
-      "snapshot": 0,
-      "time_ms": 0,
+      "snapshot": 100,
+      "time_ms": 10000,
       "event": "gateway_update",
       "count": 1,
-      "bytes": 391680,
+      "bytes": 250560,
       "detail": {
         "k": 8,
-        "changed_pairs": 1632
+        "changed_pairs": 1044
       }
     },
     {
-      "snapshot": 0,
-      "time_ms": 0,
-      "event": "gateway_update",
-      "count": 1,
-      "bytes": 97920,
-      "detail": {
-        "k": 8,
-        "changed_pairs": 408
-      }
-    },
-    {
-      "snapshot": 0,
-      "time_ms": 0,
-      "event": "gateway_update",
-      "count": 1,
-      "bytes": 132480,
-      "detail": {
-        "k": 8,
-        "changed_pairs": 552
-      }
-    },
-    {
-      "snapshot": 0,
-      "time_ms": 0,
+      "snapshot": 100,
+      "time_ms": 10000,
       "event": "topology_change",
       "count": 1,
       "bytes": 0,
@@ -102,134 +60,8 @@
       }
     },
     {
-      "snapshot": 0,
-      "time_ms": 0,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 6144,
-      "detail": {
-        "changed_pids": 96
-      }
-    },
-    {
-      "snapshot": 60,
-      "time_ms": 6000,
-      "event": "gateway_update",
-      "count": 1,
-      "bytes": 28800,
-      "detail": {
-        "k": 8,
-        "changed_pairs": 120
-      }
-    },
-    {
-      "snapshot": 60,
-      "time_ms": 6000,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 3072,
-      "detail": {
-        "changed_pids": 48
-      }
-    },
-    {
-      "snapshot": 20,
-      "time_ms": 2000,
-      "event": "gateway_update",
-      "count": 1,
-      "bytes": 51840,
-      "detail": {
-        "k": 8,
-        "changed_pairs": 216
-      }
-    },
-    {
-      "snapshot": 20,
-      "time_ms": 2000,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 4608,
-      "detail": {
-        "changed_pids": 72
-      }
-    },
-    {
       "snapshot": 100,
       "time_ms": 10000,
-      "event": "gateway_update",
-      "count": 1,
-      "bytes": 69120,
-      "detail": {
-        "k": 8,
-        "changed_pairs": 288
-      }
-    },
-    {
-      "snapshot": 100,
-      "time_ms": 10000,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 4608,
-      "detail": {
-        "changed_pids": 72
-      }
-    },
-    {
-      "snapshot": 160,
-      "time_ms": 16000,
-      "event": "gateway_update",
-      "count": 1,
-      "bytes": 80640,
-      "detail": {
-        "k": 8,
-        "changed_pairs": 336
-      }
-    },
-    {
-      "snapshot": 160,
-      "time_ms": 16000,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 1536,
-      "detail": {
-        "changed_pids": 24
-      }
-    },
-    {
-      "snapshot": 180,
-      "time_ms": 18000,
-      "event": "gateway_update",
-      "count": 1,
-      "bytes": 22560,
-      "detail": {
-        "k": 8,
-        "changed_pairs": 94
-      }
-    },
-    {
-      "snapshot": 180,
-      "time_ms": 18000,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 3072,
-      "detail": {
-        "changed_pids": 48
-      }
-    },
-    {
-      "snapshot": 120,
-      "time_ms": 12000,
-      "event": "gateway_update",
-      "count": 1,
-      "bytes": 33600,
-      "detail": {
-        "k": 8,
-        "changed_pairs": 140
-      }
-    },
-    {
-      "snapshot": 120,
-      "time_ms": 12000,
       "event": "pid_rebuild",
       "count": 1,
       "bytes": 0,
@@ -238,18 +70,81 @@
       }
     },
     {
-      "snapshot": 140,
-      "time_ms": 14000,
+      "snapshot": 80,
+      "time_ms": 8000,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 7680,
+      "bytes": 3456,
       "detail": {
-        "changed_pids": 120
+        "changed_pids": 54
       }
     },
     {
-      "snapshot": 41,
-      "time_ms": 4100,
+      "snapshot": 120,
+      "time_ms": 12000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 112320,
+      "detail": {
+        "k": 8,
+        "changed_pairs": 468
+      }
+    },
+    {
+      "snapshot": 120,
+      "time_ms": 12000,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 5760,
+      "detail": {
+        "changed_pids": 90
+      }
+    },
+    {
+      "snapshot": 20,
+      "time_ms": 2000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 146880,
+      "detail": {
+        "k": 8,
+        "changed_pairs": 612
+      }
+    },
+    {
+      "snapshot": 20,
+      "time_ms": 2000,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 8064,
+      "detail": {
+        "changed_pids": 126
+      }
+    },
+    {
+      "snapshot": 0,
+      "time_ms": 0,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 147360,
+      "detail": {
+        "k": 8,
+        "changed_pairs": 614
+      }
+    },
+    {
+      "snapshot": 0,
+      "time_ms": 0,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 8064,
+      "detail": {
+        "changed_pids": 126
+      }
+    },
+    {
+      "snapshot": 60,
+      "time_ms": 6000,
       "event": "pid_rebuild",
       "count": 1,
       "bytes": 4608,
@@ -258,33 +153,87 @@
       }
     },
     {
-      "snapshot": 1,
-      "time_ms": 100,
-      "event": "pid_rebuild",
+      "snapshot": 140,
+      "time_ms": 14000,
+      "event": "gateway_update",
       "count": 1,
-      "bytes": 7680,
+      "bytes": 138720,
       "detail": {
-        "changed_pids": 120
+        "k": 8,
+        "changed_pairs": 578
       }
     },
     {
-      "snapshot": 81,
-      "time_ms": 8100,
-      "event": "pid_rebuild",
+      "snapshot": 140,
+      "time_ms": 14000,
+      "event": "gateway_update",
       "count": 1,
-      "bytes": 1536,
+      "bytes": 129600,
       "detail": {
-        "changed_pids": 24
+        "k": 8,
+        "changed_pairs": 540
       }
     },
     {
-      "snapshot": 61,
-      "time_ms": 6100,
+      "snapshot": 140,
+      "time_ms": 14000,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 1536,
+      "bytes": 0,
       "detail": {
-        "changed_pids": 24
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 160,
+      "time_ms": 16000,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 180,
+      "time_ms": 18000,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 4608,
+      "detail": {
+        "changed_pids": 72
+      }
+    },
+    {
+      "snapshot": 40,
+      "time_ms": 4000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 120960,
+      "detail": {
+        "k": 8,
+        "changed_pairs": 504
+      }
+    },
+    {
+      "snapshot": 40,
+      "time_ms": 4000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 120960,
+      "detail": {
+        "k": 8,
+        "changed_pairs": 504
+      }
+    },
+    {
+      "snapshot": 40,
+      "time_ms": 4000,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 1152,
+      "detail": {
+        "changed_pids": 18
       }
     },
     {
@@ -292,19 +241,19 @@
       "time_ms": 10100,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 4608,
+      "bytes": 0,
       "detail": {
-        "changed_pids": 72
+        "changed_pids": 0
       }
     },
     {
-      "snapshot": 161,
-      "time_ms": 16100,
+      "snapshot": 81,
+      "time_ms": 8100,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 9216,
+      "bytes": 2304,
       "detail": {
-        "changed_pids": 144
+        "changed_pids": 36
       }
     },
     {
@@ -312,9 +261,19 @@
       "time_ms": 2100,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 9216,
+      "bytes": 1152,
       "detail": {
-        "changed_pids": 144
+        "changed_pids": 18
+      }
+    },
+    {
+      "snapshot": 61,
+      "time_ms": 6100,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 4608,
+      "detail": {
+        "changed_pids": 72
       }
     },
     {
@@ -322,9 +281,29 @@
       "time_ms": 18100,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 3072,
+      "bytes": 0,
       "detail": {
-        "changed_pids": 48
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 121,
+      "time_ms": 12100,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 8064,
+      "detail": {
+        "changed_pids": 126
+      }
+    },
+    {
+      "snapshot": 1,
+      "time_ms": 100,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 8064,
+      "detail": {
+        "changed_pids": 126
       }
     },
     {
@@ -338,38 +317,8 @@
       }
     },
     {
-      "snapshot": 121,
-      "time_ms": 12100,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 6144,
-      "detail": {
-        "changed_pids": 96
-      }
-    },
-    {
-      "snapshot": 42,
-      "time_ms": 4200,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 1536,
-      "detail": {
-        "changed_pids": 24
-      }
-    },
-    {
-      "snapshot": 82,
-      "time_ms": 8200,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 7680,
-      "detail": {
-        "changed_pids": 120
-      }
-    },
-    {
-      "snapshot": 2,
-      "time_ms": 200,
+      "snapshot": 161,
+      "time_ms": 16100,
       "event": "pid_rebuild",
       "count": 1,
       "bytes": 4608,
@@ -378,33 +327,13 @@
       }
     },
     {
-      "snapshot": 22,
-      "time_ms": 2200,
+      "snapshot": 41,
+      "time_ms": 4100,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 3072,
+      "bytes": 1152,
       "detail": {
-        "changed_pids": 48
-      }
-    },
-    {
-      "snapshot": 62,
-      "time_ms": 6200,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 6144,
-      "detail": {
-        "changed_pids": 96
-      }
-    },
-    {
-      "snapshot": 182,
-      "time_ms": 18200,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 4608,
-      "detail": {
-        "changed_pids": 72
+        "changed_pids": 18
       }
     },
     {
@@ -412,19 +341,39 @@
       "time_ms": 10200,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 4608,
+      "bytes": 0,
       "detail": {
-        "changed_pids": 72
+        "changed_pids": 0
       }
     },
     {
-      "snapshot": 162,
-      "time_ms": 16200,
+      "snapshot": 82,
+      "time_ms": 8200,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 3072,
+      "bytes": 2304,
       "detail": {
-        "changed_pids": 48
+        "changed_pids": 36
+      }
+    },
+    {
+      "snapshot": 22,
+      "time_ms": 2200,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 1152,
+      "detail": {
+        "changed_pids": 18
+      }
+    },
+    {
+      "snapshot": 62,
+      "time_ms": 6200,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 4608,
+      "detail": {
+        "changed_pids": 72
       }
     },
     {
@@ -438,33 +387,53 @@
       }
     },
     {
+      "snapshot": 162,
+      "time_ms": 16200,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 8064,
+      "detail": {
+        "changed_pids": 126
+      }
+    },
+    {
+      "snapshot": 2,
+      "time_ms": 200,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 8064,
+      "detail": {
+        "changed_pids": 126
+      }
+    },
+    {
       "snapshot": 122,
       "time_ms": 12200,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 6144,
+      "bytes": 0,
       "detail": {
-        "changed_pids": 96
+        "changed_pids": 0
       }
     },
     {
-      "snapshot": 43,
-      "time_ms": 4300,
+      "snapshot": 182,
+      "time_ms": 18200,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 6144,
+      "bytes": 4608,
       "detail": {
-        "changed_pids": 96
+        "changed_pids": 72
       }
     },
     {
-      "snapshot": 3,
-      "time_ms": 300,
+      "snapshot": 42,
+      "time_ms": 4200,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 7680,
+      "bytes": 1152,
       "detail": {
-        "changed_pids": 120
+        "changed_pids": 18
       }
     },
     {
@@ -472,9 +441,9 @@
       "time_ms": 8300,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 4608,
+      "bytes": 2304,
       "detail": {
-        "changed_pids": 72
+        "changed_pids": 36
       }
     },
     {
@@ -482,34 +451,24 @@
       "time_ms": 2300,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 3072,
+      "bytes": 2304,
       "detail": {
-        "changed_pids": 48
-      }
-    },
-    {
-      "snapshot": 63,
-      "time_ms": 6300,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 6144,
-      "detail": {
-        "changed_pids": 96
-      }
-    },
-    {
-      "snapshot": 183,
-      "time_ms": 18300,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 4608,
-      "detail": {
-        "changed_pids": 72
+        "changed_pids": 36
       }
     },
     {
       "snapshot": 103,
       "time_ms": 10300,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 1152,
+      "detail": {
+        "changed_pids": 18
+      }
+    },
+    {
+      "snapshot": 63,
+      "time_ms": 6300,
       "event": "pid_rebuild",
       "count": 1,
       "bytes": 4608,
@@ -522,9 +481,9 @@
       "time_ms": 16300,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 3072,
+      "bytes": 0,
       "detail": {
-        "changed_pids": 48
+        "changed_pids": 0
       }
     },
     {
@@ -542,29 +501,39 @@
       "time_ms": 14300,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 6144,
+      "bytes": 0,
       "detail": {
-        "changed_pids": 96
+        "changed_pids": 0
       }
     },
     {
-      "snapshot": 44,
-      "time_ms": 4400,
+      "snapshot": 183,
+      "time_ms": 18300,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 6144,
+      "bytes": 6912,
       "detail": {
-        "changed_pids": 96
+        "changed_pids": 108
       }
     },
     {
-      "snapshot": 4,
-      "time_ms": 400,
+      "snapshot": 3,
+      "time_ms": 300,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 7680,
+      "bytes": 4608,
       "detail": {
-        "changed_pids": 120
+        "changed_pids": 72
+      }
+    },
+    {
+      "snapshot": 43,
+      "time_ms": 4300,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 1152,
+      "detail": {
+        "changed_pids": 18
       }
     },
     {
@@ -572,154 +541,14 @@
       "time_ms": 8400,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 3072,
+      "bytes": 1152,
       "detail": {
-        "changed_pids": 48
-      }
-    },
-    {
-      "snapshot": 24,
-      "time_ms": 2400,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 1536,
-      "detail": {
-        "changed_pids": 24
+        "changed_pids": 18
       }
     },
     {
       "snapshot": 64,
       "time_ms": 6400,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 6144,
-      "detail": {
-        "changed_pids": 96
-      }
-    },
-    {
-      "snapshot": 184,
-      "time_ms": 18400,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 4608,
-      "detail": {
-        "changed_pids": 72
-      }
-    },
-    {
-      "snapshot": 104,
-      "time_ms": 10400,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 4608,
-      "detail": {
-        "changed_pids": 72
-      }
-    },
-    {
-      "snapshot": 124,
-      "time_ms": 12400,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 3072,
-      "detail": {
-        "changed_pids": 48
-      }
-    },
-    {
-      "snapshot": 164,
-      "time_ms": 16400,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 3072,
-      "detail": {
-        "changed_pids": 48
-      }
-    },
-    {
-      "snapshot": 144,
-      "time_ms": 14400,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 12288,
-      "detail": {
-        "changed_pids": 192
-      }
-    },
-    {
-      "snapshot": 5,
-      "time_ms": 500,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 6144,
-      "detail": {
-        "changed_pids": 96
-      }
-    },
-    {
-      "snapshot": 45,
-      "time_ms": 4500,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 1536,
-      "detail": {
-        "changed_pids": 24
-      }
-    },
-    {
-      "snapshot": 85,
-      "time_ms": 8500,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 3072,
-      "detail": {
-        "changed_pids": 48
-      }
-    },
-    {
-      "snapshot": 25,
-      "time_ms": 2500,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 1536,
-      "detail": {
-        "changed_pids": 24
-      }
-    },
-    {
-      "snapshot": 65,
-      "time_ms": 6500,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 3072,
-      "detail": {
-        "changed_pids": 48
-      }
-    },
-    {
-      "snapshot": 105,
-      "time_ms": 10500,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 4608,
-      "detail": {
-        "changed_pids": 72
-      }
-    },
-    {
-      "snapshot": 185,
-      "time_ms": 18500,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 3072,
-      "detail": {
-        "changed_pids": 48
-      }
-    },
-    {
-      "snapshot": 125,
-      "time_ms": 12500,
       "event": "pid_rebuild",
       "count": 1,
       "bytes": 0,
@@ -728,13 +557,123 @@
       }
     },
     {
-      "snapshot": 145,
-      "time_ms": 14500,
+      "snapshot": 24,
+      "time_ms": 2400,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 3072,
+      "bytes": 1152,
       "detail": {
-        "changed_pids": 48
+        "changed_pids": 18
+      }
+    },
+    {
+      "snapshot": 104,
+      "time_ms": 10400,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 3456,
+      "detail": {
+        "changed_pids": 54
+      }
+    },
+    {
+      "snapshot": 164,
+      "time_ms": 16400,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 124,
+      "time_ms": 12400,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 144,
+      "time_ms": 14400,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 184,
+      "time_ms": 18400,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 6912,
+      "detail": {
+        "changed_pids": 108
+      }
+    },
+    {
+      "snapshot": 4,
+      "time_ms": 400,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 4608,
+      "detail": {
+        "changed_pids": 72
+      }
+    },
+    {
+      "snapshot": 44,
+      "time_ms": 4400,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 1152,
+      "detail": {
+        "changed_pids": 18
+      }
+    },
+    {
+      "snapshot": 85,
+      "time_ms": 8500,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 1152,
+      "detail": {
+        "changed_pids": 18
+      }
+    },
+    {
+      "snapshot": 105,
+      "time_ms": 10500,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 2304,
+      "detail": {
+        "changed_pids": 36
+      }
+    },
+    {
+      "snapshot": 25,
+      "time_ms": 2500,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 65,
+      "time_ms": 6500,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 4608,
+      "detail": {
+        "changed_pids": 72
       }
     },
     {
@@ -742,29 +681,59 @@
       "time_ms": 16500,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 12288,
+      "bytes": 6912,
       "detail": {
-        "changed_pids": 192
+        "changed_pids": 108
       }
     },
     {
-      "snapshot": 6,
-      "time_ms": 600,
+      "snapshot": 5,
+      "time_ms": 500,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 6144,
+      "bytes": 6912,
       "detail": {
-        "changed_pids": 96
+        "changed_pids": 108
       }
     },
     {
-      "snapshot": 46,
-      "time_ms": 4600,
+      "snapshot": 145,
+      "time_ms": 14500,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 1536,
+      "bytes": 0,
       "detail": {
-        "changed_pids": 24
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 185,
+      "time_ms": 18500,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 125,
+      "time_ms": 12500,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 4608,
+      "detail": {
+        "changed_pids": 72
+      }
+    },
+    {
+      "snapshot": 45,
+      "time_ms": 4500,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 1152,
+      "detail": {
+        "changed_pids": 18
       }
     },
     {
@@ -772,9 +741,9 @@
       "time_ms": 8600,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 3072,
+      "bytes": 1152,
       "detail": {
-        "changed_pids": 48
+        "changed_pids": 18
       }
     },
     {
@@ -782,29 +751,9 @@
       "time_ms": 2600,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 1536,
+      "bytes": 3456,
       "detail": {
-        "changed_pids": 24
-      }
-    },
-    {
-      "snapshot": 66,
-      "time_ms": 6600,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 6144,
-      "detail": {
-        "changed_pids": 96
-      }
-    },
-    {
-      "snapshot": 186,
-      "time_ms": 18600,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 3072,
-      "detail": {
-        "changed_pids": 48
+        "changed_pids": 54
       }
     },
     {
@@ -812,19 +761,19 @@
       "time_ms": 10600,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 1536,
+      "bytes": 3456,
       "detail": {
-        "changed_pids": 24
+        "changed_pids": 54
       }
     },
     {
-      "snapshot": 126,
-      "time_ms": 12600,
+      "snapshot": 66,
+      "time_ms": 6600,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 3072,
+      "bytes": 4608,
       "detail": {
-        "changed_pids": 48
+        "changed_pids": 72
       }
     },
     {
@@ -832,9 +781,19 @@
       "time_ms": 16600,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 3072,
+      "bytes": 6912,
       "detail": {
-        "changed_pids": 48
+        "changed_pids": 108
+      }
+    },
+    {
+      "snapshot": 6,
+      "time_ms": 600,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 6912,
+      "detail": {
+        "changed_pids": 108
       }
     },
     {
@@ -842,29 +801,29 @@
       "time_ms": 14600,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 12288,
+      "bytes": 0,
       "detail": {
-        "changed_pids": 192
+        "changed_pids": 0
       }
     },
     {
-      "snapshot": 7,
-      "time_ms": 700,
+      "snapshot": 186,
+      "time_ms": 18600,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 6144,
+      "bytes": 0,
       "detail": {
-        "changed_pids": 96
+        "changed_pids": 0
       }
     },
     {
-      "snapshot": 47,
-      "time_ms": 4700,
+      "snapshot": 126,
+      "time_ms": 12600,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 1536,
+      "bytes": 3456,
       "detail": {
-        "changed_pids": 24
+        "changed_pids": 54
       }
     },
     {
@@ -872,9 +831,19 @@
       "time_ms": 8700,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 3072,
+      "bytes": 1152,
       "detail": {
-        "changed_pids": 48
+        "changed_pids": 18
+      }
+    },
+    {
+      "snapshot": 46,
+      "time_ms": 4600,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
       }
     },
     {
@@ -882,9 +851,9 @@
       "time_ms": 2700,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 1536,
+      "bytes": 0,
       "detail": {
-        "changed_pids": 24
+        "changed_pids": 0
       }
     },
     {
@@ -892,9 +861,9 @@
       "time_ms": 6700,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 4608,
+      "bytes": 3456,
       "detail": {
-        "changed_pids": 72
+        "changed_pids": 54
       }
     },
     {
@@ -902,29 +871,9 @@
       "time_ms": 10700,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 3072,
+      "bytes": 1152,
       "detail": {
-        "changed_pids": 48
-      }
-    },
-    {
-      "snapshot": 187,
-      "time_ms": 18700,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 3072,
-      "detail": {
-        "changed_pids": 48
-      }
-    },
-    {
-      "snapshot": 127,
-      "time_ms": 12700,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 3072,
-      "detail": {
-        "changed_pids": 48
+        "changed_pids": 18
       }
     },
     {
@@ -932,9 +881,19 @@
       "time_ms": 16700,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 3072,
+      "bytes": 5760,
       "detail": {
-        "changed_pids": 48
+        "changed_pids": 90
+      }
+    },
+    {
+      "snapshot": 7,
+      "time_ms": 700,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 5760,
+      "detail": {
+        "changed_pids": 90
       }
     },
     {
@@ -942,19 +901,29 @@
       "time_ms": 14700,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 12288,
+      "bytes": 0,
       "detail": {
-        "changed_pids": 192
+        "changed_pids": 0
       }
     },
     {
-      "snapshot": 8,
-      "time_ms": 800,
+      "snapshot": 187,
+      "time_ms": 18700,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 7680,
+      "bytes": 0,
       "detail": {
-        "changed_pids": 120
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 127,
+      "time_ms": 12700,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 3456,
+      "detail": {
+        "changed_pids": 54
       }
     },
     {
@@ -962,34 +931,34 @@
       "time_ms": 8800,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 1536,
+      "bytes": 1152,
       "detail": {
-        "changed_pids": 24
+        "changed_pids": 18
       }
     },
     {
-      "snapshot": 48,
-      "time_ms": 4800,
+      "snapshot": 47,
+      "time_ms": 4700,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 1536,
+      "bytes": 3456,
       "detail": {
-        "changed_pids": 24
-      }
-    },
-    {
-      "snapshot": 28,
-      "time_ms": 2800,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 6144,
-      "detail": {
-        "changed_pids": 96
+        "changed_pids": 54
       }
     },
     {
       "snapshot": 108,
       "time_ms": 10800,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 3456,
+      "detail": {
+        "changed_pids": 54
+      }
+    },
+    {
+      "snapshot": 68,
+      "time_ms": 6800,
       "event": "pid_rebuild",
       "count": 1,
       "bytes": 4608,
@@ -998,63 +967,33 @@
       }
     },
     {
-      "snapshot": 68,
-      "time_ms": 6800,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 6144,
-      "detail": {
-        "changed_pids": 96
-      }
-    },
-    {
-      "snapshot": 188,
-      "time_ms": 18800,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 3072,
-      "detail": {
-        "changed_pids": 48
-      }
-    },
-    {
-      "snapshot": 128,
-      "time_ms": 12800,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 3072,
-      "detail": {
-        "changed_pids": 48
-      }
-    },
-    {
       "snapshot": 168,
       "time_ms": 16800,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 3072,
+      "bytes": 4608,
       "detail": {
-        "changed_pids": 48
+        "changed_pids": 72
       }
     },
     {
-      "snapshot": 148,
-      "time_ms": 14800,
+      "snapshot": 28,
+      "time_ms": 2800,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 12288,
+      "bytes": 2304,
       "detail": {
-        "changed_pids": 192
+        "changed_pids": 36
       }
     },
     {
-      "snapshot": 9,
-      "time_ms": 900,
+      "snapshot": 8,
+      "time_ms": 800,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 7680,
+      "bytes": 3456,
       "detail": {
-        "changed_pids": 120
+        "changed_pids": 54
       }
     },
     {
@@ -1062,34 +1001,54 @@
       "time_ms": 8900,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 1536,
+      "bytes": 3456,
       "detail": {
-        "changed_pids": 24
+        "changed_pids": 54
       }
     },
     {
-      "snapshot": 49,
-      "time_ms": 4900,
+      "snapshot": 148,
+      "time_ms": 14800,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 1536,
+      "bytes": 0,
       "detail": {
-        "changed_pids": 24
+        "changed_pids": 0
       }
     },
     {
-      "snapshot": 29,
-      "time_ms": 2900,
+      "snapshot": 128,
+      "time_ms": 12800,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 6144,
+      "bytes": 4608,
       "detail": {
-        "changed_pids": 96
+        "changed_pids": 72
       }
     },
     {
-      "snapshot": 109,
-      "time_ms": 10900,
+      "snapshot": 48,
+      "time_ms": 4800,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 4608,
+      "detail": {
+        "changed_pids": 72
+      }
+    },
+    {
+      "snapshot": 188,
+      "time_ms": 18800,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 169,
+      "time_ms": 16900,
       "event": "pid_rebuild",
       "count": 1,
       "bytes": 4608,
@@ -1102,24 +1061,65 @@
       "time_ms": 6900,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 6144,
+      "bytes": 3456,
       "detail": {
-        "changed_pids": 96
+        "changed_pids": 54
       }
     },
     {
-      "snapshot": 189,
-      "time_ms": 18900,
+      "snapshot": 109,
+      "time_ms": 10900,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 3072,
+      "bytes": 3456,
       "detail": {
-        "changed_pids": 48
+        "changed_pids": 54
       }
     },
     {
-      "snapshot": 129,
-      "time_ms": 12900,
+      "snapshot": 29,
+      "time_ms": 2900,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 2304,
+      "detail": {
+        "changed_pids": 36
+      }
+    },
+    {
+      "snapshot": 9,
+      "time_ms": 900,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 3456,
+      "detail": {
+        "changed_pids": 54
+      }
+    },
+    {
+      "snapshot": 90,
+      "time_ms": 9000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 95040,
+      "detail": {
+        "k": 8,
+        "changed_pairs": 396
+      }
+    },
+    {
+      "snapshot": 90,
+      "time_ms": 9000,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 3456,
+      "detail": {
+        "changed_pids": 54
+      }
+    },
+    {
+      "snapshot": 149,
+      "time_ms": 14900,
       "event": "pid_rebuild",
       "count": 1,
       "bytes": 0,
@@ -1128,81 +1128,8 @@
       }
     },
     {
-      "snapshot": 149,
-      "time_ms": 14900,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 3072,
-      "detail": {
-        "changed_pids": 48
-      }
-    },
-    {
-      "snapshot": 169,
-      "time_ms": 16900,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 12288,
-      "detail": {
-        "changed_pids": 192
-      }
-    },
-    {
-      "snapshot": 10,
-      "time_ms": 1000,
-      "event": "gateway_update",
-      "count": 1,
-      "bytes": 213120,
-      "detail": {
-        "k": 8,
-        "changed_pairs": 888
-      }
-    },
-    {
-      "snapshot": 10,
-      "time_ms": 1000,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 7680,
-      "detail": {
-        "changed_pids": 120
-      }
-    },
-    {
-      "snapshot": 90,
-      "time_ms": 9000,
-      "event": "gateway_update",
-      "count": 1,
-      "bytes": 138240,
-      "detail": {
-        "k": 8,
-        "changed_pairs": 576
-      }
-    },
-    {
-      "snapshot": 90,
-      "time_ms": 9000,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 1536,
-      "detail": {
-        "changed_pids": 24
-      }
-    },
-    {
-      "snapshot": 50,
-      "time_ms": 5000,
-      "event": "gateway_update",
-      "count": 1,
-      "bytes": 28800,
-      "detail": {
-        "k": 8,
-        "changed_pairs": 120
-      }
-    },
-    {
-      "snapshot": 50,
-      "time_ms": 5000,
+      "snapshot": 129,
+      "time_ms": 12900,
       "event": "pid_rebuild",
       "count": 1,
       "bytes": 4608,
@@ -1211,108 +1138,23 @@
       }
     },
     {
-      "snapshot": 110,
-      "time_ms": 11000,
-      "event": "gateway_update",
-      "count": 1,
-      "bytes": 74880,
-      "detail": {
-        "k": 8,
-        "changed_pairs": 312
-      }
-    },
-    {
-      "snapshot": 110,
-      "time_ms": 11000,
+      "snapshot": 49,
+      "time_ms": 4900,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 6144,
+      "bytes": 4608,
       "detail": {
-        "changed_pids": 96
+        "changed_pids": 72
       }
     },
     {
-      "snapshot": 30,
-      "time_ms": 3000,
-      "event": "gateway_update",
-      "count": 1,
-      "bytes": 92160,
-      "detail": {
-        "k": 8,
-        "changed_pairs": 384
-      }
-    },
-    {
-      "snapshot": 30,
-      "time_ms": 3000,
+      "snapshot": 189,
+      "time_ms": 18900,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 7680,
+      "bytes": 0,
       "detail": {
-        "changed_pids": 120
-      }
-    },
-    {
-      "snapshot": 190,
-      "time_ms": 19000,
-      "event": "gateway_update",
-      "count": 1,
-      "bytes": 144000,
-      "detail": {
-        "k": 8,
-        "changed_pairs": 600
-      }
-    },
-    {
-      "snapshot": 190,
-      "time_ms": 19000,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 3072,
-      "detail": {
-        "changed_pids": 48
-      }
-    },
-    {
-      "snapshot": 150,
-      "time_ms": 15000,
-      "event": "gateway_update",
-      "count": 1,
-      "bytes": 33600,
-      "detail": {
-        "k": 8,
-        "changed_pairs": 140
-      }
-    },
-    {
-      "snapshot": 150,
-      "time_ms": 15000,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 6144,
-      "detail": {
-        "changed_pids": 96
-      }
-    },
-    {
-      "snapshot": 70,
-      "time_ms": 7000,
-      "event": "gateway_update",
-      "count": 1,
-      "bytes": 92160,
-      "detail": {
-        "k": 8,
-        "changed_pairs": 384
-      }
-    },
-    {
-      "snapshot": 70,
-      "time_ms": 7000,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 6144,
-      "detail": {
-        "changed_pids": 96
+        "changed_pids": 0
       }
     },
     {
@@ -1320,10 +1162,10 @@
       "time_ms": 17000,
       "event": "gateway_update",
       "count": 1,
-      "bytes": 115200,
+      "bytes": 95040,
       "detail": {
         "k": 8,
-        "changed_pairs": 480
+        "changed_pairs": 396
       }
     },
     {
@@ -1331,40 +1173,82 @@
       "time_ms": 17000,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 3072,
+      "bytes": 1152,
       "detail": {
-        "changed_pids": 48
+        "changed_pids": 18
       }
     },
     {
-      "snapshot": 130,
-      "time_ms": 13000,
+      "snapshot": 110,
+      "time_ms": 11000,
       "event": "gateway_update",
       "count": 1,
-      "bytes": 33600,
+      "bytes": 34560,
       "detail": {
         "k": 8,
-        "changed_pairs": 140
+        "changed_pairs": 144
       }
     },
     {
-      "snapshot": 130,
-      "time_ms": 13000,
+      "snapshot": 110,
+      "time_ms": 11000,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 12288,
+      "bytes": 3456,
       "detail": {
-        "changed_pids": 192
+        "changed_pids": 54
       }
     },
     {
-      "snapshot": 11,
-      "time_ms": 1100,
+      "snapshot": 70,
+      "time_ms": 7000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 86400,
+      "detail": {
+        "k": 8,
+        "changed_pairs": 360
+      }
+    },
+    {
+      "snapshot": 70,
+      "time_ms": 7000,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 7680,
+      "bytes": 0,
       "detail": {
-        "changed_pids": 120
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 30,
+      "time_ms": 3000,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 2304,
+      "detail": {
+        "changed_pids": 36
+      }
+    },
+    {
+      "snapshot": 10,
+      "time_ms": 1000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 51840,
+      "detail": {
+        "k": 8,
+        "changed_pairs": 216
+      }
+    },
+    {
+      "snapshot": 10,
+      "time_ms": 1000,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 3456,
+      "detail": {
+        "changed_pids": 54
       }
     },
     {
@@ -1372,19 +1256,71 @@
       "time_ms": 9100,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 1536,
+      "bytes": 3456,
       "detail": {
-        "changed_pids": 24
+        "changed_pids": 54
       }
     },
     {
-      "snapshot": 51,
-      "time_ms": 5100,
+      "snapshot": 190,
+      "time_ms": 19000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 155520,
+      "detail": {
+        "k": 8,
+        "changed_pairs": 648
+      }
+    },
+    {
+      "snapshot": 190,
+      "time_ms": 19000,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 150,
+      "time_ms": 15000,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 130,
+      "time_ms": 13000,
       "event": "pid_rebuild",
       "count": 1,
       "bytes": 4608,
       "detail": {
         "changed_pids": 72
+      }
+    },
+    {
+      "snapshot": 50,
+      "time_ms": 5000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 120960,
+      "detail": {
+        "k": 8,
+        "changed_pairs": 504
+      }
+    },
+    {
+      "snapshot": 50,
+      "time_ms": 5000,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 3456,
+      "detail": {
+        "changed_pids": 54
       }
     },
     {
@@ -1392,59 +1328,9 @@
       "time_ms": 11100,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 6144,
+      "bytes": 1152,
       "detail": {
-        "changed_pids": 96
-      }
-    },
-    {
-      "snapshot": 31,
-      "time_ms": 3100,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 7680,
-      "detail": {
-        "changed_pids": 120
-      }
-    },
-    {
-      "snapshot": 151,
-      "time_ms": 15100,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 3072,
-      "detail": {
-        "changed_pids": 48
-      }
-    },
-    {
-      "snapshot": 191,
-      "time_ms": 19100,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 6144,
-      "detail": {
-        "changed_pids": 96
-      }
-    },
-    {
-      "snapshot": 71,
-      "time_ms": 7100,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 6144,
-      "detail": {
-        "changed_pids": 96
-      }
-    },
-    {
-      "snapshot": 131,
-      "time_ms": 13100,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 3072,
-      "detail": {
-        "changed_pids": 48
+        "changed_pids": 18
       }
     },
     {
@@ -1452,19 +1338,29 @@
       "time_ms": 17100,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 12288,
+      "bytes": 4608,
       "detail": {
-        "changed_pids": 192
+        "changed_pids": 72
       }
     },
     {
-      "snapshot": 12,
-      "time_ms": 1200,
+      "snapshot": 71,
+      "time_ms": 7100,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 7680,
+      "bytes": 0,
       "detail": {
-        "changed_pids": 120
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 31,
+      "time_ms": 3100,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 1152,
+      "detail": {
+        "changed_pids": 18
       }
     },
     {
@@ -1472,19 +1368,59 @@
       "time_ms": 9200,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 1536,
+      "bytes": 3456,
       "detail": {
-        "changed_pids": 24
+        "changed_pids": 54
       }
     },
     {
-      "snapshot": 52,
-      "time_ms": 5200,
+      "snapshot": 131,
+      "time_ms": 13100,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 5760,
+      "detail": {
+        "changed_pids": 90
+      }
+    },
+    {
+      "snapshot": 11,
+      "time_ms": 1100,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 5760,
+      "detail": {
+        "changed_pids": 90
+      }
+    },
+    {
+      "snapshot": 151,
+      "time_ms": 15100,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 191,
+      "time_ms": 19100,
       "event": "pid_rebuild",
       "count": 1,
       "bytes": 4608,
       "detail": {
         "changed_pids": 72
+      }
+    },
+    {
+      "snapshot": 51,
+      "time_ms": 5100,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 3456,
+      "detail": {
+        "changed_pids": 54
       }
     },
     {
@@ -1492,59 +1428,9 @@
       "time_ms": 11200,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 6144,
+      "bytes": 1152,
       "detail": {
-        "changed_pids": 96
-      }
-    },
-    {
-      "snapshot": 32,
-      "time_ms": 3200,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 7680,
-      "detail": {
-        "changed_pids": 120
-      }
-    },
-    {
-      "snapshot": 192,
-      "time_ms": 19200,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 3072,
-      "detail": {
-        "changed_pids": 48
-      }
-    },
-    {
-      "snapshot": 152,
-      "time_ms": 15200,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 6144,
-      "detail": {
-        "changed_pids": 96
-      }
-    },
-    {
-      "snapshot": 72,
-      "time_ms": 7200,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 6144,
-      "detail": {
-        "changed_pids": 96
-      }
-    },
-    {
-      "snapshot": 132,
-      "time_ms": 13200,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 3072,
-      "detail": {
-        "changed_pids": 48
+        "changed_pids": 18
       }
     },
     {
@@ -1552,29 +1438,39 @@
       "time_ms": 17200,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 12288,
+      "bytes": 4608,
       "detail": {
-        "changed_pids": 192
+        "changed_pids": 72
       }
     },
     {
-      "snapshot": 13,
-      "time_ms": 1300,
+      "snapshot": 72,
+      "time_ms": 7200,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 6144,
+      "bytes": 0,
       "detail": {
-        "changed_pids": 96
+        "changed_pids": 0
       }
     },
     {
-      "snapshot": 53,
-      "time_ms": 5300,
+      "snapshot": 32,
+      "time_ms": 3200,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 1536,
+      "bytes": 2304,
       "detail": {
-        "changed_pids": 24
+        "changed_pids": 36
+      }
+    },
+    {
+      "snapshot": 12,
+      "time_ms": 1200,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 3456,
+      "detail": {
+        "changed_pids": 54
       }
     },
     {
@@ -1582,9 +1478,49 @@
       "time_ms": 9300,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 3072,
+      "bytes": 3456,
       "detail": {
-        "changed_pids": 48
+        "changed_pids": 54
+      }
+    },
+    {
+      "snapshot": 192,
+      "time_ms": 19200,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 132,
+      "time_ms": 13200,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 152,
+      "time_ms": 15200,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 4608,
+      "detail": {
+        "changed_pids": 72
+      }
+    },
+    {
+      "snapshot": 52,
+      "time_ms": 5200,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 3456,
+      "detail": {
+        "changed_pids": 54
       }
     },
     {
@@ -1592,59 +1528,9 @@
       "time_ms": 11300,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 6144,
+      "bytes": 1152,
       "detail": {
-        "changed_pids": 96
-      }
-    },
-    {
-      "snapshot": 33,
-      "time_ms": 3300,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 7680,
-      "detail": {
-        "changed_pids": 120
-      }
-    },
-    {
-      "snapshot": 153,
-      "time_ms": 15300,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 3072,
-      "detail": {
-        "changed_pids": 48
-      }
-    },
-    {
-      "snapshot": 193,
-      "time_ms": 19300,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 6144,
-      "detail": {
-        "changed_pids": 96
-      }
-    },
-    {
-      "snapshot": 73,
-      "time_ms": 7300,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 6144,
-      "detail": {
-        "changed_pids": 96
-      }
-    },
-    {
-      "snapshot": 133,
-      "time_ms": 13300,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 3072,
-      "detail": {
-        "changed_pids": 48
+        "changed_pids": 18
       }
     },
     {
@@ -1652,19 +1538,19 @@
       "time_ms": 17300,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 12288,
+      "bytes": 4608,
       "detail": {
-        "changed_pids": 192
+        "changed_pids": 72
       }
     },
     {
-      "snapshot": 14,
-      "time_ms": 1400,
+      "snapshot": 73,
+      "time_ms": 7300,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 7680,
+      "bytes": 1152,
       "detail": {
-        "changed_pids": 120
+        "changed_pids": 18
       }
     },
     {
@@ -1672,19 +1558,69 @@
       "time_ms": 9400,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 1536,
+      "bytes": 1152,
       "detail": {
-        "changed_pids": 24
+        "changed_pids": 18
       }
     },
     {
-      "snapshot": 54,
-      "time_ms": 5400,
+      "snapshot": 33,
+      "time_ms": 3300,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 6144,
+      "bytes": 2304,
       "detail": {
-        "changed_pids": 96
+        "changed_pids": 36
+      }
+    },
+    {
+      "snapshot": 13,
+      "time_ms": 1300,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 5760,
+      "detail": {
+        "changed_pids": 90
+      }
+    },
+    {
+      "snapshot": 133,
+      "time_ms": 13300,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 153,
+      "time_ms": 15300,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 193,
+      "time_ms": 19300,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 4608,
+      "detail": {
+        "changed_pids": 72
+      }
+    },
+    {
+      "snapshot": 53,
+      "time_ms": 5300,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 4608,
+      "detail": {
+        "changed_pids": 72
       }
     },
     {
@@ -1692,59 +1628,9 @@
       "time_ms": 11400,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 7680,
+      "bytes": 0,
       "detail": {
-        "changed_pids": 120
-      }
-    },
-    {
-      "snapshot": 34,
-      "time_ms": 3400,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 7680,
-      "detail": {
-        "changed_pids": 120
-      }
-    },
-    {
-      "snapshot": 194,
-      "time_ms": 19400,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 3072,
-      "detail": {
-        "changed_pids": 48
-      }
-    },
-    {
-      "snapshot": 154,
-      "time_ms": 15400,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 4608,
-      "detail": {
-        "changed_pids": 72
-      }
-    },
-    {
-      "snapshot": 74,
-      "time_ms": 7400,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 4608,
-      "detail": {
-        "changed_pids": 72
-      }
-    },
-    {
-      "snapshot": 134,
-      "time_ms": 13400,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 3072,
-      "detail": {
-        "changed_pids": 48
+        "changed_pids": 0
       }
     },
     {
@@ -1752,19 +1638,29 @@
       "time_ms": 17400,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 12288,
+      "bytes": 3456,
       "detail": {
-        "changed_pids": 192
+        "changed_pids": 54
       }
     },
     {
-      "snapshot": 15,
-      "time_ms": 1500,
+      "snapshot": 74,
+      "time_ms": 7400,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 7680,
+      "bytes": 1152,
       "detail": {
-        "changed_pids": 120
+        "changed_pids": 18
+      }
+    },
+    {
+      "snapshot": 34,
+      "time_ms": 3400,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 1152,
+      "detail": {
+        "changed_pids": 18
       }
     },
     {
@@ -1772,19 +1668,59 @@
       "time_ms": 9500,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 1536,
+      "bytes": 3456,
       "detail": {
-        "changed_pids": 24
+        "changed_pids": 54
       }
     },
     {
-      "snapshot": 55,
-      "time_ms": 5500,
+      "snapshot": 134,
+      "time_ms": 13400,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 6144,
+      "bytes": 0,
       "detail": {
-        "changed_pids": 96
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 154,
+      "time_ms": 15400,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 5760,
+      "detail": {
+        "changed_pids": 90
+      }
+    },
+    {
+      "snapshot": 14,
+      "time_ms": 1400,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 5760,
+      "detail": {
+        "changed_pids": 90
+      }
+    },
+    {
+      "snapshot": 194,
+      "time_ms": 19400,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 4608,
+      "detail": {
+        "changed_pids": 72
+      }
+    },
+    {
+      "snapshot": 54,
+      "time_ms": 5400,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 4608,
+      "detail": {
+        "changed_pids": 72
       }
     },
     {
@@ -1798,13 +1734,13 @@
       }
     },
     {
-      "snapshot": 155,
-      "time_ms": 15500,
+      "snapshot": 175,
+      "time_ms": 17500,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 7680,
+      "bytes": 4608,
       "detail": {
-        "changed_pids": 120
+        "changed_pids": 72
       }
     },
     {
@@ -1812,9 +1748,59 @@
       "time_ms": 3500,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 7680,
+      "bytes": 1152,
       "detail": {
-        "changed_pids": 120
+        "changed_pids": 18
+      }
+    },
+    {
+      "snapshot": 75,
+      "time_ms": 7500,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 96,
+      "time_ms": 9600,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 3456,
+      "detail": {
+        "changed_pids": 54
+      }
+    },
+    {
+      "snapshot": 135,
+      "time_ms": 13500,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 155,
+      "time_ms": 15500,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 5760,
+      "detail": {
+        "changed_pids": 90
+      }
+    },
+    {
+      "snapshot": 15,
+      "time_ms": 1500,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 5760,
+      "detail": {
+        "changed_pids": 90
       }
     },
     {
@@ -1828,73 +1814,13 @@
       }
     },
     {
-      "snapshot": 75,
-      "time_ms": 7500,
+      "snapshot": 55,
+      "time_ms": 5500,
       "event": "pid_rebuild",
       "count": 1,
       "bytes": 4608,
       "detail": {
         "changed_pids": 72
-      }
-    },
-    {
-      "snapshot": 135,
-      "time_ms": 13500,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 10752,
-      "detail": {
-        "changed_pids": 168
-      }
-    },
-    {
-      "snapshot": 16,
-      "time_ms": 1600,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 10752,
-      "detail": {
-        "changed_pids": 168
-      }
-    },
-    {
-      "snapshot": 175,
-      "time_ms": 17500,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 4608,
-      "detail": {
-        "changed_pids": 72
-      }
-    },
-    {
-      "snapshot": 96,
-      "time_ms": 9600,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 1536,
-      "detail": {
-        "changed_pids": 24
-      }
-    },
-    {
-      "snapshot": 56,
-      "time_ms": 5600,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 6144,
-      "detail": {
-        "changed_pids": 96
-      }
-    },
-    {
-      "snapshot": 156,
-      "time_ms": 15600,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 0,
-      "detail": {
-        "changed_pids": 0
       }
     },
     {
@@ -1902,59 +1828,9 @@
       "time_ms": 11600,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 7680,
+      "bytes": 0,
       "detail": {
-        "changed_pids": 120
-      }
-    },
-    {
-      "snapshot": 36,
-      "time_ms": 3600,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 3072,
-      "detail": {
-        "changed_pids": 48
-      }
-    },
-    {
-      "snapshot": 76,
-      "time_ms": 7600,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 4608,
-      "detail": {
-        "changed_pids": 72
-      }
-    },
-    {
-      "snapshot": 196,
-      "time_ms": 19600,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 3072,
-      "detail": {
-        "changed_pids": 48
-      }
-    },
-    {
-      "snapshot": 136,
-      "time_ms": 13600,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 10752,
-      "detail": {
-        "changed_pids": 168
-      }
-    },
-    {
-      "snapshot": 17,
-      "time_ms": 1700,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 10752,
-      "detail": {
-        "changed_pids": 168
+        "changed_pids": 0
       }
     },
     {
@@ -1968,38 +1844,78 @@
       }
     },
     {
+      "snapshot": 36,
+      "time_ms": 3600,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 1152,
+      "detail": {
+        "changed_pids": 18
+      }
+    },
+    {
+      "snapshot": 76,
+      "time_ms": 7600,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
       "snapshot": 97,
       "time_ms": 9700,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 1536,
+      "bytes": 3456,
       "detail": {
-        "changed_pids": 24
+        "changed_pids": 54
       }
     },
     {
-      "snapshot": 57,
-      "time_ms": 5700,
+      "snapshot": 136,
+      "time_ms": 13600,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 6144,
+      "bytes": 5760,
       "detail": {
-        "changed_pids": 96
+        "changed_pids": 90
       }
     },
     {
-      "snapshot": 157,
-      "time_ms": 15700,
+      "snapshot": 16,
+      "time_ms": 1600,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 1536,
+      "bytes": 5760,
       "detail": {
-        "changed_pids": 24
+        "changed_pids": 90
+      }
+    },
+    {
+      "snapshot": 156,
+      "time_ms": 15600,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
       }
     },
     {
       "snapshot": 117,
       "time_ms": 11700,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 196,
+      "time_ms": 19600,
       "event": "pid_rebuild",
       "count": 1,
       "bytes": 4608,
@@ -2008,53 +1924,13 @@
       }
     },
     {
-      "snapshot": 77,
-      "time_ms": 7700,
+      "snapshot": 56,
+      "time_ms": 5600,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 3072,
+      "bytes": 4608,
       "detail": {
-        "changed_pids": 48
-      }
-    },
-    {
-      "snapshot": 37,
-      "time_ms": 3700,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 7680,
-      "detail": {
-        "changed_pids": 120
-      }
-    },
-    {
-      "snapshot": 197,
-      "time_ms": 19700,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 3072,
-      "detail": {
-        "changed_pids": 48
-      }
-    },
-    {
-      "snapshot": 137,
-      "time_ms": 13700,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 10752,
-      "detail": {
-        "changed_pids": 168
-      }
-    },
-    {
-      "snapshot": 18,
-      "time_ms": 1800,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 10752,
-      "detail": {
-        "changed_pids": 168
+        "changed_pids": 72
       }
     },
     {
@@ -2068,33 +1944,63 @@
       }
     },
     {
+      "snapshot": 37,
+      "time_ms": 3700,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 1152,
+      "detail": {
+        "changed_pids": 18
+      }
+    },
+    {
       "snapshot": 98,
       "time_ms": 9800,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 1536,
+      "bytes": 0,
       "detail": {
-        "changed_pids": 24
+        "changed_pids": 0
       }
     },
     {
-      "snapshot": 58,
-      "time_ms": 5800,
+      "snapshot": 77,
+      "time_ms": 7700,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 6144,
+      "bytes": 2304,
       "detail": {
-        "changed_pids": 96
+        "changed_pids": 36
       }
     },
     {
-      "snapshot": 158,
-      "time_ms": 15800,
+      "snapshot": 17,
+      "time_ms": 1700,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 1536,
+      "bytes": 5760,
       "detail": {
-        "changed_pids": 24
+        "changed_pids": 90
+      }
+    },
+    {
+      "snapshot": 137,
+      "time_ms": 13700,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 157,
+      "time_ms": 15700,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
       }
     },
     {
@@ -2108,48 +2014,8 @@
       }
     },
     {
-      "snapshot": 78,
-      "time_ms": 7800,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 3072,
-      "detail": {
-        "changed_pids": 48
-      }
-    },
-    {
-      "snapshot": 38,
-      "time_ms": 3800,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 7680,
-      "detail": {
-        "changed_pids": 120
-      }
-    },
-    {
-      "snapshot": 198,
-      "time_ms": 19800,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 3072,
-      "detail": {
-        "changed_pids": 48
-      }
-    },
-    {
-      "snapshot": 138,
-      "time_ms": 13800,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 3072,
-      "detail": {
-        "changed_pids": 48
-      }
-    },
-    {
-      "snapshot": 178,
-      "time_ms": 17800,
+      "snapshot": 57,
+      "time_ms": 5700,
       "event": "pid_rebuild",
       "count": 1,
       "bytes": 4608,
@@ -2158,18 +2024,200 @@
       }
     },
     {
+      "snapshot": 197,
+      "time_ms": 19700,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 178,
+      "time_ms": 17800,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 3456,
+      "detail": {
+        "changed_pids": 54
+      }
+    },
+    {
       "snapshot": 99,
       "time_ms": 9900,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 6144,
+      "bytes": 1152,
       "detail": {
-        "changed_pids": 96
+        "changed_pids": 18
+      }
+    },
+    {
+      "snapshot": 38,
+      "time_ms": 3800,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 1152,
+      "detail": {
+        "changed_pids": 18
+      }
+    },
+    {
+      "snapshot": 78,
+      "time_ms": 7800,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 2304,
+      "detail": {
+        "changed_pids": 36
+      }
+    },
+    {
+      "snapshot": 18,
+      "time_ms": 1800,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 5760,
+      "detail": {
+        "changed_pids": 90
+      }
+    },
+    {
+      "snapshot": 119,
+      "time_ms": 11900,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 138,
+      "time_ms": 13800,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 4608,
+      "detail": {
+        "changed_pids": 72
+      }
+    },
+    {
+      "snapshot": 58,
+      "time_ms": 5800,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 4608,
+      "detail": {
+        "changed_pids": 72
+      }
+    },
+    {
+      "snapshot": 158,
+      "time_ms": 15800,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 198,
+      "time_ms": 19800,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 179,
+      "time_ms": 17900,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 3456,
+      "detail": {
+        "changed_pids": 54
+      }
+    },
+    {
+      "snapshot": 100,
+      "time_ms": 10000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 25920,
+      "detail": {
+        "k": 8,
+        "changed_pairs": 108
+      }
+    },
+    {
+      "snapshot": 100,
+      "time_ms": 10000,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 1152,
+      "detail": {
+        "changed_pids": 18
+      }
+    },
+    {
+      "snapshot": 39,
+      "time_ms": 3900,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 1152,
+      "detail": {
+        "changed_pids": 18
+      }
+    },
+    {
+      "snapshot": 79,
+      "time_ms": 7900,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 2304,
+      "detail": {
+        "changed_pids": 36
       }
     },
     {
       "snapshot": 19,
       "time_ms": 1900,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 5760,
+      "detail": {
+        "changed_pids": 90
+      }
+    },
+    {
+      "snapshot": 120,
+      "time_ms": 12000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 95040,
+      "detail": {
+        "k": 8,
+        "changed_pairs": 396
+      }
+    },
+    {
+      "snapshot": 120,
+      "time_ms": 12000,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 139,
+      "time_ms": 13900,
       "event": "pid_rebuild",
       "count": 1,
       "bytes": 4608,
@@ -2182,9 +2230,9 @@
       "time_ms": 5900,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 6144,
+      "bytes": 4608,
       "detail": {
-        "changed_pids": 96
+        "changed_pids": 72
       }
     },
     {
@@ -2192,39 +2240,9 @@
       "time_ms": 15900,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 1536,
+      "bytes": 0,
       "detail": {
-        "changed_pids": 24
-      }
-    },
-    {
-      "snapshot": 119,
-      "time_ms": 11900,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 4608,
-      "detail": {
-        "changed_pids": 72
-      }
-    },
-    {
-      "snapshot": 79,
-      "time_ms": 7900,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 3072,
-      "detail": {
-        "changed_pids": 48
-      }
-    },
-    {
-      "snapshot": 39,
-      "time_ms": 3900,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 7680,
-      "detail": {
-        "changed_pids": 120
+        "changed_pids": 0
       }
     },
     {
@@ -2232,208 +2250,135 @@
       "time_ms": 19900,
       "event": "pid_rebuild",
       "count": 1,
-      "bytes": 3072,
+      "bytes": 0,
       "detail": {
-        "changed_pids": 48
-      }
-    },
-    {
-      "snapshot": 139,
-      "time_ms": 13900,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 3072,
-      "detail": {
-        "changed_pids": 48
-      }
-    },
-    {
-      "snapshot": 179,
-      "time_ms": 17900,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 4608,
-      "detail": {
-        "changed_pids": 72
-      }
-    },
-    {
-      "snapshot": 100,
-      "time_ms": 10000,
-      "event": "gateway_update",
-      "count": 1,
-      "bytes": 63360,
-      "detail": {
-        "k": 8,
-        "changed_pairs": 264
-      }
-    },
-    {
-      "snapshot": 100,
-      "time_ms": 10000,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 4608,
-      "detail": {
-        "changed_pids": 72
-      }
-    },
-    {
-      "snapshot": 20,
-      "time_ms": 2000,
-      "event": "gateway_update",
-      "count": 1,
-      "bytes": 80640,
-      "detail": {
-        "k": 8,
-        "changed_pairs": 336
-      }
-    },
-    {
-      "snapshot": 20,
-      "time_ms": 2000,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 3072,
-      "detail": {
-        "changed_pids": 48
-      }
-    },
-    {
-      "snapshot": 60,
-      "time_ms": 6000,
-      "event": "gateway_update",
-      "count": 1,
-      "bytes": 46080,
-      "detail": {
-        "k": 8,
-        "changed_pairs": 192
-      }
-    },
-    {
-      "snapshot": 60,
-      "time_ms": 6000,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 6144,
-      "detail": {
-        "changed_pids": 96
-      }
-    },
-    {
-      "snapshot": 160,
-      "time_ms": 16000,
-      "event": "gateway_update",
-      "count": 1,
-      "bytes": 103680,
-      "detail": {
-        "k": 8,
-        "changed_pairs": 432
-      }
-    },
-    {
-      "snapshot": 160,
-      "time_ms": 16000,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 1536,
-      "detail": {
-        "changed_pids": 24
-      }
-    },
-    {
-      "snapshot": 120,
-      "time_ms": 12000,
-      "event": "gateway_update",
-      "count": 1,
-      "bytes": 16800,
-      "detail": {
-        "k": 8,
-        "changed_pairs": 70
-      }
-    },
-    {
-      "snapshot": 120,
-      "time_ms": 12000,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 4608,
-      "detail": {
-        "changed_pids": 72
-      }
-    },
-    {
-      "snapshot": 80,
-      "time_ms": 8000,
-      "event": "gateway_update",
-      "count": 1,
-      "bytes": 57600,
-      "detail": {
-        "k": 8,
-        "changed_pairs": 240
-      }
-    },
-    {
-      "snapshot": 80,
-      "time_ms": 8000,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 3072,
-      "detail": {
-        "changed_pids": 48
-      }
-    },
-    {
-      "snapshot": 40,
-      "time_ms": 4000,
-      "event": "gateway_update",
-      "count": 1,
-      "bytes": 57600,
-      "detail": {
-        "k": 8,
-        "changed_pairs": 240
-      }
-    },
-    {
-      "snapshot": 40,
-      "time_ms": 4000,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 7680,
-      "detail": {
-        "changed_pids": 120
-      }
-    },
-    {
-      "snapshot": 140,
-      "time_ms": 14000,
-      "event": "gateway_update",
-      "count": 1,
-      "bytes": 109440,
-      "detail": {
-        "k": 8,
-        "changed_pairs": 456
-      }
-    },
-    {
-      "snapshot": 140,
-      "time_ms": 14000,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 3072,
-      "detail": {
-        "changed_pids": 48
+        "changed_pids": 0
       }
     },
     {
       "snapshot": 180,
       "time_ms": 18000,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 3456,
+      "detail": {
+        "changed_pids": 54
+      }
+    },
+    {
+      "snapshot": 80,
+      "time_ms": 8000,
       "event": "gateway_update",
       "count": 1,
-      "bytes": 45120,
+      "bytes": 95040,
       "detail": {
         "k": 8,
-        "changed_pairs": 188
+        "changed_pairs": 396
+      }
+    },
+    {
+      "snapshot": 80,
+      "time_ms": 8000,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 1152,
+      "detail": {
+        "changed_pids": 18
+      }
+    },
+    {
+      "snapshot": 40,
+      "time_ms": 4000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 25920,
+      "detail": {
+        "k": 8,
+        "changed_pairs": 108
+      }
+    },
+    {
+      "snapshot": 40,
+      "time_ms": 4000,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 1152,
+      "detail": {
+        "changed_pids": 18
+      }
+    },
+    {
+      "snapshot": 20,
+      "time_ms": 2000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 25920,
+      "detail": {
+        "k": 8,
+        "changed_pairs": 108
+      }
+    },
+    {
+      "snapshot": 20,
+      "time_ms": 2000,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 5760,
+      "detail": {
+        "changed_pids": 90
+      }
+    },
+    {
+      "snapshot": 140,
+      "time_ms": 14000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 146880,
+      "detail": {
+        "k": 8,
+        "changed_pairs": 612
+      }
+    },
+    {
+      "snapshot": 140,
+      "time_ms": 14000,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 4608,
+      "detail": {
+        "changed_pids": 72
+      }
+    },
+    {
+      "snapshot": 60,
+      "time_ms": 6000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 120960,
+      "detail": {
+        "k": 8,
+        "changed_pairs": 504
+      }
+    },
+    {
+      "snapshot": 60,
+      "time_ms": 6000,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 4608,
+      "detail": {
+        "changed_pids": 72
+      }
+    },
+    {
+      "snapshot": 160,
+      "time_ms": 16000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 120960,
+      "detail": {
+        "k": 8,
+        "changed_pairs": 504
       }
     }
   ]

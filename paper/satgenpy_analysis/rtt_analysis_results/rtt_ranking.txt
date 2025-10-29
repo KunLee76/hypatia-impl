@@ -1,0 +1,42 @@
+================================================================================
+整體排名 (按平均 RTT)
+================================================================================
+
+排名     算法                   網格              平均RTT      路由數
+------------------------------------------------------------
+1      Floyd-Warshall       21°             68.29        3 🥇
+2      Floyd-Warshall       22°             68.29        3 🥈
+3      Floyd-Warshall       23°             68.29        3 🥉
+4      Floyd-Warshall       24°             68.29        3 
+5      Floyd-Warshall       25°             68.29        3 
+6      Floyd-Warshall       26°             68.29        3 
+7      Floyd-Warshall       27°             68.29        3 
+8      Floyd-Warshall       28°             68.29        3 
+9      Floyd-Warshall       29°             68.29        3 
+10     Floyd-Warshall       30°             68.29        3 
+11     Dijkstra             22°             68.29        3 
+12     Dijkstra             23°             68.29        3 
+13     Dijkstra             24°             68.29        3 
+14     Dijkstra             26°             68.29        3 
+15     Dijkstra             27°             68.29        3 
+16     Dijkstra             28°             68.29        3 
+17     Dijkstra             29°             68.29        3 
+18     Dijkstra             30°             68.29        3 
+19     Floyd-Warshall       19°             68.31        3 
+20     Floyd-Warshall       18°             68.31        3 
+21     Dijkstra             18°             68.31        3 
+22     Dijkstra             19°             68.31        3 
+23     Floyd-Warshall       20°             68.32        3 
+24     Dijkstra             20°             68.32        3 
+25     Dijkstra             16°             68.36        3 
+26     Floyd-Warshall       16°             68.36        3 
+27     Floyd-Warshall       17°             68.71        3 
+28     Dijkstra             17°             68.75        3 
+29     Floyd-Warshall       15°             74.47        3 
+30     Dijkstra             15°             74.74        1 
+31     Dijkstra             21°             74.74        1 
+
+🏆 最佳整體配置:
+   算法: Floyd-Warshall
+   網格大小: 21°
+   平均RTT: 68.29 ms

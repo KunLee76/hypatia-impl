@@ -1,0 +1,315 @@
+Hypatia 多算法控制信令比較報告
+============================================================
+生成時間: 2025-10-28 13:55:07
+比較算法數: 33
+
+算法總覽:
+------------------------------------------------------------
+
+Hierarchical GID Dijkstra (27°):
+  總事件數: 239
+  總字節數: 820,480
+  ✅ 相比基線節省: 99.69%
+
+Hierarchical GID (27°):
+  總事件數: 239
+  總字節數: 827,680
+  ✅ 相比基線節省: 99.69%
+
+Hierarchical GID (26°):
+  總事件數: 239
+  總字節數: 945,696
+  ✅ 相比基線節省: 99.64%
+
+Hierarchical GID Dijkstra (30°):
+  總事件數: 235
+  總字節數: 1,043,808
+  ✅ 相比基線節省: 99.61%
+
+Hierarchical GID (29°):
+  總事件數: 239
+  總字節數: 1,068,000
+  ✅ 相比基線節省: 99.60%
+
+Hierarchical GID (25°):
+  總事件數: 233
+  總字節數: 1,077,888
+  ✅ 相比基線節省: 99.59%
+
+Hierarchical GID Dijkstra (26°):
+  總事件數: 238
+  總字節數: 1,086,016
+  ✅ 相比基線節省: 99.59%
+
+Hierarchical GID Dijkstra (25°):
+  總事件數: 226
+  總字節數: 1,106,816
+  ✅ 相比基線節省: 99.58%
+
+Hierarchical GID (30°):
+  總事件數: 236
+  總字節數: 1,163,712
+  ✅ 相比基線節省: 99.56%
+
+Hierarchical GID Dijkstra (29°):
+  總事件數: 239
+  總字節數: 1,202,176
+  ✅ 相比基線節省: 99.55%
+
+Hierarchical GID (28°):
+  總事件數: 239
+  總字節數: 1,262,720
+  ✅ 相比基線節省: 99.52%
+
+Hierarchical GID Dijkstra (28°):
+  總事件數: 239
+  總字節數: 1,420,384
+  ✅ 相比基線節省: 99.46%
+
+Hierarchical GID (23°):
+  總事件數: 239
+  總字節數: 1,904,224
+  ✅ 相比基線節省: 99.28%
+
+Hierarchical GID Dijkstra (23°):
+  總事件數: 239
+  總字節數: 1,968,448
+  ✅ 相比基線節省: 99.26%
+
+Hierarchical GID Dijkstra (21°):
+  總事件數: 217
+  總字節數: 1,993,696
+  ✅ 相比基線節省: 99.25%
+
+Hierarchical GID (21°):
+  總事件數: 239
+  總字節數: 2,060,320
+  ✅ 相比基線節省: 99.22%
+
+Hierarchical GID (24°):
+  總事件數: 239
+  總字節數: 2,085,792
+  ✅ 相比基線節省: 99.21%
+
+Hierarchical GID (19°):
+  總事件數: 239
+  總字節數: 2,131,168
+  ✅ 相比基線節省: 99.20%
+
+Hierarchical GID Dijkstra (24°):
+  總事件數: 239
+  總字節數: 2,196,192
+  ✅ 相比基線節省: 99.17%
+
+Hierarchical GID (18°):
+  總事件數: 239
+  總字節數: 2,221,504
+  ✅ 相比基線節省: 99.16%
+
+Hierarchical GID Dijkstra (19°):
+  總事件數: 239
+  總字節數: 2,411,040
+  ✅ 相比基線節省: 99.09%
+
+Hierarchical GID Dijkstra (18°):
+  總事件數: 239
+  總字節數: 2,647,168
+  ✅ 相比基線節省: 99.00%
+
+Hierarchical GID (22°):
+  總事件數: 239
+  總字節數: 2,671,904
+  ✅ 相比基線節省: 98.99%
+
+Hierarchical GID Dijkstra (22°):
+  總事件數: 239
+  總字節數: 2,692,096
+  ✅ 相比基線節省: 98.98%
+
+Hierarchical GID (20°):
+  總事件數: 234
+  總字節數: 2,703,264
+  ✅ 相比基線節省: 98.98%
+
+Hierarchical GID (17°):
+  總事件數: 239
+  總字節數: 2,715,296
+  ✅ 相比基線節省: 98.98%
+
+Hierarchical GID Dijkstra (17°):
+  總事件數: 239
+  總字節數: 2,888,416
+  ✅ 相比基線節省: 98.91%
+
+Hierarchical GID Dijkstra (20°):
+  總事件數: 233
+  總字節數: 3,034,752
+  ✅ 相比基線節省: 98.85%
+
+Hierarchical GID Dijkstra (15°):
+  總事件數: 215
+  總字節數: 3,460,032
+  ✅ 相比基線節省: 98.69%
+
+Hierarchical GID (15°):
+  總事件數: 239
+  總字節數: 4,217,856
+  ✅ 相比基線節省: 98.41%
+
+Hierarchical GID Dijkstra (16°):
+  總事件數: 238
+  總字節數: 4,269,728
+  ✅ 相比基線節省: 98.39%
+
+Hierarchical GID (16°):
+  總事件數: 239
+  總字節數: 4,777,184
+  ✅ 相比基線節省: 98.20%
+
+Floyd-Warshall Baseline:
+  總事件數: 209
+  總字節數: 264,984,896
+
+
+按事件類型詳細比較:
+------------------------------------------------------------
+
+gateway_update:
+  Floyd-Warshall Baseline                 : N/A
+  Hierarchical GID (15°)                  :     29 次,  3,079,680 字節
+  Hierarchical GID (16°)                  :     29 次,  3,370,080 字節
+  Hierarchical GID (17°)                  :     29 次,  1,877,280 字節
+  Hierarchical GID (18°)                  :     29 次,  1,517,760 字節
+  Hierarchical GID (19°)                  :     29 次,  1,428,000 字節
+  Hierarchical GID (20°)                  :     24 次,  2,096,160 字節
+  Hierarchical GID (21°)                  :     29 次,  1,292,640 字節
+  Hierarchical GID (22°)                  :     29 次,  1,885,920 字節
+  Hierarchical GID (23°)                  :     29 次,  1,233,120 字節
+  Hierarchical GID (24°)                  :     29 次,  1,422,240 字節
+  Hierarchical GID (25°)                  :     23 次,    551,040 字節
+  Hierarchical GID (26°)                  :     29 次,    496,800 字節
+  Hierarchical GID (27°)                  :     29 次,    449,760 字節
+  Hierarchical GID (28°)                  :     29 次,    716,160 字節
+  Hierarchical GID (29°)                  :     29 次,    628,320 字節
+  Hierarchical GID (30°)                  :     26 次,    730,560 字節
+  Hierarchical GID Dijkstra (15°)         :     25 次,  2,381,760 字節
+  Hierarchical GID Dijkstra (16°)         :     28 次,  3,040,800 字節
+  Hierarchical GID Dijkstra (17°)         :     29 次,  2,003,040 字節
+  Hierarchical GID Dijkstra (18°)         :     29 次,  1,906,560 字節
+  Hierarchical GID Dijkstra (19°)         :     29 次,  1,629,600 字節
+  Hierarchical GID Dijkstra (20°)         :     23 次,  2,463,360 字節
+  Hierarchical GID Dijkstra (21°)         :     27 次,  1,344,480 字節
+  Hierarchical GID Dijkstra (22°)         :     29 次,  1,981,440 字節
+  Hierarchical GID Dijkstra (23°)         :     29 次,  1,296,960 字節
+  Hierarchical GID Dijkstra (24°)         :     29 次,  1,484,640 字節
+  Hierarchical GID Dijkstra (25°)         :     26 次,    608,640 字節
+  Hierarchical GID Dijkstra (26°)         :     28 次,    585,600 字節
+  Hierarchical GID Dijkstra (27°)         :     29 次,    410,880 字節
+  Hierarchical GID Dijkstra (28°)         :     29 次,    885,600 字節
+  Hierarchical GID Dijkstra (29°)         :     29 次,    765,120 字節
+  Hierarchical GID Dijkstra (30°)         :     25 次,    659,040 字節
+
+pid_rebuild:
+  Floyd-Warshall Baseline                 : N/A
+  Hierarchical GID (15°)                  :    209 次,  1,138,176 字節
+  Hierarchical GID (16°)                  :    209 次,  1,407,104 字節
+  Hierarchical GID (17°)                  :    209 次,    838,016 字節
+  Hierarchical GID (18°)                  :    209 次,    703,744 字節
+  Hierarchical GID (19°)                  :    209 次,    703,168 字節
+  Hierarchical GID (20°)                  :    209 次,    607,104 字節
+  Hierarchical GID (21°)                  :    209 次,    767,680 字節
+  Hierarchical GID (22°)                  :    209 次,    785,984 字節
+  Hierarchical GID (23°)                  :    209 次,    671,104 字節
+  Hierarchical GID (24°)                  :    209 次,    663,552 字節
+  Hierarchical GID (25°)                  :    209 次,    526,848 字節
+  Hierarchical GID (26°)                  :    209 次,    448,896 字節
+  Hierarchical GID (27°)                  :    209 次,    377,920 字節
+  Hierarchical GID (28°)                  :    209 次,    546,560 字節
+  Hierarchical GID (29°)                  :    209 次,    439,680 字節
+  Hierarchical GID (30°)                  :    209 次,    433,152 字節
+  Hierarchical GID Dijkstra (15°)         :    189 次,  1,078,272 字節
+  Hierarchical GID Dijkstra (16°)         :    209 次,  1,228,928 字節
+  Hierarchical GID Dijkstra (17°)         :    209 次,    885,376 字節
+  Hierarchical GID Dijkstra (18°)         :    209 次,    740,608 字節
+  Hierarchical GID Dijkstra (19°)         :    209 次,    781,440 字節
+  Hierarchical GID Dijkstra (20°)         :    209 次,    571,392 字節
+  Hierarchical GID Dijkstra (21°)         :    189 次,    649,216 字節
+  Hierarchical GID Dijkstra (22°)         :    209 次,    710,656 字節
+  Hierarchical GID Dijkstra (23°)         :    209 次,    671,488 字節
+  Hierarchical GID Dijkstra (24°)         :    209 次,    711,552 字節
+  Hierarchical GID Dijkstra (25°)         :    199 次,    498,176 字節
+  Hierarchical GID Dijkstra (26°)         :    209 次,    500,416 字節
+  Hierarchical GID Dijkstra (27°)         :    209 次,    409,600 字節
+  Hierarchical GID Dijkstra (28°)         :    209 次,    534,784 字節
+  Hierarchical GID Dijkstra (29°)         :    209 次,    437,056 字節
+  Hierarchical GID Dijkstra (30°)         :    209 次,    384,768 字節
+
+routing_update:
+  Floyd-Warshall Baseline                 :    209 次, 264,984,896 字節
+  Hierarchical GID (15°)                  : N/A
+  Hierarchical GID (16°)                  : N/A
+  Hierarchical GID (17°)                  : N/A
+  Hierarchical GID (18°)                  : N/A
+  Hierarchical GID (19°)                  : N/A
+  Hierarchical GID (20°)                  : N/A
+  Hierarchical GID (21°)                  : N/A
+  Hierarchical GID (22°)                  : N/A
+  Hierarchical GID (23°)                  : N/A
+  Hierarchical GID (24°)                  : N/A
+  Hierarchical GID (25°)                  : N/A
+  Hierarchical GID (26°)                  : N/A
+  Hierarchical GID (27°)                  : N/A
+  Hierarchical GID (28°)                  : N/A
+  Hierarchical GID (29°)                  : N/A
+  Hierarchical GID (30°)                  : N/A
+  Hierarchical GID Dijkstra (15°)         : N/A
+  Hierarchical GID Dijkstra (16°)         : N/A
+  Hierarchical GID Dijkstra (17°)         : N/A
+  Hierarchical GID Dijkstra (18°)         : N/A
+  Hierarchical GID Dijkstra (19°)         : N/A
+  Hierarchical GID Dijkstra (20°)         : N/A
+  Hierarchical GID Dijkstra (21°)         : N/A
+  Hierarchical GID Dijkstra (22°)         : N/A
+  Hierarchical GID Dijkstra (23°)         : N/A
+  Hierarchical GID Dijkstra (24°)         : N/A
+  Hierarchical GID Dijkstra (25°)         : N/A
+  Hierarchical GID Dijkstra (26°)         : N/A
+  Hierarchical GID Dijkstra (27°)         : N/A
+  Hierarchical GID Dijkstra (28°)         : N/A
+  Hierarchical GID Dijkstra (29°)         : N/A
+  Hierarchical GID Dijkstra (30°)         : N/A
+
+topology_change:
+  Floyd-Warshall Baseline                 : N/A
+  Hierarchical GID (15°)                  :      1 次,          0 字節
+  Hierarchical GID (16°)                  :      1 次,          0 字節
+  Hierarchical GID (17°)                  :      1 次,          0 字節
+  Hierarchical GID (18°)                  :      1 次,          0 字節
+  Hierarchical GID (19°)                  :      1 次,          0 字節
+  Hierarchical GID (20°)                  :      1 次,          0 字節
+  Hierarchical GID (21°)                  :      1 次,          0 字節
+  Hierarchical GID (22°)                  :      1 次,          0 字節
+  Hierarchical GID (23°)                  :      1 次,          0 字節
+  Hierarchical GID (24°)                  :      1 次,          0 字節
+  Hierarchical GID (25°)                  :      1 次,          0 字節
+  Hierarchical GID (26°)                  :      1 次,          0 字節
+  Hierarchical GID (27°)                  :      1 次,          0 字節
+  Hierarchical GID (28°)                  :      1 次,          0 字節
+  Hierarchical GID (29°)                  :      1 次,          0 字節
+  Hierarchical GID (30°)                  :      1 次,          0 字節
+  Hierarchical GID Dijkstra (15°)         :      1 次,          0 字節
+  Hierarchical GID Dijkstra (16°)         :      1 次,          0 字節
+  Hierarchical GID Dijkstra (17°)         :      1 次,          0 字節
+  Hierarchical GID Dijkstra (18°)         :      1 次,          0 字節
+  Hierarchical GID Dijkstra (19°)         :      1 次,          0 字節
+  Hierarchical GID Dijkstra (20°)         :      1 次,          0 字節
+  Hierarchical GID Dijkstra (21°)         :      1 次,          0 字節
+  Hierarchical GID Dijkstra (22°)         :      1 次,          0 字節
+  Hierarchical GID Dijkstra (23°)         :      1 次,          0 字節
+  Hierarchical GID Dijkstra (24°)         :      1 次,          0 字節
+  Hierarchical GID Dijkstra (25°)         :      1 次,          0 字節
+  Hierarchical GID Dijkstra (26°)         :      1 次,          0 字節
+  Hierarchical GID Dijkstra (27°)         :      1 次,          0 字節
+  Hierarchical GID Dijkstra (28°)         :      1 次,          0 字節
+  Hierarchical GID Dijkstra (29°)         :      1 次,          0 字節
+  Hierarchical GID Dijkstra (30°)         :      1 次,          0 字節

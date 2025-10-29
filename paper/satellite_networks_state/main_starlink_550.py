@@ -79,15 +79,18 @@ main_helper = MainHelper(
 
 def main():
     args = sys.argv[1:]
-    if len(args) != 6:
-        print("Must supply exactly six arguments")
+    if len(args) != 6 and len(args) != 7:
+        print("Must supply exactly six or seven arguments")
         print("Usage: python main_starlink_550.py [duration (s)] [time step (ms)] "
               "[isls_plus_grid / isls_none] "
               "[ground_stations_{top_100, paris_moscow_grid}] "
               "[algorithm_{free_one_only_over_isls, free_one_only_gs_relays, paired_many_only_over_isls}] "
-              "[num threads]")
+              "[num threads] [grid_deg (optional, default: 15)]")
         exit(1)
     else:
+        # 如果提供第 7 個參數，則使用它作為 grid_deg；否則預設為 15
+        grid_deg = int(args[6]) if len(args) == 7 else 15
+        
         main_helper.calculate(
             "gen_data",
             int(args[0]),
@@ -96,6 +99,7 @@ def main():
             args[3],
             args[4],
             int(args[5]),
+            grid_deg,
         )
 
 

@@ -64,11 +64,19 @@ class MainHelper:
             isl_selection,            # isls_{none, plus_grid}
             gs_selection,             # ground_stations_{top_100, paris_moscow_grid}
             dynamic_state_algorithm,  # algorithm_{free_one_only_{gs_relays,_over_isls}, paired_many_only_over_isls, hierarchical}
-            num_threads
+            num_threads,
+            grid_deg=15               # Grid degree for hierarchical algorithms (default: 15)
     ):
 
         # Add base name to setting
         name = self.BASE_NAME + "_" + isl_selection + "_" + gs_selection + "_" + dynamic_state_algorithm
+        
+        # 如果是 hierarchical 演算法，在名稱加上 grid_deg 後綴
+        if "hierarchical" in dynamic_state_algorithm.lower():
+            name += f"_{grid_deg}deg"
+            # 設定環境變數，讓演算法讀取
+            os.environ['SATGEN_GRID_DEG'] = str(grid_deg)
+            print(f"Setting grid degree to {grid_deg}° for hierarchical algorithm")
 
         # Create output directories
         if not os.path.isdir(output_generated_data_dir):
