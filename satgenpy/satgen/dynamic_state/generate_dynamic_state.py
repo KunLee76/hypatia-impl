@@ -31,8 +31,8 @@ from .algorithm_paired_many_only_over_isls import algorithm_paired_many_only_ove
 from .algorithm_free_gs_one_sat_many_only_over_isls import algorithm_free_gs_one_sat_many_only_over_isls
 from .algorithm_hierarchical import algorithm_hierarchical
 from .algorithm_hierarchical_region import algorithm_hierarchical_region
-from .algorithm_hierarchical_virtual_pid import algorithm_hierarchical_virtual_pid  # 你的新算法
-from .algorithm_hierarchical_virtual_pid_dijkstra import algorithm_hierarchical_virtual_pid as algorithm_hierarchical_virtual_pid_dijkstra  # Dijkstra優化版
+from .algorithm_hierarchical_virtual_gid import algorithm_hierarchical_virtual_gid  # 你的新算法 (GID: Group Identifier)
+from .algorithm_hierarchical_virtual_gid_dijkstra import algorithm_hierarchical_virtual_gid as algorithm_hierarchical_virtual_gid_dijkstra  # Dijkstra優化版
 from .algorithm_free_one_only_over_isls_with_stats import algorithm_free_one_only_over_isls  # 基線算法with stats
 
 
@@ -329,11 +329,11 @@ def generate_dynamic_state_at(
         use_region_grouping=True,
     )
     
-    elif dynamic_state_algorithm == "algorithm_hierarchical_virtual_pid":
+    elif dynamic_state_algorithm == "algorithm_hierarchical_virtual_gid":
 
         sat_lat_lon_dict = _build_sat_lat_lon_dict_for_lohi(satellites, epoch, time)
         
-        return algorithm_hierarchical_virtual_pid(
+        return algorithm_hierarchical_virtual_gid(
             output_dynamic_state_dir,
             time_since_epoch_ns,
             satellites,
@@ -351,11 +351,11 @@ def generate_dynamic_state_at(
             epoch=epoch
         )
 
-    elif dynamic_state_algorithm == "algorithm_hierarchical_virtual_pid_dijkstra":
+    elif dynamic_state_algorithm == "algorithm_hierarchical_virtual_gid_dijkstra":
         # Dijkstra 優化版本：使用 Dijkstra 替代 Floyd-Warshall
         sat_lat_lon_dict = _build_sat_lat_lon_dict_for_lohi(satellites, epoch, time)
         
-        return algorithm_hierarchical_virtual_pid_dijkstra(
+        return algorithm_hierarchical_virtual_gid_dijkstra(
             output_dynamic_state_dir,
             time_since_epoch_ns,
             satellites,
