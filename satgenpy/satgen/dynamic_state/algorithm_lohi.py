@@ -178,6 +178,10 @@ class VirtualPIDRouterPlaneBlock:
     def _build_pid_from_plane_blocks(self, G_sat: nx.Graph) -> None:
         pid_counter = 0
         self.pid_members.clear(); self.pid_key_map.clear(); self.pid_of_sat.clear(); self.pid_mgmt_sat.clear()
+        
+        # 建立 gkey -> pid_int 的反向映射（避免迭代時修改字典）
+        gkey_to_pid: Dict[Tuple[int,int], int] = {}
+        
         # 掃描節點，依 plane/pos 產生 group_key
         for sid, attrs in G_sat.nodes(data=True):
             plane, pos = self._infer_plane_and_pos(attrs)
@@ -188,22 +192,22 @@ class VirtualPIDRouterPlaneBlock:
                 plane_block_id = plane // PLANES_PER_GROUP
                 seg_id_in_plane = pos // SATS_PER_PLANE_IN_GROUP
             gkey = (plane_block_id, seg_id_in_plane)
-            # 取得/配置 pid_int
-            if gkey not in self.pid_key_map.values():
-                pid_int = None
-                for p_int, key in self.pid_key_map.items():
-                    if key == gkey:
-                        pid_int = p_int; break
-                if pid_int is None:
-                    pid_int = pid_counter; pid_counter += 1
-                    self.pid_key_map[pid_int] = gkey
-                    self.pid_members[pid_int] = set()
+            
+            # 取得/配置 pid_int（使用臨時映射避免迭代衝突）
+            if gkey not in gkey_to_pid:
+                pid_int = pid_counter
+                pid_counter += 1
+                gkey_to_pid[gkey] = pid_int
+                self.pid_key_map[pid_int] = gkey
+                self.pid_members[pid_int] = set()
             else:
-                pid_int = [p for p,k in self.pid_key_map.items() if k == gkey][0]
+                pid_int = gkey_to_pid[gkey]
+            
             self.pid_members[pid_int].add(sid)
             self.pid_of_sat[sid] = pid_int
+        
         # 選管理衛星：優先度數最高，次選最小 id（穩定）
-        for pid, mem in self.pid_members.items():
+        for pid, mem in list(self.pid_members.items()):
             if not mem:
                 continue
             Gp = G_sat.subgraph(mem)
@@ -372,25 +376,33 @@ class GroupPlanner:
 class BorderSelector:
     """從 src_PID 指向 next_PID 的所有實體跨邊中，挑一組 (u_in_src, v_in_next)。[6]
 
-    策略（可替換）：
-      - 最短 geo_len_m（預設）
-      - 之後也可改成：群內成本 + 邊界鏈路成本的合併評分。
+    策略：選擇最短 geo_len_m 的邊界對（符合 LoHi 原意）
     """
     @staticmethod
     def pick_border_pair(G_sat: nx.Graph,
                          gplanner: 'GroupPlanner',
                          src_pid:int,
-                         next_pid:int) -> Optional[Tuple[int,int]]:
+                         next_pid:int,
+                         sat_pid: Dict[int, int]) -> Optional[Tuple[int,int]]:
         meta = gplanner.get_edge_meta(src_pid, next_pid)
         if not meta:
             return None
+        
         best = None
         best_w = float('inf')
+        
         for (u, v) in meta.get('isl_pairs', []):
+            # 確保方向正確：u 在 src_pid，v 在 next_pid
+            if sat_pid.get(u) == next_pid and sat_pid.get(v) == src_pid:
+                u, v = v, u  # 交換方向
+            
             d = G_sat.get_edge_data(u, v, default={})
             w = float(d.get('geo_len_m', d.get('weight', 1.0)))
+            
             if w < best_w:
-                best_w = w; best = (u, v) if gplanner.get_edge_meta(src_pid, next_pid) else None
+                best_w = w
+                best = (u, v)
+        
         return best
 
 # ==========================
@@ -412,8 +424,10 @@ def build_fstate_lohi(
     ground_station_satellites_in_range,
     satellites,
     ground_stations,
-) -> Dict[Tuple[int,int], List[Tuple[int,int]]]:
-    """產生 fstate（第一跳）：以 (u,dst) -> [(next_hop, if_idx)] 的型式返回  [7]
+    num_isls_per_sat,
+    gid_to_sat_gsl_if_idx,
+) -> Dict[Tuple[int,int], Tuple[int,int,int]]:
+    """產生 fstate（第一跳）：以 (u,dst) -> (next_hop, my_if, next_if) 的型式返回  [7]
 
     決策強制包含管理衛星跳點（ENFORCE_MGMT_HOP=True）：
       - 每次欲跨群時，固定：當前節點 → 管理衛星 → 出口邊界衛星
@@ -424,6 +438,7 @@ def build_fstate_lohi(
 
     # 目的集合：將每個 GS 投影到其候選可視衛星所在 PID
     dst_pid_map: Dict[int,int] = {}
+    dst_sat_map: Dict[int,int] = {}  # GS node -> best satellite
     for gid0 in range(num_gs):
         candidates = ground_station_satellites_in_range.get(gid0, []) if isinstance(ground_station_satellites_in_range, dict) else []
         if not candidates:
@@ -431,18 +446,35 @@ def build_fstate_lohi(
         sat_candidate = candidates[0][1] if isinstance(candidates[0], (list,tuple)) and len(candidates[0])>1 else candidates[0]
         if sat_candidate in sat_pid:
             dst_pid_map[num_sats + gid0] = sat_pid[sat_candidate]
+            dst_sat_map[num_sats + gid0] = sat_candidate
 
-    fstate: Dict[Tuple[int,int], List[Tuple[int,int]]] = {}
+    fstate: Dict[Tuple[int,int], Tuple[int,int,int]] = {}
 
-    def _first_step_to(Gp: nx.Graph, cur:int, target:int) -> Optional[int]:
+    def _first_step_to(Gp: nx.Graph, cur:int, target:int, sat_neighbor_to_if) -> Optional[Tuple[int,int,int]]:
+        """返回 (next_hop, my_if, next_if)"""
         if cur == target:
             return None
         try:
             path = nx.shortest_path(Gp, cur, target, weight='weight')
-            return path[1] if len(path) >= 2 else None
+            if len(path) < 2:
+                return None
+            next_hop = path[1]
+            my_if = sat_neighbor_to_if.get((cur, next_hop), 0)
+            next_if = sat_neighbor_to_if.get((next_hop, cur), 0)
+            return (next_hop, my_if, next_if)
         except Exception:
             return None
 
+    # 建立 sat_neighbor_to_if 映射（如果不存在）
+    sat_neighbor_to_if = {}
+    for u in G_sat.nodes():
+        if_idx = 0
+        for v in G_sat.neighbors(u):
+            if (u, v) not in sat_neighbor_to_if:
+                sat_neighbor_to_if[(u, v)] = if_idx
+                if_idx += 1
+
+    # Satellites to ground stations
     for u in range(num_sats):
         src_pid = sat_pid.get(u)
         if src_pid is None:
@@ -457,41 +489,88 @@ def build_fstate_lohi(
             pid_path = gplanner.shortest_group_path(src_pid, dst_pid)
             if not pid_path:
                 continue
-            # 同群：若強制管理跳，先走到管理，再走到可視衛星；否則直走可視衛星
+            # 同群：LoHi 管理衛星機制
             if len(pid_path) == 1:
-                # 先走到管理衛星（若開啟 ENFORCE_MGMT_HOP）
-                if ENFORCE_MGMT_HOP and mgmt_src is not None and mgmt_src in Gp_src:
-                    step = _first_step_to(Gp_src, u, mgmt_src)
-                    if step is not None:
-                        fstate[(u, dst_node)] = [(step, 0)]
-                        continue
-                # 再走到任一可視衛星
-                candidates = ground_station_satellites_in_range.get(gid0, []) if isinstance(ground_station_satellites_in_range, dict) else []
-                if not candidates:
+                # 如果當前就是目標衛星，直接到 GS
+                dst_sat = dst_sat_map.get(dst_node)
+                if u == dst_sat:
+                    my_if = num_isls_per_sat[u] + gid_to_sat_gsl_if_idx[gid0]
+                    fstate[(u, dst_node)] = (dst_node, my_if, 0)
                     continue
-                dst_sat = candidates[0][1] if isinstance(candidates[0], (list,tuple)) and len(candidates[0])>1 else candidates[0]
-                step = _first_step_to(Gp_src, u, dst_sat)
-                if step is not None:
-                    fstate[(u, dst_node)] = [(step, 0)]
+                
+                # LoHi 管理衛星邏輯：
+                # - 如果當前是管理衛星，直接路由到目標
+                # - 如果不是管理衛星且開啟 ENFORCE_MGMT_HOP，先到管理衛星
+                if u == mgmt_src:
+                    # 管理衛星直接到目標衛星
+                    if dst_sat is not None and dst_sat in Gp_src:
+                        result = _first_step_to(Gp_src, u, dst_sat, sat_neighbor_to_if)
+                        if result is not None:
+                            fstate[(u, dst_node)] = result
+                elif ENFORCE_MGMT_HOP and mgmt_src is not None and mgmt_src in Gp_src:
+                    # 普通衛星先到管理衛星
+                    result = _first_step_to(Gp_src, u, mgmt_src, sat_neighbor_to_if)
+                    if result is not None:
+                        fstate[(u, dst_node)] = result
+                else:
+                    # 沒有管理衛星或不強制，直接到目標
+                    if dst_sat is not None and dst_sat in Gp_src:
+                        result = _first_step_to(Gp_src, u, dst_sat, sat_neighbor_to_if)
+                        if result is not None:
+                            fstate[(u, dst_node)] = result
                 continue
 
-            # 跨群：取得第一個 next_pid 與該群邊的邊界對候選
+            # 跨群：LoHi 管理衛星機制
             next_pid = pid_path[1]
-            border = BorderSelector.pick_border_pair(G_sat, gplanner, src_pid, next_pid)
+            border = BorderSelector.pick_border_pair(G_sat, gplanner, src_pid, next_pid, sat_pid)
             if not border:
                 continue
             u_border, v_border = border
 
-            # 1) 當前群：若要求管理跳，先到 mgmt，再到 u_border
-            if ENFORCE_MGMT_HOP and mgmt_src is not None and mgmt_src in Gp_src and u != mgmt_src:
-                step = _first_step_to(Gp_src, u, mgmt_src)
-                if step is not None:
-                    fstate[(u, dst_node)] = [(step, 0)]
-                    continue
-            # 否則直接往邊界衛星走
-            step = _first_step_to(Gp_src, u, u_border)
-            if step is not None:
-                fstate[(u, dst_node)] = [(step, 0)]
+            # 如果當前節點就是邊界衛星，直接跨群
+            if u == u_border:
+                my_if = sat_neighbor_to_if.get((u, v_border), 0)
+                next_if = sat_neighbor_to_if.get((v_border, u), 0)
+                fstate[(u, dst_node)] = (v_border, my_if, next_if)
+                continue
+            
+            # LoHi 跨群路由邏輯：
+            # - 如果當前是管理衛星，直接路由到邊界衛星
+            # - 如果不是管理衛星且開啟 ENFORCE_MGMT_HOP，先到管理衛星
+            if u == mgmt_src:
+                # 管理衛星直接到邊界衛星
+                result = _first_step_to(Gp_src, u, u_border, sat_neighbor_to_if)
+                if result is not None:
+                    fstate[(u, dst_node)] = result
+            elif ENFORCE_MGMT_HOP and mgmt_src is not None and mgmt_src in Gp_src:
+                # 普通衛星先到管理衛星（管理衛星會負責到邊界）
+                result = _first_step_to(Gp_src, u, mgmt_src, sat_neighbor_to_if)
+                if result is not None:
+                    fstate[(u, dst_node)] = result
+            else:
+                # 沒有管理衛星或不強制，直接到邊界
+                result = _first_step_to(Gp_src, u, u_border, sat_neighbor_to_if)
+                if result is not None:
+                    fstate[(u, dst_node)] = result
+    
+    # Ground stations to ground stations
+    for src_gid in range(num_gs):
+        src_gs_node = num_sats + src_gid
+        # 找最近的源衛星
+        candidates = ground_station_satellites_in_range.get(src_gid, []) if isinstance(ground_station_satellites_in_range, dict) else []
+        if not candidates:
+            continue
+        src_sat = candidates[0][1] if isinstance(candidates[0], (list,tuple)) and len(candidates[0])>1 else candidates[0]
+        
+        for dst_gid in range(num_gs):
+            if src_gid == dst_gid:
+                continue
+            dst_gs_node = num_sats + dst_gid
+            # 從 GS 到最近的衛星
+            my_if = 0
+            next_if = num_isls_per_sat[src_sat] + gid_to_sat_gsl_if_idx[src_gid]
+            fstate[(src_gs_node, dst_gs_node)] = (src_sat, my_if, next_if)
+    
     return fstate
 
 # ==========================
@@ -560,13 +639,35 @@ def algorithm_lohi(
     _ROUTER.set_snapshot(snapshot_idx, step_ms)
     _GPLANNER.set_snapshot(snapshot_idx, step_ms)
 
-    # (1) 重置權重
+    # (1) 重置權重並添加衛星屬性（plane, pos）到圖節點
+    num_sats = len(satellites) if not isinstance(satellites, int) else satellites
+    
     for _, _, d in sat_net_graph_only_satellites_with_isls.edges(data=True):
         if 'geo_len_m' in d:
             d['weight'] = d['geo_len_m']
+    
+    # 添加 plane 和 pos_in_plane 屬性到圖節點
+    # 嘗試從常見星座配置推斷（基於衛星總數）
+    constellation_config = _infer_constellation_config(num_sats)
+    
+    for sid in range(num_sats):
+        node_data = sat_net_graph_only_satellites_with_isls.nodes.get(sid, None)
+        if node_data is None:
+            sat_net_graph_only_satellites_with_isls.add_node(sid)
+            node_data = sat_net_graph_only_satellites_with_isls.nodes[sid]
+        
+        # 計算 plane 和 pos
+        if constellation_config:
+            num_orbits, num_sats_per_orbit = constellation_config
+            orbit = sid // num_sats_per_orbit
+            pos = sid % num_sats_per_orbit
+            node_data['plane'] = orbit
+            node_data['pos_in_plane'] = pos
+        else:
+            # 無法推斷，使用 fallback（讓 _infer_plane_and_pos 處理）
+            pass
 
     # (2) 分群（plane-block：p×s 固定 6×10）
-    num_sats = len(satellites) if not isinstance(satellites, int) else satellites
     sat_ids = list(range(num_sats))
     sat_to_pid = _ROUTER.refresh_pid_members_and_subgraphs(sat_ids,
                                                            sat_net_graph_only_satellites_with_isls)
@@ -586,6 +687,16 @@ def algorithm_lohi(
     # ground_station_satellites_in_range 正規化為 {gid0: [(dist, sat_id), ...]}
     gs_map = _normalize_gs_range_candidates(ground_station_satellites_in_range,
                                             satellites, ground_stations)
+    
+    # GID to satellite GSL interface index
+    num_ground_stations = len(ground_stations) if not isinstance(ground_stations, int) else ground_stations
+    gid_to_sat_gsl_if_idx = [0] * num_ground_stations  # 每個衛星只有一個 GSL 介面
+    
+    # 前一次的 fstate（用於只寫差異）
+    prev_fstate = None
+    if prev_output is not None and 'fstate' in prev_output:
+        prev_fstate = prev_output['fstate']
+    
     fstate = build_fstate_lohi(
         sat_net_graph_only_satellites_with_isls,
         sat_to_pid,
@@ -594,7 +705,24 @@ def algorithm_lohi(
         gs_map,
         satellites,
         ground_stations,
+        num_isls_per_sat,
+        gid_to_sat_gsl_if_idx,
     )
+    
+    # 寫入 fstate 文件
+    output_filename = output_dynamic_state_dir + "/fstate_" + str(time_since_epoch_ns) + ".txt"
+    if enable_verbose_logs:
+        print("  > Writing LoHi forwarding state to: " + output_filename)
+    with open(output_filename, "w+") as f_out:
+        for (src, dst), decision in sorted(fstate.items()):
+            # decision = (next_hop, my_if, next_if)
+            if not prev_fstate or prev_fstate.get((src, dst)) != decision:
+                f_out.write("%d,%d,%d,%d,%d\n" % (
+                    src, dst,
+                    decision[0],  # next_hop
+                    decision[1],  # my_if
+                    decision[2]   # next_if
+                ))
 
     # (6) 路由差分
     flat = {(u,d): nh[0] for (u,d), nh in fstate.items()} if fstate else {}
@@ -628,6 +756,45 @@ def algorithm_lohi(
 # ==========================
 # Utilities
 # ==========================
+
+def _infer_constellation_config(num_sats: int) -> Optional[Tuple[int, int]]:
+    """推斷星座配置（num_orbits, num_sats_per_orbit）基於總衛星數
+    
+    常見配置：
+    - Starlink-550: 72 orbits × 22 sats = 1584
+    - Kuiper-630: 34 orbits × 34 sats = 1156
+    - Telesat-1015: 27 orbits × 13 sats = 351
+    
+    如果無法匹配，嘗試因數分解找合理的配置
+    """
+    # 已知星座配置
+    known_configs = {
+        1584: (72, 22),  # Starlink-550
+        1156: (34, 34),  # Kuiper-630
+        351: (27, 13),   # Telesat-1015
+        # 可以添加更多
+    }
+    
+    if num_sats in known_configs:
+        return known_configs[num_sats]
+    
+    # 嘗試因數分解找接近正方形的配置
+    # 優先選擇接近 sqrt(n) 的因數對
+    import math
+    best_factor = None
+    min_diff = float('inf')
+    sqrt_n = int(math.sqrt(num_sats))
+    
+    for i in range(max(1, sqrt_n - 20), sqrt_n + 20):
+        if num_sats % i == 0:
+            j = num_sats // i
+            diff = abs(i - j)
+            if diff < min_diff:
+                min_diff = diff
+                best_factor = (i, j)
+    
+    return best_factor if best_factor else None
+
 
 def _normalize_gs_range_candidates(raw_map, satellites, ground_stations):
     num_sats = len(satellites) if not isinstance(satellites,int) else satellites

@@ -128,13 +128,31 @@ def get_path(src, dst, forward_state):
 
     curr = src
     path = [src]
+    visited = {src}  # Track visited nodes to detect loops
+    max_hops = 1000  # Safety limit
+    hops = 0
+    
     while curr != dst:
         # next_hop = forward_state[(curr, dst)]
         next_hop = forward_state.get((curr, dst), -1)
         if next_hop == -1:
             return None
+        
+        # Detect routing loop
+        if next_hop in visited:
+            print(f"Warning: Routing loop detected at {curr} -> {next_hop} (dst={dst})")
+            return None
+        
+        # Safety limit
+        if hops >= max_hops:
+            print(f"Warning: Path exceeds {max_hops} hops (src={src}, dst={dst})")
+            return None
+        
         path.append(next_hop)
+        visited.add(next_hop)
         curr = next_hop
+        hops += 1
+    
     return path
 
 

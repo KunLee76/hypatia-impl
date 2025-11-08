@@ -34,6 +34,7 @@ from .algorithm_hierarchical_region import algorithm_hierarchical_region
 from .algorithm_hierarchical_virtual_gid import algorithm_hierarchical_virtual_gid  # 你的新算法 (GID: Group Identifier)
 from .algorithm_hierarchical_virtual_gid_dijkstra import algorithm_hierarchical_virtual_gid as algorithm_hierarchical_virtual_gid_dijkstra  # Dijkstra優化版
 from .algorithm_free_one_only_over_isls_with_stats import algorithm_free_one_only_over_isls  # 基線算法with stats
+from .algorithm_lohi import algorithm_lohi, init as lohi_init  # LoHi 實作（文獻baseline）
 
 
 def generate_dynamic_state(
@@ -389,6 +390,28 @@ def generate_dynamic_state_at(
             list_gsl_interfaces_info,
             prev_output,
             enable_verbose_logs
+        )
+
+    elif dynamic_state_algorithm == "algorithm_lohi":
+        # LoHi 實作（文獻baseline）：p×s 分群，負載感知，管理衛星跳點
+        # 初始化（僅第一次調用）
+        if prev_output is None:
+            lohi_init()
+        
+        return algorithm_lohi(
+            output_dynamic_state_dir,
+            time_since_epoch_ns,
+            satellites,
+            ground_stations,
+            sat_net_graph_only_satellites_with_isls,
+            ground_station_satellites_in_range,
+            num_isls_per_sat,
+            sat_neighbor_to_if,
+            list_gsl_interfaces_info,
+            prev_output,
+            enable_verbose_logs,
+            epoch=epoch,
+            time_step_ns=time_step_ns
         )
 
     else:

@@ -65,11 +65,12 @@ def print_routes_and_rtt(base_output_dir, satellite_network_dir, dynamic_state_u
     with open(data_path_filename, "w+") as data_path_file:
 
         # For each time moment
-        fstate = {}
         current_path = []
         rtt_ns_list = []
         for t in range(0, simulation_end_time_ns, dynamic_state_update_interval_ns):
 
+            # Clear fstate for each time step to avoid memory accumulation
+            fstate = {}
             with open(satellite_network_dynamic_state_dir + "/fstate_" + str(t) + ".txt", "r") as f_in:
                 for line in f_in:
                     spl = line.split(",")

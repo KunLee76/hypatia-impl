@@ -71,12 +71,24 @@ class MainHelper:
         # Add base name to setting
         name = self.BASE_NAME + "_" + isl_selection + "_" + gs_selection + "_" + dynamic_state_algorithm
         
-        # 如果是 hierarchical 演算法，在名稱加上 grid_deg 後綴
-        if "hierarchical" in dynamic_state_algorithm.lower():
+        # 如果是需要 grid_deg 的演算法，在名稱加上 grid_deg 後綴
+        # 注意：algorithm_lohi 不使用 grid_deg，使用固定的 6×10 平面區塊分群
+        if "hierarchical_virtual_gid" in dynamic_state_algorithm.lower():
             name += f"_{grid_deg}deg"
             # 設定環境變數，讓演算法讀取
             os.environ['SATGEN_GRID_DEG'] = str(grid_deg)
-            print(f"Setting grid degree to {grid_deg}° for hierarchical algorithm")
+            print(f"[GID] Setting grid degree to {grid_deg}° for hierarchical GID algorithm")
+        elif "hierarchical" in dynamic_state_algorithm.lower() and "lohi" not in dynamic_state_algorithm.lower():
+            # 其他 hierarchical 演算法也可能需要 grid_deg
+            name += f"_{grid_deg}deg"
+            os.environ['SATGEN_GRID_DEG'] = str(grid_deg)
+            print(f"[Hierarchical] Setting grid degree to {grid_deg}°")
+        elif "lohi" in dynamic_state_algorithm.lower():
+            # LoHi 使用固定的 p×s (6×10) 分群，不需要 grid_deg
+            print(f"[LoHi] Using fixed 6×10 plane-block grouping (grid_deg parameter ignored)")
+        else:
+            # 非階層化演算法不需要 grid_deg
+            print(f"[{dynamic_state_algorithm}] No grouping parameter needed")
 
         # Create output directories
         if not os.path.isdir(output_generated_data_dir):
@@ -145,9 +157,10 @@ class MainHelper:
         if dynamic_state_algorithm == "algorithm_free_one_only_gs_relays" \
                 or dynamic_state_algorithm == "algorithm_free_one_only_over_isls" \
                 or dynamic_state_algorithm == "algorithm_hierarchical" \
-                or dynamic_state_algorithm == "algorithm_hierarchical_virtual_pid" \
-                or dynamic_state_algorithm == "algorithm_hierarchical_virtual_pid_dijkstra" \
-                or dynamic_state_algorithm == "algorithm_free_one_only_over_isls_with_stats":
+                or dynamic_state_algorithm == "algorithm_hierarchical_virtual_gid" \
+                or dynamic_state_algorithm == "algorithm_hierarchical_virtual_gid_dijkstra" \
+                or dynamic_state_algorithm == "algorithm_free_one_only_over_isls_with_stats" \
+                or dynamic_state_algorithm == "algorithm_lohi":
             # One GSL interface per satellite
             gsl_interfaces_per_satellite = 1
         elif dynamic_state_algorithm == "algorithm_paired_many_only_over_isls":
