@@ -2,18 +2,18 @@
   "algorithm": "algorithm_lohi_pure",
   "p": 6,
   "s": 10,
-  "timestamp": "2025-11-08T23:13:59.507001",
+  "timestamp": "2025-11-13T19:16:46.714704",
   "summary": {
-    "total_events": 112,
-    "total_bytes": 5413168,
-    "pid_rebuilds": 36,
-    "routing_updates": 40,
-    "topology_changes": 36
+    "total_events": 605,
+    "total_bytes": 9992944,
+    "pid_rebuilds": 201,
+    "routing_updates": 203,
+    "topology_changes": 201
   },
   "timeline": [
     {
-      "snapshot": 120,
-      "sim_time_ms": 12000,
+      "snapshot": 50,
+      "sim_time_ms": 5000,
       "event": "pid_rebuild",
       "count": 1,
       "bytes": 2304,
@@ -22,18 +22,38 @@
       }
     },
     {
-      "snapshot": 120,
-      "sim_time_ms": 12000,
+      "snapshot": 100,
+      "sim_time_ms": 10000,
       "event": "topology_change",
       "count": 1,
-      "bytes": 1152,
+      "bytes": 0,
       "detail": {
-        "delta_group_edges": 72
+        "delta_group_edges": 0
       }
     },
     {
-      "snapshot": 160,
-      "sim_time_ms": 16000,
+      "snapshot": 100,
+      "sim_time_ms": 10000,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 2304,
+      "detail": {
+        "changed_pids": 36
+      }
+    },
+    {
+      "snapshot": 100,
+      "sim_time_ms": 10000,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 0,
+      "sim_time_ms": 0,
       "event": "routing_update",
       "count": 1,
       "bytes": 2692800,
@@ -43,68 +63,24 @@
       }
     },
     {
-      "snapshot": 40,
-      "sim_time_ms": 4000,
+      "snapshot": 50,
+      "sim_time_ms": 5000,
       "event": "routing_update",
       "count": 1,
-      "bytes": 50912,
+      "bytes": 40272,
       "detail": {
-        "changed_entries": 3182,
+        "changed_entries": 2517,
         "total_entries": 168300
       }
     },
     {
-      "snapshot": 60,
-      "sim_time_ms": 6000,
+      "snapshot": 150,
+      "sim_time_ms": 15000,
       "event": "routing_update",
       "count": 1,
-      "bytes": 50896,
+      "bytes": 32704,
       "detail": {
-        "changed_entries": 3181,
-        "total_entries": 167120
-      }
-    },
-    {
-      "snapshot": 180,
-      "sim_time_ms": 18000,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 48672,
-      "detail": {
-        "changed_entries": 3042,
-        "total_entries": 168300
-      }
-    },
-    {
-      "snapshot": 140,
-      "sim_time_ms": 14000,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 52512,
-      "detail": {
-        "changed_entries": 3282,
-        "total_entries": 168300
-      }
-    },
-    {
-      "snapshot": 120,
-      "sim_time_ms": 12000,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 60816,
-      "detail": {
-        "changed_entries": 3801,
-        "total_entries": 168300
-      }
-    },
-    {
-      "snapshot": 0,
-      "sim_time_ms": 0,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 52096,
-      "detail": {
-        "changed_entries": 3256,
+        "changed_entries": 2044,
         "total_entries": 168300
       }
     },
@@ -113,21 +89,1270 @@
       "sim_time_ms": 10000,
       "event": "routing_update",
       "count": 1,
-      "bytes": 33536,
+      "bytes": 19680,
       "detail": {
-        "changed_entries": 2096,
+        "changed_entries": 1230,
         "total_entries": 168300
       }
     },
     {
-      "snapshot": 80,
-      "sim_time_ms": 8000,
+      "snapshot": 1,
+      "sim_time_ms": 100,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 1,
+      "sim_time_ms": 100,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 1152,
+      "detail": {
+        "delta_group_edges": 72
+      }
+    },
+    {
+      "snapshot": 51,
+      "sim_time_ms": 5100,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 51,
+      "sim_time_ms": 5100,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 151,
+      "sim_time_ms": 15100,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 151,
+      "sim_time_ms": 15100,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 101,
+      "sim_time_ms": 10100,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 101,
+      "sim_time_ms": 10100,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 1,
+      "sim_time_ms": 100,
       "event": "routing_update",
       "count": 1,
-      "bytes": 34016,
+      "bytes": 53264,
       "detail": {
-        "changed_entries": 2126,
-        "total_entries": 168200
+        "changed_entries": 3329,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 51,
+      "sim_time_ms": 5100,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 40384,
+      "detail": {
+        "changed_entries": 2524,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 151,
+      "sim_time_ms": 15100,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 72208,
+      "detail": {
+        "changed_entries": 4513,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 101,
+      "sim_time_ms": 10100,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 19680,
+      "detail": {
+        "changed_entries": 1230,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 2,
+      "sim_time_ms": 200,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 2,
+      "sim_time_ms": 200,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 52,
+      "sim_time_ms": 5200,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 52,
+      "sim_time_ms": 5200,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 152,
+      "sim_time_ms": 15200,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 152,
+      "sim_time_ms": 15200,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 102,
+      "sim_time_ms": 10200,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 102,
+      "sim_time_ms": 10200,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 2,
+      "sim_time_ms": 200,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 53248,
+      "detail": {
+        "changed_entries": 3328,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 152,
+      "sim_time_ms": 15200,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 72192,
+      "detail": {
+        "changed_entries": 4512,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 52,
+      "sim_time_ms": 5200,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 32240,
+      "detail": {
+        "changed_entries": 2015,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 102,
+      "sim_time_ms": 10200,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 13264,
+      "detail": {
+        "changed_entries": 829,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 3,
+      "sim_time_ms": 300,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 3,
+      "sim_time_ms": 300,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 153,
+      "sim_time_ms": 15300,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 153,
+      "sim_time_ms": 15300,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 53,
+      "sim_time_ms": 5300,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 53,
+      "sim_time_ms": 5300,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 103,
+      "sim_time_ms": 10300,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 103,
+      "sim_time_ms": 10300,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 3,
+      "sim_time_ms": 300,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 53664,
+      "detail": {
+        "changed_entries": 3354,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 153,
+      "sim_time_ms": 15300,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 72192,
+      "detail": {
+        "changed_entries": 4512,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 53,
+      "sim_time_ms": 5300,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 32240,
+      "detail": {
+        "changed_entries": 2015,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 103,
+      "sim_time_ms": 10300,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 13328,
+      "detail": {
+        "changed_entries": 833,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 4,
+      "sim_time_ms": 400,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 4,
+      "sim_time_ms": 400,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 154,
+      "sim_time_ms": 15400,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 154,
+      "sim_time_ms": 15400,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 54,
+      "sim_time_ms": 5400,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 54,
+      "sim_time_ms": 5400,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 104,
+      "sim_time_ms": 10400,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 104,
+      "sim_time_ms": 10400,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 4,
+      "sim_time_ms": 400,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 51888,
+      "detail": {
+        "changed_entries": 3243,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 154,
+      "sim_time_ms": 15400,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 70384,
+      "detail": {
+        "changed_entries": 4399,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 104,
+      "sim_time_ms": 10400,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 19168,
+      "detail": {
+        "changed_entries": 1198,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 54,
+      "sim_time_ms": 5400,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 32208,
+      "detail": {
+        "changed_entries": 2013,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 5,
+      "sim_time_ms": 500,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 5,
+      "sim_time_ms": 500,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 155,
+      "sim_time_ms": 15500,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 155,
+      "sim_time_ms": 15500,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 5,
+      "sim_time_ms": 500,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 39008,
+      "detail": {
+        "changed_entries": 2438,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 105,
+      "sim_time_ms": 10500,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 105,
+      "sim_time_ms": 10500,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 55,
+      "sim_time_ms": 5500,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 55,
+      "sim_time_ms": 5500,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 155,
+      "sim_time_ms": 15500,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 70416,
+      "detail": {
+        "changed_entries": 4401,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 55,
+      "sim_time_ms": 5500,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 32256,
+      "detail": {
+        "changed_entries": 2016,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 105,
+      "sim_time_ms": 10500,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 19232,
+      "detail": {
+        "changed_entries": 1202,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 6,
+      "sim_time_ms": 600,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 6,
+      "sim_time_ms": 600,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 156,
+      "sim_time_ms": 15600,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 156,
+      "sim_time_ms": 15600,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 106,
+      "sim_time_ms": 10600,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 106,
+      "sim_time_ms": 10600,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 6,
+      "sim_time_ms": 600,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 50176,
+      "detail": {
+        "changed_entries": 3136,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 56,
+      "sim_time_ms": 5600,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 56,
+      "sim_time_ms": 5600,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 156,
+      "sim_time_ms": 15600,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 68768,
+      "detail": {
+        "changed_entries": 4298,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 106,
+      "sim_time_ms": 10600,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 19232,
+      "detail": {
+        "changed_entries": 1202,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 56,
+      "sim_time_ms": 5600,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 13248,
+      "detail": {
+        "changed_entries": 828,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 7,
+      "sim_time_ms": 700,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 7,
+      "sim_time_ms": 700,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 157,
+      "sim_time_ms": 15700,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 157,
+      "sim_time_ms": 15700,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 107,
+      "sim_time_ms": 10700,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 107,
+      "sim_time_ms": 10700,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 57,
+      "sim_time_ms": 5700,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 57,
+      "sim_time_ms": 5700,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 7,
+      "sim_time_ms": 700,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 36896,
+      "detail": {
+        "changed_entries": 2306,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 157,
+      "sim_time_ms": 15700,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 68320,
+      "detail": {
+        "changed_entries": 4270,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 57,
+      "sim_time_ms": 5700,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 31984,
+      "detail": {
+        "changed_entries": 1999,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 107,
+      "sim_time_ms": 10700,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 19232,
+      "detail": {
+        "changed_entries": 1202,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 8,
+      "sim_time_ms": 800,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 8,
+      "sim_time_ms": 800,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 158,
+      "sim_time_ms": 15800,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 158,
+      "sim_time_ms": 15800,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 108,
+      "sim_time_ms": 10800,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 108,
+      "sim_time_ms": 10800,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 8,
+      "sim_time_ms": 800,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 49568,
+      "detail": {
+        "changed_entries": 3098,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 58,
+      "sim_time_ms": 5800,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 58,
+      "sim_time_ms": 5800,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 158,
+      "sim_time_ms": 15800,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 68160,
+      "detail": {
+        "changed_entries": 4260,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 108,
+      "sim_time_ms": 10800,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 17648,
+      "detail": {
+        "changed_entries": 1103,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 58,
+      "sim_time_ms": 5800,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 31936,
+      "detail": {
+        "changed_entries": 1996,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 9,
+      "sim_time_ms": 900,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 9,
+      "sim_time_ms": 900,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 159,
+      "sim_time_ms": 15900,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 159,
+      "sim_time_ms": 15900,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 109,
+      "sim_time_ms": 10900,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 109,
+      "sim_time_ms": 10900,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 59,
+      "sim_time_ms": 5900,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 59,
+      "sim_time_ms": 5900,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 9,
+      "sim_time_ms": 900,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 35120,
+      "detail": {
+        "changed_entries": 2195,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 159,
+      "sim_time_ms": 15900,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 66528,
+      "detail": {
+        "changed_entries": 4158,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 109,
+      "sim_time_ms": 10900,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 17888,
+      "detail": {
+        "changed_entries": 1118,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 59,
+      "sim_time_ms": 5900,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 32176,
+      "detail": {
+        "changed_entries": 2011,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 10,
+      "sim_time_ms": 1000,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 10,
+      "sim_time_ms": 1000,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 160,
+      "sim_time_ms": 16000,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 160,
+      "sim_time_ms": 16000,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 110,
+      "sim_time_ms": 11000,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 110,
+      "sim_time_ms": 11000,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 60,
+      "sim_time_ms": 6000,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 60,
+      "sim_time_ms": 6000,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 10,
+      "sim_time_ms": 1000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 29872,
+      "detail": {
+        "changed_entries": 1867,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 160,
+      "sim_time_ms": 16000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 61616,
+      "detail": {
+        "changed_entries": 3851,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 110,
+      "sim_time_ms": 11000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 18080,
+      "detail": {
+        "changed_entries": 1130,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 60,
+      "sim_time_ms": 6000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 14432,
+      "detail": {
+        "changed_entries": 902,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 11,
+      "sim_time_ms": 1100,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 11,
+      "sim_time_ms": 1100,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
       }
     },
     {
@@ -143,6 +1368,1122 @@
     {
       "snapshot": 161,
       "sim_time_ms": 16100,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 111,
+      "sim_time_ms": 11100,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 111,
+      "sim_time_ms": 11100,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 11,
+      "sim_time_ms": 1100,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 29984,
+      "detail": {
+        "changed_entries": 1874,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 61,
+      "sim_time_ms": 6100,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 61,
+      "sim_time_ms": 6100,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 111,
+      "sim_time_ms": 11100,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 44544,
+      "detail": {
+        "changed_entries": 2784,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 161,
+      "sim_time_ms": 16100,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 61616,
+      "detail": {
+        "changed_entries": 3851,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 61,
+      "sim_time_ms": 6100,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 32256,
+      "detail": {
+        "changed_entries": 2016,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 12,
+      "sim_time_ms": 1200,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 12,
+      "sim_time_ms": 1200,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 112,
+      "sim_time_ms": 11200,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 112,
+      "sim_time_ms": 11200,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 162,
+      "sim_time_ms": 16200,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 162,
+      "sim_time_ms": 16200,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 12,
+      "sim_time_ms": 1200,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 29984,
+      "detail": {
+        "changed_entries": 1874,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 62,
+      "sim_time_ms": 6200,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 62,
+      "sim_time_ms": 6200,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 112,
+      "sim_time_ms": 11200,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 44544,
+      "detail": {
+        "changed_entries": 2784,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 162,
+      "sim_time_ms": 16200,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 19424,
+      "detail": {
+        "changed_entries": 1214,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 62,
+      "sim_time_ms": 6200,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 34096,
+      "detail": {
+        "changed_entries": 2131,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 13,
+      "sim_time_ms": 1300,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 13,
+      "sim_time_ms": 1300,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 113,
+      "sim_time_ms": 11300,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 113,
+      "sim_time_ms": 11300,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 163,
+      "sim_time_ms": 16300,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 163,
+      "sim_time_ms": 16300,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 13,
+      "sim_time_ms": 1300,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 29984,
+      "detail": {
+        "changed_entries": 1874,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 63,
+      "sim_time_ms": 6300,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 63,
+      "sim_time_ms": 6300,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 113,
+      "sim_time_ms": 11300,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 44544,
+      "detail": {
+        "changed_entries": 2784,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 163,
+      "sim_time_ms": 16300,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 19424,
+      "detail": {
+        "changed_entries": 1214,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 63,
+      "sim_time_ms": 6300,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 34096,
+      "detail": {
+        "changed_entries": 2131,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 14,
+      "sim_time_ms": 1400,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 14,
+      "sim_time_ms": 1400,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 114,
+      "sim_time_ms": 11400,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 114,
+      "sim_time_ms": 11400,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 114,
+      "sim_time_ms": 11400,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 114,
+      "sim_time_ms": 11400,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 14,
+      "sim_time_ms": 1400,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 29952,
+      "detail": {
+        "changed_entries": 1872,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 64,
+      "sim_time_ms": 6400,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 64,
+      "sim_time_ms": 6400,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 164,
+      "sim_time_ms": 16400,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 63424,
+      "detail": {
+        "changed_entries": 3964,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 114,
+      "sim_time_ms": 11400,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 19184,
+      "detail": {
+        "changed_entries": 1199,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 64,
+      "sim_time_ms": 6400,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 15168,
+      "detail": {
+        "changed_entries": 948,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 15,
+      "sim_time_ms": 1500,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 15,
+      "sim_time_ms": 1500,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 165,
+      "sim_time_ms": 16500,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 165,
+      "sim_time_ms": 16500,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 115,
+      "sim_time_ms": 11500,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 115,
+      "sim_time_ms": 11500,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 15,
+      "sim_time_ms": 1500,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 29952,
+      "detail": {
+        "changed_entries": 1872,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 65,
+      "sim_time_ms": 6500,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 65,
+      "sim_time_ms": 6500,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 165,
+      "sim_time_ms": 16500,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 63424,
+      "detail": {
+        "changed_entries": 3964,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 115,
+      "sim_time_ms": 11500,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 19184,
+      "detail": {
+        "changed_entries": 1199,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 16,
+      "sim_time_ms": 1600,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 16,
+      "sim_time_ms": 1600,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 65,
+      "sim_time_ms": 6500,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 15168,
+      "detail": {
+        "changed_entries": 948,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 166,
+      "sim_time_ms": 16600,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 166,
+      "sim_time_ms": 16600,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 16,
+      "sim_time_ms": 1600,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 29952,
+      "detail": {
+        "changed_entries": 1872,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 116,
+      "sim_time_ms": 11600,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 116,
+      "sim_time_ms": 11600,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 66,
+      "sim_time_ms": 6600,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 66,
+      "sim_time_ms": 6600,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 166,
+      "sim_time_ms": 16600,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 63440,
+      "detail": {
+        "changed_entries": 3965,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 116,
+      "sim_time_ms": 11600,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 17536,
+      "detail": {
+        "changed_entries": 1096,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 17,
+      "sim_time_ms": 1700,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 17,
+      "sim_time_ms": 1700,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 66,
+      "sim_time_ms": 6600,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 16784,
+      "detail": {
+        "changed_entries": 1049,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 167,
+      "sim_time_ms": 16700,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 167,
+      "sim_time_ms": 16700,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 17,
+      "sim_time_ms": 1700,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 30000,
+      "detail": {
+        "changed_entries": 1875,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 117,
+      "sim_time_ms": 11700,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 117,
+      "sim_time_ms": 11700,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 167,
+      "sim_time_ms": 16700,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 63440,
+      "detail": {
+        "changed_entries": 3965,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 67,
+      "sim_time_ms": 6700,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 67,
+      "sim_time_ms": 6700,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 117,
+      "sim_time_ms": 11700,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 17536,
+      "detail": {
+        "changed_entries": 1096,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 18,
+      "sim_time_ms": 1800,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 18,
+      "sim_time_ms": 1800,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 67,
+      "sim_time_ms": 6700,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 16576,
+      "detail": {
+        "changed_entries": 1036,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 18,
+      "sim_time_ms": 1800,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 30208,
+      "detail": {
+        "changed_entries": 1888,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 168,
+      "sim_time_ms": 16800,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 168,
+      "sim_time_ms": 16800,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 118,
+      "sim_time_ms": 11800,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 118,
+      "sim_time_ms": 11800,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 168,
+      "sim_time_ms": 16800,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 63488,
+      "detail": {
+        "changed_entries": 3968,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 68,
+      "sim_time_ms": 6800,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 68,
+      "sim_time_ms": 6800,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 19,
+      "sim_time_ms": 1900,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 19,
+      "sim_time_ms": 1900,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 118,
+      "sim_time_ms": 11800,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 17456,
+      "detail": {
+        "changed_entries": 1091,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 68,
+      "sim_time_ms": 6800,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 16528,
+      "detail": {
+        "changed_entries": 1033,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 169,
+      "sim_time_ms": 16900,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 169,
+      "sim_time_ms": 16900,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 19,
+      "sim_time_ms": 1900,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 30336,
+      "detail": {
+        "changed_entries": 1896,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 119,
+      "sim_time_ms": 11900,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 119,
+      "sim_time_ms": 11900,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 169,
+      "sim_time_ms": 16900,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 60352,
+      "detail": {
+        "changed_entries": 3772,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 69,
+      "sim_time_ms": 6900,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 69,
+      "sim_time_ms": 6900,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 119,
+      "sim_time_ms": 11900,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 22736,
+      "detail": {
+        "changed_entries": 1421,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 20,
+      "sim_time_ms": 2000,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 20,
+      "sim_time_ms": 2000,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 69,
+      "sim_time_ms": 6900,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 16528,
+      "detail": {
+        "changed_entries": 1033,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 170,
+      "sim_time_ms": 17000,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 170,
+      "sim_time_ms": 17000,
       "event": "topology_change",
       "count": 1,
       "bytes": 0,
@@ -155,15 +2496,15 @@
       "sim_time_ms": 2000,
       "event": "routing_update",
       "count": 1,
-      "bytes": 39936,
+      "bytes": 30336,
       "detail": {
-        "changed_entries": 2496,
+        "changed_entries": 1896,
         "total_entries": 168300
       }
     },
     {
-      "snapshot": 41,
-      "sim_time_ms": 4100,
+      "snapshot": 120,
+      "sim_time_ms": 12000,
       "event": "pid_rebuild",
       "count": 1,
       "bytes": 0,
@@ -172,8 +2513,8 @@
       }
     },
     {
-      "snapshot": 41,
-      "sim_time_ms": 4100,
+      "snapshot": 120,
+      "sim_time_ms": 12000,
       "event": "topology_change",
       "count": 1,
       "bytes": 0,
@@ -182,8 +2523,19 @@
       }
     },
     {
-      "snapshot": 61,
-      "sim_time_ms": 6100,
+      "snapshot": 170,
+      "sim_time_ms": 17000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 60352,
+      "detail": {
+        "changed_entries": 3772,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 70,
+      "sim_time_ms": 7000,
       "event": "pid_rebuild",
       "count": 1,
       "bytes": 0,
@@ -192,8 +2544,8 @@
       }
     },
     {
-      "snapshot": 61,
-      "sim_time_ms": 6100,
+      "snapshot": 70,
+      "sim_time_ms": 7000,
       "event": "topology_change",
       "count": 1,
       "bytes": 0,
@@ -202,8 +2554,19 @@
       }
     },
     {
-      "snapshot": 181,
-      "sim_time_ms": 18100,
+      "snapshot": 120,
+      "sim_time_ms": 12000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 22688,
+      "detail": {
+        "changed_entries": 1418,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 21,
+      "sim_time_ms": 2100,
       "event": "pid_rebuild",
       "count": 1,
       "bytes": 0,
@@ -212,8 +2575,8 @@
       }
     },
     {
-      "snapshot": 181,
-      "sim_time_ms": 18100,
+      "snapshot": 21,
+      "sim_time_ms": 2100,
       "event": "topology_change",
       "count": 1,
       "bytes": 0,
@@ -222,8 +2585,30 @@
       }
     },
     {
-      "snapshot": 141,
-      "sim_time_ms": 14100,
+      "snapshot": 70,
+      "sim_time_ms": 7000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 16576,
+      "detail": {
+        "changed_entries": 1036,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 21,
+      "sim_time_ms": 2100,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 30336,
+      "detail": {
+        "changed_entries": 1896,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 171,
+      "sim_time_ms": 17100,
       "event": "pid_rebuild",
       "count": 1,
       "bytes": 0,
@@ -232,8 +2617,8 @@
       }
     },
     {
-      "snapshot": 141,
-      "sim_time_ms": 14100,
+      "snapshot": 171,
+      "sim_time_ms": 17100,
       "event": "topology_change",
       "count": 1,
       "bytes": 0,
@@ -262,8 +2647,19 @@
       }
     },
     {
-      "snapshot": 1,
-      "sim_time_ms": 100,
+      "snapshot": 171,
+      "sim_time_ms": 17100,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 60352,
+      "detail": {
+        "changed_entries": 3772,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 71,
+      "sim_time_ms": 7100,
       "event": "pid_rebuild",
       "count": 1,
       "bytes": 0,
@@ -272,170 +2668,13 @@
       }
     },
     {
-      "snapshot": 1,
-      "sim_time_ms": 100,
+      "snapshot": 71,
+      "sim_time_ms": 7100,
       "event": "topology_change",
       "count": 1,
       "bytes": 0,
       "detail": {
         "delta_group_edges": 0
-      }
-    },
-    {
-      "snapshot": 101,
-      "sim_time_ms": 10100,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 0,
-      "detail": {
-        "changed_pids": 0
-      }
-    },
-    {
-      "snapshot": 101,
-      "sim_time_ms": 10100,
-      "event": "topology_change",
-      "count": 1,
-      "bytes": 0,
-      "detail": {
-        "delta_group_edges": 0
-      }
-    },
-    {
-      "snapshot": 21,
-      "sim_time_ms": 2100,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 0,
-      "detail": {
-        "changed_pids": 0
-      }
-    },
-    {
-      "snapshot": 21,
-      "sim_time_ms": 2100,
-      "event": "topology_change",
-      "count": 1,
-      "bytes": 0,
-      "detail": {
-        "delta_group_edges": 0
-      }
-    },
-    {
-      "snapshot": 81,
-      "sim_time_ms": 8100,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 0,
-      "detail": {
-        "changed_pids": 0
-      }
-    },
-    {
-      "snapshot": 81,
-      "sim_time_ms": 8100,
-      "event": "topology_change",
-      "count": 1,
-      "bytes": 0,
-      "detail": {
-        "delta_group_edges": 0
-      }
-    },
-    {
-      "snapshot": 161,
-      "sim_time_ms": 16100,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 75376,
-      "detail": {
-        "changed_entries": 4711,
-        "total_entries": 166878
-      }
-    },
-    {
-      "snapshot": 41,
-      "sim_time_ms": 4100,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 78608,
-      "detail": {
-        "changed_entries": 4913,
-        "total_entries": 168200
-      }
-    },
-    {
-      "snapshot": 61,
-      "sim_time_ms": 6100,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 41152,
-      "detail": {
-        "changed_entries": 2572,
-        "total_entries": 168300
-      }
-    },
-    {
-      "snapshot": 181,
-      "sim_time_ms": 18100,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 51328,
-      "detail": {
-        "changed_entries": 3208,
-        "total_entries": 168300
-      }
-    },
-    {
-      "snapshot": 141,
-      "sim_time_ms": 14100,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 47200,
-      "detail": {
-        "changed_entries": 2950,
-        "total_entries": 168300
-      }
-    },
-    {
-      "snapshot": 1,
-      "sim_time_ms": 100,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 52304,
-      "detail": {
-        "changed_entries": 3269,
-        "total_entries": 168300
-      }
-    },
-    {
-      "snapshot": 42,
-      "sim_time_ms": 4200,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 0,
-      "detail": {
-        "changed_pids": 0
-      }
-    },
-    {
-      "snapshot": 42,
-      "sim_time_ms": 4200,
-      "event": "topology_change",
-      "count": 1,
-      "bytes": 0,
-      "detail": {
-        "delta_group_edges": 0
-      }
-    },
-    {
-      "snapshot": 101,
-      "sim_time_ms": 10100,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 52912,
-      "detail": {
-        "changed_entries": 3307,
-        "total_entries": 168300
       }
     },
     {
@@ -443,15 +2682,15 @@
       "sim_time_ms": 12100,
       "event": "routing_update",
       "count": 1,
-      "bytes": 57760,
+      "bytes": 22688,
       "detail": {
-        "changed_entries": 3610,
+        "changed_entries": 1418,
         "total_entries": 168300
       }
     },
     {
-      "snapshot": 162,
-      "sim_time_ms": 16200,
+      "snapshot": 22,
+      "sim_time_ms": 2200,
       "event": "pid_rebuild",
       "count": 1,
       "bytes": 0,
@@ -460,8 +2699,8 @@
       }
     },
     {
-      "snapshot": 162,
-      "sim_time_ms": 16200,
+      "snapshot": 22,
+      "sim_time_ms": 2200,
       "event": "topology_change",
       "count": 1,
       "bytes": 0,
@@ -470,70 +2709,30 @@
       }
     },
     {
-      "snapshot": 81,
-      "sim_time_ms": 8100,
+      "snapshot": 71,
+      "sim_time_ms": 7100,
       "event": "routing_update",
       "count": 1,
-      "bytes": 69872,
+      "bytes": 16576,
       "detail": {
-        "changed_entries": 4367,
-        "total_entries": 167200
+        "changed_entries": 1036,
+        "total_entries": 168300
       }
     },
     {
-      "snapshot": 182,
-      "sim_time_ms": 18200,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 0,
-      "detail": {
-        "changed_pids": 0
-      }
-    },
-    {
-      "snapshot": 182,
-      "sim_time_ms": 18200,
-      "event": "topology_change",
-      "count": 1,
-      "bytes": 0,
-      "detail": {
-        "delta_group_edges": 0
-      }
-    },
-    {
-      "snapshot": 62,
-      "sim_time_ms": 6200,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 0,
-      "detail": {
-        "changed_pids": 0
-      }
-    },
-    {
-      "snapshot": 62,
-      "sim_time_ms": 6200,
-      "event": "topology_change",
-      "count": 1,
-      "bytes": 0,
-      "detail": {
-        "delta_group_edges": 0
-      }
-    },
-    {
-      "snapshot": 21,
-      "sim_time_ms": 2100,
+      "snapshot": 22,
+      "sim_time_ms": 2200,
       "event": "routing_update",
       "count": 1,
-      "bytes": 78576,
+      "bytes": 30336,
       "detail": {
-        "changed_entries": 4911,
-        "total_entries": 167788
+        "changed_entries": 1896,
+        "total_entries": 168300
       }
     },
     {
-      "snapshot": 2,
-      "sim_time_ms": 200,
+      "snapshot": 172,
+      "sim_time_ms": 17200,
       "event": "pid_rebuild",
       "count": 1,
       "bytes": 0,
@@ -542,48 +2741,8 @@
       }
     },
     {
-      "snapshot": 2,
-      "sim_time_ms": 200,
-      "event": "topology_change",
-      "count": 1,
-      "bytes": 0,
-      "detail": {
-        "delta_group_edges": 0
-      }
-    },
-    {
-      "snapshot": 142,
-      "sim_time_ms": 14200,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 0,
-      "detail": {
-        "changed_pids": 0
-      }
-    },
-    {
-      "snapshot": 142,
-      "sim_time_ms": 14200,
-      "event": "topology_change",
-      "count": 1,
-      "bytes": 0,
-      "detail": {
-        "delta_group_edges": 0
-      }
-    },
-    {
-      "snapshot": 102,
-      "sim_time_ms": 10200,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 0,
-      "detail": {
-        "changed_pids": 0
-      }
-    },
-    {
-      "snapshot": 102,
-      "sim_time_ms": 10200,
+      "snapshot": 172,
+      "sim_time_ms": 17200,
       "event": "topology_change",
       "count": 1,
       "bytes": 0,
@@ -612,103 +2771,19 @@
       }
     },
     {
-      "snapshot": 82,
-      "sim_time_ms": 8200,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 0,
-      "detail": {
-        "changed_pids": 0
-      }
-    },
-    {
-      "snapshot": 82,
-      "sim_time_ms": 8200,
-      "event": "topology_change",
-      "count": 1,
-      "bytes": 0,
-      "detail": {
-        "delta_group_edges": 0
-      }
-    },
-    {
-      "snapshot": 22,
-      "sim_time_ms": 2200,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 0,
-      "detail": {
-        "changed_pids": 0
-      }
-    },
-    {
-      "snapshot": 22,
-      "sim_time_ms": 2200,
-      "event": "topology_change",
-      "count": 1,
-      "bytes": 0,
-      "detail": {
-        "delta_group_edges": 0
-      }
-    },
-    {
-      "snapshot": 162,
-      "sim_time_ms": 16200,
+      "snapshot": 172,
+      "sim_time_ms": 17200,
       "event": "routing_update",
       "count": 1,
-      "bytes": 83440,
+      "bytes": 60352,
       "detail": {
-        "changed_entries": 5215,
-        "total_entries": 167300
-      }
-    },
-    {
-      "snapshot": 42,
-      "sim_time_ms": 4200,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 76416,
-      "detail": {
-        "changed_entries": 4776,
-        "total_entries": 167806
-      }
-    },
-    {
-      "snapshot": 182,
-      "sim_time_ms": 18200,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 75904,
-      "detail": {
-        "changed_entries": 4744,
+        "changed_entries": 3772,
         "total_entries": 168300
       }
     },
     {
-      "snapshot": 62,
-      "sim_time_ms": 6200,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 62000,
-      "detail": {
-        "changed_entries": 3875,
-        "total_entries": 168100
-      }
-    },
-    {
-      "snapshot": 142,
-      "sim_time_ms": 14200,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 59136,
-      "detail": {
-        "changed_entries": 3696,
-        "total_entries": 168300
-      }
-    },
-    {
-      "snapshot": 163,
-      "sim_time_ms": 16300,
+      "snapshot": 72,
+      "sim_time_ms": 7200,
       "event": "pid_rebuild",
       "count": 1,
       "bytes": 0,
@@ -717,55 +2792,13 @@
       }
     },
     {
-      "snapshot": 163,
-      "sim_time_ms": 16300,
+      "snapshot": 72,
+      "sim_time_ms": 7200,
       "event": "topology_change",
       "count": 1,
       "bytes": 0,
       "detail": {
         "delta_group_edges": 0
-      }
-    },
-    {
-      "snapshot": 43,
-      "sim_time_ms": 4300,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 0,
-      "detail": {
-        "changed_pids": 0
-      }
-    },
-    {
-      "snapshot": 43,
-      "sim_time_ms": 4300,
-      "event": "topology_change",
-      "count": 1,
-      "bytes": 0,
-      "detail": {
-        "delta_group_edges": 0
-      }
-    },
-    {
-      "snapshot": 102,
-      "sim_time_ms": 10200,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 67952,
-      "detail": {
-        "changed_entries": 4247,
-        "total_entries": 166700
-      }
-    },
-    {
-      "snapshot": 2,
-      "sim_time_ms": 200,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 75824,
-      "detail": {
-        "changed_entries": 4739,
-        "total_entries": 167518
       }
     },
     {
@@ -773,77 +2806,57 @@
       "sim_time_ms": 12200,
       "event": "routing_update",
       "count": 1,
-      "bytes": 46512,
+      "bytes": 22688,
       "detail": {
-        "changed_entries": 2907,
-        "total_entries": 167800
+        "changed_entries": 1418,
+        "total_entries": 168300
       }
     },
     {
-      "snapshot": 82,
-      "sim_time_ms": 8200,
+      "snapshot": 23,
+      "sim_time_ms": 2300,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 23,
+      "sim_time_ms": 2300,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 72,
+      "sim_time_ms": 7200,
       "event": "routing_update",
       "count": 1,
-      "bytes": 82320,
+      "bytes": 16576,
       "detail": {
-        "changed_entries": 5145,
-        "total_entries": 166577
+        "changed_entries": 1036,
+        "total_entries": 168300
       }
     },
     {
-      "snapshot": 183,
-      "sim_time_ms": 18300,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 0,
-      "detail": {
-        "changed_pids": 0
-      }
-    },
-    {
-      "snapshot": 183,
-      "sim_time_ms": 18300,
-      "event": "topology_change",
-      "count": 1,
-      "bytes": 0,
-      "detail": {
-        "delta_group_edges": 0
-      }
-    },
-    {
-      "snapshot": 63,
-      "sim_time_ms": 6300,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 0,
-      "detail": {
-        "changed_pids": 0
-      }
-    },
-    {
-      "snapshot": 63,
-      "sim_time_ms": 6300,
-      "event": "topology_change",
-      "count": 1,
-      "bytes": 0,
-      "detail": {
-        "delta_group_edges": 0
-      }
-    },
-    {
-      "snapshot": 22,
-      "sim_time_ms": 2200,
+      "snapshot": 23,
+      "sim_time_ms": 2300,
       "event": "routing_update",
       "count": 1,
-      "bytes": 71728,
+      "bytes": 30336,
       "detail": {
-        "changed_entries": 4483,
-        "total_entries": 168000
+        "changed_entries": 1896,
+        "total_entries": 168300
       }
     },
     {
-      "snapshot": 143,
-      "sim_time_ms": 14300,
+      "snapshot": 173,
+      "sim_time_ms": 17300,
       "event": "pid_rebuild",
       "count": 1,
       "bytes": 0,
@@ -852,48 +2865,8 @@
       }
     },
     {
-      "snapshot": 143,
-      "sim_time_ms": 14300,
-      "event": "topology_change",
-      "count": 1,
-      "bytes": 0,
-      "detail": {
-        "delta_group_edges": 0
-      }
-    },
-    {
-      "snapshot": 3,
-      "sim_time_ms": 300,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 0,
-      "detail": {
-        "changed_pids": 0
-      }
-    },
-    {
-      "snapshot": 3,
-      "sim_time_ms": 300,
-      "event": "topology_change",
-      "count": 1,
-      "bytes": 0,
-      "detail": {
-        "delta_group_edges": 0
-      }
-    },
-    {
-      "snapshot": 3,
-      "sim_time_ms": 300,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 0,
-      "detail": {
-        "changed_pids": 0
-      }
-    },
-    {
-      "snapshot": 3,
-      "sim_time_ms": 300,
+      "snapshot": 173,
+      "sim_time_ms": 17300,
       "event": "topology_change",
       "count": 1,
       "bytes": 0,
@@ -922,54 +2895,1252 @@
       }
     },
     {
-      "snapshot": 83,
-      "sim_time_ms": 8300,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 0,
-      "detail": {
-        "changed_pids": 0
-      }
-    },
-    {
-      "snapshot": 83,
-      "sim_time_ms": 8300,
-      "event": "topology_change",
-      "count": 1,
-      "bytes": 0,
-      "detail": {
-        "delta_group_edges": 0
-      }
-    },
-    {
-      "snapshot": 23,
-      "sim_time_ms": 2300,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 0,
-      "detail": {
-        "changed_pids": 0
-      }
-    },
-    {
-      "snapshot": 23,
-      "sim_time_ms": 2300,
-      "event": "topology_change",
-      "count": 1,
-      "bytes": 0,
-      "detail": {
-        "delta_group_edges": 0
-      }
-    },
-    {
-      "snapshot": 163,
-      "sim_time_ms": 16300,
+      "snapshot": 173,
+      "sim_time_ms": 17300,
       "event": "routing_update",
       "count": 1,
-      "bytes": 77728,
+      "bytes": 60352,
       "detail": {
-        "changed_entries": 4858,
-        "total_entries": 167416
+        "changed_entries": 3772,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 73,
+      "sim_time_ms": 7300,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 73,
+      "sim_time_ms": 7300,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 123,
+      "sim_time_ms": 12300,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 22688,
+      "detail": {
+        "changed_entries": 1418,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 24,
+      "sim_time_ms": 2400,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 24,
+      "sim_time_ms": 2400,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 73,
+      "sim_time_ms": 7300,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 16576,
+      "detail": {
+        "changed_entries": 1036,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 174,
+      "sim_time_ms": 17400,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 24,
+      "sim_time_ms": 2400,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 30128,
+      "detail": {
+        "changed_entries": 1883,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 174,
+      "sim_time_ms": 17400,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 124,
+      "sim_time_ms": 12400,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 124,
+      "sim_time_ms": 12400,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 174,
+      "sim_time_ms": 17400,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 60144,
+      "detail": {
+        "changed_entries": 3759,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 74,
+      "sim_time_ms": 7400,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 74,
+      "sim_time_ms": 7400,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 124,
+      "sim_time_ms": 12400,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 22672,
+      "detail": {
+        "changed_entries": 1417,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 25,
+      "sim_time_ms": 2500,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 25,
+      "sim_time_ms": 2500,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 74,
+      "sim_time_ms": 7400,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 11520,
+      "detail": {
+        "changed_entries": 720,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 175,
+      "sim_time_ms": 17500,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 175,
+      "sim_time_ms": 17500,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 25,
+      "sim_time_ms": 2500,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 35088,
+      "detail": {
+        "changed_entries": 2193,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 125,
+      "sim_time_ms": 12500,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 125,
+      "sim_time_ms": 12500,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 175,
+      "sim_time_ms": 17500,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 60032,
+      "detail": {
+        "changed_entries": 3752,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 75,
+      "sim_time_ms": 7500,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 75,
+      "sim_time_ms": 7500,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 125,
+      "sim_time_ms": 12500,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 22672,
+      "detail": {
+        "changed_entries": 1417,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 26,
+      "sim_time_ms": 2600,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 26,
+      "sim_time_ms": 2600,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 75,
+      "sim_time_ms": 7500,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 11488,
+      "detail": {
+        "changed_entries": 718,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 176,
+      "sim_time_ms": 17600,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 176,
+      "sim_time_ms": 17600,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 26,
+      "sim_time_ms": 2600,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 35120,
+      "detail": {
+        "changed_entries": 2195,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 126,
+      "sim_time_ms": 12600,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 126,
+      "sim_time_ms": 12600,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 176,
+      "sim_time_ms": 17600,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 60032,
+      "detail": {
+        "changed_entries": 3752,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 76,
+      "sim_time_ms": 7600,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 76,
+      "sim_time_ms": 7600,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 126,
+      "sim_time_ms": 12600,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 22672,
+      "detail": {
+        "changed_entries": 1417,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 27,
+      "sim_time_ms": 2700,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 27,
+      "sim_time_ms": 2700,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 76,
+      "sim_time_ms": 7600,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 11264,
+      "detail": {
+        "changed_entries": 704,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 177,
+      "sim_time_ms": 17700,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 177,
+      "sim_time_ms": 17700,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 27,
+      "sim_time_ms": 2700,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 35264,
+      "detail": {
+        "changed_entries": 2204,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 127,
+      "sim_time_ms": 12700,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 127,
+      "sim_time_ms": 12700,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 177,
+      "sim_time_ms": 17700,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 59984,
+      "detail": {
+        "changed_entries": 3749,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 77,
+      "sim_time_ms": 7700,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 77,
+      "sim_time_ms": 7700,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 127,
+      "sim_time_ms": 12700,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 22672,
+      "detail": {
+        "changed_entries": 1417,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 77,
+      "sim_time_ms": 7700,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 11088,
+      "detail": {
+        "changed_entries": 693,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 178,
+      "sim_time_ms": 17800,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 178,
+      "sim_time_ms": 17800,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 178,
+      "sim_time_ms": 17800,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 178,
+      "sim_time_ms": 17800,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 28,
+      "sim_time_ms": 2800,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 35424,
+      "detail": {
+        "changed_entries": 2214,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 178,
+      "sim_time_ms": 17800,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 33600,
+      "detail": {
+        "changed_entries": 2100,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 128,
+      "sim_time_ms": 12800,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 128,
+      "sim_time_ms": 12800,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 78,
+      "sim_time_ms": 7800,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 78,
+      "sim_time_ms": 7800,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 128,
+      "sim_time_ms": 12800,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 22672,
+      "detail": {
+        "changed_entries": 1417,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 78,
+      "sim_time_ms": 7800,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 11072,
+      "detail": {
+        "changed_entries": 692,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 29,
+      "sim_time_ms": 2900,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 29,
+      "sim_time_ms": 2900,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 179,
+      "sim_time_ms": 17900,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 179,
+      "sim_time_ms": 17900,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 179,
+      "sim_time_ms": 17900,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 33584,
+      "detail": {
+        "changed_entries": 2099,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 29,
+      "sim_time_ms": 2900,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 35440,
+      "detail": {
+        "changed_entries": 2215,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 129,
+      "sim_time_ms": 12900,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 129,
+      "sim_time_ms": 12900,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 79,
+      "sim_time_ms": 7900,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 79,
+      "sim_time_ms": 7900,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 129,
+      "sim_time_ms": 12900,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 47792,
+      "detail": {
+        "changed_entries": 2987,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 79,
+      "sim_time_ms": 7900,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 12720,
+      "detail": {
+        "changed_entries": 795,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 30,
+      "sim_time_ms": 3000,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 30,
+      "sim_time_ms": 3000,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 180,
+      "sim_time_ms": 18000,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 180,
+      "sim_time_ms": 18000,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 130,
+      "sim_time_ms": 13000,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 130,
+      "sim_time_ms": 13000,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 180,
+      "sim_time_ms": 18000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 33584,
+      "detail": {
+        "changed_entries": 2099,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 30,
+      "sim_time_ms": 3000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 59952,
+      "detail": {
+        "changed_entries": 3747,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 80,
+      "sim_time_ms": 8000,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 80,
+      "sim_time_ms": 8000,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 130,
+      "sim_time_ms": 13000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 47792,
+      "detail": {
+        "changed_entries": 2987,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 80,
+      "sim_time_ms": 8000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 12720,
+      "detail": {
+        "changed_entries": 795,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 181,
+      "sim_time_ms": 18100,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 181,
+      "sim_time_ms": 18100,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 31,
+      "sim_time_ms": 3100,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 31,
+      "sim_time_ms": 3100,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 131,
+      "sim_time_ms": 13100,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 131,
+      "sim_time_ms": 13100,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 181,
+      "sim_time_ms": 18100,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 33936,
+      "detail": {
+        "changed_entries": 2121,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 81,
+      "sim_time_ms": 8100,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 81,
+      "sim_time_ms": 8100,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 31,
+      "sim_time_ms": 3100,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 60272,
+      "detail": {
+        "changed_entries": 3767,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 131,
+      "sim_time_ms": 13100,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 47792,
+      "detail": {
+        "changed_entries": 2987,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 81,
+      "sim_time_ms": 8100,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 12720,
+      "detail": {
+        "changed_entries": 795,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 182,
+      "sim_time_ms": 18200,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 182,
+      "sim_time_ms": 18200,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 32,
+      "sim_time_ms": 3200,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 32,
+      "sim_time_ms": 3200,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 132,
+      "sim_time_ms": 13200,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 132,
+      "sim_time_ms": 13200,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 82,
+      "sim_time_ms": 8200,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 82,
+      "sim_time_ms": 8200,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 182,
+      "sim_time_ms": 18200,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 35712,
+      "detail": {
+        "changed_entries": 2232,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 32,
+      "sim_time_ms": 3200,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 62112,
+      "detail": {
+        "changed_entries": 3882,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 132,
+      "sim_time_ms": 13200,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 47792,
+      "detail": {
+        "changed_entries": 2987,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 82,
+      "sim_time_ms": 8200,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 12720,
+      "detail": {
+        "changed_entries": 795,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 183,
+      "sim_time_ms": 18300,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 183,
+      "sim_time_ms": 18300,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 33,
+      "sim_time_ms": 3300,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 33,
+      "sim_time_ms": 3300,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 133,
+      "sim_time_ms": 13300,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 133,
+      "sim_time_ms": 13300,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 83,
+      "sim_time_ms": 8300,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 83,
+      "sim_time_ms": 8300,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
       }
     },
     {
@@ -977,63 +4148,43 @@
       "sim_time_ms": 18300,
       "event": "routing_update",
       "count": 1,
-      "bytes": 74800,
+      "bytes": 35712,
       "detail": {
-        "changed_entries": 4675,
-        "total_entries": 167400
+        "changed_entries": 2232,
+        "total_entries": 168300
       }
     },
     {
-      "snapshot": 43,
-      "sim_time_ms": 4300,
+      "snapshot": 33,
+      "sim_time_ms": 3300,
       "event": "routing_update",
       "count": 1,
-      "bytes": 121264,
+      "bytes": 62112,
       "detail": {
-        "changed_entries": 7579,
-        "total_entries": 165701
+        "changed_entries": 3882,
+        "total_entries": 168300
       }
     },
     {
-      "snapshot": 143,
-      "sim_time_ms": 14300,
+      "snapshot": 133,
+      "sim_time_ms": 13300,
       "event": "routing_update",
       "count": 1,
-      "bytes": 151520,
+      "bytes": 53184,
       "detail": {
-        "changed_entries": 9470,
-        "total_entries": 164875
+        "changed_entries": 3324,
+        "total_entries": 168300
       }
     },
     {
-      "snapshot": 63,
-      "sim_time_ms": 6300,
+      "snapshot": 83,
+      "sim_time_ms": 8300,
       "event": "routing_update",
       "count": 1,
-      "bytes": 118704,
+      "bytes": 17936,
       "detail": {
-        "changed_entries": 7419,
-        "total_entries": 167026
-      }
-    },
-    {
-      "snapshot": 164,
-      "sim_time_ms": 16400,
-      "event": "pid_rebuild",
-      "count": 1,
-      "bytes": 0,
-      "detail": {
-        "changed_pids": 0
-      }
-    },
-    {
-      "snapshot": 164,
-      "sim_time_ms": 16400,
-      "event": "topology_change",
-      "count": 1,
-      "bytes": 0,
-      "detail": {
-        "delta_group_edges": 0
+        "changed_entries": 1121,
+        "total_entries": 168300
       }
     },
     {
@@ -1057,14 +4208,1243 @@
       }
     },
     {
-      "snapshot": 103,
-      "sim_time_ms": 10300,
+      "snapshot": 34,
+      "sim_time_ms": 3400,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 34,
+      "sim_time_ms": 3400,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 134,
+      "sim_time_ms": 13400,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 134,
+      "sim_time_ms": 13400,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 84,
+      "sim_time_ms": 8400,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 84,
+      "sim_time_ms": 8400,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 184,
+      "sim_time_ms": 18400,
       "event": "routing_update",
       "count": 1,
-      "bytes": 97712,
+      "bytes": 35472,
       "detail": {
-        "changed_entries": 6107,
-        "total_entries": 166974
+        "changed_entries": 2217,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 34,
+      "sim_time_ms": 3400,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 62064,
+      "detail": {
+        "changed_entries": 3879,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 84,
+      "sim_time_ms": 8400,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 35600,
+      "detail": {
+        "changed_entries": 2225,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 134,
+      "sim_time_ms": 13400,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 53136,
+      "detail": {
+        "changed_entries": 3321,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 185,
+      "sim_time_ms": 18500,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 185,
+      "sim_time_ms": 18500,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 35,
+      "sim_time_ms": 3500,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 35,
+      "sim_time_ms": 3500,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 185,
+      "sim_time_ms": 18500,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 17984,
+      "detail": {
+        "changed_entries": 1124,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 85,
+      "sim_time_ms": 8500,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 85,
+      "sim_time_ms": 8500,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 135,
+      "sim_time_ms": 13500,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 135,
+      "sim_time_ms": 13500,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 35,
+      "sim_time_ms": 3500,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 62048,
+      "detail": {
+        "changed_entries": 3878,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 85,
+      "sim_time_ms": 8500,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 35696,
+      "detail": {
+        "changed_entries": 2231,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 135,
+      "sim_time_ms": 13500,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 17760,
+      "detail": {
+        "changed_entries": 1110,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 186,
+      "sim_time_ms": 18600,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 186,
+      "sim_time_ms": 18600,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 36,
+      "sim_time_ms": 3600,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 36,
+      "sim_time_ms": 3600,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 186,
+      "sim_time_ms": 18600,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 23120,
+      "detail": {
+        "changed_entries": 1445,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 136,
+      "sim_time_ms": 13600,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 136,
+      "sim_time_ms": 13600,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 86,
+      "sim_time_ms": 8600,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 86,
+      "sim_time_ms": 8600,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 36,
+      "sim_time_ms": 3600,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 67040,
+      "detail": {
+        "changed_entries": 4190,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 136,
+      "sim_time_ms": 13600,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 54688,
+      "detail": {
+        "changed_entries": 3418,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 86,
+      "sim_time_ms": 8600,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 19424,
+      "detail": {
+        "changed_entries": 1214,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 187,
+      "sim_time_ms": 18700,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 187,
+      "sim_time_ms": 18700,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 37,
+      "sim_time_ms": 3700,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 37,
+      "sim_time_ms": 3700,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 187,
+      "sim_time_ms": 18700,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 40832,
+      "detail": {
+        "changed_entries": 2552,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 137,
+      "sim_time_ms": 13700,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 137,
+      "sim_time_ms": 13700,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 137,
+      "sim_time_ms": 13700,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 137,
+      "sim_time_ms": 13700,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 37,
+      "sim_time_ms": 3700,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 66896,
+      "detail": {
+        "changed_entries": 4181,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 87,
+      "sim_time_ms": 8700,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 35200,
+      "detail": {
+        "changed_entries": 2200,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 137,
+      "sim_time_ms": 13700,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 54544,
+      "detail": {
+        "changed_entries": 3409,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 188,
+      "sim_time_ms": 18800,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 188,
+      "sim_time_ms": 18800,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 38,
+      "sim_time_ms": 3800,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 38,
+      "sim_time_ms": 3800,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 188,
+      "sim_time_ms": 18800,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 21696,
+      "detail": {
+        "changed_entries": 1356,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 138,
+      "sim_time_ms": 13800,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 138,
+      "sim_time_ms": 13800,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 88,
+      "sim_time_ms": 8800,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 88,
+      "sim_time_ms": 8800,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 38,
+      "sim_time_ms": 3800,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 67184,
+      "detail": {
+        "changed_entries": 4199,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 88,
+      "sim_time_ms": 8800,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 35152,
+      "detail": {
+        "changed_entries": 2197,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 138,
+      "sim_time_ms": 13800,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 19920,
+      "detail": {
+        "changed_entries": 1245,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 189,
+      "sim_time_ms": 18900,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 189,
+      "sim_time_ms": 18900,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 39,
+      "sim_time_ms": 3900,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 39,
+      "sim_time_ms": 3900,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 189,
+      "sim_time_ms": 18900,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 21552,
+      "detail": {
+        "changed_entries": 1347,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 139,
+      "sim_time_ms": 13900,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 139,
+      "sim_time_ms": 13900,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 89,
+      "sim_time_ms": 8900,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 89,
+      "sim_time_ms": 8900,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 39,
+      "sim_time_ms": 3900,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 51888,
+      "detail": {
+        "changed_entries": 3243,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 89,
+      "sim_time_ms": 8900,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 19808,
+      "detail": {
+        "changed_entries": 1238,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 139,
+      "sim_time_ms": 13900,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 25040,
+      "detail": {
+        "changed_entries": 1565,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 190,
+      "sim_time_ms": 19000,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 190,
+      "sim_time_ms": 19000,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 40,
+      "sim_time_ms": 4000,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 40,
+      "sim_time_ms": 4000,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 190,
+      "sim_time_ms": 19000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 16400,
+      "detail": {
+        "changed_entries": 1025,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 90,
+      "sim_time_ms": 9000,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 90,
+      "sim_time_ms": 9000,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 140,
+      "sim_time_ms": 14000,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 140,
+      "sim_time_ms": 14000,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 40,
+      "sim_time_ms": 4000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 51888,
+      "detail": {
+        "changed_entries": 3243,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 90,
+      "sim_time_ms": 9000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 19920,
+      "detail": {
+        "changed_entries": 1245,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 191,
+      "sim_time_ms": 19100,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 191,
+      "sim_time_ms": 19100,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 140,
+      "sim_time_ms": 14000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 25168,
+      "detail": {
+        "changed_entries": 1573,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 41,
+      "sim_time_ms": 4100,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 41,
+      "sim_time_ms": 4100,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 191,
+      "sim_time_ms": 19100,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 16224,
+      "detail": {
+        "changed_entries": 1014,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 141,
+      "sim_time_ms": 14100,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 141,
+      "sim_time_ms": 14100,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 91,
+      "sim_time_ms": 9100,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 91,
+      "sim_time_ms": 9100,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 41,
+      "sim_time_ms": 4100,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 51888,
+      "detail": {
+        "changed_entries": 3243,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 192,
+      "sim_time_ms": 19200,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 192,
+      "sim_time_ms": 19200,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 141,
+      "sim_time_ms": 14100,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 44576,
+      "detail": {
+        "changed_entries": 2786,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 91,
+      "sim_time_ms": 9100,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 19936,
+      "detail": {
+        "changed_entries": 1246,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 42,
+      "sim_time_ms": 4200,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 42,
+      "sim_time_ms": 4200,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 192,
+      "sim_time_ms": 19200,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 41024,
+      "detail": {
+        "changed_entries": 2564,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 142,
+      "sim_time_ms": 14200,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 142,
+      "sim_time_ms": 14200,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 42,
+      "sim_time_ms": 4200,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 51920,
+      "detail": {
+        "changed_entries": 3245,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 92,
+      "sim_time_ms": 9200,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 92,
+      "sim_time_ms": 9200,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 142,
+      "sim_time_ms": 14200,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 44576,
+      "detail": {
+        "changed_entries": 2786,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 193,
+      "sim_time_ms": 19300,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 193,
+      "sim_time_ms": 19300,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 92,
+      "sim_time_ms": 9200,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 25152,
+      "detail": {
+        "changed_entries": 1572,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 43,
+      "sim_time_ms": 4300,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 43,
+      "sim_time_ms": 4300,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 193,
+      "sim_time_ms": 19300,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 41024,
+      "detail": {
+        "changed_entries": 2564,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 143,
+      "sim_time_ms": 14300,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 143,
+      "sim_time_ms": 14300,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 93,
+      "sim_time_ms": 9300,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 93,
+      "sim_time_ms": 9300,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 43,
+      "sim_time_ms": 4300,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 51920,
+      "detail": {
+        "changed_entries": 3245,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 143,
+      "sim_time_ms": 14300,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 44576,
+      "detail": {
+        "changed_entries": 2786,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 194,
+      "sim_time_ms": 19400,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 194,
+      "sim_time_ms": 19400,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 93,
+      "sim_time_ms": 9300,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 25152,
+      "detail": {
+        "changed_entries": 1572,
+        "total_entries": 168300
       }
     },
     {
@@ -1088,36 +5468,14 @@
       }
     },
     {
-      "snapshot": 123,
-      "sim_time_ms": 12300,
+      "snapshot": 194,
+      "sim_time_ms": 19400,
       "event": "routing_update",
       "count": 1,
-      "bytes": 92416,
+      "bytes": 41024,
       "detail": {
-        "changed_entries": 5776,
-        "total_entries": 166772
-      }
-    },
-    {
-      "snapshot": 3,
-      "sim_time_ms": 300,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 95792,
-      "detail": {
-        "changed_entries": 5987,
-        "total_entries": 167701
-      }
-    },
-    {
-      "snapshot": 23,
-      "sim_time_ms": 2300,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 71568,
-      "detail": {
-        "changed_entries": 4473,
-        "total_entries": 166834
+        "changed_entries": 2564,
+        "total_entries": 168300
       }
     },
     {
@@ -1141,8 +5499,19 @@
       }
     },
     {
-      "snapshot": 64,
-      "sim_time_ms": 6400,
+      "snapshot": 44,
+      "sim_time_ms": 4400,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 51920,
+      "detail": {
+        "changed_entries": 3245,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 94,
+      "sim_time_ms": 9400,
       "event": "pid_rebuild",
       "count": 1,
       "bytes": 0,
@@ -1151,8 +5520,8 @@
       }
     },
     {
-      "snapshot": 64,
-      "sim_time_ms": 6400,
+      "snapshot": 94,
+      "sim_time_ms": 9400,
       "event": "topology_change",
       "count": 1,
       "bytes": 0,
@@ -1161,14 +5530,739 @@
       }
     },
     {
-      "snapshot": 83,
-      "sim_time_ms": 8300,
+      "snapshot": 195,
+      "sim_time_ms": 19500,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 195,
+      "sim_time_ms": 19500,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 144,
+      "sim_time_ms": 14400,
       "event": "routing_update",
       "count": 1,
-      "bytes": 85696,
+      "bytes": 44576,
       "detail": {
-        "changed_entries": 5356,
-        "total_entries": 167200
+        "changed_entries": 2786,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 94,
+      "sim_time_ms": 9400,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 25152,
+      "detail": {
+        "changed_entries": 1572,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 45,
+      "sim_time_ms": 4500,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 45,
+      "sim_time_ms": 4500,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 195,
+      "sim_time_ms": 19500,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 41024,
+      "detail": {
+        "changed_entries": 2564,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 45,
+      "sim_time_ms": 4500,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 51920,
+      "detail": {
+        "changed_entries": 3245,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 145,
+      "sim_time_ms": 14500,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 145,
+      "sim_time_ms": 14500,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 95,
+      "sim_time_ms": 9500,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 95,
+      "sim_time_ms": 9500,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 196,
+      "sim_time_ms": 19600,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 196,
+      "sim_time_ms": 19600,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 95,
+      "sim_time_ms": 9500,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 19936,
+      "detail": {
+        "changed_entries": 1246,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 145,
+      "sim_time_ms": 14500,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 44576,
+      "detail": {
+        "changed_entries": 2786,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 46,
+      "sim_time_ms": 4600,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 46,
+      "sim_time_ms": 4600,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 196,
+      "sim_time_ms": 19600,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 16256,
+      "detail": {
+        "changed_entries": 1016,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 46,
+      "sim_time_ms": 4600,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 51920,
+      "detail": {
+        "changed_entries": 3245,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 146,
+      "sim_time_ms": 14600,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 146,
+      "sim_time_ms": 14600,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 96,
+      "sim_time_ms": 9600,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 96,
+      "sim_time_ms": 9600,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 197,
+      "sim_time_ms": 19700,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 197,
+      "sim_time_ms": 19700,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 146,
+      "sim_time_ms": 14600,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 44576,
+      "detail": {
+        "changed_entries": 2786,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 96,
+      "sim_time_ms": 9600,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 25040,
+      "detail": {
+        "changed_entries": 1565,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 47,
+      "sim_time_ms": 4700,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 47,
+      "sim_time_ms": 4700,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 197,
+      "sim_time_ms": 19700,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 40944,
+      "detail": {
+        "changed_entries": 2559,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 147,
+      "sim_time_ms": 14700,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 147,
+      "sim_time_ms": 14700,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 47,
+      "sim_time_ms": 4700,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 51952,
+      "detail": {
+        "changed_entries": 3247,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 97,
+      "sim_time_ms": 9700,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 97,
+      "sim_time_ms": 9700,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 147,
+      "sim_time_ms": 14700,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 44576,
+      "detail": {
+        "changed_entries": 2786,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 198,
+      "sim_time_ms": 19800,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 198,
+      "sim_time_ms": 19800,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 97,
+      "sim_time_ms": 9700,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 24816,
+      "detail": {
+        "changed_entries": 1551,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 48,
+      "sim_time_ms": 4800,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 48,
+      "sim_time_ms": 4800,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 198,
+      "sim_time_ms": 19800,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 40720,
+      "detail": {
+        "changed_entries": 2545,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 98,
+      "sim_time_ms": 9800,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 98,
+      "sim_time_ms": 9800,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 98,
+      "sim_time_ms": 9800,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 98,
+      "sim_time_ms": 9800,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 48,
+      "sim_time_ms": 4800,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 51952,
+      "detail": {
+        "changed_entries": 3247,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 199,
+      "sim_time_ms": 19900,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 199,
+      "sim_time_ms": 19900,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 148,
+      "sim_time_ms": 14800,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 44576,
+      "detail": {
+        "changed_entries": 2786,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 98,
+      "sim_time_ms": 9800,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 20304,
+      "detail": {
+        "changed_entries": 1269,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 49,
+      "sim_time_ms": 4900,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 49,
+      "sim_time_ms": 4900,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 199,
+      "sim_time_ms": 19900,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 40656,
+      "detail": {
+        "changed_entries": 2541,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 149,
+      "sim_time_ms": 14900,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 149,
+      "sim_time_ms": 14900,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 99,
+      "sim_time_ms": 9900,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 99,
+      "sim_time_ms": 9900,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 49,
+      "sim_time_ms": 4900,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 45248,
+      "detail": {
+        "changed_entries": 2828,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 149,
+      "sim_time_ms": 14900,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 37776,
+      "detail": {
+        "changed_entries": 2361,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 99,
+      "sim_time_ms": 9900,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 24752,
+      "detail": {
+        "changed_entries": 1547,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 50,
+      "sim_time_ms": 5000,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 50,
+      "sim_time_ms": 5000,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 150,
+      "sim_time_ms": 15000,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 150,
+      "sim_time_ms": 15000,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 50,
+      "sim_time_ms": 5000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 8240,
+      "detail": {
+        "changed_entries": 515,
+        "total_entries": 168300
+      }
+    },
+    {
+      "snapshot": 100,
+      "sim_time_ms": 10000,
+      "event": "pid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_pids": 0
+      }
+    },
+    {
+      "snapshot": 100,
+      "sim_time_ms": 10000,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_group_edges": 0
+      }
+    },
+    {
+      "snapshot": 150,
+      "sim_time_ms": 15000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 32704,
+      "detail": {
+        "changed_entries": 2044,
+        "total_entries": 168300
+      }
+    }
+  ]
+}{
+      "snapshot": 100,
+      "sim_time_ms": 10000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 13312,
+      "detail": {
+        "changed_entries": 832,
+        "total_entries": 168300
       }
     }
   ]
