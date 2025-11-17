@@ -23,13 +23,12 @@ Trying LoHi（p×s 分群）：
 """
 from dataclasses import dataclass
 from typing import Dict, Set, Tuple, List, Optional, Callable, Any
-import datetime as _dt
-import heapq
-import json
 import math
-import networkx as nx
 import os
-import random
+import json
+import datetime as _dt
+import networkx as nx
+import heapq
 
 # ==========================
 # Tunables (LoHi p×s fixed)
@@ -41,30 +40,8 @@ SATS_PER_PLANE_IN_GROUP = 10           # s
 BETA_Q = float(os.environ.get('LOHI_BETA_Q', 1.0))   # [3]
 BETA_S = float(os.environ.get('LOHI_BETA_S', 0.0))   # [3]
 
-# ============================================================================
-# LoHi 階層路由：控制面 vs 資料面分離
-# ============================================================================
-#
-# 控制面（Control Plane）：由管理衛星執行決策
-#   - 群間路由（PID graph SPF）
-#   - 邊界衛星對選擇  
-#   - 負載感知、路由提示生成
-#   - 每個 snapshot 計算一次，物化成 FIB
-#
-# 資料面（Data Plane）：封包轉發
-#   - 根據控制面提示，直接往邊界衛星路由
-#   - 不需要封包實際繞行管理衛星
-#   - 使用勢能場快速路由到出口邊界
-#
-# 這種設計符合 LoHi 論文的精神：
-#   - 管理衛星負責「決策」而非「轉發」
-#   - 階層性體現在控制邏輯，而非資料路徑
-# ============================================================================
-
-# Management-hop switches (控制資料面是否實際繞行管理衛星)
-# 預設都為 False：控制面決策 + 資料面直達（避免 loops）
-ENFORCE_MGMT_HOP_CROSS_PID = os.environ.get('LOHI_ENFORCE_MGMT_HOP_CROSS_PID', '0') not in ['0','false','False']
-ENFORCE_MGMT_HOP_SAME_PID  = os.environ.get('LOHI_ENFORCE_MGMT_HOP_SAME_PID', '0') not in ['0','false','False']
+# Enforce management-hop at every group (LoHi management behavior)
+ENFORCE_MGMT_HOP = os.environ.get('LOHI_ENFORCE_MGMT_HOP', '1') not in ['0','false','False']
 
 # Group-level cost (Tg) modeling (since no GET/ICN)
 # MODE: 'constant' (default) | 'off'
@@ -645,6 +622,13 @@ class BorderSelector:
 # [7] 端到端 fstate 拼接
 # ==========================
 
+def _dijkstra_in_pid(G_pid: nx.Graph, src: int, dst: int) -> List[int]:
+    try:
+        return nx.shortest_path(G_pid, src, dst, weight='weight')
+    except Exception:
+        return []
+
+
 # ========================================================================
 # Phase 1: 勢能單調 + ECMP 擾動 - 模組級輔助函數
 # ========================================================================
@@ -662,6 +646,7 @@ def _add_ecmp_perturbation(G: nx.Graph, eps: float = 1e-8) -> None:
         - weight_eff = weight + perturbation
         - perturbation ∈ [0, eps)
     """
+    import random
     for u, v, data in G.edges(data=True):
         # 邊 ID：保證無向圖中 (u,v) 和 (v,u) 使用相同 seed
         edge_id = (min(u, v), max(u, v))
@@ -760,98 +745,6 @@ def _select_potential_descent_neighbor(
     # 3. 被迫上升（選上升最少的）
     # 這種情況理論上不應該發生在正確的勢能場中，但作為 fallback
     return min(valid_neighbors, key=lambda n: (dist[n], n))
-
-
-def _route_direct_in_subgraph(src: int, dst: int, pid: int, 
-                               router, G_sat: nx.Graph) -> Optional[int]:
-    """
-    在 PID 子圖內，從 src 直接路由到 dst（使用勢能場）
-    
-    注意：不處理 src==dst 的情況（應該在主流程攔截）
-    
-    Returns:
-        下一跳衛星 ID，或 None（失敗）
-    """
-    # 檢查連通性
-    comp_map = router.pid_sat_comp.get(pid, {})
-    src_comp = comp_map.get(src)
-    dst_comp = comp_map.get(dst)
-    
-    if src_comp is None or dst_comp is None or src_comp != dst_comp:
-        return None
-    
-    # ★ 關鍵修復：不使用 router.pid_subgraphs（多線程競態），直接在 G_sat 上計算
-    # 但只考慮該 PID 的節點
-    pid_nodes = set(router.pid_members.get(pid, []))
-    if src not in pid_nodes or dst not in pid_nodes:
-        return None
-    
-    # 創建臨時子圖視圖（只包含該 PID 的節點）
-    subgraph = G_sat.subgraph(pid_nodes)
-    
-    # 使用勢能場選擇下一跳（tolerance 對齊 ECMP 擾動）
-    potential = _build_potential_field([dst], subgraph, weight='weight_eff')
-    neighbors = list(G_sat.neighbors(src))  # 使用 G_sat 的鄰居（確保是當前拓撲）
-    
-    # 只考慮在同一 PID 內的鄰居
-    neighbors = [n for n in neighbors if n in pid_nodes]
-    
-    if not neighbors:
-        return None
-    
-    next_hop = _select_potential_descent_neighbor(
-        src, neighbors, potential, tolerance=1e-8
-    )
-    
-    return next_hop
-
-
-def _fallback_spf_one_hop(src: int, dst: int, G_sat: nx.Graph) -> Optional[int]:
-    """
-    保底機制：在全網圖上計算到 dst 的 SPF，選擇能使距離下降的鄰居
-    
-    只選一步，不預先計算整條路徑
-    
-    Returns:
-        下一跳衛星 ID，或 None（失敗）
-    """
-    if not G_sat.has_node(src) or not G_sat.has_node(dst):
-        return None
-    
-    try:
-        # 計算從 dst 到所有節點的距離（反向 Dijkstra）
-        distances = nx.single_source_dijkstra_path_length(
-            G_sat, dst, weight='weight_eff'
-        )
-        
-        if src not in distances:
-            return None
-        
-        src_dist = distances[src]
-        neighbors = list(G_sat.neighbors(src))
-        
-        if not neighbors:
-            return None
-        
-        # 找能縮短距離的鄰居
-        candidates = []
-        for neighbor in neighbors:
-            if neighbor in distances:
-                neighbor_dist = distances[neighbor]
-                edge_weight = G_sat[src][neighbor].get('weight_eff', 1.0)
-                # 檢查是否在最短路徑上
-                if abs(src_dist - edge_weight - neighbor_dist) < 1e-6:
-                    candidates.append(neighbor)
-        
-        # 確定性選擇：ID 最小的鄰居
-        if candidates:
-            return min(candidates)
-        
-        return None
-    
-    except Exception:
-        return None
-
 
 def _break_2cycles(
     fstate: Dict[Tuple[int,int], Tuple[int,int,int]],
@@ -1031,6 +924,38 @@ def build_fstate_lohi(
             mv %= num_isls_per_sat[v]
         return mu, mv
     
+    def _first_step(Gp: nx.Graph, cur:int, target:int) -> Optional[int]:
+        """群內最短路第一步，使用確定性 tie-breaking（選擇最小ID的鄰居）"""
+        try:
+            if cur == target:
+                return None
+            
+            # 從 target 反向計算最短距離（確保一致性）
+            dist_from_target = nx.single_source_dijkstra_path_length(Gp, target, weight='weight')
+            if cur not in dist_from_target:
+                return None
+            
+            cur_dist = dist_from_target[cur]
+            
+            # 找到所有能縮短距離的鄰居
+            candidates = []
+            for neighbor in Gp.neighbors(cur):
+                if neighbor not in dist_from_target:
+                    continue
+                edge_weight = Gp[cur][neighbor].get('weight', 1.0)
+                neighbor_dist = dist_from_target[neighbor]
+                # neighbor 在最短路徑上：dist(cur, target) = edge(cur, neighbor) + dist(neighbor, target)
+                if abs(cur_dist - edge_weight - neighbor_dist) < 1e-6:
+                    candidates.append(neighbor)
+            
+            # 確定性選擇：ID 最小的鄰居
+            if candidates:
+                return min(candidates)
+            
+            return None
+        except Exception:
+            return None
+
     # 目的群為根：快取 prev map，確保全網一致的下一個群決策
     dst_pid_prev_cache: Dict[int, Dict[int,int]] = {}
     # **群內最短路樹快取**：(dst_sat, src_pid) -> {sat_id: next_hop_sat_id}
@@ -1041,57 +966,102 @@ def build_fstate_lohi(
     
     fstate: Dict[Tuple[int,int], Tuple[int,int,int]] = {}
 
+    def _build_intra_group_tree(dst_sat: int, src_pid: int) -> Dict[int, int]:
+        """
+        建立以 dst_sat 為根的群內最短路樹（確定性 Dijkstra with tie-breaking）
+        返回 tree[sat] = next_hop 朝向 dst_sat
+        
+        使用反向 Dijkstra 確保所有節點看到一致的距離場
+        """
+        Gp = router.pid_subgraphs.get(src_pid, nx.Graph())
+        if not Gp.has_node(dst_sat):
+            return {}
+        
+        # 使用 heap-based Dijkstra，添加 node_id 作為第二優先級確保確定性
+        dist = {dst_sat: 0.0}
+        prev = {}
+        # Priority queue: (distance, node_id, node)
+        pq = [(0.0, dst_sat, dst_sat)]
+        visited = set()
+        
+        while pq:
+            d, _, u = heapq.heappop(pq)
+            
+            if u in visited:
+                continue
+            visited.add(u)
+            
+            # 展開鄰居
+            for v in Gp.neighbors(u):
+                if v in visited:
+                    continue
+                
+                edge_weight = Gp[u][v].get('weight', 1.0)
+                new_dist = d + edge_weight
+                
+                # 只在找到更短路徑時更新（使用精度容忍）
+                if v not in dist or new_dist < dist[v] - EPS:
+                    dist[v] = new_dist
+                    prev[v] = u
+                    heapq.heappush(pq, (new_dist, v, v))
+        
+        return prev
+
+    def _geo_greedy_next_hop(G: nx.Graph, cur: int, target: int) -> Optional[int]:
+        """
+        地理貪婪 fallback：選擇能最接近 target 的鄰居
+        基於節點位置（如果可用）或簡單選擇最小 ID
+        """
+        if cur == target:
+            return None
+        
+        if not G.has_node(cur) or not G.has_node(target):
+            return None
+        
+        neighbors = list(G.neighbors(cur))
+        if not neighbors:
+            return None
+        
+        # 簡單策略：選擇最小 ID（確定性）
+        # TODO: 如果有地理位置信息，可以計算實際距離
+        return min(neighbors)
+
     # =========================================================================
-    # LoHi 三段式階層路由（控制面 vs 資料面分離）
+    # 改進 13 v3: 全局勢能場 + 快取優化
     # =========================================================================
-    #
-    # 📊 控制面職責（由管理衛星執行，每個 snapshot 計算一次）：
-    #
-    # 1️⃣ 群間路由決策（Group-level SPF）
-    #    - 管理衛星在群圖(GG)上計算最短路徑
-    #    - 決定從 src_PID → dst_PID 的下一跳 PID
-    #    - 輸出：pid_to_group_path[dst_pid] = (dist, prev)
-    #
-    # 2️⃣ 邊界衛星對選擇（Border Pair Selection）
-    #    - 管理衛星選擇最佳的跨群 ISL
-    #    - 考慮負載、延遲等因素（BorderSelector）
-    #    - 輸出：(u_border, v_border) 對
-    #
-    # 3️⃣ 路由提示生成（Routing Hints / FIB Generation）
-    #    - 管理衛星將決策結果物化成 fstate
-    #    - 每個衛星獲得「往哪個邊界」的提示
-    #    - 輸出：fstate[(u, dst)] = (next_hop, my_if, next_if)
-    #
-    # 🚀 資料面行為（封包轉發，不繞管理衛星）：
-    #    - 查表 fstate，直接往邊界衛星路由
-    #    - 使用勢能場快速計算下一跳
-    #    - 不需要封包實際經過管理衛星
-    #
-    # ✅ 這種設計的優勢：
-    #    - 階層性體現在控制邏輯（三段式決策）
-    #    - 避免資料面繞行導致的 loops
-    #    - 快速（勢能場）+ 可擴展（群分區）
+    # 預計算：為每個 GS 計算一次全局勢能場，所有源衛星共用
+    # 性能：100 GS × 200 時間步 = 20K Dijkstra (vs 31.68M naive)
     # =========================================================================
     
-    # -------------------------------------------------------------------------
-    # 控制面職責 1️⃣：群間路由決策（Group-level SPF）
-    # -------------------------------------------------------------------------
-    # 為每個目標 GS 計算群級路徑（由管理衛星邏輯執行）
-    pid_to_group_path = {}  # dst_pid -> (dist, prev) 從 group SPF
-    
+    # 步驟 1: 建立 GS -> 附掛衛星的映射
+    gs_to_dst_sat = {}
     for gid in range(num_gs):
         dst_node = num_sats + gid
-        if dst_node not in dst_pid_map:
-            continue
+        # 優先使用可見衛星
+        candidates = ground_station_satellites_in_range.get(gid, []) if isinstance(ground_station_satellites_in_range, dict) else []
+        if candidates:
+            dst_sat = candidates[0][1] if isinstance(candidates[0], (list,tuple)) and len(candidates[0])>1 else candidates[0]
+        elif dst_node in dst_sat_map:
+            # 使用歷史 sticky downlink
+            dst_sat = dst_sat_map[dst_node]
+        else:
+            # Fallback: 簡單映射
+            dst_sat = gid % num_sats
         
-        dst_pid = dst_pid_map[dst_node]
-        
-        # 如果還沒有計算過這個 dst_pid 的群級路徑
-        if dst_pid not in pid_to_group_path:
-            dist, prev = gplanner.distances_to(dst_pid)
-            pid_to_group_path[dst_pid] = (dist, prev)
+        gs_to_dst_sat[gid] = dst_sat
+        # 更新 dst_sat_map 供下次使用
+        dst_sat_map[dst_node] = dst_sat
     
-    # 對每個源衛星 → 目標 GS 進行路由
+    # 步驟 2: 為每個唯一的目標衛星計算全局勢能場（使用快取）
+    dst_sat_to_potential = {}
+    unique_dst_sats = set(gs_to_dst_sat.values())
+    
+    for dst_sat in unique_dst_sats:
+        # 使用全局衛星圖 G_sat 進行反向 Dijkstra
+        potential_dist = _build_potential_field([dst_sat], G_sat, weight='weight_eff')
+        dst_sat_to_potential[dst_sat] = potential_dist
+    
+    # 步驟 3: 對每個源衛星和目標 GS，使用快取的全局勢能場進行路由
     for u in range(num_sats):
         src_pid = sat_pid.get(u)
         if src_pid is None:
@@ -1099,155 +1069,31 @@ def build_fstate_lohi(
         
         for gid in range(num_gs):
             dst_node = num_sats + gid
-            if dst_node not in dst_sat_map:
-                continue
+            dst_sat = gs_to_dst_sat[gid]
             
-            dst_sat = dst_sat_map[dst_node]
-            dst_pid = sat_pid.get(dst_sat)
-            if dst_pid is None:
+            # 從快取中取得全局勢能場
+            potential_dist = dst_sat_to_potential.get(dst_sat)
+            if potential_dist is None:
                 continue
             
             # 特殊情況：已經在目標衛星
             if u == dst_sat:
                 gsl_if_idx = gid_to_sat_gsl_if_idx[gid] if gid_to_sat_gsl_if_idx and gid < len(gid_to_sat_gsl_if_idx) else 0
-                my_if = num_isls_per_sat[u] + gsl_if_idx if num_isls_per_sat and u < len(num_isls_per_sat) else gsl_if_idx
-                fstate[(u, dst_node)] = (dst_node, my_if, 0)
+                fstate[(u, dst_node)] = (dst_node, gsl_if_idx, 0)
                 continue
             
-            # ----------------------------------------------------------------
-            # 情況 A: 同群路由 (src_pid == dst_pid)
-            # ----------------------------------------------------------------
-            if src_pid == dst_pid:
-                mgmt_sat = router.pid_mgmt_sat.get(src_pid)
-                comp_map = router.pid_sat_comp.get(src_pid, {})
-                u_comp = comp_map.get(u)
-                dst_comp = comp_map.get(dst_sat)
-                mgmt_comp = comp_map.get(mgmt_sat) if mgmt_sat else None
-                
-                # 決定目標
-                target = None
-                if u == mgmt_sat:
-                    # 管理衛星直接往目標走
-                    target = dst_sat
-                elif (ENFORCE_MGMT_HOP_SAME_PID and mgmt_sat is not None and 
-                      u_comp == mgmt_comp == dst_comp):
-                    # 同群路由：經過管理衛星（已知導致 loop，default=False）
-                    target = mgmt_sat
-                else:
-                    # 直接到目標
-                    target = dst_sat
-                
-                # 在群內路由
-                next_hop = _route_direct_in_subgraph(u, target, src_pid, router, G_sat)
-                
-                # ★ Fix-3: 保底機制
-                if next_hop is None:
-                    next_hop = _fallback_spf_one_hop(u, dst_sat, G_sat)
-                
-                if next_hop is not None:
-                    my_if, next_if = _isl_if_idxs(u, next_hop)
-                    fstate[(u, dst_node)] = (next_hop, my_if, next_if)
-                # 否則依賴 holdover
+            # 一般情況：選擇勢能下降的鄰居
+            neighbors = list(G_sat.neighbors(u)) if G_sat.has_node(u) else []
+            if not neighbors:
+                # 孤立節點，依賴 holdover
                 continue
             
-            # ----------------------------------------------------------------
-            # 情況 B: 跨群路由 (src_pid != dst_pid)
-            # ----------------------------------------------------------------
-            # 控制面職責 1️⃣：查詢群間路徑（管理衛星已計算好）
-            dist, prev = pid_to_group_path.get(dst_pid, ({}, {}))
-            next_pid = prev.get(src_pid)
+            step = _select_potential_descent_neighbor(u, neighbors, potential_dist, tolerance=1e-6)
             
-            if next_pid is None:
-                # 群圖不連通
-                continue
-            
-            # -------------------------------------------------------------------------
-            # 控制面職責 2️⃣：邊界衛星對選擇（管理衛星決策）
-            # -------------------------------------------------------------------------
-            # BorderSelector 根據負載、延遲等因素選擇最佳跨群 ISL
-            border_pair = BorderSelector.pick_border_pair(
-                G_sat, gplanner, src_pid, next_pid, sat_pid,
-                src_sat=u, router=router
-            )
-            
-            if not border_pair:
-                continue
-            
-            u_border, v_border = border_pair
-            # 暫無次佳邊界（未來可擴展）
-            u_border2, v_border2 = None, None
-            
-            # -------------------------------------------------------------------------
-            # 控制面職責 3️⃣：FIB 生成（物化路由提示到 fstate）
-            # -------------------------------------------------------------------------
-            
-            # ★ B1. 硬規則：邊界直接跳轉（多層 fallback）
-            if u == u_border:
-                # 1. 嘗試主邊界
-                if G_sat.has_edge(u_border, v_border):
-                    my_if, next_if = _isl_if_idxs(u_border, v_border)
-                    fstate[(u, dst_node)] = (v_border, my_if, next_if)
-                    continue
-                
-                # 2. 嘗試次佳邊界
-                if u_border2 and v_border2:
-                    if u == u_border2 and G_sat.has_edge(u_border2, v_border2):
-                        my_if, next_if = _isl_if_idxs(u_border2, v_border2)
-                        fstate[(u, dst_node)] = (v_border2, my_if, next_if)
-                        continue
-                    else:
-                        # 在群內朝 u_border2 走
-                        next_hop = _route_direct_in_subgraph(u, u_border2, src_pid, router, G_sat)
-                        if next_hop:
-                            my_if, next_if = _isl_if_idxs(u, next_hop)
-                            fstate[(u, dst_node)] = (next_hop, my_if, next_if)
-                            continue
-                
-                # 3. 嘗試管理中繼（跨群邊界 fallback）
-                mgmt_sat = router.pid_mgmt_sat.get(src_pid)
-                if ENFORCE_MGMT_HOP_CROSS_PID and mgmt_sat:
-                    comp_map = router.pid_sat_comp.get(src_pid, {})
-                    if comp_map.get(u) == comp_map.get(mgmt_sat):
-                        next_hop = _route_direct_in_subgraph(u, mgmt_sat, src_pid, router, G_sat)
-                        if next_hop:
-                            my_if, next_if = _isl_if_idxs(u, next_hop)
-                            fstate[(u, dst_node)] = (next_hop, my_if, next_if)
-                            continue
-                
-                # 4. SPF 保底（目標是邊界）
-                fallback_target = u_border2 if u_border2 else u_border
-                next_hop = _fallback_spf_one_hop(u, fallback_target, G_sat)
-                if next_hop:
-                    my_if, next_if = _isl_if_idxs(u, next_hop)
-                    fstate[(u, dst_node)] = (next_hop, my_if, next_if)
-                    continue
-                
-                # 5. 條件式 holdover
-                if prev_fstate and (u, dst_node) in prev_fstate:
-                    prev_entry = prev_fstate[(u, dst_node)]
-                    prev_next_hop = prev_entry[0]
-                    if G_sat.has_edge(u, prev_next_hop):
-                        fstate[(u, dst_node)] = prev_entry
-                # 否則不寫入（空缺）
-                continue
-            
-            # ★ B2. 資料面：非邊界衛星直接往邊界路由（不繞管理衛星）
-            # 
-            # 設計理念：
-            # - 控制面已經決定好「往哪個邊界出去」（u_border）
-            # - 資料面只需執行：直接用勢能場路由到 u_border
-            # - 不需要繞行管理衛星（避免 loops，提升性能）
-            
-            next_hop = _route_direct_in_subgraph(u, u_border, src_pid, router, G_sat)
-            
-            # 保底機制
-            if next_hop is None:
-                next_hop = _fallback_spf_one_hop(u, u_border, G_sat)
-            
-            if next_hop is not None:
-                my_if, next_if = _isl_if_idxs(u, next_hop)
-                fstate[(u, dst_node)] = (next_hop, my_if, next_if)
-            # 否則依賴 holdover
+            if step is not None:
+                my_if, next_if = _isl_if_idxs(u, step)
+                fstate[(u, dst_node)] = (step, my_if, next_if)
+            # 否則依賴 holdover（保持前一時刻的路由）
 
     # Ground stations to ground stations
     # **改進 12**: Source GS sticky uplink
@@ -1467,6 +1313,8 @@ def algorithm_lohi(
     # **改進 12**: 分批處理缺失路由（每批最多 2000 條）
     # 冷啟動時可能有很多缺失，分批補洞避免過度計算
     if missing_routes:
+        import networkx as nx
+        
         # 分批大小（避免一次性計算太多 SPF）
         batch_size = 2000
         batches_to_process = (len(missing_routes) + batch_size - 1) // batch_size
@@ -1577,6 +1425,7 @@ def _infer_constellation_config(num_sats: int) -> Optional[Tuple[int, int]]:
     
     # 嘗試因數分解找接近正方形的配置
     # 優先選擇接近 sqrt(n) 的因數對
+    import math
     best_factor = None
     min_diff = float('inf')
     sqrt_n = int(math.sqrt(num_sats))

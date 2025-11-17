@@ -1,0 +1,865 @@
+Load-Aware Hierarchical Information-centric
+Routing for Large-scale LEO Satellite Networks
+Fei Yan∗ , Zhiyuan Wang∗†¶ , Shan Zhang∗†§ , Qingkai Meng‡ , and Hongbin Luo∗†§
+∗ School of Computer Science and Engineering, Beihang University, Beijing, China
+† Zhongguancun Laboratory, Beijing, China
+‡ Institute of Artificial Intelligence, Beihang University, Beijing, China
+§ State Key Laboratory of Software Development Environment, Beijing, China
+
+2024 IEEE Wireless Communications and Networking Conference (WCNC) | 979-8-3503-0358-2/24/$31.00 ©2024 IEEE | DOI: 10.1109/WCNC57260.2024.10570792
+
+¶ State Key Laboratory of Virtual Reality Technology and Systems, Beijing, China
+
+Email: {yanfeienter, zhiyuanwang, zhangshan18, mengqingkai, luohb}@buaa.edu.cn
+
+Abstract—The emerging large-scale low earth orbit (LEO)
+constellation is expected to provide global Internet services.
+However, large-scale satellite networks meet the challenges of
+topology dynamics and continuous traffic variation. This paper
+proposes LoHi, a Load-aware Hierarchical Information-centric
+(LoHi) Routing Protocol based on constellation Partitioning and
+logic path identifier (PID), to address the above challenges.
+Specifically, LoHi divides a constellation into satellite groups
+and only keeps track of the inter-satellite link (ISL) state within
+each group instead of the entire constellation, stabilizing global
+routing. Moreover, LoHi adopts the PID to denote the logic
+connectivity of adjacent satellite groups, which corresponds to
+multiple physical ISLs. Accordingly, the hierarchical multipath
+routing is calculated based on the inner-group and inter-group
+connectivity information. Furthermore, LoHi adjusts forwarding
+decisions according to the real-time traffic load on the ISL and
+group-level inter-group paths to reduce packet drop and queuing
+delay in a hierarchical pattern. Packet-level experiment results
+show that LoHi achieves a higher packet delivery ratio than the
+state-of-the-art mechanisms (up to 132.12%).
+Index Terms—Satellite networks, routing protocol, logic path
+identifier, load balance.
+
+I. I NTRODUCTION
+A. Background & Motivation
+Large-scale low earth orbit (LEO) satellite networks are
+becoming a vital communication infrastructure that provides
+low-latency and broadband Internet services [1]. The LEO
+constellations deployed by SpaceX and OneWeb are promising
+to support many delay-sensitive Internet applications, e.g.,
+live video streaming, remote sensing, and real-time communication. This goal requires reliable content delivery within
+the LEO satellite constellation via the inter-satellite links
+(ISLs) [2]. Therefore, it is crucial to develop an appropriate
+intra-domain routing architecture and design a reliable routing
+mechanism for content delivery in large-scale constellations.
+The challenges of achieving reliable content delivery (i.e.,
+high packet delivery ratio) in large-scale LEO constellations
+are two-fold: 1) dynamic topology caused by intermittent ISLs;
+2) unbalanced traffic distribution on the constellation. On the
+This work was supported by National Natural Science Foundation of China
+under Grants 62202021, 62225201, and 62271019, in part by the State Key
+Laboratory of Software Development Environment under Grant SKLSDE2022ZX-18.
+
+one hand, the regular and occasional ISL failure renders the
+satellite network topology frequently change [3]. On the other
+hand, the Geo-distributed population yields unbalanced traffic
+from the global perspective, which leads to an unbalanced load
+for large-scale satellite networks [4]–[6]. Overcoming these
+challenges requires an appropriate routing architecture.
+The classic IP-based (i.e., host-centric) routing architecture adopts an end-to-end communication model, which is
+vulnerable to topology changes. Moreover, the end-to-end
+communication model is also inefficient in distributing popular
+contents (e.g., popular live video) due to redundant delivery
+[7]. Hence, the classic IP-based routing architecture may not
+be able to accommodate the large-scale satellite networks.
+In contrast, information-centric network (ICN) routing architecture focuses on contents (instead of hosts). The named
+contents can be cached and re-used for subsequent requests,
+enabling reliable content sharing. However, the informationcentric routing architecture cannot accommodate the intermittent ISLs, since it follows stateful forwarding. This will lead
+to a poor performance for the end-to-end traffic pattern.
+The discussions above indicate that directly adopting existing terrestrial routing architectures in large-scale LEO satellite
+networks is not feasible. Therefore, it is necessary to investigate the topology feature and customize a proper routing
+architecture for this brand-new network circumstance. To this
+end, this paper proposes a load-aware hierarchical routing architecture for large-scale LEO satellite networks by integrating
+the advantages of IP-based and ICN-based routing paradigms.
+B. Related Works
+We review the literature closely related to our study in this
+article. They include the routing mechanisms that deal with
+satellite networks’ topology dynamics and load balance.
+1) Routing mechanisms on dealing with topology dynamics:
+Several studies integrate the topology control strategy (i.e.,
+virtual topology method) with the link-state routing in satellite
+networks to deal with the occasional ISL failure (e.g., [8], [9]).
+For example, Pan et al. in [8] integrate the link-state detection
+with the regular routing table updates to reduce the onboard
+satellite memory. Moreover, some studies have explored topology management strategy (i.e., constellation partitioning) to
+
+979-8-3503-0358-2/24/$31.00
+©2024 Yang
+IEEEMing Chiao Tung University. Downloaded on October 20,2024 at 13:34:08 UTC from IEEE Xplore. Restrictions apply.
+Authorized
+licensed use limited to: National
+
+stabilize the global topology, yielding a hierarchical routing
+pattern [10], [11]. For example, Zhang et al. in [10] leverage
+the topology feature to divide the constellation into multiple
+areas and restrict the ISL state change within the area to tackle
+the strong topology dynamics.
+2) Routing mechanisms for on-board load balance: The
+above routing mechanisms could get relatively good results
+when the network traffic is light. But their performance
+will decrease as traffic increase. Accordingly, several studies
+examine the problem of load balancing [4]–[6], [9], [12]. For
+example, Taleb et al. in [4] consider the congestion status
+among neighboring satellites when it selects the forwarding
+ISL. Song et al. in [5] propose a traffic-light satellite routing
+strategy to reduce packet drop and distribute traffic burdens
+fairly based on the ISL congestion status. However, the above
+routing mechanisms still suffer frequent routing updates, decreasing the content delivery performance under large-scale
+constellations, especially when ISL failure occurs.
+Different from the literature above, our study in this paper
+will customize a proper load-aware routing architecture for
+large-scale satellite networks by integrating the benefits of IPbased and ICN-based routing paradigm.
+C. Main Results and Key Contributions
+This paper presents a Load-aware Hierarchical Informationcentric (LoHi) Routing Protocol for achieving reliable content
+delivery in large-scale LEO satellite networks. Our main
+results and key contributions are as follows:
+• Propose a hierarchical information-centric routing architecture LoHi, enabling harness advantages of hostcentric and information-centric routing: LoHi reduces
+the topology dynamics by partitioning the constellation
+into several satellite groups, and each LoHi satellite only
+keeps track of the ISL state within each satellite group.
+Moreover, LoHi identifies the logic path of adjacent
+satellite groups, and adopts a hierarchical routing scheme
+(based on in-packet path identifiers).
+• Design a load-aware hierarchical content retrieval pattern: LoHi introduces a load-aware hierarchical content
+retrieval scheme, releasing the advantages of host-centric
+and information-centric routing. Specifically, LoHi adopts
+a pull-based inter-group content retrieval by sending
+GET packets (information-centric) that record the intergroup PID of traversed satellite groups. Moreover, LoHi
+employs an push-based (host-centric) inner-group routing
+based on the in-packet PID. Particularly, LoHi can adjust
+forwarding decision according to the real-time traffic load
+on inter-group logic path and ISLs (i.e., select a properly
+next-group or next-hop satellite).
+• Packet-level performance evaluation: We evaluate the
+performance of our proposed LoHi under the OneWeb
+constellation. Results show that LoHi outperforms the
+state-of-the-art routing mechanisms up to 132.12% in
+terms of packet delivery ratio.
+The remainder of the paper is organized as follows. Section II elaborates the key idea of LoHi. Section III presents
+
+Direction of
+movement
+
+Si,j's interfaces and queues:
+Si,j+1
+
+Si-1,j
+Seam
+
+Si,j+1
+
+Si+1,j
+
+if1
+
+Si-1,j
+
+Si+1,j+1
+
+if4
+if2
+
+Si,j
+
+Si,j
+if3
+
+Si,j-1
+
+Si,j-1
+Queue of ISL
+Direction
+
+Interplane ISL
+
+Intraplane ISL
+
+Fig. 1. Illustration of polar constellation and ISL’s queue.
+
+the design of LoHi in details. Section IV evaluates the performance of LoHi. Section V concludes this paper.
+II. L O H I ROUTING A RCHITECTURE
+A. Satellite Network Model
+We consider a polar orbit constellation with N orbital planes
+and M satellites on each plane. The satellites are orbiting at the
+same altitude. Let {Si,1 , Si,2 , ..., Si,M } denote the satellites on
+the i-th plane. The satellites in the same orbit plane are spaced
+uniformly, i.e., the angular distance between two adjacent
+satellites is ω = 2π/M . Overall, satellite networks exhibit a
+deterministic neighbour relationship. Moreover, each satellite
+has at most four neighbors, which are connected via ISL
+(e.g., laser ISLs). As shown in Fig. 1, the satellite Si,j has
+four neighbors {Si−1,j , Si,j−1 , Si,j+1 , Si+1,j }. Furthermore,
+we suppose that there is a queue for each interface to buffer
+pending forwarding packets. As shown in Fig. 1, the satellite
+S1,5 has four queues.
+B. Key Idea of LoHi
+LoHi aims to develop a routing mechanism that considers
+routing stabilization and load balance for satellite networks.
+1) Topology Management: In terms of topology management, our proposed LoHi achieves the global topology stability
+via the following two approaches:
+• Constellation Partition: We divide the constellation
+into multiple satellite groups, and the ISL state will
+be only disseminated within the corresponding group.
+Specifically, each group consists of p orbital planes and s
+satellites on each orbital plane. The satellite groups have
+deterministic neighbor relations. The neighbor groups are
+mutually connected by p intra-orbit ISLs or s inter-orbit
+ISLs. In practice, the group scale (p, s) could be flexible,
+which might be determined by the network operator.
+• Logic Connection: We introduce the path identifier (PID)
+to represent the logic path between adjacent groups.
+These PIDs will be used in the inter-group content request
+and data delivery. Generally, they will not be advertised
+throughout the network and will be known only by
+the two adjacent groups. Moreover, a PID is associated
+with multiple physical ISLs, which is used to carry out
+multipath inter-group routing and improve the stability of
+the inter-group content forwarding.
+
+Authorized licensed use limited to: National Yang Ming Chiao Tung University. Downloaded on October 20,2024 at 13:34:08 UTC from IEEE Xplore. Restrictions apply.
+
+S2,2's inter-group routing table:
+Content
+Next-hop
+Path
+Name
+Group
+Identifier
+Group 2
+PID1
+C1
+Group 3
+PID2
+GET:
+
+Cost
+2
+2
+
+Group 1
+f1
+(I.1)
+
+f3
+
+S2,1 (D.3) S3,1 (D.3) S4,1
+S3,2
+PID1 S
+(I.2)
+
+f2
+
+(I.2)
+S4,3
+
+S3,3
+
+S2,3
+S3,5
+
+(I.1) C1 User1 PID0
+
+S5,4
+S4,5
+
+S2,5
+(I.2) C1 User1 PID0 PID1
+(I.3) C1 User1 PID0 PID1 PID3
+
+(I.4) C1 User1 PID0 PID1 PID3 PID5
+
+Group 3
+
+S3,6
+
+S4,6
+
+User1
+
+S4,2's inner-group routing table:
+Destination
+NID
+
+Content
+Name
+
+S5,3
+
+C2, C3
+
+Next-hop
+NID
+S5,2
+S4,3
+
+Cost
+3
+2
+
+S6,4
+
+S5,5
+S5,6
+
+(D.1) PID3 PID1 PID0 User1 C1 data
+
+Group 4
+PID5
+
+PID0
+GS0
+AS0
+
+Group 2
+
+4,2
+
+C1
+
+AS1
+
+f1
+GS1
+
+(D.2) PID1 PID0 User C1 data
+DATA:
+
+(D.3) PID0 User1 C1 data
+
+Fig. 2. Illustration of how LoHi routing mechanism works.
+
+Fig. 2 plots a simple scenario with four satellite groups, each
+of which consists of nine satellites. Note that PID0 identifies
+the path between Group 1 and terrestrial AS0.
+2) Hierarchical Multipath Routing Calculation: LoHi decouples inner-group routing and inter-group routing to construct a hierarchical multipath routing mechanism by leveraging the constellation partitioning and the PID.
+Inner-group routing: Each LoHi node detects the ISL
+state via the hello mechanism and synchronizes the innergroup ISL State Advertisement (LSA) within corresponding groups rather than the entire network. This yields less
+protocol overhead and improves the routing stability.
+• Inter-group routing: The inter-group routing will construct a group-level topology and generate an inter-group
+routing table on each management satellite. Such an intergroup routing table will be used for guiding the grouplevel content retrieval in a pulling manner (like NDN).
+
+•
+
+3) Hierarchical Load-aware Packet Forwarding Adjustment: LoHi is information-centric and assigns each content
+a unique name with a hierarchical structure. According to
+the content name, LoHi adopts a hierarchical pull-based intergroup and push-based inner-group routing to fetch the desired
+content. Moreover, LoHi adjusts the forwarding decision in a
+hierarchical pattern with the following two aspects:
+Inter-group packet forwarding: Note that the management satellite will append the PID on the GET packet
+(i.e., request) to indicate the next-hop group towards the
+content provider. The inter-group traffic can be estimated
+in the management satellite by collecting content metadata (e.g., content size) in each GET packet. As a result,
+the management satellite can adjust the forwarding decision, i.e., next-hop group. Thus, we could achieve loadaware multipath inter-group routing by properly sending
+GET packets along different next group. Accordingly, the
+DATA will be delivered back to the user following the
+reversed group-level path of forwarding the GET packet.
+• Inner-group packet forwarding: In LoHi, the packets
+(i.e., GET/DATA) will be pushed to a proper destination
+within the group based on the inner-group routing and
+real-time ISL’s queuing status. Particularly, the DATA
+packets will be forwarded within the group based on the
+in-packet PID and real-time ISL’s queuing status.
+•
+
+C. An Illustrative Example
+We show how LoHi works with the help of Fig. 2. Specifically, a User1 in the autonomous system AS0 requests the
+content C1 provided by a Provider in AS1 via the satellite
+network. The content fetch under LoHi follows two stages.
+GET Packet Forwarding: The red arrows in Fig. 2 represent the GET packet forwarding in the constellation. The
+User1 in AS0 desires to obtain the content C1 , thus it issues
+a GET packet containing the name of C1 . The ground station
+(i.e., GS0 ) in AS0 will encode PID0 into the GET packet and
+forward the modified GET packet to the coverage satellite
+S1,1 . As illustrated by the red arrow (I.1) in Fig. 2, when S1,1
+receives the GET packet, it will make a forwarding decision (to
+the management satellite S2,2 of Group 1 based on its innergroup routing table and ISLs’ load status. Then, S2,2 will
+select a proper next group (i.e., Group 2) according to the
+inter-group routing table (as shown in Fig. 2) and estimated
+inter-group traffic status. Then, S2,2 appends PID1 to the end
+of the GET packet and forwards it to one of the egress border
+satellites (i.e., S3,2 ), as illustrated by arrow (I.2). Similarly,
+as shown by arrows (I.3) and (I.4) in Fig. 2, the GET packet
+is forwarded to the satellite S6,5 , which covers GS1 in AS1 .
+While the Provider in AS1 receives the GET packet, it then
+delivers the DATA packet to User1 in the following procedure.
+DATA Packet Forwarding: The blue arrows in Fig. 2
+represent the DATA packet forwarding process based on the
+PID sequence recorded in the GET packet. Specifically, the
+Provider encodes the obtained PID sequence of the GET
+packet into the DATA packet. Then, the DATA packet will be
+forwarded to S6,5 via GS1 . As shown by the blue arrow (D.1)
+in Fig. 2, S6,5 forwards the DATA packet to the nearest border
+satellite S6,4 associated with PID3. If one of the ISLs with a
+heavy load in S5,3 , it adjusts its forwarding decision based on
+the inner-group routing table (as shown in Fig. 2) and ISLs’
+load status. Similarly, the satellites in Group 2 will forward
+the DATA packet based on the encoded PID1 and adjusted
+forwarding decision, as illustrated by arrow (D.2) in Fig. 2. In
+particular, if the inter-group ISL failure occurs (i.e., the black
+cross among border satellites S3,3 and S4,3 ), S4,3 is capable
+of forwarding the DATA packet to Group 1 via an alternative
+inter-group ISL since each PID is associated with multiple
+physical ISLs. Finally, when the DATA packet reaches Group
+1, the border satellite S1,1 will forward the DATA packet to
+
+Authorized licensed use limited to: National Yang Ming Chiao Tung University. Downloaded on October 20,2024 at 13:34:08 UTC from IEEE Xplore. Restrictions apply.
+
+the GS0 via the logic path PID0.
+So far, we have introduced our key ideas of LoHi. Next, the
+LoHi routing algorithm is presented in detail.
+
+Group 1
+S1,2
+S2,3
+
+III. L O H I ROUTING A LGORITHM
+In this section, we first introduce how to build a hierarchical multipath routing. Then, we describe how LoHi adjusts
+forwarding decision based on real-time conditions.
+
+Group 2
+
+PID1
+
+Group 1
+S3,1
+S1,2 S2,2 S3,2
+S3,3
+S2,3
+S2,1
+
+S2,2 S3,2
+
+S4,2
+
+S5,2
+
+S3,3
+
+S4,3
+
+S5,3
+
+(a) Physical link change
+
+Group 2
+
+PID1
+S4,1
+S4,2
+
+S5,1
+S5,2
+
+S4,3
+
+S5,3
+
+S6,2
+
+(b) Inter-group logical path change
+
+Fig. 3. Illustration of physical ISL and inter-group logical connection change.
+
+Inner-group and Inter-group LSA synchronization:
+When the LoHi satellite receives an inner-group LSA,
+it will update its inner-group LSDB and disseminate the
+LSA to adjacent satellites within the group. Similarly,
+the inter-group LSA will be announced within the corresponding two groups. Particularly, each inner-group
+node will update the mapping of PID and the border
+satellite after receiving the inter-group LSA. For example,
+as shown in Fig. 3(b), the border satellite S3,3 and S4,3
+will create an inter-group LSA for the inter-group ISL
+failure and disseminate the LSA with the corresponding
+groups (denoted by blue arrows). Such an LSA announce
+manner can efficiently propagate link state changes within
+the satellite group and yield a small protocol overhead,
+improving global routing stability.
+• Logic inter-group path LSA synchronization: When
+the logic inter-group path change is detected, it will be
+advertised to the management satellite of each group, as
+illustrated by orange arrows in Fig. 3(b). This enables the
+management satellite to maintain up-to-date information
+on the logic inter-group path and calculate the inter-group
+routing table to guide packet forwarding.
+Moreover, each satellite in a group maintains a mapping from
+the PID to the border satellites, which incurs little overhead.
+4) Multipath Routing Calculation: LoHi node uses the
+collected adjacency information (i.e., inner-group LSA or logic
+inter-group path LSA) to construct a hierarchical multipath
+routing. Specifically, each inner-group node uses the collected
+inner-group LSA in the corresponding LSDB to build an innergroup routing table. Note that an extension of the shortest
+path first algorithm is employed to calculate the inner-group
+multipath routing. More specifically, the satellite first gets the
+number of links, which is the number of calculation iterations.
+Then, the satellite selects one of the links to calculate the cost
+to reach every inner-group satellite using Dijikstra’s algorithm.
+This process is repeated for every available ISL. Note that the
+satellite also ranks the next hops for each satellite based on
+their respective cost. A similar group-level inter-group routing
+calculation is conducted.
+Next, we present how the LoHi adjusts the forwarding
+direction based on the real-time traffic status.
+•
+
+A. Hierarchical Multipath Routing Calculation
+We detailed elaborate the hierarchical multipath routing
+mechanism based on the constellation partitioning as follows.
+1) Detection of Physical Link Status: To deal with links
+dynamics in the context of rapidly moving satellites, LoHi
+dynamically adopts the Hello mechanism to detect the link
+state (i.e., link failure and recovery).
+• Inner-group link state detection: In our proposed LoHi
+routing mechanism, the satellite and ground-station (GS)
+will detect the connectivity of the ISL and groundsatellite link (GSL) status based on a hello protocol.
+Therefore, LoHi satellites can keep the ISL and GSL
+connectivity information up-to-date. When an inner-group
+link state change is detected, the LoHi satellite will
+initiate an inner-group LSA and announce the inner-group
+LSA with the group. For example, as shown in Fig. 3(a),
+S1,2 and S2,2 will create an inner-group LSA for the ISL
+failure (denoted by the black cross), and disseminate the
+LSA within the group (denoted by the dash green arrows).
+• Inter-group link state detection: Similarly, the intergroup link changes will trigger the LoHi satellite (i.e.,
+border satellite) to generate an inter-group LSA, which
+contains the adjacent group ID of the neighboring satellite. For example, as shown in Fig. 3(a), the LoHi satellite
+S3,3 and S4,3 will create an inter-group LSA for the
+inter-group ISL failure (denoted by the red cross), and
+disseminate the LSA with the corresponding groups.
+2) Detection of Logic Inter-group Path Status: The management satellite will collect the connection relationship
+among the adjacent groups via the inter-group LSA (generated
+by border satellites) to maintain the logical connectivity of
+the inter-group. When all of the physical links between two
+groups are disrupted simultaneously, the logical relationship
+between two adjacent groups changes. Accordingly, the associate management satellites will create an inter-group path
+LSA. For instance, as shown in Fig. 3(b), when the ISLs among
+Group 1 and Group 2 are corrupted, border satellites S3,1 ,
+S3,2 , S3,3 , S4,1 , S4,2 , and S4,3 will generate an inter-group
+LSA with affiliated groups, respectively. Accordingly, when
+management satellites (i.e., S2,2 and S5,2 ) detect the logic intergroup path failure, they will initiate an inter-group path LSA
+and disseminate it to adjacent groups.
+3) Announcement of Physical ISL and Logic Inter-group
+Path Status: Once an LSA (including inner-group LSA, intergroup LSA, or logic inter-group path LSA) is received, it will
+be announced within the corresponding groups. Specifically,
+
+B. Real-time Packet Forwarding Decision
+Based on the above hierarchical multipath routing, LoHi is
+capable of adjusting the forwarding direction according to the
+real-time traffic load in a hierarchical pattern.
+1) Inner-group Forwarding Path Rating: The inner-group
+forwarding path will consider the propagation and queuing
+
+Authorized licensed use limited to: National Yang Ming Chiao Tung University. Downloaded on October 20,2024 at 13:34:08 UTC from IEEE Xplore. Restrictions apply.
+
+Satellite gro
+Managemen
+Inner-grou
+Inter-group
+ISL failure
+
+delays to find an appropriate path. In particular, the queuing
+delay can be calculated based on the output interface’s realtime queue length, as shown in Fig. 1. To calculate the path
+rating, we will calculate the ISL cost of each interface in
+satellite Si,j . Specifically, at time t, the instant ISL cost of
+interface k in Si,j is defined as
+
+Algorithm 1: Hierarchical Load-balancing Forwarding
+Output: Interface intf
+/* Process in Management Satellite */
+1 if GET packet then
+2
+Lookup Inter-group content routing table
+3
+Select the next Group ID with minimal inter-group
+logic path cost Tga to the destination Group
+LCk (t) = Tpk (t) + Tqk (t) + TSk (t),
+(1)
+4
+Encode the PID associated with next Group ID
+where, Tpk (t) denotes the one-way propagation delay among
+into the GET packet
+the adjacent satellite. Tqk (t) denotes a predicted queuing delay 5
+Send the Get packet to next group g
+in ISL k at time t, and it is computed as follows:
+6
+Update traffic matrix Ga and logic path cost Tga
+PK
+in the Inter-group content routing table
+Lk
+(2)
+Tqk (t) = k=1 ,
+/
+Process
+in Forwarding Satellite */
+*
+BW
+7 Lookup Inner-group routing table
+PK
+where,
+k=1 Lk denotes the current queue size. BW is the
+8 Calculate available routes cost LCk to the destination
+bandwidth of an ISL. Moreover, TSk denotes routing detour 9 Select the intf with minimal cost LC
+k
+k
+for the packet delivery with an exponentially distributed.
+10 Send the packet to the output interface intfk
+Based on the above design, a satellite will rate the multiple
+outgoing paths for forwarding decision. Thus, the satellite will
+select the least-cost ISL to forward GET or DATA packet.
+2) Inter-group Forwarding Path Rating via estimating Logic (to simulate the satellite mobility), the network module (to
+Path Loading: Recall that in our proposed LoHi, the group- simulate the protocol stacks), and the traffic generator module
+level traffic loads can be estimated (i.e., traffic matrix Ga ) (to simulate traffic patterns). Moreover, we implement LoHi
+in the management satellite since the GET will be sent to and conduct extensive packet-level experiments to demonstrate
+it for querying the next forwarding group. Accordingly, the the performance of LoHi and compare it with the stat-of-thepredicted number of retrieved DATA packets Ng could be art methods (i.e., NLSR [13], NDN-RFA [14], and LPIH [11]).
+In our simulation, we consider the OneWeb constellation,
+calculated. This motivates us to calculate the expected interwhich
+is a polar-orbit constellation with inclination 87.9°. It
+group path cost at the group level. Let Tg denote the interconsists
+720 satellites that fly along 18 orbital planes (i.e.,
+group path cost for next-group forwarding, which is computed
+40
+satellites
+on each orbit plane). Moreover, we suppose that
+as follows:
+Ng × Lavg
+each
+satellite
+has at most four ISLs (i.e., intra-plane ISLs
+,
+(3)
+Tg =
+Alinks × BW
+and inter-plane ISLs). The payload of each DATA packet is 1
+where, Lavg is the length of the packet. Moreover, Alinks is the KB. For simulation convenience, we consider 10 Mbps for all
+number of available ISLs among the adjacent satellite group. links (i.e., ISL and GSL). Drop-Tail-based buffer of each link
+equals 500 packets. Furthermore, we simulate occasional ISL
+3) Hierarchical Load-balancing Forwarding Algorithm:
+Algorithm 1 presents the major procedure of forwarding failures by randomly generating the failure events according
+to a Poisson process with a specific rate λ. Each failed ISL
+decisions in LoHi. It mainly consists of two key parts:
+will recover after τ seconds.
+• Inter-group path selection in management satellite:
+Lines 1-6 present the progress of packet forwarding A. Performance Under Stable Network Traffic Flows
+when the management satellite receives a GET packet.
+We evaluate the packet delivery performance achieved by
+Specifically, the management satellite will select the leastNLSR, NDN-RFA, LPIH, and LoHi under the OneWeb conloaded inter-group logic path to forward the GET packet
+stellation. Specifically, the 6 × 10 grouping scheme of LPIH
+and append the associated PID (i.e., based on the PID to
+and LoHi is adopted, i.e., 12 groups with 60 satellites per
+determine the next group).
+group. We focus on the average packet delivery ratio (PDR)
+• Inner-group ISL selection: Lines 7-10 present how a
+with constant request rates (i.e., stable network traffic flows)
+LoHi satellite processes the received packets (GET and
+under an end-to-end traffic pattern. Now, we explore how the
+DATA). Specifically, the pre-calculated inner-group routtraffic load and ISL failure rate affect the content delivery
+ing table will be used to provide a rough direction (i.e.,
+performance of the LoHi routing mechanism.
+Line 7). Further, the forwarding adjustment is carried out
+Impact of Traffic Loads: Fig. 4 shows the results with
+to help make the best decision (i.e., Lines 8-10).
+different traffic loads1 under point-to-point content delivery
+pattern. The horizontal axis represents traffic loads. From Fig.
+IV. P ERFORMANCE E VALUATIONS
+4, we find that LoHi outperforms the state-of-the-art mechaTo simulate the satellite network and conduct packet-level
+nisms, which implies that LoHi can accommodate the heavier
+experiments, we develop a satellite network simulation platform based on OMNeT++. This simulation platform consists
+1 The traffic load is characterized by the number of requests per second in
+of three key modules, including the constellation module our experiments (i.e., 500 packets per second).
+
+Authorized licensed use limited to: National Yang Ming Chiao Tung University. Downloaded on October 20,2024 at 13:34:08 UTC from IEEE Xplore. Restrictions apply.
+
+40
+20
+
+LoHi
+NDN-RFA
+NLSR
+LPIH
+
+0
+500 550 600 650 700 750 800
+
+Requests Per Second
+
+Fig. 4. Avg. PDR under different
+traffic load without ISL failure
+
+80
+60
+40
+
+LoHi
+NDN-RFA
+LPIH
+NLSR
+
+20
+0
+
+0 2 4 6 8 10 12 14 16 18 20
+
+800
+700
+600
+500
+400
+300
+200
+100
+0
+
+ISL Failure Rate (%)
+
+(a) Avg. packet delivery ratio
+
+LoHi
+NDN-RFA
+LPIH
+NLSR
+
+0 2 4 6 8 10 12 14 16 18 20
+
+ISL Failure Rate (%)
+
+(b) Avg. packet delay
+
+Fig. 5. Impact of ISL failure rate on packet delivery performance
+
+traffic load. Specifically, LoHi achieves 7.49%, 59.56%, and
+57.94% higher average PDR than NDN-RFA, NLSR, and
+LPIH, respectively. This is because the LoHi can adjust
+forwarding decisions based on the real-time traffic load on
+each ISL to avoid transient queues and packet drops.
+Impact of ISL Failure Rates: We evaluate whether our
+proposed LoHi routing mechanism performs well in the largescale satellite network with unreliable ISLs. Fig. 5 shows the
+results with different ISL failure rates (i.e., {0, 1, ..., 20}).
+Particularly, we only consider the successful packet delivery
+in terms of packet delay.
+Fig. 5(a) shows that as the ISL failure rate increases, the
+average PDR achieved by the above mechanisms decreases.
+Nevertheless, the performance of LoHi still outperforms the
+state-of-the-art mechanisms. More specifically, the average
+PDR of LoHi is higher than that of NDN-RFA, NLSR, and
+LPIH, up to 39.14%, 132.12%, and 32.22%, respectively. The
+reasons are two-fold. First, LoHi can mitigate the topology
+dynamics of satellite networks based on PID, improving packet
+forwarding reliability. Second, the LoHi can adjust packet
+forwarding decisions based on the real-time traffic load on
+ISLs to reduce the packet drop. As for packet delay, Fig. 5(b)
+shows that the packet delay of the above mechanisms increases
+as the ISL failure rate. This is because the traffic shift occurs
+when ISL fails, resulting in packet queues.
+B. Performance Under Burst Network Traffic
+Now, we compare LoHi and NDN-RFA (i.e., NDN-based
+load balance method) to evaluate their performance in dealing
+with burst traffic. Fig. 6 shows the average throughput with
+shaded areas, indicating the range of fluctuations when one
+of the traffic flows generates a burst of content requests.
+Particularly, the traffic burst occurs at time 220s.
+By comparing the red solid and green dashed lines in Fig.
+6, we can see that LoHi achieves a higher average throughput
+than that of NDN-RFA (up to 19.2%). Moreover, from Fig.
+6, we find that LoHi has a slight variation in throughput
+performance, implying LoHi achieves a stable throughput than
+NDN-RFA. This is because LoHi can adjust the forwarding
+decision based on the real-time ISLs’ load.
+V. C ONCLUSION
+In this paper, we presented the design of the Hierarchical
+Load Balanced Routing (LoHi) for large-scale LEO satellite
+
+Avg. Throughput (Mbps)
+
+60
+
+100
+
+Packet Delay (ms)
+
+80
+
+Packet Delivery Ratio (%)
+
+Packet Delivery Ratio (%)
+
+100
+
+11
+
+LoHi
+
+10
+9
+
+NDN-RFA
+220s
+
+8
+7
+6
+5
+210 215 220 225 230 235 240 245 250
+
+Simulation Time (Second)
+
+Fig. 6. Performance of LoHi and NDN-RFA
+under burst network traffic flows
+
+networks. We also evaluate the content delivery performance
+of LoHi in terms of point-to-point content delivery ratio and
+instantaneous throughput by extensive packet-level experiments. Our results indicate that the LoHi accommodates the
+heavier traffic load. Moreover, our method outperforms the
+state-of-the-art mechanisms in terms of instantaneous throughput under the bursty nature of network traffic. In the future, we
+will further improve LoHi by considering the special demands
+on content delivery delay or bandwidth.
+R EFERENCES
+[1] M. Handley, “Delay is not an option: Low latency routing in space,” in
+Proc. 17th ACM Workshop on Hot Topics in Net., Nov. 2018, pp. 85–91.
+[2] H. Zhang, Z. Wang, S. Zhang, Q. Meng, and H. Luo., “Optimizing
+link-identified forwarding framework in leo satellite networks,” in Proc.
+WiOpt 2023, Aug. 2023, pp. 1–8.
+[3] E. Ekici, I. Akyildiz, and M. Bender, “A distributed routing algorithm
+for datagram traffic in leo satellite networks,” IEEE/ACM Trans. Netw.,
+vol. 9, no. 2, pp. 137–147, 2001.
+[4] T. Taleb, D. Mashimo, A. Jamalipour, N. Kato, and Y. Nemoto, “Explicit
+load balancing technique for ngeo satellite ip networks with on-board
+processing capabilities,” IEEE/ACM Trans. Netw., vol. 17, no. 1, pp.
+281–293, 2009.
+[5] G. Song, M. Chao, B. Yang, and Y. Zheng, “TLR: A traffic-light-based
+intelligent routing strategy for NGEO satellite IP networks,” IEEE Trans.
+Wirel. Commun., vol. 13, no. 6, pp. 3380–3393, 2014.
+[6] Y. Yuan, L. Lei, T. X. Vu, S. Fowler, and S. Chatzinotas, “Efficient
+resource scheduling and optimization for over-loaded leo-terrestrial
+networks,” in Proc. IEEE ICC 2022, May, 2022, pp. 1052–1057.
+[7] F. Yan, H. Luo, S. Zhang, Z. Wang, and P. Lian, “A comparative study
+of ip-based and icn-based link-state routing protocols in LEO satellite
+networks,” Peer Peer Netw. Appl., vol. 16, no. 6, pp. 3032–3046, 2023.
+[8] T. Pan, T. Huang, X. Li, Y. Chen, W. Xue, and Y. Liu, “Opspf: orbit
+prediction shortest path first routing for resilient leo satellite networks,”
+in Proc. IEEE ICC 2019, May 2019, pp. 1–6.
+[9] Q. Shan, Z. Wang, S. Zhang, Q. Meng, and H. Luo, “Routing in leo
+satellite networks: How many link-state updates do we need?” in Proc.
+IEEE Int. Conf. on Satell. Comput., Nov. 2023, pp. 1–6.
+[10] X. Zhang, Y. Yang, M. Xu, and J. Luo, “Aser: Scalable distributed
+routing protocol for leo satellite networks,” in Proc. IEEE 46th Conf.
+on Local Comput. Netw., Oct. 2021, pp. 65–72.
+[11] F. Yan, P. Lian, H. Luo, Z. Wang, and S. Zhang, “Logic path identified
+hierarchical (lpih) routing for leo satellite network,” in Proc. IEEE Int.
+Conf. on Satell. Comput., Nov. 2022, pp. 19–24.
+[12] C. Han, W. Xiong, and R. Yu, “Load-balancing routing for leo satellite
+network with distributed hops-based back-pressure strategy,” Sensors,
+vol. 23, no. 24, pp. 1–22, 2023.
+[13] A. K. M. M. Hoque, S. O. Amin, A. Alyyan, B. Zhang, L. Zhang, and
+L. Wang, “NLSR: Named-data link state routing protocol,” in Proc. 3th
+ACM SIGCOMM Workshop on Inf.-centric Netw., Aug. 2013, pp. 15–20.
+[14] G. Carofiglio, M. Gallo, and L. Muscariello, “Optimal multipath congestion control and request forwarding in information-centric networks:
+Protocol design and experimentation,” Comput. Networks, vol. 110, pp.
+104–117, 2016.
+
+Authorized licensed use limited to: National Yang Ming Chiao Tung University. Downloaded on October 20,2024 at 13:34:08 UTC from IEEE Xplore. Restrictions apply.
+
+
