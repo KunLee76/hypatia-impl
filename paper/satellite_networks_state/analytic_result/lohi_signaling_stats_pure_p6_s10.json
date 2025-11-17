@@ -2,10 +2,10 @@
   "algorithm": "algorithm_lohi_pure",
   "p": 6,
   "s": 10,
-  "timestamp": "2025-11-17T16:19:03.989270",
+  "timestamp": "2025-11-17T20:19:05.625557",
   "summary": {
     "total_events": 30,
-    "total_bytes": 3492336,
+    "total_bytes": 3529408,
     "pid_rebuilds": 10,
     "routing_updates": 10,
     "topology_changes": 10
@@ -36,10 +36,10 @@
       "sim_time_ms": 0,
       "event": "routing_update",
       "count": 1,
-      "bytes": 2692800,
+      "bytes": 2721344,
       "detail": {
-        "changed_entries": 168300,
-        "total_entries": 168300
+        "changed_entries": 170084,
+        "total_entries": 170084
       }
     },
     {
@@ -67,10 +67,10 @@
       "sim_time_ms": 100,
       "event": "routing_update",
       "count": 1,
-      "bytes": 83392,
+      "bytes": 84288,
       "detail": {
-        "changed_entries": 5212,
-        "total_entries": 168300
+        "changed_entries": 5268,
+        "total_entries": 170084
       }
     },
     {
@@ -98,10 +98,10 @@
       "sim_time_ms": 200,
       "event": "routing_update",
       "count": 1,
-      "bytes": 100800,
+      "bytes": 101904,
       "detail": {
-        "changed_entries": 6300,
-        "total_entries": 168300
+        "changed_entries": 6369,
+        "total_entries": 170084
       }
     },
     {
@@ -129,10 +129,10 @@
       "sim_time_ms": 300,
       "event": "routing_update",
       "count": 1,
-      "bytes": 92608,
+      "bytes": 93600,
       "detail": {
-        "changed_entries": 5788,
-        "total_entries": 168300
+        "changed_entries": 5850,
+        "total_entries": 170084
       }
     },
     {
@@ -160,10 +160,10 @@
       "sim_time_ms": 400,
       "event": "routing_update",
       "count": 1,
-      "bytes": 92832,
+      "bytes": 93840,
       "detail": {
-        "changed_entries": 5802,
-        "total_entries": 168300
+        "changed_entries": 5865,
+        "total_entries": 170084
       }
     },
     {
@@ -191,10 +191,10 @@
       "sim_time_ms": 500,
       "event": "routing_update",
       "count": 1,
-      "bytes": 84448,
+      "bytes": 85376,
       "detail": {
-        "changed_entries": 5278,
-        "total_entries": 168300
+        "changed_entries": 5336,
+        "total_entries": 170084
       }
     },
     {
@@ -222,10 +222,10 @@
       "sim_time_ms": 600,
       "event": "routing_update",
       "count": 1,
-      "bytes": 93264,
+      "bytes": 94272,
       "detail": {
-        "changed_entries": 5829,
-        "total_entries": 168300
+        "changed_entries": 5892,
+        "total_entries": 170084
       }
     },
     {
@@ -253,10 +253,10 @@
       "sim_time_ms": 700,
       "event": "routing_update",
       "count": 1,
-      "bytes": 90912,
+      "bytes": 91872,
       "detail": {
-        "changed_entries": 5682,
-        "total_entries": 168300
+        "changed_entries": 5742,
+        "total_entries": 170084
       }
     },
     {
@@ -284,10 +284,10 @@
       "sim_time_ms": 800,
       "event": "routing_update",
       "count": 1,
-      "bytes": 80048,
+      "bytes": 80880,
       "detail": {
-        "changed_entries": 5003,
-        "total_entries": 168300
+        "changed_entries": 5055,
+        "total_entries": 170084
       }
     },
     {
@@ -315,10 +315,10 @@
       "sim_time_ms": 900,
       "event": "routing_update",
       "count": 1,
-      "bytes": 77776,
+      "bytes": 78576,
       "detail": {
-        "changed_entries": 4861,
-        "total_entries": 168300
+        "changed_entries": 4911,
+        "total_entries": 170084
       }
     }
   ]
