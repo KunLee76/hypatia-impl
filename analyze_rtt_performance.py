@@ -67,20 +67,26 @@ def extract_info_from_path(dir_path: Path) -> Tuple[str, int, str]:
     """
     dir_name = dir_path.name
     
-    # 提取網格大小
+    # 判斷算法類型
+    if 'algorithm_lohi' in dir_name:
+        # LoHi 不使用網格
+        return 'LoHi', None, dir_name
+    elif 'free_one_only_over_isls' in dir_name:
+        # Baseline 不使用網格
+        return 'Baseline', None, dir_name
+    
+    # 提取網格大小（GID/Dijkstra 才有）
     match = re.search(r'_(\d+)deg$', dir_name)
     if not match:
         return None, None, dir_name
     
     grid_deg = int(match.group(1))
     
-    # 判斷算法類型
+    # 判斷是 GID 還是 Dijkstra
     if 'dijkstra' in dir_name:
         algo_type = 'Dijkstra'
-    elif 'hierarchical_virtual_pid' in dir_name and 'dijkstra' not in dir_name:
-        algo_type = 'Floyd-Warshall'
-    elif 'free_one_only_over_isls' in dir_name:
-        algo_type = 'Baseline'
+    elif 'hierarchical_virtual_gid' in dir_name or 'hierarchical_virtual_pid' in dir_name:
+        algo_type = 'GID'
     else:
         algo_type = 'Unknown'
     
@@ -93,8 +99,8 @@ def scan_all_results() -> Dict:
     """
     results = {
         'Baseline': {},
-        'Floyd-Warshall': {},
-        'Dijkstra': {}
+        'GID': {},
+        'LoHi': {}
     }
     
     if not DATA_DIR.exists():
@@ -138,14 +144,14 @@ def scan_all_results() -> Dict:
                 route_stats[route_name] = stats
         
         if route_stats:
-            if algo_type == 'Baseline':
-                results[algo_type]['baseline'] = {
+            if algo_type in ['Baseline', 'LoHi']:
+                # Baseline 和 LoHi 沒有網格大小
+                results[algo_type]['default'] = {
                     'dir_name': dir_name,
                     'routes': route_stats
                 }
-            else:
-                if grid_deg not in results[algo_type]:
-                    results[algo_type][grid_deg] = {}
+            elif algo_type == 'GID' and grid_deg == 27:
+                # 只保留 GID 27°
                 results[algo_type][grid_deg] = {
                     'dir_name': dir_name,
                     'routes': route_stats
@@ -170,8 +176,8 @@ def generate_summary_report(results: Dict) -> str:
     
     lines.append(f"分析的配置數量: {total_configs}")
     lines.append(f"  - Baseline: {len(results.get('Baseline', {}))}")
-    lines.append(f"  - Floyd-Warshall: {len(results.get('Floyd-Warshall', {}))}")
-    lines.append(f"  - Dijkstra: {len(results.get('Dijkstra', {}))}")
+    lines.append(f"  - GID (27°): {len(results.get('GID', {}))}")
+    lines.append(f"  - LoHi: {len(results.get('LoHi', {}))}")
     lines.append("")
     
     return "\n".join(lines)
@@ -201,27 +207,25 @@ def generate_detailed_report(results: Dict) -> str:
         route_data = []
         
         # Baseline
-        if 'baseline' in results.get('Baseline', {}):
-            baseline_routes = results['Baseline']['baseline'].get('routes', {})
+        if 'default' in results.get('Baseline', {}):
+            baseline_routes = results['Baseline']['default'].get('routes', {})
             if route_name in baseline_routes:
                 stats = baseline_routes[route_name]
                 route_data.append(('Baseline', None, stats))
         
-        # Floyd-Warshall
-        for grid_deg in sorted(results.get('Floyd-Warshall', {}).keys()):
-            if isinstance(grid_deg, int):
-                fw_routes = results['Floyd-Warshall'][grid_deg].get('routes', {})
-                if route_name in fw_routes:
-                    stats = fw_routes[route_name]
-                    route_data.append(('Floyd-Warshall', grid_deg, stats))
+        # LoHi
+        if 'default' in results.get('LoHi', {}):
+            lohi_routes = results['LoHi']['default'].get('routes', {})
+            if route_name in lohi_routes:
+                stats = lohi_routes[route_name]
+                route_data.append(('LoHi', None, stats))
         
-        # Dijkstra
-        for grid_deg in sorted(results.get('Dijkstra', {}).keys()):
-            if isinstance(grid_deg, int):
-                dijk_routes = results['Dijkstra'][grid_deg].get('routes', {})
-                if route_name in dijk_routes:
-                    stats = dijk_routes[route_name]
-                    route_data.append(('Dijkstra', grid_deg, stats))
+        # GID
+        for grid_deg in sorted([k for k in results.get('GID', {}).keys() if isinstance(k, int)]):
+            gid_routes = results['GID'][grid_deg].get('routes', {})
+            if route_name in gid_routes:
+                stats = gid_routes[route_name]
+                route_data.append(('GID', grid_deg, stats))
         
         if not route_data:
             lines.append("  (無數據)")
@@ -277,27 +281,25 @@ def generate_ranking_report(results: Dict) -> str:
     all_configs = []
     
     # Baseline
-    if 'baseline' in results.get('Baseline', {}):
-        baseline_routes = results['Baseline']['baseline'].get('routes', {})
+    if 'default' in results.get('Baseline', {}):
+        baseline_routes = results['Baseline']['default'].get('routes', {})
         if baseline_routes:
             avg_rtt = statistics.mean([s['mean'] for s in baseline_routes.values()])
             all_configs.append(('Baseline', None, avg_rtt, len(baseline_routes)))
     
-    # Floyd-Warshall
-    for grid_deg in sorted(results.get('Floyd-Warshall', {}).keys()):
-        if isinstance(grid_deg, int):
-            fw_routes = results['Floyd-Warshall'][grid_deg].get('routes', {})
-            if fw_routes:
-                avg_rtt = statistics.mean([s['mean'] for s in fw_routes.values()])
-                all_configs.append(('Floyd-Warshall', grid_deg, avg_rtt, len(fw_routes)))
+    # LoHi
+    if 'default' in results.get('LoHi', {}):
+        lohi_routes = results['LoHi']['default'].get('routes', {})
+        if lohi_routes:
+            avg_rtt = statistics.mean([s['mean'] for s in lohi_routes.values()])
+            all_configs.append(('LoHi', None, avg_rtt, len(lohi_routes)))
     
-    # Dijkstra
-    for grid_deg in sorted(results.get('Dijkstra', {}).keys()):
-        if isinstance(grid_deg, int):
-            dijk_routes = results['Dijkstra'][grid_deg].get('routes', {})
-            if dijk_routes:
-                avg_rtt = statistics.mean([s['mean'] for s in dijk_routes.values()])
-                all_configs.append(('Dijkstra', grid_deg, avg_rtt, len(dijk_routes)))
+    # GID
+    for grid_deg in sorted([k for k in results.get('GID', {}).keys() if isinstance(k, int)]):
+        gid_routes = results['GID'][grid_deg].get('routes', {})
+        if gid_routes:
+            avg_rtt = statistics.mean([s['mean'] for s in gid_routes.values()])
+            all_configs.append(('GID', grid_deg, avg_rtt, len(gid_routes)))
     
     # 按平均 RTT 排序
     all_configs.sort(key=lambda x: x[2])
@@ -364,8 +366,8 @@ def main():
     
     print(f"✅ 找到數據:")
     print(f"   - Baseline: {len(results.get('Baseline', {}))}")
-    print(f"   - Floyd-Warshall: {len(results.get('Floyd-Warshall', {}))}")
-    print(f"   - Dijkstra: {len(results.get('Dijkstra', {}))}")
+    print(f"   - GID (27°): {len(results.get('GID', {}))}")
+    print(f"   - LoHi: {len(results.get('LoHi', {}))}")
     print()
     
     # 生成報告
