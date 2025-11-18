@@ -128,15 +128,36 @@ class ControlSignalingStats:
                               {'changed_entries': changed, 'total_entries': total}))
 
     def to_json(self):
+        """
+        輸出 JSON 格式統計（與 GID 統一格式）
+        使用 by_type 結構來組織事件統計
+        """
+        # 建立 by_type 結構
+        by_type = {}
+        for event in self.timeline:
+            event_type = event.event
+            if event_type not in by_type:
+                by_type[event_type] = {"count": 0, "bytes": 0}
+            by_type[event_type]["count"] += event.count
+            by_type[event_type]["bytes"] += event.bytes
+        
         return {
             'summary': {
                 'total_events': self.total_events,
                 'total_bytes': self.total_bytes,
-                'pid_rebuilds': self.pid_rebuilds,
-                'routing_updates': self.routing_updates,
-                'topology_changes': self.topology_changes,
+                'by_type': by_type  # ✅ 統一格式
             },
-            'timeline': [row.__dict__ for row in self.timeline]
+            'timeline': [
+                {
+                    'snapshot': row.snapshot,
+                    'time_ms': row.sim_time_ms,  # ✅ 統一欄位名
+                    'event': row.event,
+                    'count': row.count,
+                    'bytes': row.bytes,
+                    'detail': row.detail
+                }
+                for row in self.timeline
+            ]
         }
 
 _SIGNALING = ControlSignalingStats()
@@ -1542,6 +1563,7 @@ def algorithm_lohi(
     with open(os.path.join(stats_dir, f"lohi_signaling_stats_pure_p{PLANES_PER_GROUP}_s{SATS_PER_PLANE_IN_GROUP}.json"), 'w', encoding='utf-8') as f:
         json.dump({
             'algorithm': 'algorithm_lohi_pure',
+            'algorithm_display_name': f'LoHi (p={PLANES_PER_GROUP}, s={SATS_PER_PLANE_IN_GROUP})',  # ✅ 新增顯示名稱
             'p': PLANES_PER_GROUP,
             's': SATS_PER_PLANE_IN_GROUP,
             'timestamp': _dt.datetime.now().isoformat(),

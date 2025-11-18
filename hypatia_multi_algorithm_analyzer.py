@@ -29,7 +29,8 @@ class MultiAlgorithmAnalyzer:
         patterns = {
             "baseline": "baseline_floyd_warshall_signaling_stats.json",
             "hierarchical_floyd": "hierarchical_gid_*deg_signaling_stats.json",
-            "hierarchical_dijkstra": "hierarchical_gid_dijkstra_*deg_signaling_stats.json"
+            "hierarchical_dijkstra": "hierarchical_gid_dijkstra_*deg_signaling_stats.json",
+            "lohi": "lohi_signaling_stats*.json"  # 新增 LoHi 模式
         }
         
         found_files = {}
@@ -51,12 +52,27 @@ class MultiAlgorithmAnalyzer:
         if h_dijkstra_files:
             found_files['hierarchical_dijkstra'] = sorted(h_dijkstra_files)
         
+        # LoHi
+        lohi_files = glob.glob(str(self.stats_dir / patterns["lohi"]))
+        if lohi_files:
+            found_files['lohi'] = sorted(lohi_files)
+        
         return found_files
     
     def load_stats(self, file_path):
-        """加載統計數據"""
+        """加載統計數據（期望所有算法使用統一的 by_type 格式）"""
         with open(file_path, 'r', encoding='utf-8') as f:
-            return json.load(f)
+            data = json.load(f)
+        
+        # 驗證格式正確性
+        if 'summary' not in data or 'by_type' not in data.get('summary', {}):
+            raise ValueError(
+                f"❌ 格式錯誤: {Path(file_path).name}\n"
+                f"   期望 summary.by_type 結構，但未找到。\n"
+                f"   請確保所有算法輸出統一格式的統計數據。"
+            )
+        
+        return data
     
     def analyze_all(self, output_dir="multi_algorithm_analysis"):
         """分析所有算法"""
@@ -100,8 +116,12 @@ class MultiAlgorithmAnalyzer:
             return None
         
         # 按類別和網格大小排序
+        # 排序順序：baseline -> hierarchical_floyd -> hierarchical_dijkstra -> lohi
         algorithms_data.sort(key=lambda x: (
-            0 if x['category'] == 'baseline' else 1 if x['category'] == 'hierarchical_floyd' else 2,
+            0 if x['category'] == 'baseline' 
+            else 1 if x['category'] == 'hierarchical_floyd' 
+            else 2 if x['category'] == 'hierarchical_dijkstra'
+            else 3,  # lohi
             x['grid_deg'] if x['grid_deg'] else 0
         ))
         
@@ -222,6 +242,9 @@ class MultiAlgorithmAnalyzer:
                 # 根據網格大小調整顏色深淺
                 intensity = 0.4 + (grid_deg / 30.0) * 0.6  # 10°->darker, 25°->lighter
                 colors.append(plt.cm.Blues(intensity))
+            elif algo['category'] == 'lohi':
+                # LoHi 使用紫色系
+                colors.append('mediumpurple')
             else:
                 # Floyd-Warshall hierarchical 使用綠色系
                 grid_deg = algo.get('grid_deg', 15)
@@ -301,6 +324,8 @@ class MultiAlgorithmAnalyzer:
                         grid_deg = algo.get('grid_deg', 15)
                         intensity = 0.4 + (grid_deg / 30.0) * 0.6
                         color = plt.cm.Blues(intensity)
+                    elif algo['category'] == 'lohi':
+                        color = 'mediumpurple'
                     else:
                         grid_deg = algo.get('grid_deg', 15)
                         intensity = 0.4 + (grid_deg / 30.0) * 0.6
@@ -367,6 +392,9 @@ class MultiAlgorithmAnalyzer:
                 grid_deg = algo.get('grid_deg', 15)
                 intensity = 0.4 + (grid_deg / 30.0) * 0.6
                 colors.append(plt.cm.Blues(intensity))
+            elif algo['category'] == 'lohi':
+                # LoHi 使用紫色系
+                colors.append('mediumpurple')
             else:
                 # Floyd-Warshall hierarchical 使用綠色系
                 grid_deg = algo.get('grid_deg', 15)
@@ -468,6 +496,9 @@ class MultiAlgorithmAnalyzer:
                 grid_deg = algo.get('grid_deg', 15)
                 intensity = 0.4 + (grid_deg / 30.0) * 0.6
                 colors.append(plt.cm.Blues(intensity))
+            elif algo['category'] == 'lohi':
+                # LoHi 使用紫色系
+                colors.append('mediumpurple')
             else:
                 # Floyd-Warshall hierarchical 使用綠色系
                 grid_deg = algo.get('grid_deg', 15)
