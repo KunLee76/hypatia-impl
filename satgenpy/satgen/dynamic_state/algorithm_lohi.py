@@ -784,15 +784,34 @@ def _select_potential_descent_neighbor(
 
 
 def _route_direct_in_subgraph(src: int, dst: int, pid: int, 
-                               router, G_sat: nx.Graph) -> Optional[int]:
+                               router, G_sat: nx.Graph,
+                               intra_tree_cache: Optional[Dict] = None) -> Optional[int]:
     """
-    在 PID 子圖內，從 src 直接路由到 dst（使用勢能場）
+    在 PID 子圖內，從 src 直接路由到 dst（優先使用預計算的路徑樹快取）
     
     注意：不處理 src==dst 的情況（應該在主流程攔截）
+    
+    Args:
+        src: 源衛星 ID
+        dst: 目標衛星 ID
+        pid: PID ID
+        router: VirtualPIDRouterPlaneBlock 實例
+        G_sat: 衛星網絡圖
+        intra_tree_cache: 預計算的群內路徑樹快取 {(dst, pid): {src: next_hop}}
     
     Returns:
         下一跳衛星 ID，或 None（失敗）
     """
+    # ★ 性能優化：優先使用預計算的路徑樹快取
+    if intra_tree_cache is not None:
+        cache_key = (dst, pid)
+        if cache_key in intra_tree_cache:
+            next_hop_map = intra_tree_cache[cache_key]
+            if src in next_hop_map:
+                return next_hop_map[src]
+    
+    # 快取未命中，回退到原有邏輯（勢能場路由）
+    
     # 檢查連通性
     comp_map = router.pid_sat_comp.get(pid, {})
     src_comp = comp_map.get(src)
@@ -929,10 +948,13 @@ def _break_2cycles(
                     checked.add((u, dst))
                     checked.add((next_hop, dst))
         
+        # ★ 性能優化：如果本輪沒有發現 2-cycle，提前終止
         if not cycles_found:
+            # log_debug_func(f"  2-Cycle 清洗第 {iteration+1} 輪：無發現，提前終止")
             break
         
         # 修復: id 較大的改指
+        fixes_applied = 0
         for (small_id, large_id, dst) in cycles_found:
             # 獲取 large_id 所在的群
             large_pid = sat_pid.get(large_id)
@@ -959,10 +981,14 @@ def _break_2cycles(
                 # 成功找到替代路徑
                 my_if, next_if = isl_if_idxs_func(large_id, new_hop)
                 fstate[(large_id, dst)] = (new_hop, my_if, next_if)
+                fixes_applied += 1
             else:
                 # 無法修復，移除等待 holdover
                 if (large_id, dst) in fstate:
                     del fstate[(large_id, dst)]
+                    fixes_applied += 1
+        
+        # log_debug_func(f"  2-Cycle 清洗第 {iteration+1} 輪：發現 {len(cycles_found)} 個，修復 {fixes_applied} 個")
     
     return fstate
 
@@ -1112,6 +1138,50 @@ def build_fstate_lohi(
             dist, prev = gplanner.distances_to(dst_pid)
             pid_to_group_path[dst_pid] = (dist, prev)
     
+    # =========================================================================
+    # 🚀 性能優化：預計算群內路徑樹（避免重複 SPF）
+    # =========================================================================
+    # 為每個目標衛星預先計算其所在 PID 內的最短路徑樹
+    # 這樣同 PID 內的所有源衛星都可以直接查表，無需重複計算
+    
+    # 收集所有唯一的目標衛星及其 PID
+    unique_dst_targets = {}  # dst_sat -> dst_pid
+    for dst_node, dst_sat in dst_sat_map.items():
+        dst_pid = sat_pid.get(dst_sat)
+        if dst_pid is not None:
+            unique_dst_targets[dst_sat] = dst_pid
+    
+    # 為每個目標衛星預計算群內路徑樹
+    # intra_group_tree_cache[(dst_sat, pid)] = {src_sat: next_hop_sat}
+    for dst_sat, dst_pid in unique_dst_targets.items():
+        cache_key = (dst_sat, dst_pid)
+        if cache_key in intra_group_tree_cache:
+            continue  # 已經計算過
+        
+        # 獲取該 PID 的子圖
+        Gp = router.pid_subgraphs.get(dst_pid)
+        if not Gp or not Gp.has_node(dst_sat):
+            continue
+        
+        # 使用 single_source_dijkstra 一次性計算從 dst_sat 到所有節點的最短路徑
+        try:
+            lengths, paths = nx.single_source_dijkstra(Gp, dst_sat, weight='weight')
+            
+            # 建立 next_hop 映射：對每個源節點，記錄其到 dst_sat 的下一跳
+            next_hop_map = {}
+            for src_node, path in paths.items():
+                if src_node == dst_sat:
+                    continue  # 跳過目標自己
+                if len(path) >= 2:
+                    # path = [src_node, hop1, hop2, ..., dst_sat]
+                    # 下一跳是 path[1]
+                    next_hop_map[src_node] = path[1]
+            
+            intra_group_tree_cache[cache_key] = next_hop_map
+        except (nx.NetworkXNoPath, nx.NodeNotFound, nx.NetworkXError):
+            # 無法計算路徑樹（可能圖不連通），跳過
+            pass
+    
     # 對每個源衛星 → 目標 GS 進行路由
     for u in range(num_sats):
         src_pid = sat_pid.get(u)
@@ -1158,8 +1228,8 @@ def build_fstate_lohi(
                     # 直接到目標
                     target = dst_sat
                 
-                # 在群內路由
-                next_hop = _route_direct_in_subgraph(u, target, src_pid, router, G_sat)
+                # 在群內路由（使用預計算的路徑樹快取）
+                next_hop = _route_direct_in_subgraph(u, target, src_pid, router, G_sat, intra_group_tree_cache)
                 
                 # ★ Fix-3: 保底機制
                 if next_hop is None:
@@ -1217,8 +1287,8 @@ def build_fstate_lohi(
                         fstate[(u, dst_node)] = (v_border2, my_if, next_if)
                         continue
                     else:
-                        # 在群內朝 u_border2 走
-                        next_hop = _route_direct_in_subgraph(u, u_border2, src_pid, router, G_sat)
+                        # 在群內朝 u_border2 走（使用快取）
+                        next_hop = _route_direct_in_subgraph(u, u_border2, src_pid, router, G_sat, intra_group_tree_cache)
                         if next_hop:
                             my_if, next_if = _isl_if_idxs(u, next_hop)
                             fstate[(u, dst_node)] = (next_hop, my_if, next_if)
@@ -1229,7 +1299,7 @@ def build_fstate_lohi(
                 if ENFORCE_MGMT_HOP_CROSS_PID and mgmt_sat:
                     comp_map = router.pid_sat_comp.get(src_pid, {})
                     if comp_map.get(u) == comp_map.get(mgmt_sat):
-                        next_hop = _route_direct_in_subgraph(u, mgmt_sat, src_pid, router, G_sat)
+                        next_hop = _route_direct_in_subgraph(u, mgmt_sat, src_pid, router, G_sat, intra_group_tree_cache)
                         if next_hop:
                             my_if, next_if = _isl_if_idxs(u, next_hop)
                             fstate[(u, dst_node)] = (next_hop, my_if, next_if)
@@ -1259,7 +1329,7 @@ def build_fstate_lohi(
             # - 資料面只需執行：直接用勢能場路由到 u_border
             # - 不需要繞行管理衛星（避免 loops，提升性能）
             
-            next_hop = _route_direct_in_subgraph(u, u_border, src_pid, router, G_sat)
+            next_hop = _route_direct_in_subgraph(u, u_border, src_pid, router, G_sat, intra_group_tree_cache)
             
             # 保底機制
             if next_hop is None:
@@ -1485,25 +1555,18 @@ def algorithm_lohi(
             if (u, dst_node) not in fstate:
                 missing_routes.append((u, dst_node, gid0))
     
+    # **性能日誌**: 記錄缺失路由數
+    if enable_verbose_logs and len(missing_routes) > 0:
+        print(f"  > Global fallback: {len(missing_routes)} missing routes (out of {num_sats * num_gs} total)")
+    
     # **改進 12**: 分批處理缺失路由（每批最多 2000 條）
     # 冷啟動時可能有很多缺失，分批補洞避免過度計算
     if missing_routes:
-        # 分批大小（避免一次性計算太多 SPF）
+        # **階段 2 優化**: 批次 SPF - 每個目標衛星只計算一次
+        # 收集所有唯一的目標衛星
+        target_sats = {}  # dst_sat -> [(u, dst_node, gid0), ...]
+        
         batch_size = 2000
-        batches_to_process = (len(missing_routes) + batch_size - 1) // batch_size
-        
-        # 簡化的接口索引計算（假設每個衛星最多 4 個 ISL）
-        def simple_isl_if_idx(u, v, G):
-            """簡化的接口索引計算"""
-            if not G.has_edge(u, v):
-                return 0, 0
-            neighbors_u = sorted(G.neighbors(u))
-            neighbors_v = sorted(G.neighbors(v))
-            my_if = neighbors_u.index(v) if v in neighbors_u else 0
-            next_if = neighbors_v.index(u) if u in neighbors_v else 0
-            return my_if, next_if
-        
-        # 處理第一批（最多 batch_size 條）
         for u, dst_node, gid0 in missing_routes[:batch_size]:
             # 找到目標 GS 的可視衛星
             if dst_node in dst_sat_map:
@@ -1517,16 +1580,52 @@ def algorithm_lohi(
             else:
                 continue
             
-            # 嘗試全局最短路徑
-            if sat_net_graph_only_satellites_with_isls.has_node(u) and sat_net_graph_only_satellites_with_isls.has_node(dst_sat):
-                try:
-                    path = nx.shortest_path(sat_net_graph_only_satellites_with_isls, u, dst_sat, weight='weight')
-                    if len(path) > 1:
-                        next_hop = path[1]
-                        my_if, next_if = simple_isl_if_idx(u, next_hop, sat_net_graph_only_satellites_with_isls)
-                        fstate[(u, dst_node)] = (next_hop, my_if, next_if)
-                except (nx.NetworkXNoPath, nx.NodeNotFound):
-                    pass  # 物理拓撲也無法到達
+            # 按目標衛星分組
+            if dst_sat not in target_sats:
+                target_sats[dst_sat] = []
+            target_sats[dst_sat].append((u, dst_node, gid0))
+        
+        # 簡化的接口索引計算
+        def simple_isl_if_idx(u, v, G):
+            """簡化的接口索引計算"""
+            if not G.has_edge(u, v):
+                return 0, 0
+            neighbors_u = sorted(G.neighbors(u))
+            neighbors_v = sorted(G.neighbors(v))
+            my_if = neighbors_u.index(v) if v in neighbors_u else 0
+            next_if = neighbors_v.index(u) if u in neighbors_v else 0
+            return my_if, next_if
+        
+        # 對每個目標衛星執行一次 single_source_dijkstra（反向路徑）
+        if enable_verbose_logs:
+            print(f"  > Computing global SPF for {len(target_sats)} unique target satellites...")
+        
+        for dst_sat, routes in target_sats.items():
+            if not sat_net_graph_only_satellites_with_isls.has_node(dst_sat):
+                continue
+            
+            try:
+                # 從目標衛星計算到所有節點的最短路徑（反向）
+                lengths, paths = nx.single_source_dijkstra(
+                    sat_net_graph_only_satellites_with_isls, 
+                    dst_sat, 
+                    weight='weight'
+                )
+                
+                # 對該目標衛星的所有缺失路由填充
+                for u, dst_node, gid0 in routes:
+                    if u in paths:
+                        path = paths[u]
+                        # path = [dst_sat, ..., hop2, hop1, u]
+                        # 我們需要從 u 的下一跳，即 path 的倒數第二個節點
+                        if len(path) >= 2:
+                            next_hop = path[-2]  # 倒數第二個是 u 的下一跳
+                            my_if, next_if = simple_isl_if_idx(u, next_hop, sat_net_graph_only_satellites_with_isls)
+                            fstate[(u, dst_node)] = (next_hop, my_if, next_if)
+                
+            except (nx.NetworkXNoPath, nx.NodeNotFound, nx.NetworkXError):
+                # 該目標衛星不可達，跳過
+                pass
 
     # 寫入 fstate 文件（寫入所有路由，包含 holdover 和 global fallback）
     output_filename = output_dynamic_state_dir + "/fstate_" + str(time_since_epoch_ns) + ".txt"
