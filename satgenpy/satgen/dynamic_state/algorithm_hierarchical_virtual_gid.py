@@ -318,8 +318,19 @@ class VirtualGIDRouter:
         lon_idx = int((lon_adj - self.lon_min) // self.grid_deg)
         lat_clamped = max(self.lat_min, min(self.lat_max - 1e-9, lat))
         lat_idx = int((lat_clamped - self.lat_min) // self.grid_deg)
+        
+        # 確保索引不超出範圍
         lon_idx = self._wrap_lon_idx(lon_idx)
-        return lat_idx * self.num_lon + lon_idx
+        lat_idx = min(lat_idx, self.num_lat - 1)  # 防止極地區域溢出
+        
+        gid = lat_idx * self.num_lon + lon_idx
+        
+        # 額外安全檢查（防禦性編程）
+        if gid >= self.num_gid:
+            # Fallback: 返回最後一個有效 GID
+            gid = self.num_gid - 1
+        
+        return gid
 
     def _build_gid_neighbors(self) -> Dict[int, Set[int]]:
         neigh = {gid: set() for gid in range(self.num_gid)}

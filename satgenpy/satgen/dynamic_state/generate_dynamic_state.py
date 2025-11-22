@@ -33,7 +33,7 @@ from .algorithm_hierarchical import algorithm_hierarchical
 from .algorithm_hierarchical_region import algorithm_hierarchical_region
 from .algorithm_hierarchical_virtual_gid import algorithm_hierarchical_virtual_gid  # 你的新算法 (GID: Group Identifier)
 from .algorithm_hierarchical_virtual_gid_dijkstra import algorithm_hierarchical_virtual_gid as algorithm_hierarchical_virtual_gid_dijkstra  # Dijkstra優化版
-from .algorithm_free_one_only_over_isls_with_stats import algorithm_free_one_only_over_isls  # 基線算法with stats
+from .algorithm_free_one_only_over_isls_with_stats import algorithm_free_one_only_over_isls as algorithm_free_one_with_stats  # 基線算法with stats
 from .algorithm_lohi import algorithm_lohi, init as lohi_init  # LoHi 實作（文獻baseline）
 
 
@@ -376,9 +376,8 @@ def generate_dynamic_state_at(
 
     elif dynamic_state_algorithm == "algorithm_free_one_only_over_isls_with_stats":
         # Floyd-Warshall 基線算法 (帶統計功能)
-        from .algorithm_free_one_only_over_isls_with_stats import algorithm_free_one_only_over_isls
         
-        return algorithm_free_one_only_over_isls(
+        return algorithm_free_one_with_stats(
             output_dynamic_state_dir,
             time_since_epoch_ns,
             satellites,
