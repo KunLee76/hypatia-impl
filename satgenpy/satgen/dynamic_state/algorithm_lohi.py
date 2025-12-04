@@ -32,10 +32,11 @@ import os
 import random
 
 # ==========================
-# Tunables (LoHi p×s fixed)
+# Tunables (LoHi p×s - 文獻固定參數 6×10)
 # ==========================
-PLANES_PER_GROUP = 6                   # p
-SATS_PER_PLANE_IN_GROUP = 10           # s
+# 環境變數優先，否則使用文獻默認值
+PLANES_PER_GROUP = int(os.environ.get('LOHI_PLANES_PER_GROUP', 6))       # p (文獻默認: 6)
+SATS_PER_PLANE_IN_GROUP = int(os.environ.get('LOHI_SATS_PER_PLANE', 10))  # s (文獻默認: 10)
 
 # Intra-PID queue-aware weights
 BETA_Q = float(os.environ.get('LOHI_BETA_Q', 1.0))   # [3]
@@ -186,7 +187,13 @@ class VirtualPIDRouterPlaneBlock:
       - 維護每 PID 內每條邊的 down_counter
       - 邊消失後保留 M_down 個 snapshot 才真正移除
     """
-    def __init__(self, M_down: int = 2):
+    def __init__(self, M_down: int = 2, planes_per_group: int = None, sats_per_plane_in_group: int = None):
+        """
+        Args:
+            M_down: 群內邊去抖動參數
+            planes_per_group: 每群包含的軌道平面數（None=使用全局默認值）
+            sats_per_plane_in_group: 每平面包含的衛星數（None=使用全局默認值）
+        """
         self.pid_members: Dict[int, Set[int]] = {}
         self.pid_key_map: Dict[int, Tuple[int,int]] = {}
         self.pid_of_sat: Dict[int,int] = {}
@@ -196,6 +203,10 @@ class VirtualPIDRouterPlaneBlock:
         self._prev_pid_of_sat: Dict[int,int] = {}
         self._snapshot_ms = 100
         self._snapshot_idx = 0
+        
+        # 分群參數（使用傳入值或全局默認值）
+        self.planes_per_group = planes_per_group if planes_per_group is not None else PLANES_PER_GROUP
+        self.sats_per_plane_in_group = sats_per_plane_in_group if sats_per_plane_in_group is not None else SATS_PER_PLANE_IN_GROUP
         
         # 群內圖去抖動
         self.M_down = M_down
@@ -232,6 +243,7 @@ class VirtualPIDRouterPlaneBlock:
         return plane, pos
 
     def _build_pid_from_plane_blocks(self, G_sat: nx.Graph) -> None:
+        """依 p×s 分群（使用固定參數：文獻 6×10 或環境變數覆蓋）"""
         pid_counter = 0
         self.pid_members.clear(); self.pid_key_map.clear(); self.pid_of_sat.clear(); self.pid_mgmt_sat.clear()
         
@@ -243,10 +255,10 @@ class VirtualPIDRouterPlaneBlock:
             plane, pos = self._infer_plane_and_pos(attrs)
             if plane is None or pos is None:
                 plane_block_id = -1
-                seg_id_in_plane = (sid // max(1,SATS_PER_PLANE_IN_GROUP)) % SATS_PER_PLANE_IN_GROUP
+                seg_id_in_plane = (sid // max(1, self.sats_per_plane_in_group)) % self.sats_per_plane_in_group
             else:
-                plane_block_id = plane // PLANES_PER_GROUP
-                seg_id_in_plane = pos // SATS_PER_PLANE_IN_GROUP
+                plane_block_id = plane // self.planes_per_group
+                seg_id_in_plane = pos // self.sats_per_plane_in_group
             gkey = (plane_block_id, seg_id_in_plane)
             
             # 取得/配置 pid_int（使用臨時映射避免迭代衝突）
@@ -953,7 +965,7 @@ def _break_2cycles(
             # log_debug_func(f"  2-Cycle 清洗第 {iteration+1} 輪：無發現，提前終止")
             break
         
-        # 修復: id 較大的改指
+        # 修復: id 較大的改指向勢能下降的鄰居
         fixes_applied = 0
         for (small_id, large_id, dst) in cycles_found:
             # 獲取 large_id 所在的群
@@ -967,15 +979,22 @@ def _break_2cycles(
                 continue
             
             # 建立勢能場
-            Gp = router.pid_subgraphs.get(large_pid, nx.Graph())
-            if not Gp.has_node(large_id):
+            pid_nodes = set(router.pid_members.get(large_pid, []))
+            if large_id not in pid_nodes:
                 continue
             
-            potential_dist = _build_potential_field([dst_sat], Gp, weight='weight_eff')
+            subgraph = G_sat.subgraph(pid_nodes)
+            potential_dist = _build_potential_field([dst_sat], subgraph, weight='weight_eff')
             
-            # 選擇勢能下降的鄰居（排除 small_id）
-            neighbors = [n for n in Gp.neighbors(large_id) if n != small_id]
-            new_hop = _select_potential_descent_neighbor(large_id, neighbors, potential_dist, tolerance=1e-6)
+            # ★ 改進：先嘗試同 PID 鄰居，若無法修復則允許任何鄰居
+            neighbors_in_pid = [n for n in G_sat.neighbors(large_id) if n != small_id and n in pid_nodes]
+            new_hop = _select_potential_descent_neighbor(large_id, neighbors_in_pid, potential_dist, tolerance=1e-6)
+            
+            # 若同 PID 無法修復，使用全局勢能場嘗試任意鄰居
+            if new_hop is None:
+                global_potential_dist = _build_potential_field([dst_sat], G_sat, weight='weight_eff')
+                all_neighbors = [n for n in G_sat.neighbors(large_id) if n != small_id]
+                new_hop = _select_potential_descent_neighbor(large_id, all_neighbors, global_potential_dist, tolerance=1e-6)
             
             if new_hop is not None:
                 # 成功找到替代路徑
@@ -1235,7 +1254,8 @@ def build_fstate_lohi(
                 if next_hop is None:
                     next_hop = _fallback_spf_one_hop(u, dst_sat, G_sat)
                 
-                if next_hop is not None:
+                # ★ ISL驗證：只寫入有效的ISL連接
+                if next_hop is not None and G_sat.has_edge(u, next_hop):
                     my_if, next_if = _isl_if_idxs(u, next_hop)
                     fstate[(u, dst_node)] = (next_hop, my_if, next_if)
                 # 否則依賴 holdover
@@ -1289,7 +1309,8 @@ def build_fstate_lohi(
                     else:
                         # 在群內朝 u_border2 走（使用快取）
                         next_hop = _route_direct_in_subgraph(u, u_border2, src_pid, router, G_sat, intra_group_tree_cache)
-                        if next_hop:
+                        # ★ ISL驗證
+                        if next_hop and G_sat.has_edge(u, next_hop):
                             my_if, next_if = _isl_if_idxs(u, next_hop)
                             fstate[(u, dst_node)] = (next_hop, my_if, next_if)
                             continue
@@ -1300,7 +1321,8 @@ def build_fstate_lohi(
                     comp_map = router.pid_sat_comp.get(src_pid, {})
                     if comp_map.get(u) == comp_map.get(mgmt_sat):
                         next_hop = _route_direct_in_subgraph(u, mgmt_sat, src_pid, router, G_sat, intra_group_tree_cache)
-                        if next_hop:
+                        # ★ ISL驗證
+                        if next_hop and G_sat.has_edge(u, next_hop):
                             my_if, next_if = _isl_if_idxs(u, next_hop)
                             fstate[(u, dst_node)] = (next_hop, my_if, next_if)
                             continue
@@ -1308,7 +1330,8 @@ def build_fstate_lohi(
                 # 4. SPF 保底（目標是邊界）
                 fallback_target = u_border2 if u_border2 else u_border
                 next_hop = _fallback_spf_one_hop(u, fallback_target, G_sat)
-                if next_hop:
+                # ★ ISL驗證
+                if next_hop and G_sat.has_edge(u, next_hop):
                     my_if, next_if = _isl_if_idxs(u, next_hop)
                     fstate[(u, dst_node)] = (next_hop, my_if, next_if)
                     continue
@@ -1335,7 +1358,8 @@ def build_fstate_lohi(
             if next_hop is None:
                 next_hop = _fallback_spf_one_hop(u, u_border, G_sat)
             
-            if next_hop is not None:
+            # ★ ISL驗證：確保next_hop是有效的ISL鄰居
+            if next_hop is not None and G_sat.has_edge(u, next_hop):
                 my_if, next_if = _isl_if_idxs(u, next_hop)
                 fstate[(u, dst_node)] = (next_hop, my_if, next_if)
             # 否則依賴 holdover
@@ -1407,10 +1431,19 @@ def init(config: Optional[dict] = None):
     BETA_Q = float(cfg.get('beta_q', BETA_Q))
     BETA_S = float(cfg.get('beta_s', BETA_S))
 
-    _ROUTER = VirtualPIDRouterPlaneBlock()
+    # 分群參數（使用配置或全局默認值）
+    planes_per_group = cfg.get('planes_per_group', PLANES_PER_GROUP)
+    sats_per_plane = cfg.get('sats_per_plane_in_group', SATS_PER_PLANE_IN_GROUP)
+    
+    _ROUTER = VirtualPIDRouterPlaneBlock(
+        M_down=2,
+        planes_per_group=planes_per_group,
+        sats_per_plane_in_group=sats_per_plane
+    )
     _GPLANNER = GroupPlanner()
     _SIGNALING.reset()
-    return {'ok': True, 'msg': 'algorithm_lohi (pure-LoHi p×s=6×10) initialized'}
+    
+    return {'ok': True, 'msg': f'algorithm_lohi initialized with p={planes_per_group}, s={sats_per_plane}'}
 
 
 def algorithm_lohi(
@@ -1534,12 +1567,30 @@ def algorithm_lohi(
     # ==================== HOLDOVER 機制 ====================
     # 對於本回合算不出來的 (u, dst)，從 prev_fstate 沿用
     # 這避免瞬時抖動造成的缺表 → 斷鏈
+    # **FIX**: 驗證 ISL 存在性，避免沿用無效的跳躍
     if prev_fstate:
+        holdover_count = 0
+        holdover_skipped = 0
         # **修復並發問題**：創建副本避免迭代時修改
         for (src, dst), decision in list(prev_fstate.items()):
             if (src, dst) not in fstate:
-                # 本回合缺失，沿用上一張
-                fstate[(src, dst)] = decision
+                next_hop = decision[0]
+                # **FIX**: 只有當 src 和 next_hop 之間真的有 ISL 時才沿用
+                # (如果是 src->GS 或 GS->dst，next_hop 可能 >= num_sats，這是合法的)
+                if src < num_sats and next_hop < num_sats:
+                    # 衛星間跳躍：必須驗證 ISL
+                    if sat_net_graph_only_satellites_with_isls.has_edge(src, next_hop):
+                        fstate[(src, dst)] = decision
+                        holdover_count += 1
+                    else:
+                        holdover_skipped += 1
+                else:
+                    # GS 相關跳躍：直接沿用
+                    fstate[(src, dst)] = decision
+                    holdover_count += 1
+        
+        if enable_verbose_logs and holdover_skipped > 0:
+            print(f"  > Holdover: used {holdover_count}, skipped {holdover_skipped} (no ISL)")
     
     # ==================== **改進 10 & 12**: 全局 SPF FALLBACK ====================
     # 當分層路由完全失敗時（群圖分區導致），使用全局最短路徑作為 fallback
@@ -1559,15 +1610,15 @@ def algorithm_lohi(
     if enable_verbose_logs and len(missing_routes) > 0:
         print(f"  > Global fallback: {len(missing_routes)} missing routes (out of {num_sats * num_gs} total)")
     
-    # **改進 12**: 分批處理缺失路由（每批最多 2000 條）
-    # 冷啟動時可能有很多缺失，分批補洞避免過度計算
+    # **改進 12**: 處理所有缺失路由（移除批次限制以確保完整性）
+    # 之前的 batch_size=2000 會導致部分路由缺失
     if missing_routes:
         # **階段 2 優化**: 批次 SPF - 每個目標衛星只計算一次
         # 收集所有唯一的目標衛星
         target_sats = {}  # dst_sat -> [(u, dst_node, gid0), ...]
         
-        batch_size = 2000
-        for u, dst_node, gid0 in missing_routes[:batch_size]:
+        # 處理所有缺失路由，不設批次限制
+        for u, dst_node, gid0 in missing_routes:
             # 找到目標 GS 的可視衛星
             if dst_node in dst_sat_map:
                 dst_sat = dst_sat_map[dst_node]
@@ -1613,6 +1664,8 @@ def algorithm_lohi(
                 )
                 
                 # 對該目標衛星的所有缺失路由填充
+                skipped_due_to_no_isl = 0
+                filled_count = 0
                 for u, dst_node, gid0 in routes:
                     if u in paths:
                         path = paths[u]
@@ -1620,12 +1673,56 @@ def algorithm_lohi(
                         # 我們需要從 u 的下一跳，即 path 的倒數第二個節點
                         if len(path) >= 2:
                             next_hop = path[-2]  # 倒數第二個是 u 的下一跳
-                            my_if, next_if = simple_isl_if_idx(u, next_hop, sat_net_graph_only_satellites_with_isls)
-                            fstate[(u, dst_node)] = (next_hop, my_if, next_if)
+                            # **FIX**: 只有當 u 和 next_hop 之間真的有 ISL 時才寫入
+                            if sat_net_graph_only_satellites_with_isls.has_edge(u, next_hop):
+                                my_if, next_if = simple_isl_if_idx(u, next_hop, sat_net_graph_only_satellites_with_isls)
+                                fstate[(u, dst_node)] = (next_hop, my_if, next_if)
+                                filled_count += 1
+                            else:
+                                skipped_due_to_no_isl += 1
+                
+                if enable_verbose_logs and skipped_due_to_no_isl > 0:
+                    print(f"    [WARN] Skipped {skipped_due_to_no_isl} routes for dst_sat={dst_sat} (no ISL). Filled: {filled_count}")
                 
             except (nx.NetworkXNoPath, nx.NodeNotFound, nx.NetworkXError):
                 # 該目標衛星不可達，跳過
                 pass
+
+    # ==================== 最終 2-CYCLE 清理 ====================
+    # **關鍵修復**: Holdover 和 Global SPF 可能重新引入 2-cycles
+    # 必須在所有路由填充完成後，再次執行 _break_2cycles
+    if enable_verbose_logs:
+        print("  > Final 2-cycle cleanup after Holdover and Global fallback...")
+    
+    # 創建 ISL interface 索引函數（直接實現，避免閉包問題）
+    def final_isl_if_idxs(u: int, v: int) -> tuple:
+        """計算 ISL 接口索引"""
+        G = sat_net_graph_only_satellites_with_isls
+        if not G.has_edge(u, v):
+            return 0, 0
+        neighbors_u = sorted(G.neighbors(u))
+        neighbors_v = sorted(G.neighbors(v))
+        my_if = neighbors_u.index(v) if v in neighbors_u else 0
+        next_if = neighbors_v.index(u) if u in neighbors_v else 0
+        return my_if, next_if
+    
+    # 執行最終 2-cycle 清理（使用更多迭代次數確保完全清除）
+    fstate = _break_2cycles(
+        fstate, 
+        sat_net_graph_only_satellites_with_isls, 
+        sat_to_pid, 
+        _ROUTER, 
+        num_sats, 
+        dst_sat_map, 
+        final_isl_if_idxs,  # ★ 修復：使用閉包函數
+        lambda *args, **kwargs: None,  # no-op log
+        max_iterations=20  # 進一步增加迭代次數（從10→20）
+    )
+
+    # ==================== 移除最終強制刪除機制 ====================
+    # 原因：強制刪除會導致路徑斷裂，造成不可達
+    # _break_2cycles 應該已經處理了所有循環
+    # 如果仍有殘留循環，說明算法本身有問題，需要修復算法而非強制刪除
 
     # 寫入 fstate 文件（寫入所有路由，包含 holdover 和 global fallback）
     output_filename = output_dynamic_state_dir + "/fstate_" + str(time_since_epoch_ns) + ".txt"
@@ -1680,6 +1777,7 @@ def _infer_constellation_config(num_sats: int) -> Optional[Tuple[int, int]]:
     
     常見配置：
     - Starlink-550: 72 orbits × 22 sats = 1584
+    - OneWeb-1200: 18 orbits × 40 sats = 720
     - Kuiper-630: 34 orbits × 34 sats = 1156
     - Telesat-1015: 27 orbits × 13 sats = 351
     
@@ -1688,6 +1786,7 @@ def _infer_constellation_config(num_sats: int) -> Optional[Tuple[int, int]]:
     # 已知星座配置
     known_configs = {
         1584: (72, 22),  # Starlink-550
+        720: (18, 40),   # OneWeb-1200
         1156: (34, 34),  # Kuiper-630
         351: (27, 13),   # Telesat-1015
         # 可以添加更多
