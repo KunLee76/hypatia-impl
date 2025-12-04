@@ -26,7 +26,7 @@ from sgp4.api import Satrec, WGS72
 from sgp4.api import jday
 
 
-def generate_tles_from_scratch_with_sgp_original(
+def generate_tles_from_scratch_with_sgp(
         filename_out,
         constellation_name,
         num_orbits,
@@ -37,10 +37,6 @@ def generate_tles_from_scratch_with_sgp_original(
         arg_of_perigee_degree,
         mean_motion_rev_per_day
 ):
-    """
-    Original (baseline) version: treats all constellations uniformly.
-    RAAN spacing: 360° / num_orbits for all inclinations.
-    """
 
     with open(filename_out, "w+") as f_out:
 
@@ -57,10 +53,14 @@ def generate_tles_from_scratch_with_sgp_original(
         # <TLE line 1>
         # <TLE line 2>
         satellite_counter = 0
+        constellation_type = "polar" if inclination_degree > 80.0 and inclination_degree < 100.0 else "delta"
         for orbit in range(0, num_orbits):
 
             # Orbit-dependent
-            raan_degree = orbit * 360.0 / num_orbits
+            if constellation_type == "polar":
+                raan_degree = orbit * 180.0 / num_orbits
+            else:
+                raan_degree = orbit * 360.0 / num_orbits
             orbit_wise_shift = 0
             if orbit % 2 == 1:
                 if phase_diff:
@@ -131,7 +131,7 @@ def generate_tles_from_scratch_with_sgp_original(
                 satellite_counter += 1
 
 
-def generate_tles_from_scratch_manual_original(
+def generate_tles_from_scratch_manual(
         filename_out,
         constellation_name,
         num_orbits,
@@ -142,11 +142,6 @@ def generate_tles_from_scratch_manual_original(
         arg_of_perigee_degree,
         mean_motion_rev_per_day
 ):
-    """
-    Original (baseline) version: treats all constellations uniformly.
-    RAAN spacing: 360° / num_orbits for all inclinations.
-    Used for: Starlink, Kuiper, Telesat (non-polar constellations).
-    """
 
     with open(filename_out, "w+") as f_out:
 
@@ -163,94 +158,14 @@ def generate_tles_from_scratch_manual_original(
         # <TLE line 1>
         # <TLE line 2>
         satellite_counter = 0
+        constellation_type = "polar" if inclination_degree > 80.0 and inclination_degree < 100.0 else "delta"
         for orbit in range(0, num_orbits):
 
             # Orbit-dependent
-            raan_degree = orbit * 360.0 / num_orbits
-            orbit_wise_shift = 0
-            if orbit % 2 == 1:
-                if phase_diff:
-                    orbit_wise_shift = 360.0 / (num_sats_per_orbit * 2.0)
-
-            # For each satellite in the orbit
-            for n_sat in range(0, num_sats_per_orbit):
-                mean_anomaly_degree = orbit_wise_shift + (n_sat * 360 / num_sats_per_orbit)
-
-                # Epoch is 2000-01-01 00:00:00, which is 00001 in ddyyy format
-                # See also: https://www.celestrak.com/columns/v04n03/#FAQ04
-                tle_line1 = "1 %05dU 00000ABC 00001.00000000  .00000000  00000-0  00000+0 0    0" % (
-                    satellite_counter + 1
-                )
-
-                tle_line2 = "2 %05d %s %s %s %s %s %s    0" % (
-                    satellite_counter + 1,
-                    ("%3.4f" % inclination_degree).rjust(8),
-                    ("%3.4f" % raan_degree).rjust(8),
-                    ("%0.7f" % eccentricity)[2:],
-                    ("%3.4f" % arg_of_perigee_degree).rjust(8),
-                    ("%3.4f" % mean_anomaly_degree).rjust(8),
-                    ("%2.8f" % mean_motion_rev_per_day).rjust(11),
-                )
-
-                # Append checksums
-                tle_line1 = tle_line1 + str(calculate_tle_line_checksum(tle_line1))
-                tle_line2 = tle_line2 + str(calculate_tle_line_checksum(tle_line2))
-
-                # Write TLE to file
-                f_out.write(constellation_name + " " + str(orbit * num_sats_per_orbit + n_sat) + "\n")
-                f_out.write(tle_line1 + "\n")
-                f_out.write(tle_line2 + "\n")
-
-                # One more satellite there
-                satellite_counter += 1
-
-
-def generate_tles_from_scratch_manual_polar(
-        filename_out,
-        constellation_name,
-        num_orbits,
-        num_sats_per_orbit,
-        phase_diff,
-        inclination_degree,
-        eccentricity,
-        arg_of_perigee_degree,
-        mean_motion_rev_per_day
-):
-    """
-    Polar-optimized version: treats polar constellations specially.
-    For polar (80° < inc < 100°): RAAN spacing = 180° / num_orbits.
-    For delta: RAAN spacing = 360° / num_orbits.
-    
-    This reduces ground track overlap for polar Walker constellations,
-    interpreting num_orbits as "geometrically independent orbit planes."
-    
-    Used for: OneWeb (87.9°), polar experimental constellations.
-    """
-
-    with open(filename_out, "w+") as f_out:
-
-        # First line:
-        #
-        # <number of orbits> <number of satellites per orbit>
-        #
-        f_out.write("%d %d\n" % (num_orbits, num_sats_per_orbit))
-
-        # Determine constellation type
-        constellation_type = (
-            "polar"
-            if 80.0 < inclination_degree < 100.0
-            else "delta"
-        )
-
-        satellite_counter = 0
-        for orbit in range(0, num_orbits):
-
-            # Orbit-dependent RAAN
             if constellation_type == "polar":
                 raan_degree = orbit * 180.0 / num_orbits
             else:
                 raan_degree = orbit * 360.0 / num_orbits
-                
             orbit_wise_shift = 0
             if orbit % 2 == 1:
                 if phase_diff:
@@ -287,49 +202,6 @@ def generate_tles_from_scratch_manual_polar(
 
                 # One more satellite there
                 satellite_counter += 1
-
-
-def generate_tles_from_scratch_manual(
-        filename_out,
-        constellation_name,
-        num_orbits,
-        num_sats_per_orbit,
-        phase_diff,
-        inclination_degree,
-        eccentricity,
-        arg_of_perigee_degree,
-        mean_motion_rev_per_day,
-        use_polar_version=None
-):
-    """
-    Smart wrapper that automatically selects the appropriate version.
-    
-    Args:
-        use_polar_version: 
-            - None (default): Auto-detect based on inclination
-            - True: Force polar version (80° < inc < 100° → 180° RAAN spacing)
-            - False: Force original version (all inc → 360° RAAN spacing)
-    
-    Auto-detection logic:
-        - Polar (80° < inc < 100°): Use polar version
-        - Delta (all other): Use original version
-    """
-    # Auto-detect if not explicitly specified
-    if use_polar_version is None:
-        use_polar_version = (80.0 < inclination_degree < 100.0)
-    
-    if use_polar_version:
-        generate_tles_from_scratch_manual_polar(
-            filename_out, constellation_name, num_orbits, num_sats_per_orbit,
-            phase_diff, inclination_degree, eccentricity, 
-            arg_of_perigee_degree, mean_motion_rev_per_day
-        )
-    else:
-        generate_tles_from_scratch_manual_original(
-            filename_out, constellation_name, num_orbits, num_sats_per_orbit,
-            phase_diff, inclination_degree, eccentricity,
-            arg_of_perigee_degree, mean_motion_rev_per_day
-        )
 
 
 def calculate_tle_line_checksum(tle_line_without_checksum):

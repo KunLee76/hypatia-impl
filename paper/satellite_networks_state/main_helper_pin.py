@@ -63,32 +63,12 @@ class MainHelper:
             time_step_ms,
             isl_selection,            # isls_{none, plus_grid}
             gs_selection,             # ground_stations_{top_100, paris_moscow_grid}
-            dynamic_state_algorithm,  # algorithm_{free_one_only_{gs_relays,_over_isls}, paired_many_only_over_isls, hierarchical}
-            num_threads,
-            grid_deg=15               # Grid degree for hierarchical algorithms (default: 15)
+            dynamic_state_algorithm,  # algorithm_{free_one_only_{gs_relays,_over_isls}, paired_many_only_over_isls}
+            num_threads
     ):
 
         # Add base name to setting
         name = self.BASE_NAME + "_" + isl_selection + "_" + gs_selection + "_" + dynamic_state_algorithm
-        
-        # 如果是需要 grid_deg 的演算法，在名稱加上 grid_deg 後綴
-        # 注意：algorithm_lohi 不使用 grid_deg，使用固定的 6×10 平面區塊分群
-        if "hierarchical_virtual_gid" in dynamic_state_algorithm.lower():
-            name += f"_{grid_deg}deg"
-            # 設定環境變數，讓演算法讀取
-            os.environ['SATGEN_GRID_DEG'] = str(grid_deg)
-            print(f"[GID] Setting grid degree to {grid_deg}° for hierarchical GID algorithm")
-        elif "hierarchical" in dynamic_state_algorithm.lower() and "lohi" not in dynamic_state_algorithm.lower():
-            # 其他 hierarchical 演算法也可能需要 grid_deg
-            name += f"_{grid_deg}deg"
-            os.environ['SATGEN_GRID_DEG'] = str(grid_deg)
-            print(f"[Hierarchical] Setting grid degree to {grid_deg}°")
-        elif "lohi" in dynamic_state_algorithm.lower():
-            # LoHi 使用固定的 p×s (6×10) 分群，不需要 grid_deg
-            print(f"[LoHi] Using fixed 6×10 plane-block grouping (grid_deg parameter ignored)")
-        else:
-            # 非階層化演算法不需要 grid_deg
-            print(f"[{dynamic_state_algorithm}] No grouping parameter needed")
 
         # Create output directories
         if not os.path.isdir(output_generated_data_dir):
@@ -103,11 +83,6 @@ class MainHelper:
                 "input_data/ground_stations_cities_sorted_by_estimated_2025_pop_top_100.basic.txt",
                 output_generated_data_dir + "/" + name + "/ground_stations.txt"
             )
-        elif gs_selection == "ground_stations_top_100_with_hsinchu":
-            satgen.extend_ground_stations(
-                "input_data/ground_stations_cities_sorted_by_estimated_2025_pop_top_100_with_hsinchu.basic.txt",
-                output_generated_data_dir + "/" + name + "/ground_stations.txt"
-            )
         elif gs_selection == "ground_stations_paris_moscow_grid":
             satgen.extend_ground_stations(
                 "input_data/ground_stations_paris_moscow_grid.basic.txt",
@@ -118,8 +93,6 @@ class MainHelper:
 
         # TLEs
         print("Generating TLEs...")
-        # Auto-detect: polar version for 80° < inc < 100°, original for others
-        # Starlink (53°) → original, OneWeb (87.9°) → polar
         satgen.generate_tles_from_scratch_manual(
             output_generated_data_dir + "/" + name + "/tles.txt",
             self.NICE_NAME,
@@ -129,23 +102,19 @@ class MainHelper:
             self.INCLINATION_DEGREE,
             self.ECCENTRICITY,
             self.ARG_OF_PERIGEE_DEGREE,
-            self.MEAN_MOTION_REV_PER_DAY,
-            use_polar_version=None  # Auto-detect based on inclination
+            self.MEAN_MOTION_REV_PER_DAY
         )
 
         # ISLs
         print("Generating ISLs...")
         if isl_selection == "isls_plus_grid":
-            # Auto-detect: polar version for 80° < inc < 100°, original for others
-            # Starlink (53°) → original (circular wrap), OneWeb (87.9°) → polar (seam handling)
             satgen.generate_plus_grid_isls(
                 output_generated_data_dir + "/" + name + "/isls.txt",
                 self.NUM_ORBS,
                 self.NUM_SATS_PER_ORB,
+                self.INCLINATION_DEGREE,
                 isl_shift=0,
-                idx_offset=0,
-                inclination_degree=self.INCLINATION_DEGREE,
-                use_polar_version=None  # Auto-detect based on inclination
+                idx_offset=0
             )
         elif isl_selection == "isls_none":
             satgen.generate_empty_isls(
@@ -168,12 +137,8 @@ class MainHelper:
         )
         if dynamic_state_algorithm == "algorithm_free_one_only_gs_relays" \
                 or dynamic_state_algorithm == "algorithm_free_one_only_over_isls" \
-                or dynamic_state_algorithm == "algorithm_hierarchical" \
-                or dynamic_state_algorithm == "algorithm_hierarchical_virtual_gid" \
-                or dynamic_state_algorithm == "algorithm_hierarchical_virtual_gid_dijkstra" \
-                or dynamic_state_algorithm == "algorithm_free_one_only_over_isls_with_stats" \
-                or dynamic_state_algorithm == "algorithm_lohi":
-            # One GSL interface per satellite
+                or dynamic_state_algorithm == "algorithm_paired_one_only_over_isls" \
+                or dynamic_state_algorithm == "algorithm_lohi_routing":
             gsl_interfaces_per_satellite = 1
         elif dynamic_state_algorithm == "algorithm_paired_many_only_over_isls":
             gsl_interfaces_per_satellite = len(ground_stations)
@@ -202,5 +167,7 @@ class MainHelper:
             self.MAX_GSL_LENGTH_M,
             self.MAX_ISL_LENGTH_M,
             dynamic_state_algorithm,
-            True
+            True,
+            self.NUM_ORBS,
+            self.NUM_SATS_PER_ORB
         )
