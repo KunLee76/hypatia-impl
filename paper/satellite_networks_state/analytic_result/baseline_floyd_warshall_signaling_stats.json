@@ -1,7 +1,7 @@
 {
   "algorithm": "algorithm_free_one_only_over_isls_with_stats",
   "algorithm_display_name": "Floyd-Warshall Baseline",
-  "timestamp": "2025-11-22T17:24:57.357796",
+  "timestamp": "2025-12-04T21:49:41.433421",
   "summary": {
     "total_events": 209,
     "total_bytes": 121659392,
@@ -16,7 +16,7 @@
   "timeline": [
     {
       "snapshot": 0,
-      "time_ms": 0,
+      "time_ms": 12000,
       "event": "routing_update",
       "count": 1,
       "bytes": 1745344,
@@ -28,7 +28,7 @@
     },
     {
       "snapshot": 1,
-      "time_ms": 16000,
+      "time_ms": 8000,
       "event": "routing_update",
       "count": 1,
       "bytes": 1745344,
@@ -40,7 +40,7 @@
     },
     {
       "snapshot": 2,
-      "time_ms": 4000,
+      "time_ms": 14000,
       "event": "routing_update",
       "count": 1,
       "bytes": 1745344,
@@ -64,7 +64,7 @@
     },
     {
       "snapshot": 4,
-      "time_ms": 10000,
+      "time_ms": 0,
       "event": "routing_update",
       "count": 1,
       "bytes": 1745344,
@@ -76,7 +76,7 @@
     },
     {
       "snapshot": 5,
-      "time_ms": 8000,
+      "time_ms": 16000,
       "event": "routing_update",
       "count": 1,
       "bytes": 1745344,
@@ -88,7 +88,7 @@
     },
     {
       "snapshot": 6,
-      "time_ms": 12000,
+      "time_ms": 4000,
       "event": "routing_update",
       "count": 1,
       "bytes": 1745344,
@@ -100,18 +100,6 @@
     },
     {
       "snapshot": 7,
-      "time_ms": 14000,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 1745344,
-      "detail": {
-        "changed_entries": 145440,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 8,
       "time_ms": 18000,
       "event": "routing_update",
       "count": 1,
@@ -123,7 +111,7 @@
       }
     },
     {
-      "snapshot": 9,
+      "snapshot": 8,
       "time_ms": 6000,
       "event": "routing_update",
       "count": 1,
@@ -135,19 +123,19 @@
       }
     },
     {
-      "snapshot": 10,
-      "time_ms": 2100,
+      "snapshot": 9,
+      "time_ms": 10000,
       "event": "routing_update",
       "count": 1,
-      "bytes": 523648,
+      "bytes": 1745344,
       "detail": {
-        "changed_entries": 43632,
+        "changed_entries": 145440,
         "total_entries": 145440,
         "algorithm": "floyd_warshall"
       }
     },
     {
-      "snapshot": 11,
+      "snapshot": 10,
       "time_ms": 12100,
       "event": "routing_update",
       "count": 1,
@@ -159,8 +147,8 @@
       }
     },
     {
-      "snapshot": 12,
-      "time_ms": 10100,
+      "snapshot": 11,
+      "time_ms": 18100,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -171,8 +159,8 @@
       }
     },
     {
-      "snapshot": 14,
-      "time_ms": 16100,
+      "snapshot": 12,
+      "time_ms": 14100,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -184,7 +172,19 @@
     },
     {
       "snapshot": 13,
-      "time_ms": 100,
+      "time_ms": 16100,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 14,
+      "time_ms": 8100,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -196,7 +196,7 @@
     },
     {
       "snapshot": 15,
-      "time_ms": 14100,
+      "time_ms": 100,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -220,18 +220,6 @@
     },
     {
       "snapshot": 17,
-      "time_ms": 18100,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 523648,
-      "detail": {
-        "changed_entries": 43632,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 18,
       "time_ms": 4100,
       "event": "routing_update",
       "count": 1,
@@ -243,8 +231,20 @@
       }
     },
     {
+      "snapshot": 18,
+      "time_ms": 2100,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
       "snapshot": 19,
-      "time_ms": 8100,
+      "time_ms": 10100,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -256,18 +256,6 @@
     },
     {
       "snapshot": 20,
-      "time_ms": 2200,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 523648,
-      "detail": {
-        "changed_entries": 43632,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 21,
       "time_ms": 12200,
       "event": "routing_update",
       "count": 1,
@@ -279,67 +267,7 @@
       }
     },
     {
-      "snapshot": 22,
-      "time_ms": 10200,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 523648,
-      "detail": {
-        "changed_entries": 43632,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 23,
-      "time_ms": 200,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 523648,
-      "detail": {
-        "changed_entries": 43632,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 24,
-      "time_ms": 16200,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 523648,
-      "detail": {
-        "changed_entries": 43632,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 25,
-      "time_ms": 6200,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 523648,
-      "detail": {
-        "changed_entries": 43632,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 26,
-      "time_ms": 14200,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 523648,
-      "detail": {
-        "changed_entries": 43632,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 27,
+      "snapshot": 21,
       "time_ms": 18200,
       "event": "routing_update",
       "count": 1,
@@ -351,8 +279,8 @@
       }
     },
     {
-      "snapshot": 28,
-      "time_ms": 4200,
+      "snapshot": 22,
+      "time_ms": 14200,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -363,7 +291,7 @@
       }
     },
     {
-      "snapshot": 29,
+      "snapshot": 23,
       "time_ms": 8200,
       "event": "routing_update",
       "count": 1,
@@ -375,8 +303,8 @@
       }
     },
     {
-      "snapshot": 30,
-      "time_ms": 2300,
+      "snapshot": 24,
+      "time_ms": 6200,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -387,7 +315,67 @@
       }
     },
     {
-      "snapshot": 31,
+      "snapshot": 25,
+      "time_ms": 10200,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 26,
+      "time_ms": 16200,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 27,
+      "time_ms": 2200,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 28,
+      "time_ms": 200,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 29,
+      "time_ms": 4200,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 30,
       "time_ms": 12300,
       "event": "routing_update",
       "count": 1,
@@ -399,8 +387,20 @@
       }
     },
     {
+      "snapshot": 31,
+      "time_ms": 18300,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
       "snapshot": 32,
-      "time_ms": 300,
+      "time_ms": 14300,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -412,7 +412,7 @@
     },
     {
       "snapshot": 33,
-      "time_ms": 10300,
+      "time_ms": 8300,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -448,7 +448,7 @@
     },
     {
       "snapshot": 36,
-      "time_ms": 14300,
+      "time_ms": 300,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -460,30 +460,6 @@
     },
     {
       "snapshot": 37,
-      "time_ms": 18300,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 523648,
-      "detail": {
-        "changed_entries": 43632,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 38,
-      "time_ms": 8300,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 523648,
-      "detail": {
-        "changed_entries": 43632,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 39,
       "time_ms": 4300,
       "event": "routing_update",
       "count": 1,
@@ -495,8 +471,8 @@
       }
     },
     {
-      "snapshot": 40,
-      "time_ms": 2400,
+      "snapshot": 38,
+      "time_ms": 2300,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -507,7 +483,19 @@
       }
     },
     {
-      "snapshot": 41,
+      "snapshot": 39,
+      "time_ms": 10300,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 40,
       "time_ms": 12400,
       "event": "routing_update",
       "count": 1,
@@ -519,8 +507,20 @@
       }
     },
     {
+      "snapshot": 41,
+      "time_ms": 18400,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
       "snapshot": 42,
-      "time_ms": 400,
+      "time_ms": 14400,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -532,7 +532,7 @@
     },
     {
       "snapshot": 43,
-      "time_ms": 10400,
+      "time_ms": 8400,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -568,7 +568,7 @@
     },
     {
       "snapshot": 46,
-      "time_ms": 14400,
+      "time_ms": 2400,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -580,7 +580,7 @@
     },
     {
       "snapshot": 47,
-      "time_ms": 18400,
+      "time_ms": 10400,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -592,7 +592,7 @@
     },
     {
       "snapshot": 48,
-      "time_ms": 4400,
+      "time_ms": 400,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -604,7 +604,7 @@
     },
     {
       "snapshot": 49,
-      "time_ms": 8400,
+      "time_ms": 4400,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -616,18 +616,6 @@
     },
     {
       "snapshot": 50,
-      "time_ms": 2500,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 523648,
-      "detail": {
-        "changed_entries": 43632,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 51,
       "time_ms": 12500,
       "event": "routing_update",
       "count": 1,
@@ -639,8 +627,20 @@
       }
     },
     {
+      "snapshot": 51,
+      "time_ms": 18500,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
       "snapshot": 52,
-      "time_ms": 500,
+      "time_ms": 8500,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -652,7 +652,7 @@
     },
     {
       "snapshot": 53,
-      "time_ms": 10500,
+      "time_ms": 14500,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -688,7 +688,7 @@
     },
     {
       "snapshot": 56,
-      "time_ms": 14500,
+      "time_ms": 2500,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -700,7 +700,7 @@
     },
     {
       "snapshot": 57,
-      "time_ms": 18500,
+      "time_ms": 500,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -712,7 +712,7 @@
     },
     {
       "snapshot": 58,
-      "time_ms": 4500,
+      "time_ms": 10500,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -724,7 +724,7 @@
     },
     {
       "snapshot": 59,
-      "time_ms": 8500,
+      "time_ms": 4500,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -736,18 +736,6 @@
     },
     {
       "snapshot": 60,
-      "time_ms": 2600,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 523648,
-      "detail": {
-        "changed_entries": 43632,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 61,
       "time_ms": 12600,
       "event": "routing_update",
       "count": 1,
@@ -759,8 +747,8 @@
       }
     },
     {
-      "snapshot": 62,
-      "time_ms": 600,
+      "snapshot": 61,
+      "time_ms": 18600,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -771,8 +759,8 @@
       }
     },
     {
-      "snapshot": 63,
-      "time_ms": 10600,
+      "snapshot": 62,
+      "time_ms": 6600,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -784,7 +772,19 @@
     },
     {
       "snapshot": 64,
-      "time_ms": 6600,
+      "time_ms": 14600,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 63,
+      "time_ms": 8600,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -808,7 +808,7 @@
     },
     {
       "snapshot": 66,
-      "time_ms": 14600,
+      "time_ms": 2600,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -820,7 +820,7 @@
     },
     {
       "snapshot": 67,
-      "time_ms": 18600,
+      "time_ms": 600,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -844,7 +844,7 @@
     },
     {
       "snapshot": 69,
-      "time_ms": 8600,
+      "time_ms": 10600,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -856,18 +856,6 @@
     },
     {
       "snapshot": 70,
-      "time_ms": 2700,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 523648,
-      "detail": {
-        "changed_entries": 43632,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 71,
       "time_ms": 12700,
       "event": "routing_update",
       "count": 1,
@@ -879,8 +867,20 @@
       }
     },
     {
+      "snapshot": 71,
+      "time_ms": 18700,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
       "snapshot": 72,
-      "time_ms": 700,
+      "time_ms": 8700,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -892,7 +892,7 @@
     },
     {
       "snapshot": 73,
-      "time_ms": 10700,
+      "time_ms": 14700,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -916,7 +916,7 @@
     },
     {
       "snapshot": 75,
-      "time_ms": 6700,
+      "time_ms": 2700,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -928,7 +928,7 @@
     },
     {
       "snapshot": 76,
-      "time_ms": 14700,
+      "time_ms": 6700,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -940,7 +940,7 @@
     },
     {
       "snapshot": 77,
-      "time_ms": 18700,
+      "time_ms": 700,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -952,7 +952,7 @@
     },
     {
       "snapshot": 78,
-      "time_ms": 4700,
+      "time_ms": 10700,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -964,7 +964,7 @@
     },
     {
       "snapshot": 79,
-      "time_ms": 8700,
+      "time_ms": 4700,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -976,18 +976,6 @@
     },
     {
       "snapshot": 80,
-      "time_ms": 2800,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 523648,
-      "detail": {
-        "changed_entries": 43632,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 81,
       "time_ms": 12800,
       "event": "routing_update",
       "count": 1,
@@ -999,8 +987,20 @@
       }
     },
     {
+      "snapshot": 81,
+      "time_ms": 18800,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
       "snapshot": 82,
-      "time_ms": 800,
+      "time_ms": 8800,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -1012,7 +1012,7 @@
     },
     {
       "snapshot": 83,
-      "time_ms": 10800,
+      "time_ms": 14800,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -1036,7 +1036,7 @@
     },
     {
       "snapshot": 85,
-      "time_ms": 6800,
+      "time_ms": 2800,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -1048,7 +1048,7 @@
     },
     {
       "snapshot": 86,
-      "time_ms": 14800,
+      "time_ms": 6800,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -1060,7 +1060,7 @@
     },
     {
       "snapshot": 87,
-      "time_ms": 4800,
+      "time_ms": 800,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -1072,7 +1072,7 @@
     },
     {
       "snapshot": 88,
-      "time_ms": 18800,
+      "time_ms": 10800,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -1084,7 +1084,7 @@
     },
     {
       "snapshot": 89,
-      "time_ms": 2900,
+      "time_ms": 4800,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -1096,30 +1096,6 @@
     },
     {
       "snapshot": 90,
-      "time_ms": 8800,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 523648,
-      "detail": {
-        "changed_entries": 43632,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 91,
-      "time_ms": 900,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 523648,
-      "detail": {
-        "changed_entries": 43632,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 92,
       "time_ms": 12900,
       "event": "routing_update",
       "count": 1,
@@ -1131,8 +1107,32 @@
       }
     },
     {
+      "snapshot": 91,
+      "time_ms": 18900,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 92,
+      "time_ms": 8900,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
       "snapshot": 93,
-      "time_ms": 10900,
+      "time_ms": 14900,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -1144,7 +1144,7 @@
     },
     {
       "snapshot": 94,
-      "time_ms": 16900,
+      "time_ms": 2900,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -1168,7 +1168,7 @@
     },
     {
       "snapshot": 96,
-      "time_ms": 14900,
+      "time_ms": 16900,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -1180,7 +1180,7 @@
     },
     {
       "snapshot": 97,
-      "time_ms": 18900,
+      "time_ms": 900,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -1204,7 +1204,7 @@
     },
     {
       "snapshot": 99,
-      "time_ms": 8900,
+      "time_ms": 10900,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -1216,42 +1216,6 @@
     },
     {
       "snapshot": 100,
-      "time_ms": 3000,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 523648,
-      "detail": {
-        "changed_entries": 43632,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 101,
-      "time_ms": 1000,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 523648,
-      "detail": {
-        "changed_entries": 43632,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 102,
-      "time_ms": 11000,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 523648,
-      "detail": {
-        "changed_entries": 43632,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 103,
       "time_ms": 13000,
       "event": "routing_update",
       "count": 1,
@@ -1263,8 +1227,44 @@
       }
     },
     {
+      "snapshot": 101,
+      "time_ms": 19000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 102,
+      "time_ms": 9000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 103,
+      "time_ms": 3000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
       "snapshot": 104,
-      "time_ms": 17000,
+      "time_ms": 15000,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -1288,7 +1288,7 @@
     },
     {
       "snapshot": 106,
-      "time_ms": 15000,
+      "time_ms": 1000,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -1300,7 +1300,7 @@
     },
     {
       "snapshot": 107,
-      "time_ms": 5000,
+      "time_ms": 17000,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -1312,7 +1312,7 @@
     },
     {
       "snapshot": 108,
-      "time_ms": 9000,
+      "time_ms": 11000,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -1324,7 +1324,7 @@
     },
     {
       "snapshot": 109,
-      "time_ms": 19000,
+      "time_ms": 5000,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -1336,42 +1336,6 @@
     },
     {
       "snapshot": 110,
-      "time_ms": 1100,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 523648,
-      "detail": {
-        "changed_entries": 43632,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 111,
-      "time_ms": 3100,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 523648,
-      "detail": {
-        "changed_entries": 43632,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 112,
-      "time_ms": 11100,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 523648,
-      "detail": {
-        "changed_entries": 43632,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 113,
       "time_ms": 13100,
       "event": "routing_update",
       "count": 1,
@@ -1383,67 +1347,7 @@
       }
     },
     {
-      "snapshot": 114,
-      "time_ms": 17100,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 523648,
-      "detail": {
-        "changed_entries": 43632,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 115,
-      "time_ms": 7100,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 523648,
-      "detail": {
-        "changed_entries": 43632,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 116,
-      "time_ms": 15100,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 523648,
-      "detail": {
-        "changed_entries": 43632,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 117,
-      "time_ms": 5100,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 523648,
-      "detail": {
-        "changed_entries": 43632,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 118,
-      "time_ms": 9100,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 523648,
-      "detail": {
-        "changed_entries": 43632,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 119,
+      "snapshot": 111,
       "time_ms": 19100,
       "event": "routing_update",
       "count": 1,
@@ -1455,31 +1359,103 @@
       }
     },
     {
+      "snapshot": 112,
+      "time_ms": 9100,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 113,
+      "time_ms": 3100,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 114,
+      "time_ms": 7100,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 115,
+      "time_ms": 15100,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 116,
+      "time_ms": 1100,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 117,
+      "time_ms": 17100,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 118,
+      "time_ms": 11100,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 119,
+      "time_ms": 5100,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
       "snapshot": 120,
-      "time_ms": 1200,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 523648,
-      "detail": {
-        "changed_entries": 43632,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 121,
-      "time_ms": 3200,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 523648,
-      "detail": {
-        "changed_entries": 43632,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 122,
       "time_ms": 13200,
       "event": "routing_update",
       "count": 1,
@@ -1491,67 +1467,7 @@
       }
     },
     {
-      "snapshot": 123,
-      "time_ms": 11200,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 523648,
-      "detail": {
-        "changed_entries": 43632,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 124,
-      "time_ms": 17200,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 523648,
-      "detail": {
-        "changed_entries": 43632,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 125,
-      "time_ms": 7200,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 523648,
-      "detail": {
-        "changed_entries": 43632,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 126,
-      "time_ms": 15200,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 523648,
-      "detail": {
-        "changed_entries": 43632,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 127,
-      "time_ms": 5200,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 523648,
-      "detail": {
-        "changed_entries": 43632,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 128,
+      "snapshot": 121,
       "time_ms": 19200,
       "event": "routing_update",
       "count": 1,
@@ -1563,7 +1479,7 @@
       }
     },
     {
-      "snapshot": 129,
+      "snapshot": 122,
       "time_ms": 9200,
       "event": "routing_update",
       "count": 1,
@@ -1575,8 +1491,92 @@
       }
     },
     {
+      "snapshot": 123,
+      "time_ms": 3200,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 124,
+      "time_ms": 7200,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 125,
+      "time_ms": 15200,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 126,
+      "time_ms": 1200,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 127,
+      "time_ms": 17200,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 128,
+      "time_ms": 11200,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 129,
+      "time_ms": 5200,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
       "snapshot": 130,
-      "time_ms": 1300,
+      "time_ms": 19300,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -1588,7 +1588,7 @@
     },
     {
       "snapshot": 131,
-      "time_ms": 17300,
+      "time_ms": 13300,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -1600,7 +1600,7 @@
     },
     {
       "snapshot": 132,
-      "time_ms": 3300,
+      "time_ms": 9300,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -1612,7 +1612,7 @@
     },
     {
       "snapshot": 133,
-      "time_ms": 11300,
+      "time_ms": 3300,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -1624,7 +1624,7 @@
     },
     {
       "snapshot": 134,
-      "time_ms": 13300,
+      "time_ms": 15300,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -1648,7 +1648,7 @@
     },
     {
       "snapshot": 136,
-      "time_ms": 15300,
+      "time_ms": 1300,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -1660,7 +1660,7 @@
     },
     {
       "snapshot": 137,
-      "time_ms": 5300,
+      "time_ms": 17300,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -1672,7 +1672,7 @@
     },
     {
       "snapshot": 138,
-      "time_ms": 19300,
+      "time_ms": 11300,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -1684,7 +1684,7 @@
     },
     {
       "snapshot": 139,
-      "time_ms": 9300,
+      "time_ms": 5300,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -1696,7 +1696,7 @@
     },
     {
       "snapshot": 140,
-      "time_ms": 1400,
+      "time_ms": 19400,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -1708,18 +1708,6 @@
     },
     {
       "snapshot": 141,
-      "time_ms": 17400,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 523648,
-      "detail": {
-        "changed_entries": 43632,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 142,
       "time_ms": 13400,
       "event": "routing_update",
       "count": 1,
@@ -1731,8 +1719,8 @@
       }
     },
     {
-      "snapshot": 143,
-      "time_ms": 11400,
+      "snapshot": 142,
+      "time_ms": 9400,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -1743,7 +1731,7 @@
       }
     },
     {
-      "snapshot": 144,
+      "snapshot": 143,
       "time_ms": 3400,
       "event": "routing_update",
       "count": 1,
@@ -1755,7 +1743,7 @@
       }
     },
     {
-      "snapshot": 145,
+      "snapshot": 144,
       "time_ms": 15400,
       "event": "routing_update",
       "count": 1,
@@ -1767,8 +1755,20 @@
       }
     },
     {
-      "snapshot": 146,
+      "snapshot": 145,
       "time_ms": 7400,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 146,
+      "time_ms": 17400,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -1792,7 +1792,7 @@
     },
     {
       "snapshot": 148,
-      "time_ms": 19400,
+      "time_ms": 1400,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -1804,7 +1804,7 @@
     },
     {
       "snapshot": 149,
-      "time_ms": 1500,
+      "time_ms": 11400,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -1816,7 +1816,7 @@
     },
     {
       "snapshot": 151,
-      "time_ms": 13500,
+      "time_ms": 19500,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -1828,7 +1828,7 @@
     },
     {
       "snapshot": 150,
-      "time_ms": 9400,
+      "time_ms": 13500,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -1840,7 +1840,7 @@
     },
     {
       "snapshot": 152,
-      "time_ms": 3500,
+      "time_ms": 9500,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -1852,7 +1852,7 @@
     },
     {
       "snapshot": 153,
-      "time_ms": 7500,
+      "time_ms": 3500,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -1864,18 +1864,6 @@
     },
     {
       "snapshot": 154,
-      "time_ms": 17500,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 523648,
-      "detail": {
-        "changed_entries": 43632,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 155,
       "time_ms": 15500,
       "event": "routing_update",
       "count": 1,
@@ -1887,8 +1875,20 @@
       }
     },
     {
+      "snapshot": 155,
+      "time_ms": 7500,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
       "snapshot": 156,
-      "time_ms": 11500,
+      "time_ms": 17500,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -1912,7 +1912,7 @@
     },
     {
       "snapshot": 158,
-      "time_ms": 1600,
+      "time_ms": 1500,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -1924,7 +1924,7 @@
     },
     {
       "snapshot": 159,
-      "time_ms": 13600,
+      "time_ms": 11500,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -1936,7 +1936,7 @@
     },
     {
       "snapshot": 160,
-      "time_ms": 9500,
+      "time_ms": 19600,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -1948,7 +1948,7 @@
     },
     {
       "snapshot": 161,
-      "time_ms": 19500,
+      "time_ms": 13600,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -1960,7 +1960,7 @@
     },
     {
       "snapshot": 162,
-      "time_ms": 7600,
+      "time_ms": 9600,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -1972,30 +1972,6 @@
     },
     {
       "snapshot": 163,
-      "time_ms": 17600,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 523648,
-      "detail": {
-        "changed_entries": 43632,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 164,
-      "time_ms": 11600,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 523648,
-      "detail": {
-        "changed_entries": 43632,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 165,
       "time_ms": 3600,
       "event": "routing_update",
       "count": 1,
@@ -2007,8 +1983,32 @@
       }
     },
     {
-      "snapshot": 166,
+      "snapshot": 164,
+      "time_ms": 7600,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 165,
       "time_ms": 15600,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 166,
+      "time_ms": 17600,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -2032,7 +2032,7 @@
     },
     {
       "snapshot": 168,
-      "time_ms": 1700,
+      "time_ms": 1600,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -2044,7 +2044,7 @@
     },
     {
       "snapshot": 169,
-      "time_ms": 9600,
+      "time_ms": 11600,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -2056,150 +2056,6 @@
     },
     {
       "snapshot": 170,
-      "time_ms": 13700,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 523648,
-      "detail": {
-        "changed_entries": 43632,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 171,
-      "time_ms": 7700,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 523648,
-      "detail": {
-        "changed_entries": 43632,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 172,
-      "time_ms": 19600,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 523648,
-      "detail": {
-        "changed_entries": 43632,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 173,
-      "time_ms": 17700,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 523648,
-      "detail": {
-        "changed_entries": 43632,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 174,
-      "time_ms": 15700,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 523648,
-      "detail": {
-        "changed_entries": 43632,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 175,
-      "time_ms": 5700,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 523648,
-      "detail": {
-        "changed_entries": 43632,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 176,
-      "time_ms": 3700,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 523648,
-      "detail": {
-        "changed_entries": 43632,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 177,
-      "time_ms": 11700,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 523648,
-      "detail": {
-        "changed_entries": 43632,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 178,
-      "time_ms": 1800,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 523648,
-      "detail": {
-        "changed_entries": 43632,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 179,
-      "time_ms": 9700,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 523648,
-      "detail": {
-        "changed_entries": 43632,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 180,
-      "time_ms": 13800,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 523648,
-      "detail": {
-        "changed_entries": 43632,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 181,
-      "time_ms": 7800,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 523648,
-      "detail": {
-        "changed_entries": 43632,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 182,
       "time_ms": 19700,
       "event": "routing_update",
       "count": 1,
@@ -2211,8 +2067,8 @@
       }
     },
     {
-      "snapshot": 183,
-      "time_ms": 17800,
+      "snapshot": 171,
+      "time_ms": 13700,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -2223,7 +2079,139 @@
       }
     },
     {
-      "snapshot": 184,
+      "snapshot": 172,
+      "time_ms": 9700,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 173,
+      "time_ms": 3700,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 174,
+      "time_ms": 7700,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 175,
+      "time_ms": 15700,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 176,
+      "time_ms": 17700,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 177,
+      "time_ms": 1700,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 178,
+      "time_ms": 19800,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 179,
+      "time_ms": 5700,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 180,
+      "time_ms": 11700,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 181,
+      "time_ms": 13800,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 182,
+      "time_ms": 9800,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 183,
       "time_ms": 3800,
       "event": "routing_update",
       "count": 1,
@@ -2235,8 +2223,8 @@
       }
     },
     {
-      "snapshot": 186,
-      "time_ms": 5800,
+      "snapshot": 184,
+      "time_ms": 7800,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -2248,6 +2236,18 @@
     },
     {
       "snapshot": 185,
+      "time_ms": 17800,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 186,
       "time_ms": 15800,
       "event": "routing_update",
       "count": 1,
@@ -2260,7 +2260,7 @@
     },
     {
       "snapshot": 187,
-      "time_ms": 11800,
+      "time_ms": 19900,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -2272,7 +2272,7 @@
     },
     {
       "snapshot": 188,
-      "time_ms": 1900,
+      "time_ms": 1800,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -2284,7 +2284,7 @@
     },
     {
       "snapshot": 189,
-      "time_ms": 9800,
+      "time_ms": 5800,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -2296,7 +2296,7 @@
     },
     {
       "snapshot": 190,
-      "time_ms": 7900,
+      "time_ms": 11800,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -2320,90 +2320,6 @@
     },
     {
       "snapshot": 192,
-      "time_ms": 19800,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 523648,
-      "detail": {
-        "changed_entries": 43632,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 193,
-      "time_ms": 17900,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 523648,
-      "detail": {
-        "changed_entries": 43632,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 194,
-      "time_ms": 3900,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 523648,
-      "detail": {
-        "changed_entries": 43632,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 195,
-      "time_ms": 5900,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 523648,
-      "detail": {
-        "changed_entries": 43632,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 196,
-      "time_ms": 11900,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 523648,
-      "detail": {
-        "changed_entries": 43632,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 197,
-      "time_ms": 2000,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 523648,
-      "detail": {
-        "changed_entries": 43632,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 198,
-      "time_ms": 15900,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 523648,
-      "detail": {
-        "changed_entries": 43632,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 199,
       "time_ms": 9900,
       "event": "routing_update",
       "count": 1,
@@ -2415,7 +2331,67 @@
       }
     },
     {
-      "snapshot": 200,
+      "snapshot": 193,
+      "time_ms": 3900,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 194,
+      "time_ms": 7900,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 195,
+      "time_ms": 17900,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 196,
+      "time_ms": 15900,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 197,
+      "time_ms": 10000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 198,
       "time_ms": 14000,
       "event": "routing_update",
       "count": 1,
@@ -2427,8 +2403,32 @@
       }
     },
     {
+      "snapshot": 199,
+      "time_ms": 1900,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 200,
+      "time_ms": 11900,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
       "snapshot": 201,
-      "time_ms": 8000,
+      "time_ms": 5900,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -2440,30 +2440,6 @@
     },
     {
       "snapshot": 202,
-      "time_ms": 19900,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 523648,
-      "detail": {
-        "changed_entries": 43632,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 203,
-      "time_ms": 18000,
-      "event": "routing_update",
-      "count": 1,
-      "bytes": 523648,
-      "detail": {
-        "changed_entries": 43632,
-        "total_entries": 145440,
-        "algorithm": "floyd_warshall"
-      }
-    },
-    {
-      "snapshot": 204,
       "time_ms": 4000,
       "event": "routing_update",
       "count": 1,
@@ -2475,7 +2451,19 @@
       }
     },
     {
-      "snapshot": 205,
+      "snapshot": 203,
+      "time_ms": 8000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 204,
       "time_ms": 16000,
       "event": "routing_update",
       "count": 1,
@@ -2487,8 +2475,20 @@
       }
     },
     {
+      "snapshot": 205,
+      "time_ms": 18000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 523648,
+      "detail": {
+        "changed_entries": 43632,
+        "total_entries": 145440,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
       "snapshot": 206,
-      "time_ms": 12000,
+      "time_ms": 2000,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
@@ -2512,7 +2512,7 @@
     },
     {
       "snapshot": 208,
-      "time_ms": 10000,
+      "time_ms": 12000,
       "event": "routing_update",
       "count": 1,
       "bytes": 523648,
