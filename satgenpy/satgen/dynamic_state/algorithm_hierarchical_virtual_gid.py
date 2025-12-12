@@ -1285,13 +1285,13 @@ def step(payload: dict):
                     _SIGNALING_STATS.record_routing_update(snapshot, sim_time_ms,
                                                            changed_entries=changed,
                                                            total_entries=total,
-                                                           bytes_per_entry=16)
+                                                           per_entry_bytes=16)
             else:
                 if total > 0:
                     _SIGNALING_STATS.record_routing_update(snapshot, sim_time_ms,
                                                            changed_entries=total,
                                                            total_entries=total,
-                                                           bytes_per_entry=16)
+                                                           per_entry_bytes=16)
             _ROUTER._prev_fstate_simple = current
         except Exception:
             pass
