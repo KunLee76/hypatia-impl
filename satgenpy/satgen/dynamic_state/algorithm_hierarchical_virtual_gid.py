@@ -80,7 +80,7 @@ class ControlSignalingStats:
     
     def record_gateway_update(self, snapshot, sim_time_ms,
                               changed_pairs:int, k_published:int=None,
-                              bytes=None, base_bytes:int=48, per_edge_bytes:int=24):
+                              bytes=None):
         """
         記錄 Gateway 更新
         
@@ -89,20 +89,30 @@ class ControlSignalingStats:
             sim_time_ms: 模擬時間（毫秒）
             changed_pairs: 變更的 GID 對數量
             k_published: 發布的 k-best 數量
-            bytes: 如果提供，直接使用；否則用預設公式計算
-            base_bytes: 每對 GID 的基礎開銷
-            per_edge_bytes: 每條邊的開銷
+            bytes: 如果提供，直接使用；否則設為 0 讓 analyzer 計算
+        
+        Note:
+            每對 GID 發送一個控制訊息，訊息內含 k 個 gateway entry
+            bytes 計算交給 analyzer 統一處理（n_msgs*HDR + n_entries*ENTRY）
         """
         self.gateway_updates += 1
         
-        if bytes is None:
-            # 預設計算邏輯：bytes 仍依 changed_pairs 估算，因為每對 GID 都會帶資料
-            k_used = k_published or 0
-            bytes = changed_pairs * (base_bytes + k_used * per_edge_bytes)
+        k_used = k_published or 0
+        # 提供完整 detail 讓 analyzer 計算，避免推導錯誤
+        detail = {
+            "k": k_published,
+            "k_used": max(k_used, 1),  # 至少為 1，避免 0-entry 的不合理情況
+            "changed_pairs": changed_pairs,
+            "num_messages": changed_pairs,  # 每對 GID 一個訊息
+            "num_entries": changed_pairs * max(k_used, 1)  # 總 entry 數
+        }
+        
+        # bytes 設為提供值或 0（讓 analyzer 重新計算）
+        bytes = bytes if bytes is not None else 0
         
         self._append(EventRow(snapshot, sim_time_ms, "gateway_update",
                             count=1,
-                            detail={"k": k_published, "changed_pairs": changed_pairs},
+                            detail=detail,
                             bytes=bytes))
     
     def record_gid_rebuild(self, snapshot, sim_time_ms,
@@ -556,8 +566,7 @@ class GatewayCache:
                         k_used = max(k_used, len(lst))
                 _SIGNALING_STATS.record_gateway_update(snapshot, sim_time_ms,
                                                        changed_pairs=changed_pairs,
-                                                       k_published=k_used,
-                                                       base_bytes=48, per_edge_bytes=24)
+                                                       k_published=k_used)
             except Exception:
                 pass
             # [END HOOK 2]
@@ -575,8 +584,7 @@ class GatewayCache:
                         k_used = max(k_used, len(lst))
                 _SIGNALING_STATS.record_gateway_update(snapshot, sim_time_ms,
                                                        changed_pairs=changed_pairs,
-                                                       k_published=k_used,
-                                                       base_bytes=48, per_edge_bytes=24)
+                                                       k_published=k_used)
             except Exception:
                 pass
             # [END HOOK 2]
@@ -1284,14 +1292,12 @@ def step(payload: dict):
                 if changed > 0:
                     _SIGNALING_STATS.record_routing_update(snapshot, sim_time_ms,
                                                            changed_entries=changed,
-                                                           total_entries=total,
-                                                           per_entry_bytes=16)
+                                                           total_entries=total)
             else:
                 if total > 0:
                     _SIGNALING_STATS.record_routing_update(snapshot, sim_time_ms,
                                                            changed_entries=total,
-                                                           total_entries=total,
-                                                           per_entry_bytes=16)
+                                                           total_entries=total)
             _ROUTER._prev_fstate_simple = current
         except Exception:
             pass

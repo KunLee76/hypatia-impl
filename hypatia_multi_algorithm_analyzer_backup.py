@@ -20,20 +20,6 @@ from datetime import datetime
 import numpy as np
 import glob
 
-
-# ===== Normalized (Unified) Control-Plane Byte Model =====
-# We keep the original event types emitted by each algorithm, but recompute bytes with a unified model:
-#   bytes(event) = CTRL_HDR_BYTES + N_entries(event) * ENTRY_BYTES(event_type)
-# This makes cross-algorithm comparison apples-to-apples.
-CTRL_HDR_BYTES = 32  # OSPFv3-like core (16B) + satellite extension (16B)
-ROUTE_ENTRY_BYTES = 32
-PHYS_TOPO_ENTRY_BYTES = 32      # physical ISL/GSL edge state entry
-GROUP_TOPO_ENTRY_BYTES = 32     # group-level / logical edge entry (LoHi topology_change)
-ID_ENTRY_BYTES = 32             # PID/GID mapping / identifier maintenance entry
-GATEWAY_ENTRY_BYTES = 32        # gateway publication entry (k-best edges)
-
-# If True, analyzer will recompute/overwrite summary bytes using the unified model above.
-NORMALIZE_BYTES = True
 class MultiAlgorithmAnalyzer:
     def __init__(self, stats_dir="paper/satellite_networks_state/analytic_result"):
         self.stats_dir = Path(stats_dir)
@@ -74,14 +60,10 @@ class MultiAlgorithmAnalyzer:
         return found_files
     
     def load_stats(self, file_path):
-        """加載統計數據（期望所有算法使用統一的 by_type 格式）
-
-        若 NORMALIZE_BYTES=True，會以統一的 header+entry 模型重新計算 bytes，
-        並覆寫 summary.total_bytes / summary.by_type[*].bytes（保留 raw_* 備份）。
-        """
+        """加載統計數據（期望所有算法使用統一的 by_type 格式）"""
         with open(file_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
-
+        
         # 驗證格式正確性
         if 'summary' not in data or 'by_type' not in data.get('summary', {}):
             raise ValueError(
@@ -89,143 +71,9 @@ class MultiAlgorithmAnalyzer:
                 f"   期望 summary.by_type 結構，但未找到。\n"
                 f"   請確保所有算法輸出統一格式的統計數據。"
             )
-
-        if NORMALIZE_BYTES:
-            self._normalize_control_bytes(data, file_path)
-
+        
         return data
- 
-    def _normalize_control_bytes(self, data: dict, file_path: str):
-        """Recompute bytes using unified header+entry model, without changing event types.
-
-        Assumptions (true for the three algorithms in this project):
-        - timeline is a list of dicts; each dict contains: event (str), count (messages, usually 1), bytes (raw),
-          and detail (dict) which carries the *entry count* such as changed_entries, delta_isl, delta_gsl, etc.
-        - summary.by_type[*].count counts *messages*, not entries.
-
-        We keep counts as-is and only recompute bytes.
-        """
-        summary = data.get('summary', {})
-        algo_name = (
-            summary.get('algorithm_display_name')
-            or summary.get('algorithm')
-            or str(file_path)
-        ).lower()
-
-        is_lohi = 'lohi' in algo_name
-
-        # backup raw values once
-        if 'raw_total_bytes' not in summary:
-            summary['raw_total_bytes'] = summary.get('total_bytes', 0)
-        if 'raw_by_type' not in summary:
-            # deep copy minimal
-            summary['raw_by_type'] = {k: dict(v) for k, v in summary.get('by_type', {}).items()}
-
-        # normalize timeline rows
-        timeline = data.get('timeline', [])
-        norm_total_bytes = 0
-        norm_by_type = {k: {'count': v.get('count', 0), 'bytes': 0} for k, v in summary.get('by_type', {}).items()}
-        norm_total_msgs = 0
-
-        for row in timeline:
-            ev = row.get('event') or row.get('type')  # tolerate older key
-            if not ev:
-                continue
-            ev = str(ev)
-            detail = row.get('detail') or {}
-            # messages count (kept as-is)
-            msg_count = int(row.get('count', 1) or 1)
-            norm_total_msgs += msg_count
-
-            # infer number of entries carried by this message
-            n_entries = 0
-            if ev == 'routing_update':
-                n_entries = int(detail.get('changed_entries', 0) or 0)
-                entry_bytes = ROUTE_ENTRY_BYTES
-            elif ev == 'topology_change':
-                if 'delta_group_edges' in detail:
-                    n_entries = abs(int(detail.get('delta_group_edges', 0) or 0))
-                    entry_bytes = GROUP_TOPO_ENTRY_BYTES if is_lohi else PHYS_TOPO_ENTRY_BYTES
-                else:
-                    n_entries = abs(int(detail.get('delta_isl', 0) or 0)) + abs(int(detail.get('delta_gsl', 0) or 0))
-                    # fall back if someone used a generic delta_edges field
-                    if n_entries == 0 and 'delta_edges' in detail:
-                        n_entries = abs(int(detail.get('delta_edges', 0) or 0))
-                    entry_bytes = PHYS_TOPO_ENTRY_BYTES
-            elif ev == 'gid_rebuild':
-                n_entries = int(detail.get('changed_gids', 0) or 0)
-                entry_bytes = ID_ENTRY_BYTES
-            elif ev == 'pid_rebuild':
-                n_entries = int(detail.get('changed_pids', 0) or 0)
-                entry_bytes = ID_ENTRY_BYTES
-            elif ev == 'gateway_update':
-                # 特殊處理：每對 GID 一個訊息，使用通用公式 n_msgs*HDR + n_entries*ENTRY
-                # 優先使用 detail 中提供的 num_messages/num_entries，避免推導
-                n_msgs = int(detail.get('num_messages', 0) or 0)
-                n_entries = int(detail.get('num_entries', 0) or 0)
-                
-                # fallback：若沒有提供，從 changed_pairs 和 k 推導
-                if n_msgs == 0 and n_entries == 0:
-                    changed_pairs = int(detail.get('changed_pairs', 0) or 0)
-                    k = int(detail.get('k', 0) or detail.get('k_used', 0) or 0)
-                    n_msgs = changed_pairs
-                    n_entries = changed_pairs * max(k, 1)
-                
-                # gateway_update 使用多訊息模型：每對 GID 一個訊息
-                norm_bytes = n_msgs * CTRL_HDR_BYTES + n_entries * GATEWAY_ENTRY_BYTES
-                row['bytes_normalized'] = norm_bytes
-                if 'bytes_raw' not in row:
-                    row['bytes_raw'] = row.get('bytes', 0)
-                row['bytes'] = norm_bytes
-                
-                norm_total_bytes += norm_bytes
-                if ev in norm_by_type:
-                    norm_by_type[ev]['bytes'] += norm_bytes
-                else:
-                    norm_by_type[ev] = {'count': msg_count, 'bytes': norm_bytes}
-                continue
-            else:
-                # Unknown event: keep raw bytes to avoid under/over-estimation silently.
-                norm_bytes = int(row.get('bytes', 0) or 0)
-                row['bytes_normalized'] = norm_bytes
-                norm_total_bytes += norm_bytes
-                if ev in norm_by_type:
-                    norm_by_type[ev]['bytes'] += norm_bytes
-                else:
-                    norm_by_type[ev] = {'count': msg_count, 'bytes': norm_bytes}
-                continue
-
-            # unified bytes model
-            norm_bytes = int(CTRL_HDR_BYTES + n_entries * entry_bytes)
-            row['bytes_normalized'] = norm_bytes
-            # also overwrite row bytes for downstream plots (but keep raw in bytes_raw)
-            if 'bytes_raw' not in row:
-                row['bytes_raw'] = row.get('bytes', 0)
-            row['bytes'] = norm_bytes
-
-            norm_total_bytes += norm_bytes
-            if ev in norm_by_type:
-                norm_by_type[ev]['bytes'] += norm_bytes
-            else:
-                # if a type exists in timeline but not in summary.by_type, add it
-                norm_by_type[ev] = {'count': msg_count, 'bytes': norm_bytes}
-
-        # overwrite summary with normalized bytes (keep original counts)
-        summary['total_bytes'] = norm_total_bytes
-        # total_events in this project = total messages (because EventRow.count is always 1 in recorders)
-        summary['total_events'] = norm_total_msgs
-        summary['by_type'] = norm_by_type
-        summary['normalization'] = {
-            'enabled': True,
-            'CTRL_HDR_BYTES': CTRL_HDR_BYTES,
-            'ROUTE_ENTRY_BYTES': ROUTE_ENTRY_BYTES,
-            'PHYS_TOPO_ENTRY_BYTES': PHYS_TOPO_ENTRY_BYTES,
-            'GROUP_TOPO_ENTRY_BYTES': GROUP_TOPO_ENTRY_BYTES,
-            'ID_ENTRY_BYTES': ID_ENTRY_BYTES,
-            'GATEWAY_ENTRY_BYTES': GATEWAY_ENTRY_BYTES,
-            'notes': 'Bytes recomputed as HDR + N_entries*ENTRY_BYTES using timeline.detail fields. Raw values preserved in summary.raw_* and row.bytes_raw.'
-        }
-
+    
     def analyze_all(self, output_dir="multi_algorithm_analysis"):
         """分析所有算法"""
         output_path = Path(output_dir)

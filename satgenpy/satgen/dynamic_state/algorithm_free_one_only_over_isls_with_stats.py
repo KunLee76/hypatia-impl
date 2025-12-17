@@ -61,14 +61,15 @@ class ControlSignalingStats:
     
     def record_routing_update(self, snapshot, sim_time_ms, 
                               changed_entries:int, total_entries:int,
-                              bytes=None, base_bytes:int=32, per_entry_bytes:int=8):
-        """記錄路由更新事件 - Floyd-Warshall 全網重計算"""
+                              bytes=None):
+        """記錄路由更新事件 - Floyd-Warshall 全網重計算
+        
+        Note:
+            bytes 計算交給 analyzer 統一處理（HDR + changed_entries*ENTRY）
+        """
         self.routing_updates += 1
-        if bytes is None:
-            # Floyd-Warshall 需要全網路由矩陣交換
-            b = base_bytes + changed_entries * per_entry_bytes
-        else:
-            b = bytes
+        # bytes 設為提供值或 0（讓 analyzer 計算）
+        b = bytes if bytes is not None else 0
         
         # 不再雙重累加 - _append 已經處理 count 增加
         self._append(EventRow(snapshot, sim_time_ms, "routing_update",
@@ -257,13 +258,12 @@ def algorithm_free_one_only_over_isls(
     
     total_entries = num_satellites * num_ground_stations * 2
     
-    # 記錄路由更新統計 - Floyd-Warshall 的控制開銷特別大
+    # 記錄路由更新統計 - Floyd-Warshall 的控制開銷
+    # bytes 計算交給 analyzer 統一處理（32B header + changed_entries*32B）
     _BASELINE_SIGNALING_STATS.record_routing_update(
         snapshot, sim_time_ms,
         changed_entries=changed_entries,
-        total_entries=total_entries,
-        base_bytes=64,  # Floyd-Warshall 需要更多控制信息
-        per_entry_bytes=12  # 每個路由條目更大（包含距離矩陣信息）
+        total_entries=total_entries
     )
 
     if enable_verbose_logs:

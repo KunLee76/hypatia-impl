@@ -111,21 +111,34 @@ class ControlSignalingStats:
         self.total_events += row.count
         self.total_bytes += row.bytes
 
-    def record_pid_rebuild(self, snapshot, ms, changed_pids:int, per_pid_bytes:int=64):
+    def record_pid_rebuild(self, snapshot, ms, changed_pids:int):
+        """記錄 PID 重建事件
+        
+        Note:
+            bytes 計算交給 analyzer 統一處理（HDR + changed_pids*ENTRY）
+        """
         self.pid_rebuilds += 1
-        self._append(EventRow(snapshot, ms, 'pid_rebuild', 1, changed_pids*per_pid_bytes,
+        self._append(EventRow(snapshot, ms, 'pid_rebuild', 1, 0,
                               {'changed_pids': changed_pids}))
 
-    def record_topology_change(self, snapshot, ms, delta_group_edges:int, per:int=16):
+    def record_topology_change(self, snapshot, ms, delta_group_edges:int):
+        """記錄群圖拓撲變化事件
+        
+        Note:
+            bytes 計算交給 analyzer 統一處理（HDR + |delta_group_edges|*ENTRY）
+        """
         self.topology_changes += 1
-        self._append(EventRow(snapshot, ms, 'topology_change', 1,
-                              abs(delta_group_edges)*per,
+        self._append(EventRow(snapshot, ms, 'topology_change', 1, 0,
                               {'delta_group_edges': delta_group_edges}))
 
-    def record_routing_update(self, snapshot, ms, changed:int, total:int, per_entry:int=16):
+    def record_routing_update(self, snapshot, ms, changed:int, total:int):
+        """記錄路由更新事件
+        
+        Note:
+            bytes 計算交給 analyzer 統一處理（HDR + changed*ENTRY）
+        """
         self.routing_updates += 1
-        self._append(EventRow(snapshot, ms, 'routing_update', 1,
-                              changed*per_entry,
+        self._append(EventRow(snapshot, ms, 'routing_update', 1, 0,
                               {'changed_entries': changed, 'total_entries': total}))
 
     def to_json(self):
