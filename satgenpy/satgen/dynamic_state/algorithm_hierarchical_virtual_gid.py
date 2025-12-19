@@ -63,13 +63,14 @@ class ControlSignalingStats:
     
     def record_routing_update(self, snapshot, sim_time_ms,
                               changed_entries:int, total_entries:int=0,
-                              bytes=None, base_bytes:int=48, per_entry_bytes:int=24):
-        """記錄路由表更新"""
+                              bytes=None):
+        """記錄路由表更新
+        
+        Note:
+            bytes 計算交給 analyzer 統一處理（HDR + changed_entries*ENTRY）
+        """
         self.routing_updates += 1
-        if bytes is None:
-            b = base_bytes + changed_entries * per_entry_bytes
-        else:
-            b = bytes
+        b = bytes if bytes is not None else 0
         # 不要在這裡再增加 total_messages；_append 會依 count +1
         self._append(EventRow(snapshot, sim_time_ms, "routing_update",
                             count=1,
@@ -116,20 +117,28 @@ class ControlSignalingStats:
                             bytes=bytes))
     
     def record_gid_rebuild(self, snapshot, sim_time_ms,
-                           changed_gids:int, per_gid_bytes:int=64):
-        """記錄 GID 重建"""
+                           changed_gids:int, bytes=None):
+        """記錄 GID 重建
+        
+        Note:
+            bytes 計算交給 analyzer 統一處理（HDR + changed_gids*ENTRY）
+        """
         self.gid_rebuilds += 1
-        b = changed_gids * per_gid_bytes
+        b = bytes if bytes is not None else 0
         self._append(EventRow(snapshot, sim_time_ms, "gid_rebuild",
                               count=1,
                               detail={"changed_gids": changed_gids},
                               bytes=b))
     
     def record_topology_change(self, snapshot, sim_time_ms,
-                               delta_isl:int, delta_gsl:int, per_edge_bytes:int=16):
-        """記錄拓撲變化"""
+                               delta_isl:int, delta_gsl:int, bytes=None):
+        """記錄拓撲變化
+        
+        Note:
+            bytes 計算交給 analyzer 統一處理（HDR + (|delta_isl|+|delta_gsl|)*ENTRY）
+        """
         self.topology_changes += 1
-        b = (abs(delta_isl) + abs(delta_gsl)) * per_edge_bytes
+        b = bytes if bytes is not None else 0
         self._append(EventRow(snapshot, sim_time_ms, "topology_change",
                               count=1,
                               detail={"delta_isl": delta_isl, "delta_gsl": delta_gsl},
@@ -435,8 +444,7 @@ class VirtualGIDRouter:
             else:
                 changed_gids = len(self.gid_members)  # 冷啟動：以全部 PID 視為一次 rebuild
             _SIGNALING_STATS.record_gid_rebuild(snapshot, sim_time_ms,
-                                               changed_gids=changed_gids,
-                                               per_gid_bytes=64)
+                                               changed_gids=changed_gids)
             self._prev_sat_to_pid = dict(sat_gid)
         except Exception:
             pass
@@ -1199,8 +1207,7 @@ def step(payload: dict):
             if (not hasattr(_ROUTER, "_prev_isl_edges")) or isl_now != getattr(_ROUTER, "_prev_isl_edges") \
                or (not hasattr(_ROUTER, "_prev_gsl_edges")) or gsl_now != getattr(_ROUTER, "_prev_gsl_edges"):
                 _SIGNALING_STATS.record_topology_change(snapshot, sim_time_ms,
-                                                        delta_isl=delta_isl, delta_gsl=delta_gsl,
-                                                        per_edge_bytes=16)
+                                                        delta_isl=delta_isl, delta_gsl=delta_gsl)
             _ROUTER._prev_isl_edges = isl_now
             _ROUTER._prev_gsl_edges = gsl_now
         except Exception:

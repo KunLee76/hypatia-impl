@@ -80,10 +80,14 @@ class ControlSignalingStats:
                               bytes=b))
     
     def record_topology_change(self, snapshot, sim_time_ms,
-                               delta_isl:int, delta_gsl:int, per_edge_bytes:int=16):
-        """記錄拓撲變化"""
+                               delta_isl:int, delta_gsl:int, bytes=None):
+        """記錄拓撲變化
+        
+        Note:
+            bytes 計算交給 analyzer 統一處理（HDR + (|delta_isl|+|delta_gsl|)*ENTRY）
+        """
         self.topology_changes += 1
-        b = (abs(delta_isl) + abs(delta_gsl)) * per_edge_bytes
+        b = bytes if bytes is not None else 0
         self._append(EventRow(snapshot, sim_time_ms, "topology_change",
                               count=1,
                               detail={"delta_isl": delta_isl, "delta_gsl": delta_gsl,
@@ -94,9 +98,9 @@ class ControlSignalingStats:
         """獲取統計摘要"""
         events = self.timeline
         if start_time_ms is not None:
-            events = [e for e in events if e.time_ms >= start_time_ms]
+            events = [e for e in events if e.sim_time_ms >= start_time_ms]
         if end_time_ms is not None:
-            events = [e for e in events if e.time_ms <= end_time_ms]
+            events = [e for e in events if e.sim_time_ms <= end_time_ms]
         
         by_type = {}
         total_bytes = 0
