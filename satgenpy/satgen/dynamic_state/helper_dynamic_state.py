@@ -27,27 +27,36 @@ from satgen.interfaces import *
 from .generate_dynamic_state import generate_dynamic_state
 import os
 import math
-from multiprocessing.dummy import Pool as ThreadPool
+from multiprocessing import Pool
 
 
 def worker(args):
 
     # Extract arguments
     (
+        output_generated_data_dir,
+        name,
         output_dynamic_state_dir,
-        epoch,
         simulation_end_time_ns,
         time_step_ns,
         offset_ns,
-        satellites,
-        ground_stations,
-        list_isls,
-        list_gsl_interfaces_info,
         max_gsl_length_m,
         max_isl_length_m,
         dynamic_state_algorithm,
         print_logs
      ) = args
+
+    # 在每个进程内部重新加载数据（避免 pickle 序列化 ephem 对象）
+    ground_stations = read_ground_stations_extended(output_generated_data_dir + "/" + name + "/ground_stations.txt")
+    tles = read_tles(output_generated_data_dir + "/" + name + "/tles.txt")
+    satellites = tles["satellites"]
+    list_isls = read_isls(output_generated_data_dir + "/" + name + "/isls.txt", len(satellites))
+    list_gsl_interfaces_info = read_gsl_interfaces_info(
+        output_generated_data_dir + "/" + name + "/gsl_interfaces_info.txt",
+        len(satellites),
+        len(ground_stations)
+    )
+    epoch = tles["epoch"]
 
     # Generate dynamic state
     generate_dynamic_state(
@@ -101,18 +110,6 @@ def help_dynamic_state(
         if i < num_threads_with_one_more:
             num_time_steps += 1
 
-        # Variables (load in for each thread such that they don't interfere)
-        ground_stations = read_ground_stations_extended(output_generated_data_dir + "/" + name + "/ground_stations.txt")
-        tles = read_tles(output_generated_data_dir + "/" + name + "/tles.txt")
-        satellites = tles["satellites"]
-        list_isls = read_isls(output_generated_data_dir + "/" + name + "/isls.txt", len(satellites))
-        list_gsl_interfaces_info = read_gsl_interfaces_info(
-            output_generated_data_dir + "/" + name + "/gsl_interfaces_info.txt",
-            len(satellites),
-            len(ground_stations)
-        )
-        epoch = tles["epoch"]
-
         # Print goal
         print("Thread %d does interval [%.2f ms, %.2f ms]" % (
             i,
@@ -120,16 +117,14 @@ def help_dynamic_state(
             ((current + num_time_steps) * time_step_ns) / 1e6
         ))
 
+        # 只传递文件路径和标量参数，避免序列化 ephem 对象
         list_args.append((
+            output_generated_data_dir,
+            name,
             output_dynamic_state_dir,
-            epoch,
             (current + num_time_steps) * time_step_ns + (time_step_ns if (i + 1) != num_threads else 0),
             time_step_ns,
             current * time_step_ns,
-            satellites,
-            ground_stations,
-            list_isls,
-            list_gsl_interfaces_info,
             max_gsl_length_m,
             max_isl_length_m,
             dynamic_state_algorithm,
@@ -138,8 +133,8 @@ def help_dynamic_state(
 
         current += num_time_steps
 
-    # Run in parallel
-    pool = ThreadPool(num_threads)
+    # Run in parallel (使用进程池而非线程池，避免 GIL 和共享内存问题)
+    pool = Pool(num_threads)
     pool.map(worker, list_args)
     pool.close()
     pool.join()

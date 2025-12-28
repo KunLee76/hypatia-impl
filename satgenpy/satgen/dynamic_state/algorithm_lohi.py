@@ -30,6 +30,7 @@ import math
 import networkx as nx
 import os
 import random
+import threading
 
 # ==========================
 # Tunables (LoHi p×s - 文獻固定參數 6×10)
@@ -174,7 +175,18 @@ class ControlSignalingStats:
             ]
         }
 
-_SIGNALING = ControlSignalingStats()
+# Process-local 統計對象 (每個進程維護自己的統計)
+_thread_local = threading.local()
+
+def _get_process_local_stats():
+    """獲取當前進程的統計對象"""
+    if not hasattr(_thread_local, 'stats'):
+        _thread_local.stats = ControlSignalingStats()
+    return _thread_local.stats
+
+def get_lohi_signaling_stats():
+    """獲取 LoHi 算法控制信令統計數據"""
+    return _get_process_local_stats().get_stats_summary()
 
 # ==========================
 # [1][2] PID router (p×s)
@@ -385,7 +397,7 @@ class VirtualPIDRouterPlaneBlock:
             changed = len(changed_pids)
         else:
             changed = sum(1 for _, mem in self.pid_members.items() if mem)
-        _SIGNALING.record_pid_rebuild(self._snapshot_idx, self._snapshot_ms*self._snapshot_idx, changed)
+        _get_process_local_stats().record_pid_rebuild(self._snapshot_idx, self._snapshot_ms*self._snapshot_idx, changed)
         self._prev_pid_of_sat = dict(self.pid_of_sat)
         return dict(self.pid_of_sat)
 # ==========================
@@ -553,7 +565,7 @@ class GroupPlanner:
         # 4. 記錄拓撲變化（用於信令統計）
         curr = {(a,b) for (a,b) in GG.edges()}
         delta = len(curr - self.prev_edges) - len(self.prev_edges - curr)
-        _SIGNALING.record_topology_change(self._snapshot_idx, self._snapshot_ms*self._snapshot_idx, delta)
+        _get_process_local_stats().record_topology_change(self._snapshot_idx, self._snapshot_ms*self._snapshot_idx, delta)
         self.prev_edges = curr
         self.group_graph = GG
 
@@ -1454,7 +1466,9 @@ def init(config: Optional[dict] = None):
         sats_per_plane_in_group=sats_per_plane
     )
     _GPLANNER = GroupPlanner()
-    _SIGNALING.reset()
+    
+    # 重置統計數據 - 先獲取 process-local 對象
+    _get_process_local_stats().reset()
     
     return {'ok': True, 'msg': f'algorithm_lohi initialized with p={planes_per_group}, s={sats_per_plane}'}
 
@@ -1764,22 +1778,32 @@ def algorithm_lohi(
     else:
         changed = total
     _ROUTER._prev_flat_fstate = flat
-    _SIGNALING.record_routing_update(snapshot_idx, step_ms*snapshot_idx, changed, total)
+    _get_process_local_stats().record_routing_update(snapshot_idx, step_ms*snapshot_idx, changed, total)
 
+    # Process-local 輸出：使用臨時文件，帶進程/線程ID
+    thread_id = threading.get_ident()
+    pid = os.getpid()
+    
     # 輸出統計
     stats_dir = 'analytic_result'
     os.makedirs(stats_dir, exist_ok=True)
-    with open(os.path.join(stats_dir, f"lohi_signaling_stats_pure_p{PLANES_PER_GROUP}_s{SATS_PER_PLANE_IN_GROUP}.json"), 'w', encoding='utf-8') as f:
+    
+    # 臨時文件：用於收集各進程的統計數據
+    temp_dir = os.path.join(stats_dir, "temp_lohi")
+    os.makedirs(temp_dir, exist_ok=True)
+    stats_file = os.path.join(temp_dir, f"lohi_stats_pid{pid}_tid{thread_id}.json")
+    
+    with open(stats_file, 'w', encoding='utf-8') as f:
         json.dump({
             'algorithm': 'algorithm_lohi_pure',
             'algorithm_display_name': f'LoHi (p={PLANES_PER_GROUP}, s={SATS_PER_PLANE_IN_GROUP})',  # ✅ 新增顯示名稱
             'p': PLANES_PER_GROUP,
             's': SATS_PER_PLANE_IN_GROUP,
             'timestamp': _dt.datetime.now().isoformat(),
-            **_SIGNALING.to_json()
+            **_get_process_local_stats().to_json()
         }, f, indent=2, ensure_ascii=False)
 
-    return {'fstate': fstate, 'signaling_stats': _SIGNALING.to_json()}
+    return {'fstate': fstate, 'signaling_stats': _get_process_local_stats().to_json()}
 
 # ==========================
 # Utilities

@@ -13,6 +13,7 @@ import sys
 import tempfile
 import datetime as _dt
 import csv, json
+import threading
 
 # -------------------------------
 # 全域設定（可依實驗需要調整）
@@ -279,8 +280,18 @@ class ControlSignalingStats:
         if timeline_path and summary_path:
             self.save_csv(timeline_path, summary_path)
 
-# 全域統計實例
-_SIGNALING_STATS = ControlSignalingStats()
+# Process-local 統計對象 (每個進程維護自己的統計)
+_thread_local = threading.local()
+
+def _get_process_local_stats():
+    """獲取當前進程的統計對象"""
+    if not hasattr(_thread_local, 'stats'):
+        _thread_local.stats = ControlSignalingStats()
+    return _thread_local.stats
+
+def get_grhr_signaling_stats():
+    """獲取 GRHR 算法控制信令統計數據"""
+    return _get_process_local_stats().get_stats_summary()
 
 # -------------------------------
 # 小工具
@@ -443,7 +454,7 @@ class VirtualGIDRouter:
                 changed_gids = len(changed_pid_set)
             else:
                 changed_gids = len(self.gid_members)  # 冷啟動：以全部 PID 視為一次 rebuild
-            _SIGNALING_STATS.record_gid_rebuild(snapshot, sim_time_ms,
+            _get_process_local_stats().record_gid_rebuild(snapshot, sim_time_ms,
                                                changed_gids=changed_gids)
             self._prev_sat_to_pid = dict(sat_gid)
         except Exception:
@@ -572,7 +583,7 @@ class GatewayCache:
                 for lst in self.published_candidates.values():
                     if lst:
                         k_used = max(k_used, len(lst))
-                _SIGNALING_STATS.record_gateway_update(snapshot, sim_time_ms,
+                _get_process_local_stats().record_gateway_update(snapshot, sim_time_ms,
                                                        changed_pairs=changed_pairs,
                                                        k_published=k_used)
             except Exception:
@@ -590,7 +601,7 @@ class GatewayCache:
                 for lst in new_candidates.values():
                     if lst:
                         k_used = max(k_used, len(lst))
-                _SIGNALING_STATS.record_gateway_update(snapshot, sim_time_ms,
+                _get_process_local_stats().record_gateway_update(snapshot, sim_time_ms,
                                                        changed_pairs=changed_pairs,
                                                        k_published=k_used)
             except Exception:
@@ -1063,7 +1074,7 @@ _SSSP = None
 
 def init(config=None):
     """主程式在模擬開始時呼叫一次。"""
-    global _ROUTER, _GCACHE, _SSSP, _SIGNALING_STATS
+    global _ROUTER, _GCACHE, _SSSP
     cfg = config or {}
     # 優先從環境變數讀取 grid_deg（支援自動化腳本動態設定）
     grid_deg = cfg.get("grid_deg", int(os.environ.get('SATGEN_GRID_DEG', GRID_DEG)))
@@ -1080,8 +1091,8 @@ def init(config=None):
     _GCACHE = GatewayCache(k_best=k_best)
     _SSSP = SSSPCache()
     
-    # 重置統計數據
-    _SIGNALING_STATS.reset()
+    # 重置統計數據 - 直接調用 process-local 方法
+    _get_process_local_stats().reset()
     
     return {"ok": True, "msg": "algorithm_hierarchical_virtual_gid initialized"}
 
@@ -1206,7 +1217,7 @@ def step(payload: dict):
                 delta_gsl = len(gsl_now - gsl_prev) - len(gsl_prev - gsl_now)
             if (not hasattr(_ROUTER, "_prev_isl_edges")) or isl_now != getattr(_ROUTER, "_prev_isl_edges") \
                or (not hasattr(_ROUTER, "_prev_gsl_edges")) or gsl_now != getattr(_ROUTER, "_prev_gsl_edges"):
-                _SIGNALING_STATS.record_topology_change(snapshot, sim_time_ms,
+                _get_process_local_stats().record_topology_change(snapshot, sim_time_ms,
                                                         delta_isl=delta_isl, delta_gsl=delta_gsl)
             _ROUTER._prev_isl_edges = isl_now
             _ROUTER._prev_gsl_edges = gsl_now
@@ -1297,12 +1308,12 @@ def step(payload: dict):
                     if prev.get(k) != current.get(k):
                         changed += 1
                 if changed > 0:
-                    _SIGNALING_STATS.record_routing_update(snapshot, sim_time_ms,
+                    _get_process_local_stats().record_routing_update(snapshot, sim_time_ms,
                                                            changed_entries=changed,
                                                            total_entries=total)
             else:
                 if total > 0:
-                    _SIGNALING_STATS.record_routing_update(snapshot, sim_time_ms,
+                    _get_process_local_stats().record_routing_update(snapshot, sim_time_ms,
                                                            changed_entries=total,
                                                            total_entries=total)
             _ROUTER._prev_fstate_simple = current
@@ -1313,15 +1324,23 @@ def step(payload: dict):
         
         # 添加 Terminal 統計輸出
         if payload.get("enable_verbose_logs", False):
-            stats_summary = _SIGNALING_STATS.get_stats_summary()
+            stats_summary = _get_process_local_stats().get_stats_summary()
             print(f"  > [SIGNALING] 累計統計: {stats_summary['total_events']} 事件, {stats_summary['total_bytes']} 字節")
+        
+        # Process-local 輸出：使用臨時文件，帶進程/線程ID
+        thread_id = threading.get_ident()
+        pid = os.getpid()
         
         # 統一輸出統計文件到 analytic_result 目錄
         # 從 ROUTER 讀取網格大小（init() 時已正確設定）
         stats_output_dir = "analytic_result"
         os.makedirs(stats_output_dir, exist_ok=True)
         grid_size = _ROUTER.grid_deg
-        stats_file = os.path.join(stats_output_dir, f"hierarchical_gid_{grid_size}deg_signaling_stats.json")
+        
+        # 臨時文件：用於收集各進程的統計數據
+        temp_dir = os.path.join(stats_output_dir, "temp_grhr")
+        os.makedirs(temp_dir, exist_ok=True)
+        stats_file = os.path.join(temp_dir, f"grhr_stats_pid{pid}_tid{thread_id}.json")
         
         try:
             
@@ -1331,7 +1350,7 @@ def step(payload: dict):
                 "algorithm_display_name": f"Hierarchical GID ({grid_size}°)",
                 "grid_deg": grid_size,
                 "timestamp": _dt.datetime.now().isoformat(),
-                "summary": _SIGNALING_STATS.get_stats_summary(),
+                "summary": _get_process_local_stats().get_stats_summary(),
                 "timeline": [
                     {
                         "snapshot": row.snapshot,
@@ -1341,7 +1360,7 @@ def step(payload: dict):
                         "bytes": row.bytes,
                         "detail": row.detail
                     }
-                    for row in _SIGNALING_STATS.timeline
+                    for row in _get_process_local_stats().timeline
                 ]
             }
             
@@ -1372,15 +1391,23 @@ def step(payload: dict):
     
     # 添加 Terminal 統計輸出
     if payload.get("enable_verbose_logs", False):
-        stats_summary = _SIGNALING_STATS.get_stats_summary()
+        stats_summary = _get_process_local_stats().get_stats_summary()
         print(f"  > [SIGNALING] 累計統計: {stats_summary['total_events']} 事件, {stats_summary['total_bytes']} 字節")
+    
+    # Process-local 輸出：使用臨時文件，帶進程/線程ID
+    thread_id = threading.get_ident()
+    pid = os.getpid()
     
     # 統一輸出統計文件到 analytic_result 目錄
     # 從 ROUTER 讀取網格大小（init() 時已正確設定）
     stats_output_dir = "analytic_result"
     os.makedirs(stats_output_dir, exist_ok=True)
     grid_size = _ROUTER.grid_deg
-    stats_file = os.path.join(stats_output_dir, f"hierarchical_gid_{grid_size}deg_signaling_stats.json")
+    
+    # 臨時文件：用於收集各進程的統計數據
+    temp_dir = os.path.join(stats_output_dir, "temp_grhr")
+    os.makedirs(temp_dir, exist_ok=True)
+    stats_file = os.path.join(temp_dir, f"grhr_stats_pid{pid}_tid{thread_id}.json")
     
     try:
         
@@ -1390,7 +1417,7 @@ def step(payload: dict):
             "algorithm_display_name": f"Hierarchical GID ({grid_size}°)",
             "grid_deg": grid_size,
             "timestamp": _dt.datetime.now().isoformat(),
-            "summary": _SIGNALING_STATS.get_stats_summary(),
+            "summary": _get_process_local_stats().get_stats_summary(),
             "timeline": [
                 {
                     "snapshot": row.snapshot,
@@ -1400,7 +1427,7 @@ def step(payload: dict):
                     "bytes": row.bytes,
                     "detail": row.detail
                 }
-                for row in _SIGNALING_STATS.timeline
+                for row in _get_process_local_stats().timeline
             ]
         }
         
@@ -1488,13 +1515,11 @@ def run_algorithm(payload: dict):
 
 def get_signaling_stats():
     """獲取控制信令統計數據"""
-    global _SIGNALING_STATS
-    return _SIGNALING_STATS.get_stats()
+    return _get_process_local_stats().get_stats()
 
 def save_signaling_stats(filepath):
     """保存控制信令統計數據到文件"""
-    global _SIGNALING_STATS
-    _SIGNALING_STATS.save_to_file(filepath)
+    _get_process_local_stats().save_to_file(filepath)
 
 # ===== Hypatia 系統適配器函數 =====
 def algorithm_hierarchical_virtual_gid(

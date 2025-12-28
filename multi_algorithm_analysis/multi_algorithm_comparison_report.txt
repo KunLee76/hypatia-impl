@@ -1,24 +1,24 @@
 Hypatia 多算法控制信令比較報告
 ============================================================
-生成時間: 2025-11-18 14:01:02
+生成時間: 2025-12-26 23:51:15
 比較算法數: 3
 
 算法總覽:
 ------------------------------------------------------------
 
-Hierarchical GID (27°):
-  總事件數: 239
-  總字節數: 827,680
-  ✅ 相比基線節省: 99.69%
+Hierarchical GID (15°):
+  總事件數: 4,198
+  總字節數: 377,707,616
+  ✅ 相比基線節省: 93.95%
 
 LoHi (p=6, s=10):
-  總事件數: 611
-  總字節數: 24,318,736
-  ✅ 相比基線節省: 90.82%
+  總事件數: 5,998
+  總字節數: 1,244,208,384
+  ✅ 相比基線節省: 80.07%
 
 Floyd-Warshall Baseline:
-  總事件數: 209
-  總字節數: 264,984,896
+  總事件數: 2,009
+  總字節數: 6,242,742,368
 
 
 按事件類型詳細比較:
@@ -26,20 +26,25 @@ Floyd-Warshall Baseline:
 
 gateway_update:
   Floyd-Warshall Baseline                 : N/A
-  Hierarchical GID (27°)                  :     29 次,    449,760 字節
+  Hierarchical GID (15°)                  :    197 次,  8,635,968 字節
+  LoHi (p=6, s=10)                        : N/A
+
+gid_rebuild:
+  Floyd-Warshall Baseline                 : N/A
+  Hierarchical GID (15°)                  :   2000 次,  1,342,592 字節
   LoHi (p=6, s=10)                        : N/A
 
 pid_rebuild:
   Floyd-Warshall Baseline                 : N/A
-  Hierarchical GID (27°)                  :    209 次,    377,920 字節
-  LoHi (p=6, s=10)                        :    201 次,      2,304 字節
+  Hierarchical GID (15°)                  : N/A
+  LoHi (p=6, s=10)                        :   1999 次,     65,120 字節
 
 routing_update:
-  Floyd-Warshall Baseline                 :    209 次, 264,984,896 字節
-  Hierarchical GID (27°)                  : N/A
-  LoHi (p=6, s=10)                        :    209 次, 24,315,280 字節
+  Floyd-Warshall Baseline                 :   2009 次, 6,242,742,368 字節
+  Hierarchical GID (15°)                  :   1991 次, 367,728,736 字節
+  LoHi (p=6, s=10)                        :   2000 次, 1,244,076,992 字節
 
 topology_change:
   Floyd-Warshall Baseline                 : N/A
-  Hierarchical GID (27°)                  :      1 次,          0 字節
-  LoHi (p=6, s=10)                        :    201 次,      1,152 字節
+  Hierarchical GID (15°)                  :     10 次,        320 字節
+  LoHi (p=6, s=10)                        :   1999 次,     66,272 字節

@@ -25,6 +25,7 @@ from dataclasses import dataclass
 from typing import List, Dict, Optional, Any
 import json
 import os
+import threading
 from datetime import datetime
 
 # ===== 控制信令統計功能 (參考 algorithm_hierarchical_virtual_pid.py) =====
@@ -146,18 +147,22 @@ class ControlSignalingStats:
                 f.write("\n=== 事件時間軸 ===\n")
                 f.write(self.get_timeline_csv())
 
-# 全局統計對象
-_BASELINE_SIGNALING_STATS = ControlSignalingStats()
+# Process-local 統計對象 (每個進程維護自己的統計)
+_thread_local = threading.local()
+
+def _get_process_local_stats():
+    """獲取當前進程的統計對象"""
+    if not hasattr(_thread_local, 'stats'):
+        _thread_local.stats = ControlSignalingStats()
+    return _thread_local.stats
 
 def get_baseline_signaling_stats():
     """獲取基線算法控制信令統計數據"""
-    global _BASELINE_SIGNALING_STATS
-    return _BASELINE_SIGNALING_STATS.get_stats_summary()
+    return _get_process_local_stats().get_stats_summary()
 
 def save_baseline_signaling_stats(filepath):
     """保存基線算法控制信令統計數據到文件"""
-    global _BASELINE_SIGNALING_STATS
-    _BASELINE_SIGNALING_STATS.save_stats_to_file(filepath)
+    _get_process_local_stats().save_stats_to_file(filepath)
 
 
 def algorithm_free_one_only_over_isls(
@@ -194,16 +199,14 @@ def algorithm_free_one_only_over_isls(
     - 使用 Floyd-Warshall 算法，每次快照都需要全網路由矩陣重計算
     - 相比分層路由有更高的控制開銷
     """
-    
-    global _BASELINE_SIGNALING_STATS
 
     if enable_verbose_logs:
         print("\nALGORITHM: FREE ONE ONLY OVER ISLS (WITH SIGNALING STATS)")
 
     # 統計準備
-    snapshot = getattr(_BASELINE_SIGNALING_STATS, '_current_snapshot', 0)
+    snapshot = getattr(_get_process_local_stats(), '_current_snapshot', 0)
     sim_time_ms = time_since_epoch_ns // 1000000  # 轉換為毫秒
-    _BASELINE_SIGNALING_STATS._current_snapshot = snapshot + 1
+    _get_process_local_stats()._current_snapshot = snapshot + 1
 
     # Check the graph
     if sat_net_graph_only_satellites_with_isls.number_of_nodes() != len(satellites):
@@ -264,7 +267,7 @@ def algorithm_free_one_only_over_isls(
     
     # 記錄路由更新統計 - Floyd-Warshall 的控制開銷
     # bytes 計算交給 analyzer 統一處理（32B header + changed_entries*32B）
-    _BASELINE_SIGNALING_STATS.record_routing_update(
+    _get_process_local_stats().record_routing_update(
         snapshot, sim_time_ms,
         changed_entries=changed_entries,
         total_entries=total_entries
@@ -292,13 +295,13 @@ def algorithm_free_one_only_over_isls(
     if snapshot > 0:  # 第一個快照沒有拓撲變化
         # 簡化的拓撲變化檢測 - 基於邊數變化
         current_edges = sat_net_graph_only_satellites_with_isls.number_of_edges()
-        prev_edges = getattr(_BASELINE_SIGNALING_STATS, '_prev_edge_count', current_edges)
+        prev_edges = getattr(_get_process_local_stats(), '_prev_edge_count', current_edges)
         
         delta_isl = current_edges - prev_edges
         delta_gsl = 0  # 這個算法不處理GSL變化
         
         if delta_isl != 0:
-            _BASELINE_SIGNALING_STATS.record_topology_change(
+            _get_process_local_stats().record_topology_change(
                 snapshot, sim_time_ms,
                 delta_isl=delta_isl,
                 delta_gsl=delta_gsl
@@ -306,18 +309,26 @@ def algorithm_free_one_only_over_isls(
             if enable_verbose_logs:
                 print(f"  > [SIGNALING] 拓撲變化: ISL {delta_isl:+}")
         
-        _BASELINE_SIGNALING_STATS._prev_edge_count = current_edges
+        _get_process_local_stats()._prev_edge_count = current_edges
 
     if enable_verbose_logs:
         print("")
         # 輸出當前統計摘要
-        stats_summary = _BASELINE_SIGNALING_STATS.get_stats_summary()
+        stats_summary = _get_process_local_stats().get_stats_summary()
         print(f"  > [SIGNALING] 累計統計: {stats_summary['total_events']} 事件, {stats_summary['total_bytes']} 字節")
 
-    # 統一輸出統計文件到 analytic_result 目錄
+    # Process-local 輸出：使用臨時文件，帶進程/線程ID
+    import threading
+    thread_id = threading.get_ident()
+    pid = os.getpid()
+    
     stats_output_dir = "analytic_result"
     os.makedirs(stats_output_dir, exist_ok=True)
-    stats_file = os.path.join(stats_output_dir, "baseline_floyd_warshall_signaling_stats.json")
+    
+    # 臨時文件：用於收集各進程的統計數據
+    temp_dir = os.path.join(stats_output_dir, "temp_baseline")
+    os.makedirs(temp_dir, exist_ok=True)
+    stats_file = os.path.join(temp_dir, f"baseline_stats_pid{pid}_tid{thread_id}.json")
     
     try:
         
@@ -326,7 +337,7 @@ def algorithm_free_one_only_over_isls(
             "algorithm": "algorithm_free_one_only_over_isls_with_stats",
             "algorithm_display_name": "Floyd-Warshall Baseline",
             "timestamp": datetime.now().isoformat(),
-            "summary": _BASELINE_SIGNALING_STATS.get_stats_summary(),
+            "summary": _get_process_local_stats().get_stats_summary(),
             "timeline": [
                 {
                     "snapshot": row.snapshot,
@@ -336,7 +347,7 @@ def algorithm_free_one_only_over_isls(
                     "bytes": row.bytes,
                     "detail": row.detail
                 }
-                for row in _BASELINE_SIGNALING_STATS.timeline
+                for row in _get_process_local_stats().timeline
             ]
         }
         
@@ -351,5 +362,5 @@ def algorithm_free_one_only_over_isls(
 
     return {
         "fstate": fstate,
-        "signaling_stats": _BASELINE_SIGNALING_STATS.get_stats_summary()
+        "signaling_stats": _get_process_local_stats().get_stats_summary()
     }
