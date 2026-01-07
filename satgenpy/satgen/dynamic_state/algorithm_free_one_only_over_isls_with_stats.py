@@ -53,6 +53,7 @@ class ControlSignalingStats:
         self.total_messages = 0
         self.total_bytes = 0
         self.timeline: List[EventRow] = []
+        self._recorded_snapshots: Set[int] = set()  # 追蹤已記錄的 snapshot（去重）
     
     def _append(self, event: EventRow):
         """添加事件到時間軸 - 統一邏輯，避免雙重累加"""
@@ -67,7 +68,13 @@ class ControlSignalingStats:
         
         Note:
             bytes 計算交給 analyzer 統一處理（HDR + changed_entries*ENTRY）
+            每個 snapshot 只記錄一次，避免重複計數
         """
+        # 去重檢查：每個 snapshot 只記錄一次
+        if snapshot in self._recorded_snapshots:
+            return
+        self._recorded_snapshots.add(snapshot)
+        
         self.routing_updates += 1
         # bytes 設為提供值或 0（讓 analyzer 計算）
         b = bytes if bytes is not None else 0
@@ -176,7 +183,8 @@ def algorithm_free_one_only_over_isls(
         sat_neighbor_to_if,
         list_gsl_interfaces_info,
         prev_output,
-        enable_verbose_logs
+        enable_verbose_logs,
+        time_step_ns=None  # 新增：時間步長（納秒），用於計算 snapshot 索引
 ):
     """
     FREE-ONE ONLY OVER INTER-SATELLITE LINKS ALGORITHM WITH SIGNALING STATS
@@ -203,10 +211,14 @@ def algorithm_free_one_only_over_isls(
     if enable_verbose_logs:
         print("\nALGORITHM: FREE ONE ONLY OVER ISLS (WITH SIGNALING STATS)")
 
-    # 統計準備
-    snapshot = getattr(_get_process_local_stats(), '_current_snapshot', 0)
+    # 統計準備：從 time_since_epoch_ns 計算正確的 snapshot 索引
+    # 避免使用 process-local 計數器造成的並行執行問題
     sim_time_ms = time_since_epoch_ns // 1000000  # 轉換為毫秒
-    _get_process_local_stats()._current_snapshot = snapshot + 1
+    if time_step_ns is not None and time_step_ns > 0:
+        snapshot = int(time_since_epoch_ns / time_step_ns)
+    else:
+        # 預設 100ms per snapshot
+        snapshot = int(time_since_epoch_ns / 100_000_000)  # 100ms = 100M ns
 
     # Check the graph
     if sat_net_graph_only_satellites_with_isls.number_of_nodes() != len(satellites):
