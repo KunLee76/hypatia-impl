@@ -2,15 +2,18 @@
 """
 RTT 比較視覺化腳本
 讀取 RTT 分析結果並生成比較圖表
+支援 OneWeb 和 Starlink 兩個星座的比較
 """
 
 import json
 import matplotlib.pyplot as plt
 import numpy as np
 from pathlib import Path
+import glob
+import re
 
 # 配置
-DATA_FILE = Path("paper/satgenpy_analysis/rtt_analysis_results/rtt_analysis_data.json")
+DATA_DIR = Path("paper/satgenpy_analysis/data")
 OUTPUT_DIR = Path("paper/satgenpy_analysis/rtt_analysis_results")
 
 # 設定中文字體
@@ -20,16 +23,105 @@ plt.rcParams['axes.unicode_minus'] = False
 # 顏色配置
 COLORS = {
     'Baseline': '#FF6B6B',      # 珊瑚紅
-    'GID': '#4ECDC4',           # 青綠色
+    'GRHR': '#4ECDC4',          # 青綠色（原 GID）
     'LoHi': '#95A5A6',          # 灰色
 }
 
-# 路由中文名稱映射
+# 星座配置
+CONSTELLATIONS = {
+    'oneweb': 'OneWeb',
+    'starlink': 'Starlink'
+}
+
+# 算法映射
+ALGORITHM_MAP = {
+    'algorithm_free_one_only_over_isls_with_stats': 'Baseline',
+    'algorithm_hierarchical_virtual_gid': 'GRHR',
+    'algorithm_lohi': 'LoHi'
+}
+
+# 路由名稱映射
 ROUTE_LABELS = {
     'Tokyo_to_Shanghai': 'Tokyo → Shanghai',
     'Tokyo_to_Delhi': 'Tokyo → Delhi',
     'Tokyo_to_New_York': 'Tokyo → New York'
 }
+
+# 路由 ID 映射（根據你的 ground_stations.txt）
+# 這裡需要根據實際的 node ID 調整
+ROUTE_IDS = {
+    'Tokyo_to_Shanghai': ('720', '721'),
+    'Tokyo_to_Delhi': ('720', '729'),
+    'Tokyo_to_New_York': ('720', '722')
+}
+
+def load_rtt_data(constellation):
+    """
+    載入指定星座的 RTT 數據
+    
+    Args:
+        constellation: 'oneweb' 或 'starlink'
+    
+    Returns:
+        dict: {algorithm: {route_name: rtt_time_series}}
+    """
+    data = {}
+    
+    # 查找該星座的所有算法目錄
+    pattern = f"{constellation}_*_algorithm_*"
+    algo_dirs = glob.glob(str(DATA_DIR / pattern))
+    
+    for algo_dir in algo_dirs:
+        # 提取算法名稱
+        algo_name = None
+        for algo_key, algo_value in ALGORITHM_MAP.items():
+            if algo_key in algo_dir:
+                algo_name = algo_value
+                break
+        
+        if not algo_name:
+            continue
+        
+        # 檢查是否有 RTT 數據
+        rtt_dir = Path(algo_dir) / "100ms_for_20s" / "manual" / "data"
+        if not rtt_dir.exists():
+            continue
+        
+        data[algo_name] = {}
+        
+        # 讀取各路由的 RTT 數據
+        for route_name, (src, dst) in ROUTE_IDS.items():
+            rtt_file = rtt_dir / f"networkx_rtt_{src}_to_{dst}.txt"
+            if rtt_file.exists():
+                time_series = []
+                with open(rtt_file, 'r') as f:
+                    for line in f:
+                        parts = line.strip().split(',')
+                        if len(parts) == 2:
+                            time_ns = int(parts[0])
+                            rtt_ns = float(parts[1])
+                            # 轉換為毫秒
+                            time_ms = time_ns / 1_000_000
+                            rtt_ms = rtt_ns / 1_000_000
+                            time_series.append((time_ms, rtt_ms))
+                
+                if time_series:
+                    data[algo_name][route_name] = time_series
+    
+    return data
+
+def compute_stats(time_series):
+    """計算 RTT 統計數據"""
+    if not time_series:
+        return None
+    
+    rtt_values = [rtt for _, rtt in time_series]
+    return {
+        'mean': np.mean(rtt_values),
+        'min': np.min(rtt_values),
+        'max': np.max(rtt_values),
+        'std': np.std(rtt_values)
+    }
 
 def load_data():
     """載入 RTT 分析數據"""
@@ -56,7 +148,43 @@ def extract_stats(data):
     
     return stats
 
-def plot_overall_comparison(stats, output_file):
+def plot_rtt_time_series(constellation_data, constellation_name, route_name, output_file):
+    """
+    圖表: RTT 時間序列折線圖
+    
+    Args:
+        constellation_data: 星座的 RTT 數據
+        constellation_name: 星座名稱 (OneWeb 或 Starlink)
+        route_name: 路由名稱
+        output_file: 輸出文件路徑
+    """
+    fig, ax = plt.subplots(figsize=(14, 7))
+    
+    algorithms = ['Baseline', 'GRHR', 'LoHi']
+    
+    for algo in algorithms:
+        if algo in constellation_data and route_name in constellation_data[algo]:
+            time_series = constellation_data[algo][route_name]
+            times = [t for t, _ in time_series]
+            rtts = [rtt for _, rtt in time_series]
+            
+            ax.plot(times, rtts, label=algo, color=COLORS[algo], 
+                   linewidth=2, alpha=0.8)
+    
+    route_label = ROUTE_LABELS.get(route_name, route_name)
+    ax.set_xlabel('Time (ms)', fontsize=14, fontweight='bold')
+    ax.set_ylabel('RTT (ms)', fontsize=14, fontweight='bold')
+    ax.set_title(f'{constellation_name}: {route_label} - RTT Over Time', 
+                fontsize=16, fontweight='bold', pad=20)
+    ax.legend(fontsize=12, loc='best', framealpha=0.9)
+    ax.grid(True, alpha=0.3, linestyle='--')
+    
+    plt.tight_layout()
+    plt.savefig(output_file, dpi=300, bbox_inches='tight')
+    plt.close()
+    print(f"✅ RTT 折線圖已保存: {output_file}")
+
+def plot_overall_comparison(stats, constellation_name, output_file):
     """
     圖表 1: 整體平均 RTT 比較（柱狀圖）
     """
@@ -66,11 +194,11 @@ def plot_overall_comparison(stats, output_file):
     avg_rtts = []
     colors = []
     
-    for algo in ['Baseline', 'GID', 'LoHi']:
+    for algo in ['Baseline', 'GRHR', 'LoHi']:
         if algo in stats:
             routes = stats[algo]
             avg_rtt = np.mean([route['mean'] for route in routes.values()])
-            algorithms.append(algo if algo != 'GID' else 'GID (27°)')
+            algorithms.append(algo)
             avg_rtts.append(avg_rtt)
             colors.append(COLORS[algo])
     
@@ -84,16 +212,17 @@ def plot_overall_comparison(stats, output_file):
                 ha='center', va='bottom', fontsize=12, fontweight='bold')
     
     ax.set_ylabel('Average RTT (ms)', fontsize=14, fontweight='bold')
-    ax.set_title('Overall Average RTT Comparison', fontsize=16, fontweight='bold', pad=20)
+    ax.set_title(f'{constellation_name}: Overall Average RTT Comparison', 
+                fontsize=16, fontweight='bold', pad=20)
     ax.grid(axis='y', alpha=0.3, linestyle='--')
     ax.set_ylim(0, max(avg_rtts) * 1.15)
     
     plt.tight_layout()
     plt.savefig(output_file, dpi=300, bbox_inches='tight')
     plt.close()
-    print(f"✅ 圖表 1 已保存: {output_file}")
+    print(f"✅ 圖表已保存: {output_file}")
 
-def plot_route_comparison(stats, output_file):
+def plot_route_comparison(stats, constellation_name, output_file):
     """
     圖表 2: 各路由的 RTT 比較（分組柱狀圖）
     """
@@ -108,7 +237,7 @@ def plot_route_comparison(stats, output_file):
     x = np.arange(len(routes))
     width = 0.25
     
-    algorithms = ['Baseline', 'GID', 'LoHi']
+    algorithms = ['Baseline', 'GRHR', 'LoHi']
     offsets = [-width, 0, width]
     
     for algo, offset in zip(algorithms, offsets):
@@ -120,8 +249,7 @@ def plot_route_comparison(stats, output_file):
                 else:
                     rtts.append(0)
             
-            label = algo if algo != 'GID' else 'GID (27°)'
-            bars = ax.bar(x + offset, rtts, width, label=label, 
+            bars = ax.bar(x + offset, rtts, width, label=algo, 
                          color=COLORS[algo], alpha=0.8, edgecolor='black', linewidth=1.2)
             
             # 添加數值標籤
@@ -138,14 +266,15 @@ def plot_route_comparison(stats, output_file):
     ax.set_xticklabels(route_labels, fontsize=12)
     
     ax.set_ylabel('Average RTT (ms)', fontsize=14, fontweight='bold')
-    ax.set_title('RTT Comparison by Route', fontsize=16, fontweight='bold', pad=20)
+    ax.set_title(f'{constellation_name}: RTT Comparison by Route', 
+                fontsize=16, fontweight='bold', pad=20)
     ax.legend(fontsize=12, loc='upper left', framealpha=0.9)
     ax.grid(axis='y', alpha=0.3, linestyle='--')
     
     plt.tight_layout()
     plt.savefig(output_file, dpi=300, bbox_inches='tight')
     plt.close()
-    print(f"✅ 圖表 2 已保存: {output_file}")
+    print(f"✅ 圖表已保存: {output_file}")
 
 def plot_rtt_distribution(stats, output_file):
     """

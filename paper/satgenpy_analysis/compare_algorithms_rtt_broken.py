@@ -6,7 +6,7 @@ Usage:
 
 Example:
     python compare_algorithms_rtt.py data oneweb_1200 20 720 721
-    python compare_algorithms_rtt.py data starlink_550 20 1584 1585
+    python compare_algorithms_rtt.py data starlink_550 20 720 721
 """
 
 import sys
@@ -15,23 +15,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib
 matplotlib.use('Agg')  # Use non-interactive backend
-
-# Constellation configurations
-# Note: The numbers (1200, 550, 630) represent orbital altitude in km, not satellite count
-CONSTELLATION_CONFIG = {
-    'oneweb_1200': {
-        'num_satellites': 720,  # Satellite IDs: 0-719, Ground stations start from 720
-        'display_name': 'OneWeb-1200'
-    },
-    'starlink_550': {
-        'num_satellites': 1584,  # Satellite IDs: 0-1583, Ground stations start from 1584
-        'display_name': 'Starlink-550'
-    },
-    'kuiper_630': {
-        'num_satellites': 630,  # To be verified
-        'display_name': 'Kuiper-630'
-    }
-}
 
 def read_ground_stations(gs_file_path):
     """
@@ -65,6 +48,25 @@ def read_ground_stations(gs_file_path):
             gs_dict[gs_id] = gs_name
     
     return gs_dict
+
+def extract_constellation_name(file_path):
+    """
+    Extract constellation name from file path.
+    
+    Example:
+        "data/oneweb_1200_isls_plus_grid_.../..." -> "oneweb_1200"
+    """
+    parts = file_path.split('/')
+    for part in parts:
+        if 'oneweb' in part.lower() or 'starlink' in part.lower() or 'kuiper' in part.lower():
+            # Extract constellation name before "_isls_"
+            if '_isls_' in part:
+                return part.split('_isls_')[0]
+            # Fallback: take first two parts (e.g., "oneweb_1200")
+            subparts = part.split('_')
+            if len(subparts) >= 2:
+                return '_'.join(subparts[:2])
+    return "Unknown"
 
 def read_rtt_file(file_path):
     """
@@ -112,47 +114,38 @@ def plot_comparison(baseline_data, grhr_data, lohi_data, src_id, dst_id, src_nam
     fig, ax = plt.subplots(figsize=(9, 6))
     
     # Convert to milliseconds and seconds
-    # Plot in specific order: LoHi first (background), then GRHR, then Baseline (foreground)
-    # Use different line styles to distinguish overlapping lines
-    
-    if lohi_data:
-        lohi_times = [t[0] / 1e9 for t in lohi_data]  # ns to seconds
-        lohi_rtts = [t[1] / 1e6 for t in lohi_data]   # ns to milliseconds
-        ax.plot(lohi_times, lohi_rtts, 
-                color='#FF6B6B',  # 紅色
-                linewidth=2.5, 
-                label='LoHi',
-                marker='^',
-                markersize=4,
-                markevery=10,  # Show marker every 10 points
-                alpha=0.9,
-                linestyle='-')  # Solid line
+    if baseline_data:
+        baseline_times = [t[0] / 1e9 for t in baseline_data]  # ns to seconds
+        baseline_rtts = [t[1] / 1e6 for t in baseline_data]   # ns to milliseconds
+        ax.plot(baseline_times, baseline_rtts, 
+                color='#FF6B6B',  # 珊瑚紅
+                linewidth=2, 
+                label='Baseline',
+                marker='o',
+                markersize=3,
+                alpha=0.8)
     
     if grhr_data:
         grhr_times = [t[0] / 1e9 for t in grhr_data]  # ns to seconds
         grhr_rtts = [t[1] / 1e6 for t in grhr_data]   # ns to milliseconds
         ax.plot(grhr_times, grhr_rtts, 
                 color='#4ECDC4',  # 青綠色
-                linewidth=2.5, 
+                linewidth=2, 
                 label='GRHR',
                 marker='s',
-                markersize=4,
-                markevery=10,  # Show marker every 10 points
-                alpha=0.9,
-                linestyle='-')  # Solid line
+                markersize=3,
+                alpha=0.8)
     
-    if baseline_data:
-        baseline_times = [t[0] / 1e9 for t in baseline_data]  # ns to seconds
-        baseline_rtts = [t[1] / 1e6 for t in baseline_data]   # ns to milliseconds
-        ax.plot(baseline_times, baseline_rtts, 
+    if lohi_data:
+        lohi_times = [t[0] / 1e9 for t in lohi_data]  # ns to seconds
+        lohi_rtts = [t[1] / 1e6 for t in lohi_data]   # ns to milliseconds
+        ax.plot(lohi_times, lohi_rtts, 
                 color='#95A5A6',  # 灰色
                 linewidth=2, 
-                label='Baseline',
-                marker='o',
-                markersize=3.5,
-                markevery=10,  # Show marker every 10 points
-                alpha=0.95,
-                linestyle='-.')  # Dash-dot line
+                label='LoHi',
+                marker='^',
+                markersize=3,
+                alpha=0.8)
     
     # Formatting
     ax.set_xlabel('Time (seconds)', fontsize=14, fontweight='bold')
@@ -169,18 +162,6 @@ def plot_comparison(baseline_data, grhr_data, lohi_data, src_id, dst_id, src_nam
     # Set x-axis limits and ticks - 每 2 秒一個刻度
     ax.set_xlim(0, duration_s)
     ax.set_xticks(np.arange(0, duration_s + 1, 2))  # 0, 2, 4, 6, ..., duration_s
-    
-    # Tight layout
-    plt.tight_layout()
-    
-    # Save
-    plt.savefig(output_path, dpi=300, bbox_inches='tight')
-    print(f"✅ Plot saved to: {output_path}")
-    
-    # Statistics
-    print("\n" + "=" * 70)
-    print(f"Statistics Summary: {src_name} → {dst_name}")
-    print("=" * 70)
     
     stats_dict = {}
     
@@ -245,45 +226,15 @@ def plot_comparison(baseline_data, grhr_data, lohi_data, src_id, dst_id, src_nam
             if improvement > 0:
                 print(f"  🎯 GRHR is {improvement:.1f}% better than LoHi")
             else:
-                print(f"  🎯 LoHi is {-improvement:.1f}% better than GRHR")
+                unreachable_count = len([r for r in grhr_rtts if r == 0])
+            if unreachable_count > 0:
+                print(f"  - Unreachable: {unreachable_count} / {len(grhr_data)} ({unreachable_count/len(grhr_data)*100:.1f}%)")
     
-    print("=" * 70)
-
-def main():
-    if len(sys.argv) != 6:
-        print("Usage: python compare_algorithms_rtt.py <data_dir> <constellation> <duration_s> <src_id> <dst_id>")
-        print("\nExample:")
-        print("  python compare_algorithms_rtt.py data oneweb_1200 20 720 721")
-        print("  python compare_algorithms_rtt.py data starlink_550 20 1584 1585")
-        sys.exit(1)
-    
-    data_dir = sys.argv[1]
-    constellation_name = sys.argv[2]
-    duration_s = int(sys.argv[3])
-    src_id = sys.argv[4]
-    dst_id = sys.argv[5]
-    
-    print("=" * 70)
-    print("RTT Algorithm Comparison Tool")
-    print("=" * 70)
-    print(f"Constellation: {constellation_name.upper()}")
-    print(f"Data directory: {data_dir}")
-    print(f"Duration: {duration_s}s")
-    print(f"Route: {src_id} → {dst_id}")
-    print("=" * 70)
-    
-    # Get constellation configuration
-    if constellation_name not in CONSTELLATION_CONFIG:
-        print(f"\n⚠️  Warning: Unknown constellation '{constellation_name}', using dynamic detection")
-        num_satellites = None
-        display_name = constellation_name.replace('_', '-').upper()
-    else:
-        config = CONSTELLATION_CONFIG[constellation_name]
-        num_satellites = config['num_satellites']
-        display_name = config['display_name']
-        print(f"Constellation config: {num_satellites} satellites")
-    
-    # Search for matching algorithm directories
+    if lohi_rtts_valid and grhr_rtts_valid:
+        lohi_avg = sum(lohi_rtts_valid) / len(lohi_rtts_valid)
+        grhr_avg = sum(grhr_rtts_valid) / len(grhr_rtts_valid)
+        improvement = ((lohi_avg - grhr_avg) / lohi_avg) * 100
+        print(f"\nComparison:")
     baseline_candidates = [d for d in os.listdir(data_dir) 
                           if constellation_name in d and 'algorithm_free_one_only_over_isls_with_stats' in d]
     grhr_candidates = [d for d in os.listdir(data_dir) 
@@ -334,9 +285,22 @@ def main():
             "manual",
             "data",
             f"networkx_rtt_{src_id}_to_{dst_id}.txt"
-        )
+                          if constellation_name in d and 'algorithm_lohi' in d]
+    grhr_candidates = [d for d in os.listdir(data_dir) 
+                      if constellation_name in d and 'algorithm_hierarchical_virtual_gid' in d]
     
-    # Find ground stations file
+    if not lohi_candidates or not grhr_candidates:
+        print(f"\n❌ Error: Could not find algorithm directories for {constellation_name}!")
+        if not lohi_candidates:
+            print(f"  - LoHi directory not found (should contain '{constellation_name}' and 'algorithm_lohi')")
+        if not grhr_candidates:
+            print(f"  - GRHR directory not found (should contain '{constellation_name}' and 'algorithm_hierarchical_virtual_gid')")
+        sys.exit(1)
+    
+    lohi_pattern = lohi_candidates[0]
+    grhr_pattern = grhr_candidates[0]
+    
+    lohi_file = os.path.join(
     # Use the first available pattern
     base_pattern = None
     if lohi_pattern:
@@ -359,6 +323,24 @@ def main():
         potential_gs_paths.append(os.path.join(data_dir, "..", "..", "satellite_networks_state", "gen_data", grhr_pattern, "ground_stations.txt"))
     if baseline_pattern:
         potential_gs_paths.append(os.path.join(data_dir, "..", "..", "satellite_networks_state", "gen_data", baseline_pattern, "ground_stations.txt"))
+    grhr_file = os.path.join(
+        data_dir,
+        grhr_pattern,
+        f"100ms_for_{duration_s}s",
+        "manual",
+        "data",
+        f"networkx_rtt_{src_id}_to_{dst_id}.txt"
+    )
+    
+    # Find ground stations file
+    gs_file_pattern = lohi_pattern.replace('_algorithm_lohi', '')
+    gs_file = None
+    
+    # Search in satellite_networks_state/gen_data/
+    potential_gs_paths = [
+        os.path.join(data_dir, "..", "..", "satellite_networks_state", "gen_data", gs_file_pattern, "ground_stations.txt"),
+        os.path.join(data_dir, "..", "..", "satellite_networks_state", "gen_data", lohi_pattern, "ground_stations.txt"),
+    ]
     
     for path in potential_gs_paths:
         normalized_path = os.path.normpath(path)
@@ -366,48 +348,15 @@ def main():
             gs_file = normalized_path
             break
     
-    # Read ground station names
+    # Read ground station names and determine actual number of satellites
     gs_dict = {}
+    num_satellites = 0
     
     if gs_file:
         gs_dict = read_ground_stations(gs_file)
         
-        # If num_satellites not set from config, determine from TLE file
-        if num_satellites is None:
-            tles_file = gs_file.replace('ground_stations.txt', 'tles.txt')
-            if os.path.exists(tles_file):
-                with open(tles_file, 'r') as f:
-                    num_satellites = sum(1 for line in f) // 3  # Each satellite has 3 lines in TLE
-                print(f"Detected {num_satellites} satellites from TLE file")
-            else:
-                # Fallback: use src_id as estimate
-                num_satellites = int(src_id)
-                print(f"⚠️  Warning: Could not determine satellite count, assuming {num_satellites}")
-        
-        print(f"Ground stations file: {gs_file}")
-        print(f"Loaded {len(gs_dict)} ground stations")
-        print(f"Satellites: {num_satellites}, Ground stations start from ID {num_satellites}")
-    else:
-        print("⚠️  Warning: Ground stations file not found, using IDs instead of names")
-        if num_satellites is None:
-            num_satellites = int(src_id)
-    
-    # Get names or use IDs as fallback
-    src_gs_index = int(src_id) - num_satellites
-    dst_gs_index = int(dst_id) - num_satellites
-    
-    src_name = gs_dict.get(src_gs_index, f"GS-{src_id}")
-    dst_name = gs_dict.get(dst_gs_index, f"GS-{dst_id}")
-    
-    # Output path
-    output_dir = os.path.join(data_dir, "algorithm_comparison")
-    os.makedirs(output_dir, exist_ok=True)
-    output_path = os.path.join(
-        output_dir,
-        f"{constellation_name}_rtt_comparison_{src_id}_to_{dst_id}_{duration_s}s.pdf"
-    )
-    
-    print(f"\nReading data files...")
+        # Determine actual number of satellites from TLE file
+        tles_file = gs_file.replace('ground_stations.txt', 'tles.txt')
     if baseline_file:
         print(f"  Baseline: {baseline_file}")
     if grhr_file:
@@ -433,9 +382,41 @@ def main():
     
     # Plot
     print(f"\nGenerating comparison plot...")
-    print(f"Constellation: {display_name}")
+    print(f"Constellation: {constellation_name}")
     print(f"Route: {src_name} ({src_id}) → {dst_name} ({dst_id})")
-    plot_comparison(baseline_data, grhr_data, lohi_data, src_id, dst_id, src_name, dst_name, display_name, duration_s, output_path)
+    plot_comparison(baseline_data, grhr_data, lohindex, f"GS-{src_id}")
+    dst_name = gs_dict.get(dst_gs_index, f"GS-{dst_id}")
+    
+    # Output path
+    output_dir = os.path.join(data_dir, "algorithm_comparison")
+    os.makedirs(output_dir, exist_ok=True)
+    output_path = os.path.join(
+        output_dir,
+        f"rtt_comparison_{src_id}_to_{dst_id}_{duration_s}s.pdf"
+    )
+    
+    print(f"\nReading data files...")
+    print(f"  LoHi: {lohi_file}")
+    print(f"  GRHR: {grhr_file}")
+    
+    # Read data
+    lohi_data = read_rtt_file(lohi_file)
+    grhr_data = read_rtt_file(grhr_file)
+    
+    if not lohi_data and not grhr_data:
+        print("\n❌ Error: No data found in either file!")
+        sys.exit(1)
+    
+    if not lohi_data:
+        print("\n⚠️  Warning: No LoHi data found")
+    if not grhr_data:
+        print("\n⚠️  Warning: No GRHR data found")
+    
+    # Plot
+    print(f"\nGenerating comparison plot...")
+    print(f"Constellation: {constellation_name}")
+    print(f"Route: {src_name} ({src_id}) → {dst_name} ({dst_id})")
+    plot_comparison(lohi_data, grhr_data, src_id, dst_id, src_name, dst_name, constellation_name, duration_s, output_path)
 
 if __name__ == "__main__":
     main()
