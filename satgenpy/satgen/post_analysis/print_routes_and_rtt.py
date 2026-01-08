@@ -67,10 +67,11 @@ def print_routes_and_rtt(base_output_dir, satellite_network_dir, dynamic_state_u
         # For each time moment
         current_path = []
         rtt_ns_list = []
+        fstate = {}  # Initialize fstate once, will be updated incrementally
         for t in range(0, simulation_end_time_ns, dynamic_state_update_interval_ns):
 
-            # Clear fstate for each time step to avoid memory accumulation
-            fstate = {}
+            # Read and apply delta updates to fstate (cumulative, not cleared)
+            # fstate files use delta updates: only changed entries are written
             with open(satellite_network_dynamic_state_dir + "/fstate_" + str(t) + ".txt", "r") as f_in:
                 for line in f_in:
                     spl = line.split(",")

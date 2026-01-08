@@ -388,7 +388,8 @@ def generate_dynamic_state_at(
             sat_neighbor_to_if,
             list_gsl_interfaces_info,
             prev_output,
-            enable_verbose_logs
+            enable_verbose_logs,
+            time_step_ns=time_step_ns
         )
 
     elif dynamic_state_algorithm == "algorithm_lohi":
