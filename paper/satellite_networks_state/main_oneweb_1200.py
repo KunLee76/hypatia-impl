@@ -86,14 +86,14 @@ main_helper = MainHelper(
 
 def main():
     args = sys.argv[1:]
-    if len(args) != 6 and len(args) != 7:
-        print("Must supply exactly six or seven arguments")
+    if len(args) != 6 and len(args) != 7 and len(args) != 8:
+        print("Must supply exactly six, seven or eight arguments")
         print("Usage: python main_oneweb_1200.py [duration (s)] [time step (ms)] "
               "[isls_plus_grid / isls_none] "
               "[ground_stations_{top_100, paris_moscow_grid}] "
               "[algorithm_{free_one_only_over_isls, free_one_only_gs_relays, "
               "paired_many_only_over_isls, lohi}] "
-              "[num threads] [grid_deg (optional, default: 15)]")
+              "[num threads] [grid_deg (optional, default: 15)] [k_best_gateways (optional, default: 8)]")
         print("")
         print("Examples:")
         print("  # LoHi (uses fixed 6×10 grouping, grid_deg ignored)")
@@ -104,13 +104,18 @@ def main():
         print("  python main_oneweb_1200.py 20 100 isls_plus_grid "
               "ground_stations_top_100 algorithm_free_one_only_over_isls 4")
         print("")
-        print("  # Hierarchical with custom grid degree")
-        print("  python main_oneweb_1200.py 20 100 isls_plus_grid "
-              "ground_stations_top_100 algorithm_hierarchical_virtual_gid 4 10")
+        print("  # Hierarchical with custom grid_deg=27, k=8")
+        print("  python main_oneweb_1200.py 100 100 isls_plus_grid "
+              "ground_stations_top_100 algorithm_hierarchical_virtual_gid 4 27 8")
+        print("")
+        print("  # Hierarchical with k=999 (All)")
+        print("  python main_oneweb_1200.py 100 100 isls_plus_grid "
+              "ground_stations_top_100 algorithm_hierarchical_virtual_gid 4 27 999")
         exit(1)
     else:
-        # If 7th argument provided, use it as grid_deg; otherwise default to 15
-        grid_deg = int(args[6]) if len(args) == 7 else 15
+        # 向下相容：支援 6, 7, 8 個參數
+        grid_deg = int(args[6]) if len(args) >= 7 else 15
+        k_best_gateways = int(args[7]) if len(args) == 8 else 8
         
         main_helper.calculate(
             "gen_data",
@@ -121,6 +126,7 @@ def main():
             args[4],
             int(args[5]),
             grid_deg,
+            k_best_gateways,
         )
 
 

@@ -65,7 +65,8 @@ class MainHelper:
             gs_selection,             # ground_stations_{top_100, paris_moscow_grid}
             dynamic_state_algorithm,  # algorithm_{free_one_only_{gs_relays,_over_isls}, paired_many_only_over_isls, hierarchical}
             num_threads,
-            grid_deg=15               # Grid degree for hierarchical algorithms (default: 15)
+            grid_deg=15,              # Grid degree for hierarchical algorithms (default: 15)
+            k_best_gateways=8         # K-best gateways for hierarchical_virtual_gid (default: 8, 999=all)
     ):
 
         # Add base name to setting
@@ -74,10 +75,11 @@ class MainHelper:
         # 如果是需要 grid_deg 的演算法，在名稱加上 grid_deg 後綴
         # 注意：algorithm_lohi 不使用 grid_deg，使用固定的 6×10 平面區塊分群
         if "hierarchical_virtual_gid" in dynamic_state_algorithm.lower():
-            name += f"_{grid_deg}deg"
+            name += f"_{grid_deg}deg_k{k_best_gateways}"
             # 設定環境變數，讓演算法讀取
             os.environ['SATGEN_GRID_DEG'] = str(grid_deg)
-            print(f"[GID] Setting grid degree to {grid_deg}° for hierarchical GID algorithm")
+            os.environ['K_BEST_GATEWAYS'] = str(k_best_gateways)
+            print(f"[GID] Setting grid degree to {grid_deg}° and K-best to {k_best_gateways} for hierarchical GID algorithm")
         elif "hierarchical" in dynamic_state_algorithm.lower() and "lohi" not in dynamic_state_algorithm.lower():
             # 其他 hierarchical 演算法也可能需要 grid_deg
             name += f"_{grid_deg}deg"

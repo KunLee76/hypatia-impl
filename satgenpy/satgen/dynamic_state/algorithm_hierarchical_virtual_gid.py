@@ -19,10 +19,10 @@ import threading
 # 全域設定（可依實驗需要調整）
 # -------------------------------
 # 優先從環境變數讀取，否則使用預設值
-GRID_DEG = int(os.environ.get('SATGEN_GRID_DEG', 15))  # 可從外部指定網格大小
+GRID_DEG = int(os.environ.get('SATGEN_GRID_DEG', 15))  # 外部指定網格大小
 ALLOW_DIAGONAL_NEIGHBOR = True          # ★ GID 8-鄰（含對角）以對應斜向跨面 ISL
 ALLOW_GLOBAL_FALLBACK = False           # ★ 預設關閉全域最短路兜底（GID 圖斷了才開）
-K_BEST_GATEWAYS = 8                     # 每對相鄰 GID 保留的 gateway 候選數
+K_BEST_GATEWAYS = int(os.environ.get('K_BEST_GATEWAYS', 8))  # 每對相鄰 GID 保留的 gateway 候選數（999=保留全部）
 GEO_ALPHA = 0.08                        # 地理方向偏好係數（小：不拉歪主成本，建議 0.05~0.1）
 MIN_AGENT_HOLD_STEPS = 2                # agent 抖動抑制步數（若你需要 agent）
 EARTH_R_KM = 6371.0
@@ -540,9 +540,14 @@ class GatewayCache:
             cross_cnt += 1
 
         # 對每個PID對挑選top-k（依EMA後成本）
+        # 若 k_best >= 999，表示保留全部候選（不限制）
         new_candidates: Dict[Tuple[int,int], List[Tuple[int,int,float]]] = {}
         for key, lst in self.candidates.items():
-            new_candidates[key] = sorted(lst, key=lambda x: x[2])[:self.k_best]
+            sorted_lst = sorted(lst, key=lambda x: x[2])
+            if self.k_best >= 999:
+                new_candidates[key] = sorted_lst  # 保留全部
+            else:
+                new_candidates[key] = sorted_lst[:self.k_best]
 
         # 決定是否「發布」：比較新top-k與已發布的top-k集合差異（Jaccard）
         def _topk_set(d):
