@@ -65,7 +65,7 @@ class MainHelper:
             gs_selection,             # ground_stations_{top_100, paris_moscow_grid}
             dynamic_state_algorithm,  # algorithm_{free_one_only_{gs_relays,_over_isls}, paired_many_only_over_isls, hierarchical}
             num_threads,
-            grid_deg=15,              # Grid degree for hierarchical algorithms (default: 15)
+            grid_deg=27,              # Grid degree for hierarchical algorithms (default: 27)
             k_best_gateways=8         # K-best gateways for hierarchical_virtual_gid (default: 8, 999=all)
     ):
 

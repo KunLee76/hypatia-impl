@@ -19,7 +19,7 @@ import threading
 # 全域設定（可依實驗需要調整）
 # -------------------------------
 # 優先從環境變數讀取，否則使用預設值
-GRID_DEG = int(os.environ.get('SATGEN_GRID_DEG', 15))  # 外部指定網格大小
+GRID_DEG = int(os.environ.get('SATGEN_GRID_DEG', 27))  # 外部指定網格大小，預設定為27
 ALLOW_DIAGONAL_NEIGHBOR = True          # ★ GID 8-鄰（含對角）以對應斜向跨面 ISL
 ALLOW_GLOBAL_FALLBACK = False           # ★ 預設關閉全域最短路兜底（GID 圖斷了才開）
 K_BEST_GATEWAYS = int(os.environ.get('K_BEST_GATEWAYS', 8))  # 每對相鄰 GID 保留的 gateway 候選數（999=保留全部）
@@ -1084,7 +1084,9 @@ def init(config=None):
     # 優先從環境變數讀取 grid_deg（支援自動化腳本動態設定）
     grid_deg = cfg.get("grid_deg", int(os.environ.get('SATGEN_GRID_DEG', GRID_DEG)))
     allow_diag = cfg.get("allow_diagonal_neighbor", ALLOW_DIAGONAL_NEIGHBOR)
-    k_best = cfg.get("k_best_gateways", K_BEST_GATEWAYS)
+    # 每次 init 時重新讀取環境變數，避免全域變數快取問題
+    env_k = int(os.environ.get('K_BEST_GATEWAYS', 8))
+    k_best = cfg.get("k_best_gateways", env_k)
 
     # （可選）覆寫 VA 發布節奏參數
     global GWC_REBUILD_PERIOD_SNAPSHOTS, GWC_EMA_ALPHA, GWC_PUBLISH_JACCARD_THRESHOLD
