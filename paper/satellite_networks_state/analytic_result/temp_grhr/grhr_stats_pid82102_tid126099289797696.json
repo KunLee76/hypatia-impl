@@ -1,0 +1,2344 @@
+{
+  "algorithm": "algorithm_hierarchical_virtual_gid",
+  "algorithm_display_name": "Hierarchical GID (27°)",
+  "grid_deg": 27,
+  "timestamp": "2026-01-20T10:41:40.770720",
+  "summary": {
+    "total_events": 208,
+    "total_bytes": 0,
+    "by_type": {
+      "gid_rebuild": {
+        "count": 101,
+        "bytes": 0
+      },
+      "gateway_update": {
+        "count": 8,
+        "bytes": 0
+      },
+      "topology_change": {
+        "count": 1,
+        "bytes": 0
+      },
+      "routing_update": {
+        "count": 98,
+        "bytes": 0
+      }
+    },
+    "time_window": {
+      "start_ms": null,
+      "end_ms": null,
+      "duration_ms": null
+    }
+  },
+  "timeline": [
+    {
+      "snapshot": 0,
+      "time_ms": 0,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 78
+      }
+    },
+    {
+      "snapshot": 300,
+      "time_ms": 30000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 4,
+        "k_used": 4,
+        "changed_pairs": 442,
+        "num_messages": 442,
+        "num_entries": 1768
+      }
+    },
+    {
+      "snapshot": 300,
+      "time_ms": 30000,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_isl": 0,
+        "delta_gsl": 0
+      }
+    },
+    {
+      "snapshot": 300,
+      "time_ms": 30000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 170084,
+        "total_entries": 170084,
+        "diff_ratio": 1.0
+      }
+    },
+    {
+      "snapshot": 300,
+      "time_ms": 30000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 4
+      }
+    },
+    {
+      "snapshot": 301,
+      "time_ms": 30100,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 5,
+        "total_entries": 170084,
+        "diff_ratio": 2.9397239011312058e-05
+      }
+    },
+    {
+      "snapshot": 301,
+      "time_ms": 30100,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 302,
+      "time_ms": 30200,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 76,
+        "total_entries": 170084,
+        "diff_ratio": 0.0004468380329719433
+      }
+    },
+    {
+      "snapshot": 302,
+      "time_ms": 30200,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 4
+      }
+    },
+    {
+      "snapshot": 303,
+      "time_ms": 30300,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 13,
+        "total_entries": 170084,
+        "diff_ratio": 7.643282142941135e-05
+      }
+    },
+    {
+      "snapshot": 303,
+      "time_ms": 30300,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 304,
+      "time_ms": 30400,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 86,
+        "total_entries": 170084,
+        "diff_ratio": 0.0005056325109945674
+      }
+    },
+    {
+      "snapshot": 304,
+      "time_ms": 30400,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 305,
+      "time_ms": 30500,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 262,
+        "total_entries": 170084,
+        "diff_ratio": 0.001540415324192752
+      }
+    },
+    {
+      "snapshot": 305,
+      "time_ms": 30500,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 306,
+      "time_ms": 30600,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 7,
+        "total_entries": 170084,
+        "diff_ratio": 4.115613461583688e-05
+      }
+    },
+    {
+      "snapshot": 306,
+      "time_ms": 30600,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 307,
+      "time_ms": 30700,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 6,
+        "total_entries": 170084,
+        "diff_ratio": 3.527668681357447e-05
+      }
+    },
+    {
+      "snapshot": 307,
+      "time_ms": 30700,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 2
+      }
+    },
+    {
+      "snapshot": 308,
+      "time_ms": 30800,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 134,
+        "total_entries": 170084,
+        "diff_ratio": 0.0007878460055031632
+      }
+    },
+    {
+      "snapshot": 308,
+      "time_ms": 30800,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 309,
+      "time_ms": 30900,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 42,
+        "total_entries": 170084,
+        "diff_ratio": 0.0002469368076950213
+      }
+    },
+    {
+      "snapshot": 309,
+      "time_ms": 30900,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 310,
+      "time_ms": 31000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 4,
+        "k_used": 4,
+        "changed_pairs": 10,
+        "num_messages": 10,
+        "num_entries": 40
+      }
+    },
+    {
+      "snapshot": 310,
+      "time_ms": 31000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 47,
+        "total_entries": 170084,
+        "diff_ratio": 0.00027633404670633334
+      }
+    },
+    {
+      "snapshot": 310,
+      "time_ms": 31000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 311,
+      "time_ms": 31100,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 16,
+        "total_entries": 170084,
+        "diff_ratio": 9.407116483619858e-05
+      }
+    },
+    {
+      "snapshot": 311,
+      "time_ms": 31100,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 4
+      }
+    },
+    {
+      "snapshot": 312,
+      "time_ms": 31200,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 53,
+        "total_entries": 170084,
+        "diff_ratio": 0.0003116107335199078
+      }
+    },
+    {
+      "snapshot": 312,
+      "time_ms": 31200,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 4
+      }
+    },
+    {
+      "snapshot": 313,
+      "time_ms": 31300,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 75,
+        "total_entries": 170084,
+        "diff_ratio": 0.00044095858516968086
+      }
+    },
+    {
+      "snapshot": 313,
+      "time_ms": 31300,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 314,
+      "time_ms": 31400,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 4,
+        "total_entries": 170084,
+        "diff_ratio": 2.3517791209049645e-05
+      }
+    },
+    {
+      "snapshot": 314,
+      "time_ms": 31400,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 315,
+      "time_ms": 31500,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 8,
+        "total_entries": 170084,
+        "diff_ratio": 4.703558241809929e-05
+      }
+    },
+    {
+      "snapshot": 315,
+      "time_ms": 31500,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 316,
+      "time_ms": 31600,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 38,
+        "total_entries": 170084,
+        "diff_ratio": 0.00022341901648597164
+      }
+    },
+    {
+      "snapshot": 316,
+      "time_ms": 31600,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 317,
+      "time_ms": 31700,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 10,
+        "total_entries": 170084,
+        "diff_ratio": 5.8794478022624115e-05
+      }
+    },
+    {
+      "snapshot": 317,
+      "time_ms": 31700,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 318,
+      "time_ms": 31800,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 15,
+        "total_entries": 170084,
+        "diff_ratio": 8.819171703393617e-05
+      }
+    },
+    {
+      "snapshot": 318,
+      "time_ms": 31800,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 319,
+      "time_ms": 31900,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 4,
+        "total_entries": 170084,
+        "diff_ratio": 2.3517791209049645e-05
+      }
+    },
+    {
+      "snapshot": 319,
+      "time_ms": 31900,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 4
+      }
+    },
+    {
+      "snapshot": 320,
+      "time_ms": 32000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 4,
+        "k_used": 4,
+        "changed_pairs": 24,
+        "num_messages": 24,
+        "num_entries": 96
+      }
+    },
+    {
+      "snapshot": 320,
+      "time_ms": 32000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 11,
+        "total_entries": 170084,
+        "diff_ratio": 6.467392582488653e-05
+      }
+    },
+    {
+      "snapshot": 320,
+      "time_ms": 32000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 321,
+      "time_ms": 32100,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 2,
+        "total_entries": 170084,
+        "diff_ratio": 1.1758895604524822e-05
+      }
+    },
+    {
+      "snapshot": 321,
+      "time_ms": 32100,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 322,
+      "time_ms": 32200,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 84,
+        "total_entries": 170084,
+        "diff_ratio": 0.0004938736153900426
+      }
+    },
+    {
+      "snapshot": 322,
+      "time_ms": 32200,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 323,
+      "time_ms": 32300,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 9,
+        "total_entries": 170084,
+        "diff_ratio": 5.2915030220361706e-05
+      }
+    },
+    {
+      "snapshot": 323,
+      "time_ms": 32300,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 324,
+      "time_ms": 32400,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 13,
+        "total_entries": 170084,
+        "diff_ratio": 7.643282142941135e-05
+      }
+    },
+    {
+      "snapshot": 324,
+      "time_ms": 32400,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 325,
+      "time_ms": 32500,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 10,
+        "total_entries": 170084,
+        "diff_ratio": 5.8794478022624115e-05
+      }
+    },
+    {
+      "snapshot": 325,
+      "time_ms": 32500,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 326,
+      "time_ms": 32600,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 2,
+        "total_entries": 170084,
+        "diff_ratio": 1.1758895604524822e-05
+      }
+    },
+    {
+      "snapshot": 326,
+      "time_ms": 32600,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 327,
+      "time_ms": 32700,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 8,
+        "total_entries": 170084,
+        "diff_ratio": 4.703558241809929e-05
+      }
+    },
+    {
+      "snapshot": 327,
+      "time_ms": 32700,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 2
+      }
+    },
+    {
+      "snapshot": 328,
+      "time_ms": 32800,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 2,
+        "total_entries": 170084,
+        "diff_ratio": 1.1758895604524822e-05
+      }
+    },
+    {
+      "snapshot": 328,
+      "time_ms": 32800,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 329,
+      "time_ms": 32900,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 43,
+        "total_entries": 170084,
+        "diff_ratio": 0.0002528162554972837
+      }
+    },
+    {
+      "snapshot": 329,
+      "time_ms": 32900,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 330,
+      "time_ms": 33000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 331,
+      "time_ms": 33100,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 3,
+        "total_entries": 170084,
+        "diff_ratio": 1.7638343406787235e-05
+      }
+    },
+    {
+      "snapshot": 331,
+      "time_ms": 33100,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 332,
+      "time_ms": 33200,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 14,
+        "total_entries": 170084,
+        "diff_ratio": 8.231226923167376e-05
+      }
+    },
+    {
+      "snapshot": 332,
+      "time_ms": 33200,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 333,
+      "time_ms": 33300,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 6,
+        "total_entries": 170084,
+        "diff_ratio": 3.527668681357447e-05
+      }
+    },
+    {
+      "snapshot": 333,
+      "time_ms": 33300,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 334,
+      "time_ms": 33400,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 3,
+        "total_entries": 170084,
+        "diff_ratio": 1.7638343406787235e-05
+      }
+    },
+    {
+      "snapshot": 334,
+      "time_ms": 33400,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 6
+      }
+    },
+    {
+      "snapshot": 335,
+      "time_ms": 33500,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 42,
+        "total_entries": 170084,
+        "diff_ratio": 0.0002469368076950213
+      }
+    },
+    {
+      "snapshot": 335,
+      "time_ms": 33500,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 6
+      }
+    },
+    {
+      "snapshot": 336,
+      "time_ms": 33600,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 34,
+        "total_entries": 170084,
+        "diff_ratio": 0.000199901225276922
+      }
+    },
+    {
+      "snapshot": 336,
+      "time_ms": 33600,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 337,
+      "time_ms": 33700,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 10,
+        "total_entries": 170084,
+        "diff_ratio": 5.8794478022624115e-05
+      }
+    },
+    {
+      "snapshot": 337,
+      "time_ms": 33700,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 338,
+      "time_ms": 33800,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 9,
+        "total_entries": 170084,
+        "diff_ratio": 5.2915030220361706e-05
+      }
+    },
+    {
+      "snapshot": 338,
+      "time_ms": 33800,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 8
+      }
+    },
+    {
+      "snapshot": 339,
+      "time_ms": 33900,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 17,
+        "total_entries": 170084,
+        "diff_ratio": 9.9950612638461e-05
+      }
+    },
+    {
+      "snapshot": 339,
+      "time_ms": 33900,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 340,
+      "time_ms": 34000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 4,
+        "k_used": 4,
+        "changed_pairs": 36,
+        "num_messages": 36,
+        "num_entries": 144
+      }
+    },
+    {
+      "snapshot": 340,
+      "time_ms": 34000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 7,
+        "total_entries": 170084,
+        "diff_ratio": 4.115613461583688e-05
+      }
+    },
+    {
+      "snapshot": 340,
+      "time_ms": 34000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 341,
+      "time_ms": 34100,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 3,
+        "total_entries": 170084,
+        "diff_ratio": 1.7638343406787235e-05
+      }
+    },
+    {
+      "snapshot": 341,
+      "time_ms": 34100,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 342,
+      "time_ms": 34200,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 4,
+        "total_entries": 170084,
+        "diff_ratio": 2.3517791209049645e-05
+      }
+    },
+    {
+      "snapshot": 342,
+      "time_ms": 34200,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 343,
+      "time_ms": 34300,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 8,
+        "total_entries": 170084,
+        "diff_ratio": 4.703558241809929e-05
+      }
+    },
+    {
+      "snapshot": 343,
+      "time_ms": 34300,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 344,
+      "time_ms": 34400,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 76,
+        "total_entries": 170084,
+        "diff_ratio": 0.0004468380329719433
+      }
+    },
+    {
+      "snapshot": 344,
+      "time_ms": 34400,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 2
+      }
+    },
+    {
+      "snapshot": 345,
+      "time_ms": 34500,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 124,
+        "total_entries": 170084,
+        "diff_ratio": 0.000729051527480539
+      }
+    },
+    {
+      "snapshot": 345,
+      "time_ms": 34500,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 346,
+      "time_ms": 34600,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 31,
+        "total_entries": 170084,
+        "diff_ratio": 0.00018226288187013476
+      }
+    },
+    {
+      "snapshot": 346,
+      "time_ms": 34600,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 347,
+      "time_ms": 34700,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 7,
+        "total_entries": 170084,
+        "diff_ratio": 4.115613461583688e-05
+      }
+    },
+    {
+      "snapshot": 347,
+      "time_ms": 34700,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 2
+      }
+    },
+    {
+      "snapshot": 348,
+      "time_ms": 34800,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 30,
+        "total_entries": 170084,
+        "diff_ratio": 0.00017638343406787234
+      }
+    },
+    {
+      "snapshot": 348,
+      "time_ms": 34800,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 4
+      }
+    },
+    {
+      "snapshot": 349,
+      "time_ms": 34900,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 6,
+        "total_entries": 170084,
+        "diff_ratio": 3.527668681357447e-05
+      }
+    },
+    {
+      "snapshot": 349,
+      "time_ms": 34900,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 350,
+      "time_ms": 35000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 111,
+        "total_entries": 170084,
+        "diff_ratio": 0.0006526187060511277
+      }
+    },
+    {
+      "snapshot": 350,
+      "time_ms": 35000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 351,
+      "time_ms": 35100,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 26,
+        "total_entries": 170084,
+        "diff_ratio": 0.0001528656428588227
+      }
+    },
+    {
+      "snapshot": 351,
+      "time_ms": 35100,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 352,
+      "time_ms": 35200,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 7,
+        "total_entries": 170084,
+        "diff_ratio": 4.115613461583688e-05
+      }
+    },
+    {
+      "snapshot": 352,
+      "time_ms": 35200,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 353,
+      "time_ms": 35300,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 7,
+        "total_entries": 170084,
+        "diff_ratio": 4.115613461583688e-05
+      }
+    },
+    {
+      "snapshot": 353,
+      "time_ms": 35300,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 354,
+      "time_ms": 35400,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 106,
+        "total_entries": 170084,
+        "diff_ratio": 0.0006232214670398157
+      }
+    },
+    {
+      "snapshot": 354,
+      "time_ms": 35400,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 355,
+      "time_ms": 35500,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 10,
+        "total_entries": 170084,
+        "diff_ratio": 5.8794478022624115e-05
+      }
+    },
+    {
+      "snapshot": 355,
+      "time_ms": 35500,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 356,
+      "time_ms": 35600,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 38,
+        "total_entries": 170084,
+        "diff_ratio": 0.00022341901648597164
+      }
+    },
+    {
+      "snapshot": 356,
+      "time_ms": 35600,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 357,
+      "time_ms": 35700,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 45,
+        "total_entries": 170084,
+        "diff_ratio": 0.0002645751511018085
+      }
+    },
+    {
+      "snapshot": 357,
+      "time_ms": 35700,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 358,
+      "time_ms": 35800,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 17,
+        "total_entries": 170084,
+        "diff_ratio": 9.9950612638461e-05
+      }
+    },
+    {
+      "snapshot": 358,
+      "time_ms": 35800,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 359,
+      "time_ms": 35900,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 63,
+        "total_entries": 170084,
+        "diff_ratio": 0.00037040521154253195
+      }
+    },
+    {
+      "snapshot": 359,
+      "time_ms": 35900,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 360,
+      "time_ms": 36000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 8,
+        "total_entries": 170084,
+        "diff_ratio": 4.703558241809929e-05
+      }
+    },
+    {
+      "snapshot": 360,
+      "time_ms": 36000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 361,
+      "time_ms": 36100,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 42,
+        "total_entries": 170084,
+        "diff_ratio": 0.0002469368076950213
+      }
+    },
+    {
+      "snapshot": 361,
+      "time_ms": 36100,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 362,
+      "time_ms": 36200,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 8,
+        "total_entries": 170084,
+        "diff_ratio": 4.703558241809929e-05
+      }
+    },
+    {
+      "snapshot": 362,
+      "time_ms": 36200,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 363,
+      "time_ms": 36300,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 141,
+        "total_entries": 170084,
+        "diff_ratio": 0.0008290021401190001
+      }
+    },
+    {
+      "snapshot": 363,
+      "time_ms": 36300,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 364,
+      "time_ms": 36400,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 68,
+        "total_entries": 170084,
+        "diff_ratio": 0.000399802450553844
+      }
+    },
+    {
+      "snapshot": 364,
+      "time_ms": 36400,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 4
+      }
+    },
+    {
+      "snapshot": 365,
+      "time_ms": 36500,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 37,
+        "total_entries": 170084,
+        "diff_ratio": 0.00021753956868370922
+      }
+    },
+    {
+      "snapshot": 365,
+      "time_ms": 36500,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 2
+      }
+    },
+    {
+      "snapshot": 366,
+      "time_ms": 36600,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 31,
+        "total_entries": 170084,
+        "diff_ratio": 0.00018226288187013476
+      }
+    },
+    {
+      "snapshot": 366,
+      "time_ms": 36600,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 367,
+      "time_ms": 36700,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 8,
+        "total_entries": 170084,
+        "diff_ratio": 4.703558241809929e-05
+      }
+    },
+    {
+      "snapshot": 367,
+      "time_ms": 36700,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 368,
+      "time_ms": 36800,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 3,
+        "total_entries": 170084,
+        "diff_ratio": 1.7638343406787235e-05
+      }
+    },
+    {
+      "snapshot": 368,
+      "time_ms": 36800,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 4
+      }
+    },
+    {
+      "snapshot": 369,
+      "time_ms": 36900,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 31,
+        "total_entries": 170084,
+        "diff_ratio": 0.00018226288187013476
+      }
+    },
+    {
+      "snapshot": 369,
+      "time_ms": 36900,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 370,
+      "time_ms": 37000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 4,
+        "k_used": 4,
+        "changed_pairs": 14,
+        "num_messages": 14,
+        "num_entries": 56
+      }
+    },
+    {
+      "snapshot": 370,
+      "time_ms": 37000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 105,
+        "total_entries": 170084,
+        "diff_ratio": 0.0006173420192375532
+      }
+    },
+    {
+      "snapshot": 370,
+      "time_ms": 37000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 4
+      }
+    },
+    {
+      "snapshot": 371,
+      "time_ms": 37100,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 84,
+        "total_entries": 170084,
+        "diff_ratio": 0.0004938736153900426
+      }
+    },
+    {
+      "snapshot": 371,
+      "time_ms": 37100,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 372,
+      "time_ms": 37200,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 4,
+        "total_entries": 170084,
+        "diff_ratio": 2.3517791209049645e-05
+      }
+    },
+    {
+      "snapshot": 372,
+      "time_ms": 37200,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 373,
+      "time_ms": 37300,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 47,
+        "total_entries": 170084,
+        "diff_ratio": 0.00027633404670633334
+      }
+    },
+    {
+      "snapshot": 373,
+      "time_ms": 37300,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 374,
+      "time_ms": 37400,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 18,
+        "total_entries": 170084,
+        "diff_ratio": 0.00010583006044072341
+      }
+    },
+    {
+      "snapshot": 374,
+      "time_ms": 37400,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 375,
+      "time_ms": 37500,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 3,
+        "total_entries": 170084,
+        "diff_ratio": 1.7638343406787235e-05
+      }
+    },
+    {
+      "snapshot": 375,
+      "time_ms": 37500,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 376,
+      "time_ms": 37600,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 2,
+        "total_entries": 170084,
+        "diff_ratio": 1.1758895604524822e-05
+      }
+    },
+    {
+      "snapshot": 376,
+      "time_ms": 37600,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 377,
+      "time_ms": 37700,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 9,
+        "total_entries": 170084,
+        "diff_ratio": 5.2915030220361706e-05
+      }
+    },
+    {
+      "snapshot": 377,
+      "time_ms": 37700,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 378,
+      "time_ms": 37800,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 5,
+        "total_entries": 170084,
+        "diff_ratio": 2.9397239011312058e-05
+      }
+    },
+    {
+      "snapshot": 378,
+      "time_ms": 37800,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 379,
+      "time_ms": 37900,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 29,
+        "total_entries": 170084,
+        "diff_ratio": 0.00017050398626560994
+      }
+    },
+    {
+      "snapshot": 379,
+      "time_ms": 37900,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 380,
+      "time_ms": 38000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 4,
+        "k_used": 4,
+        "changed_pairs": 8,
+        "num_messages": 8,
+        "num_entries": 32
+      }
+    },
+    {
+      "snapshot": 380,
+      "time_ms": 38000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 24,
+        "total_entries": 170084,
+        "diff_ratio": 0.00014110674725429788
+      }
+    },
+    {
+      "snapshot": 380,
+      "time_ms": 38000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 2
+      }
+    },
+    {
+      "snapshot": 381,
+      "time_ms": 38100,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 43,
+        "total_entries": 170084,
+        "diff_ratio": 0.0002528162554972837
+      }
+    },
+    {
+      "snapshot": 381,
+      "time_ms": 38100,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 382,
+      "time_ms": 38200,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 5,
+        "total_entries": 170084,
+        "diff_ratio": 2.9397239011312058e-05
+      }
+    },
+    {
+      "snapshot": 382,
+      "time_ms": 38200,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 383,
+      "time_ms": 38300,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 55,
+        "total_entries": 170084,
+        "diff_ratio": 0.0003233696291244326
+      }
+    },
+    {
+      "snapshot": 383,
+      "time_ms": 38300,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 384,
+      "time_ms": 38400,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 90,
+        "total_entries": 170084,
+        "diff_ratio": 0.000529150302203617
+      }
+    },
+    {
+      "snapshot": 384,
+      "time_ms": 38400,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 385,
+      "time_ms": 38500,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 69,
+        "total_entries": 170084,
+        "diff_ratio": 0.0004056818983561064
+      }
+    },
+    {
+      "snapshot": 385,
+      "time_ms": 38500,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 386,
+      "time_ms": 38600,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 131,
+        "total_entries": 170084,
+        "diff_ratio": 0.000770207662096376
+      }
+    },
+    {
+      "snapshot": 386,
+      "time_ms": 38600,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 387,
+      "time_ms": 38700,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 103,
+        "total_entries": 170084,
+        "diff_ratio": 0.0006055831236330284
+      }
+    },
+    {
+      "snapshot": 387,
+      "time_ms": 38700,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 388,
+      "time_ms": 38800,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 10,
+        "total_entries": 170084,
+        "diff_ratio": 5.8794478022624115e-05
+      }
+    },
+    {
+      "snapshot": 388,
+      "time_ms": 38800,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 389,
+      "time_ms": 38900,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 58,
+        "total_entries": 170084,
+        "diff_ratio": 0.0003410079725312199
+      }
+    },
+    {
+      "snapshot": 389,
+      "time_ms": 38900,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 390,
+      "time_ms": 39000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 4,
+        "k_used": 4,
+        "changed_pairs": 6,
+        "num_messages": 6,
+        "num_entries": 24
+      }
+    },
+    {
+      "snapshot": 390,
+      "time_ms": 39000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 7,
+        "total_entries": 170084,
+        "diff_ratio": 4.115613461583688e-05
+      }
+    },
+    {
+      "snapshot": 390,
+      "time_ms": 39000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 2
+      }
+    },
+    {
+      "snapshot": 391,
+      "time_ms": 39100,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 13,
+        "total_entries": 170084,
+        "diff_ratio": 7.643282142941135e-05
+      }
+    },
+    {
+      "snapshot": 391,
+      "time_ms": 39100,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 4
+      }
+    },
+    {
+      "snapshot": 392,
+      "time_ms": 39200,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 36,
+        "total_entries": 170084,
+        "diff_ratio": 0.00021166012088144682
+      }
+    },
+    {
+      "snapshot": 392,
+      "time_ms": 39200,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 2
+      }
+    },
+    {
+      "snapshot": 393,
+      "time_ms": 39300,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 7,
+        "total_entries": 170084,
+        "diff_ratio": 4.115613461583688e-05
+      }
+    },
+    {
+      "snapshot": 393,
+      "time_ms": 39300,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 394,
+      "time_ms": 39400,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 109,
+        "total_entries": 170084,
+        "diff_ratio": 0.0006408598104466029
+      }
+    },
+    {
+      "snapshot": 394,
+      "time_ms": 39400,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 2
+      }
+    },
+    {
+      "snapshot": 395,
+      "time_ms": 39500,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 5,
+        "total_entries": 170084,
+        "diff_ratio": 2.9397239011312058e-05
+      }
+    },
+    {
+      "snapshot": 395,
+      "time_ms": 39500,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 2
+      }
+    },
+    {
+      "snapshot": 396,
+      "time_ms": 39600,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 53,
+        "total_entries": 170084,
+        "diff_ratio": 0.0003116107335199078
+      }
+    },
+    {
+      "snapshot": 396,
+      "time_ms": 39600,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 397,
+      "time_ms": 39700,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 14,
+        "total_entries": 170084,
+        "diff_ratio": 8.231226923167376e-05
+      }
+    },
+    {
+      "snapshot": 397,
+      "time_ms": 39700,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 398,
+      "time_ms": 39800,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 399,
+      "time_ms": 39900,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 2,
+        "total_entries": 170084,
+        "diff_ratio": 1.1758895604524822e-05
+      }
+    },
+    {
+      "snapshot": 399,
+      "time_ms": 39900,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 400,
+      "time_ms": 40000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 4,
+        "k_used": 4,
+        "changed_pairs": 6,
+        "num_messages": 6,
+        "num_entries": 24
+      }
+    }
+  ]
+}

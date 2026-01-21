@@ -153,6 +153,20 @@ class MainHelper:
             satgen.generate_empty_isls(
                 output_generated_data_dir + "/" + name + "/isls.txt"
             )
+        elif isl_selection.startswith("isls_failure_"):
+            # ISL 失效場景：從預先生成的文件複製
+            failure_level = isl_selection.replace("isls_", "")  # 提取 "failure_XX"
+            source_file = f"input_data/failure_scenarios/isls_{failure_level}.txt"
+            dest_file = output_generated_data_dir + "/" + name + "/isls.txt"
+            
+            if not os.path.exists(source_file):
+                raise FileNotFoundError(f"失效場景文件不存在: {source_file}")
+            
+            print(f"使用失效場景: {failure_level}")
+            print(f"  複製 {source_file} -> {dest_file}")
+            
+            import shutil
+            shutil.copy2(source_file, dest_file)
         else:
             raise ValueError("Unknown ISL selection: " + isl_selection)
 
