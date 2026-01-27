@@ -1338,24 +1338,53 @@ def step(payload: dict):
         thread_id = threading.get_ident()
         pid = os.getpid()
         
+        print(f"[STATS-DEBUG] 開始生成統計文件... PID={pid}, TID={thread_id}")
+        
         # 統一輸出統計文件到 analytic_result 目錄
         # 從 ROUTER 讀取網格大小（init() 時已正確設定）
         stats_output_dir = "analytic_result"
         os.makedirs(stats_output_dir, exist_ok=True)
         grid_size = _ROUTER.grid_deg
         
-        # 臨時文件：用於收集各進程的統計數據
-        temp_dir = os.path.join(stats_output_dir, "temp_grhr")
-        os.makedirs(temp_dir, exist_ok=True)
-        stats_file = os.path.join(temp_dir, f"grhr_stats_pid{pid}_tid{thread_id}.json")
-        
         try:
+            # 從 output_dynamic_state_dir 提取場景資訊
+            output_dir = payload.get("output_dynamic_state_dir", "")
+            k_best = getattr(_GCACHE, 'k_best', None)
+            
+            # DEBUG: 顯示 output_dir 用於驗證
+            print(f"[DEBUG] output_dynamic_state_dir: {output_dir}")
+            print(f"[DEBUG] k_best: {k_best}")
+            
+            # 從目錄名稱提取失效場景資訊（如果有）
+            scenario_info = ""
+            if "isls_failure_" in output_dir:
+                # 提取 failure_lX 部分
+                import re
+                match = re.search(r'isls_failure_(l\d+)', output_dir)
+                if match:
+                    scenario_info = f"_failure_{match.group(1)}"
+            
+            # 臨時文件目錄：根據 scenario 和 K 值命名，避免不同實驗混淆
+            temp_dir_name = "temp_grhr"
+            if scenario_info:  # 如果是 failure 場景
+                temp_dir_name += scenario_info
+            if k_best is not None:  # 如果指定了 K 值
+                temp_dir_name += f"_k{k_best}"
+            
+            print(f"[DEBUG] scenario_info: '{scenario_info}'")
+            print(f"[DEBUG] temp_dir_name: {temp_dir_name}")
+            
+            temp_dir = os.path.join(stats_output_dir, temp_dir_name)
+            os.makedirs(temp_dir, exist_ok=True)
+            stats_file = os.path.join(temp_dir, f"grhr_stats_pid{pid}_tid{thread_id}.json")
             
             # 保存詳細統計到 JSON 文件
             detailed_stats = {
                 "algorithm": "algorithm_hierarchical_virtual_gid",
-                "algorithm_display_name": f"Hierarchical GID ({grid_size}°)",
+                "algorithm_display_name": f"Hierarchical GID ({grid_size}°, K={k_best})",
                 "grid_deg": grid_size,
+                "k_best_gateways": k_best,
+                "scenario": scenario_info.lstrip("_") if scenario_info else "baseline",
                 "timestamp": _dt.datetime.now().isoformat(),
                 "summary": _get_process_local_stats().get_stats_summary(),
                 "timeline": [
@@ -1377,9 +1406,7 @@ def step(payload: dict):
             _alog(f"[STATS] Saved signaling stats to {stats_file}", payload)
         except Exception as e:
             _alog(f"[STATS-ERROR] Failed to save stats: {e}", payload)
-        
-        return {"ok": True, "fstate": fstate}
-
+    
     # ---------- 逐跳（stitch） ----------
     _alog("[STITCH] running route_all_gs_pairs()", payload)
     route_all_gs_pairs(
@@ -1410,9 +1437,14 @@ def step(payload: dict):
     stats_output_dir = "analytic_result"
     os.makedirs(stats_output_dir, exist_ok=True)
     grid_size = _ROUTER.grid_deg
+    k_best = getattr(_GCACHE, 'k_best', None)
     
-    # 臨時文件：用於收集各進程的統計數據
-    temp_dir = os.path.join(stats_output_dir, "temp_grhr")
+    # 臨時文件目錄：baseline 實驗使用基本名稱，K 值實驗加上 K 值後綴
+    temp_dir_name = "temp_grhr"
+    if k_best is not None:
+        temp_dir_name += f"_k{k_best}"
+    
+    temp_dir = os.path.join(stats_output_dir, temp_dir_name)
     os.makedirs(temp_dir, exist_ok=True)
     stats_file = os.path.join(temp_dir, f"grhr_stats_pid{pid}_tid{thread_id}.json")
     
@@ -1444,8 +1476,7 @@ def step(payload: dict):
         _alog(f"[STATS] Saved signaling stats to {stats_file}", payload)
     except Exception as e:
         _alog(f"[STATS-ERROR] Failed to save stats: {e}", payload)
-    
-    return {"ok": True}
+        
 
 def _normalize_gs_range_candidates(raw_map, satellites, ground_stations):
     """

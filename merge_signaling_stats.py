@@ -62,7 +62,8 @@ class StatsMerger:
         Returns:
             (merged_timeline, stats_by_type)
         """
-        # 使用 set 去重：(snapshot, time_ms, event) 作為唯一鍵
+        # 使用 set 去重：(snapshot, time_ms, event, detail_json) 作為唯一鍵
+        # detail 必須序列化為 JSON 字串才能作為 set 的鍵
         seen_events = set()
         all_events = []
         
@@ -81,10 +82,12 @@ class StatsMerger:
                     event_type = event['event']
                     count = event['count']
                     bytes_val = event['bytes']
-                    detail = event.get('detail', '')
+                    detail = event.get('detail', {})
                     
-                    # 創建唯一鍵
-                    key = (snapshot, time_ms, event_type)
+                    # 創建唯一鍵：將 detail 序列化為 JSON 字串
+                    # 使用 sort_keys=True 確保相同內容的 dict 生成相同的字串
+                    detail_json = json.dumps(detail, sort_keys=True) if detail else ''
+                    key = (snapshot, time_ms, event_type, detail_json)
                     
                     if key not in seen_events:
                         seen_events.add(key)
@@ -144,9 +147,31 @@ class StatsMerger:
         # 根據算法參數動態生成輸出文件名
         if algo_name == 'grhr' and 'grid_deg' in first_file:
             grid_deg = first_file['grid_deg']
-            output_filename = f'hierarchical_gid_{grid_deg}deg_signaling_stats.json'
-            display_name = f'Hierarchical GID ({grid_deg}°)'
-            self.log(f"[{algo_name.upper()}] 檢測到 grid_deg={grid_deg}，使用動態文件名", force=True)
+            k_best = first_file.get('k_best_gateways', None)
+            scenario = first_file.get('scenario', 'baseline')
+            
+            # 構建檔案名稱
+            filename_parts = [f'hierarchical_gid_{grid_deg}deg']
+            
+            # 添加場景資訊（如果不是 baseline）
+            if scenario and scenario != 'baseline':
+                filename_parts.append(scenario)
+            
+            # 添加 K 值資訊（如果有）
+            if k_best is not None:
+                filename_parts.append(f'k{k_best}')
+            
+            output_filename = '_'.join(filename_parts) + '_signaling_stats.json'
+            
+            # 構建顯示名稱
+            display_parts = [f'Hierarchical GID ({grid_deg}°)']
+            if scenario and scenario != 'baseline':
+                display_parts.append(f'{scenario.upper()}')
+            if k_best is not None:
+                display_parts.append(f'K={k_best}')
+            display_name = ', '.join(display_parts)
+            
+            self.log(f"[{algo_name.upper()}] 檢測到 grid_deg={grid_deg}, scenario={scenario}, k={k_best}，使用動態文件名", force=True)
         elif algo_name == 'lohi' and 'p' in first_file and 's' in first_file:
             p = first_file['p']
             s = first_file['s']
@@ -176,6 +201,10 @@ class StatsMerger:
         # 添加算法特定字段
         if 'grid_deg' in first_file:
             final_stats['grid_deg'] = first_file['grid_deg']
+        if 'k_best_gateways' in first_file:
+            final_stats['k_best_gateways'] = first_file['k_best_gateways']
+        if 'scenario' in first_file:
+            final_stats['scenario'] = first_file['scenario']
         if 'p' in first_file:
             final_stats['p'] = first_file['p']
             final_stats['s'] = first_file['s']

@@ -1,0 +1,231 @@
+[GID] Setting grid degree to 27° and K-best to 8 for hierarchical GID algorithm
+Generating ground stations...
+Generating TLEs...
+Generating ISLs...
+使用失效場景: failure_l1
+  複製 input_data/failure_scenarios/isls_failure_l1.txt -> gen_data/starlink_550_isls_failure_l1_ground_stations_top_100_with_hsinchu_algorithm_hierarchical_virtual_gid_27deg_k8/isls.txt
+Generating description...
+Generating GSL interfaces info..
+Generating forwarding state...
+Thread 0 does interval [0.00 ms, 2000.00 ms]
+Thread 1 does interval [2000.00 ms, 4000.00 ms]
+Thread 2 does interval [4000.00 ms, 6000.00 ms]
+Thread 3 does interval [6000.00 ms, 8000.00 ms]
+Thread 4 does interval [8000.00 ms, 10000.00 ms]
+Thread 5 does interval [10000.00 ms, 12000.00 ms]
+Thread 6 does interval [12000.00 ms, 14000.00 ms]
+Thread 7 does interval [14000.00 ms, 16000.00 ms]
+Thread 8 does interval [16000.00 ms, 18000.00 ms]
+Thread 9 does interval [18000.00 ms, 20000.00 ms]
+FORWARDING STATE AT T = 12000000000ns (= 12.0 seconds)
+
+BASIC INFORMATION
+  > Epoch.................. 2000-01-01 00:00:00.000
+  > Time since epoch....... 12000000000 ns
+  > Absolute time.......... 2000-01-01 00:00:12.000
+  > Satellites............. 1584
+  > Ground stations........ 101
+  > Max. range GSL......... 1089686.4181956202m
+  > Max. range ISL......... 5016591.233098428m
+
+ISL INFORMATION
+  > Total ISLs............. 3167
+  > Min. ISLs/satellite.... 3
+  > Max. ISLs/satellite.... 4
+
+GSL INTERFACE INFORMATION
+  > Min. GSL IFs/satellite........ 1
+  > Max. GSL IFs/satellite........ 1
+  > Min. GSL IFs/ground station... 1
+  > Max. GSL IFs/ground_station... 1
+
+GSL IN-RANGE INFORMATION
+  > Min. satellites in range... 4
+  > Max. satellites in range... 20
+[MODE] SP_OVER_PID_QUOTIENT=True
+  > Calculating Floyd-Warshall for graph without ground-station relays
+  > Writing forwarding state to: gen_data/starlink_550_isls_failure_l1_ground_stations_top_100_with_hsinchu_algorithm_hierarchical_virtual_gid_27deg_k8/dynamic_state_100ms_for_20s/fstate_12000000000.txt
+  > [SIGNALING] 累計統計: 4 事件, 0 字節
+FORWARDING STATE AT T = 12100000000ns (= 12.1 seconds)
+
+BASIC INFORMATION
+  > Epoch.................. 2000-01-01 00:00:00.000
+  > Time since epoch....... 12100000000 ns
+  > Absolute time.......... 2000-01-01 00:00:12.100
+  > Satellites............. 1584
+  > Ground stations........ 101
+  > Max. range GSL......... 1089686.4181956202m
+  > Max. range ISL......... 5016591.233098428m
+
+ISL INFORMATION
+  > Total ISLs............. 3167
+  > Min. ISLs/satellite.... 3
+  > Max. ISLs/satellite.... 4
+
+GSL INTERFACE INFORMATION
+  > Min. GSL IFs/satellite........ 1
+  > Max. GSL IFs/satellite........ 1
+  > Min. GSL IFs/ground station... 1
+  > Max. GSL IFs/ground_station... 1
+
+GSL IN-RANGE INFORMATION
+  > Min. satellites in range... 4
+  > Max. satellites in range... 20
+[MODE] SP_OVER_PID_QUOTIENT=True
+  > Calculating Floyd-Warshall for graph without ground-station relays
+  > Writing forwarding state to: gen_data/starlink_550_isls_failure_l1_ground_stations_top_100_with_hsinchu_algorithm_hierarchical_virtual_gid_27deg_k8/dynamic_state_100ms_for_20s/fstate_12100000000.txt
+  > [SIGNALING] 累計統計: 6 事件, 0 字節
+FORWARDING STATE AT T = 12200000000ns (= 12.2 seconds)
+
+BASIC INFORMATION
+  > Epoch.................. 2000-01-01 00:00:00.000
+  > Time since epoch....... 12200000000 ns
+  > Absolute time.......... 2000-01-01 00:00:12.200
+  > Satellites............. 1584
+  > Ground stations........ 101
+  > Max. range GSL......... 1089686.4181956202m
+  > Max. range ISL......... 5016591.233098428m
+
+ISL INFORMATION
+  > Total ISLs............. 3167
+  > Min. ISLs/satellite.... 3
+  > Max. ISLs/satellite.... 4
+
+GSL INTERFACE INFORMATION
+  > Min. GSL IFs/satellite........ 1
+  > Max. GSL IFs/satellite........ 1
+  > Min. GSL IFs/ground station... 1
+  > Max. GSL IFs/ground_station... 1
+
+GSL IN-RANGE INFORMATION
+  > Min. satellites in range... 4
+  > Max. satellites in range... 20
+[MODE] SP_OVER_PID_QUOTIENT=True
+  > Calculating Floyd-Warshall for graph without ground-station relays
+  > Writing forwarding state to: gen_data/starlink_550_isls_failure_l1_ground_stations_top_100_with_hsinchu_algorithm_hierarchical_virtual_gid_27deg_k8/dynamic_state_100ms_for_20s/fstate_12200000000.txt
+  > [SIGNALING] 累計統計: 8 事件, 0 字節
+FORWARDING STATE AT T = 12300000000ns (= 12.3 seconds)
+
+BASIC INFORMATION
+  > Epoch.................. 2000-01-01 00:00:00.000
+  > Time since epoch....... 12300000000 ns
+  > Absolute time.......... 2000-01-01 00:00:12.300
+  > Satellites............. 1584
+  > Ground stations........ 101
+  > Max. range GSL......... 1089686.4181956202m
+  > Max. range ISL......... 5016591.233098428m
+
+ISL INFORMATION
+  > Total ISLs............. 3167
+  > Min. ISLs/satellite.... 3
+  > Max. ISLs/satellite.... 4
+
+GSL INTERFACE INFORMATION
+  > Min. GSL IFs/satellite........ 1
+  > Max. GSL IFs/satellite........ 1
+  > Min. GSL IFs/ground station... 1
+  > Max. GSL IFs/ground_station... 1
+
+GSL IN-RANGE INFORMATION
+  > Min. satellites in range... 4
+  > Max. satellites in range... 20
+[MODE] SP_OVER_PID_QUOTIENT=True
+  > Calculating Floyd-Warshall for graph without ground-station relays
+  > Writing forwarding state to: gen_data/starlink_550_isls_failure_l1_ground_stations_top_100_with_hsinchu_algorithm_hierarchical_virtual_gid_27deg_k8/dynamic_state_100ms_for_20s/fstate_12300000000.txt
+  > [SIGNALING] 累計統計: 10 事件, 0 字節
+FORWARDING STATE AT T = 12400000000ns (= 12.4 seconds)
+
+BASIC INFORMATION
+  > Epoch.................. 2000-01-01 00:00:00.000
+  > Time since epoch....... 12400000000 ns
+  > Absolute time.......... 2000-01-01 00:00:12.400
+  > Satellites............. 1584
+  > Ground stations........ 101
+  > Max. range GSL......... 1089686.4181956202m
+  > Max. range ISL......... 5016591.233098428m
+
+ISL INFORMATION
+  > Total ISLs............. 3167
+  > Min. ISLs/satellite.... 3
+  > Max. ISLs/satellite.... 4
+
+GSL INTERFACE INFORMATION
+  > Min. GSL IFs/satellite........ 1
+  > Max. GSL IFs/satellite........ 1
+  > Min. GSL IFs/ground station... 1
+  > Max. GSL IFs/ground_station... 1
+
+GSL IN-RANGE INFORMATION
+  > Min. satellites in range... 4
+  > Max. satellites in range... 20
+[MODE] SP_OVER_PID_QUOTIENT=True
+  > Calculating Floyd-Warshall for graph without ground-station relays
+  > Writing forwarding state to: gen_data/starlink_550_isls_failure_l1_ground_stations_top_100_with_hsinchu_algorithm_hierarchical_virtual_gid_27deg_k8/dynamic_state_100ms_for_20s/fstate_12400000000.txt
+  > [SIGNALING] 累計統計: 12 事件, 0 字節
+FORWARDING STATE AT T = 12500000000ns (= 12.5 seconds)
+
+BASIC INFORMATION
+  > Epoch.................. 2000-01-01 00:00:00.000
+  > Time since epoch....... 12500000000 ns
+  > Absolute time.......... 2000-01-01 00:00:12.500
+  > Satellites............. 1584
+  > Ground stations........ 101
+  > Max. range GSL......... 1089686.4181956202m
+  > Max. range ISL......... 5016591.233098428m
+
+ISL INFORMATION
+  > Total ISLs............. 3167
+  > Min. ISLs/satellite.... 3
+  > Max. ISLs/satellite.... 4
+
+GSL INTERFACE INFORMATION
+  > Min. GSL IFs/satellite........ 1
+  > Max. GSL IFs/satellite........ 1
+  > Min. GSL IFs/ground station... 1
+  > Max. GSL IFs/ground_station... 1
+
+GSL IN-RANGE INFORMATION
+  > Min. satellites in range... 4
+  > Max. satellites in range... 20
+[MODE] SP_OVER_PID_QUOTIENT=True
+  > Calculating Floyd-Warshall for graph without ground-station relays
+  > Writing forwarding state to: gen_data/starlink_550_isls_failure_l1_ground_stations_top_100_with_hsinchu_algorithm_hierarchical_virtual_gid_27deg_k8/dynamic_state_100ms_for_20s/fstate_12500000000.txt
+  > [SIGNALING] 累計統計: 14 事件, 0 字節
+FORWARDING STATE AT T = 12600000000ns (= 12.6 seconds)
+
+BASIC INFORMATION
+  > Epoch.................. 2000-01-01 00:00:00.000
+  > Time since epoch....... 12600000000 ns
+  > Absolute time.......... 2000-01-01 00:00:12.600
+  > Satellites............. 1584
+  > Ground stations........ 101
+  > Max. range GSL......... 1089686.4181956202m
+  > Max. range ISL......... 5016591.233098428m
+
+ISL INFORMATION
+  > Total ISLs............. 3167
+  > Min. ISLs/satellite.... 3
+  > Max. ISLs/satellite.... 4
+
+GSL INTERFACE INFORMATION
+  > Min. GSL IFs/satellite........ 1
+  > Max. GSL IFs/satellite........ 1
+  > Min. GSL IFs/ground station... 1
+  > Max. GSL IFs/ground_station... 1
+
+GSL IN-RANGE INFORMATION
+  > Min. satellites in range... 4
+  > Max. satellites in range... 20
+[MODE] SP_OVER_PID_QUOTIENT=True
+  > Calculating Floyd-Warshall for graph without ground-station relays
+  > Writing forwarding state to: gen_data/starlink_550_isls_failure_l1_ground_stations_top_100_with_hsinchu_algorithm_hierarchical_virtual_gid_27deg_k8/dynamic_state_100ms_for_20s/fstate_12600000000.txt
+  > [SIGNALING] 累計統計: 16 事件, 0 字節
+FORWARDING STATE AT T = 12700000000ns (= 12.7 seconds)
+
+BASIC INFORMATION
+  > Epoch.................. 2000-01-01 00:00:00.000
+  > Time since epoch....... 12700000000 ns
+  > Absolute time.......... 2000-01-01 00:00:12.700
+  > Satellites............. 1584
+  > Ground stations........ 101
+  > Max. range GSL......... 1089686.4181956202m

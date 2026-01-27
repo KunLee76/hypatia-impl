@@ -1,0 +1,295 @@
+[GID] Setting grid degree to 27° and K-best to 8 for hierarchical GID algorithm
+Generating ground stations...
+Generating TLEs...
+Generating ISLs...
+使用失效場景: failure_l1
+  複製 input_data/failure_scenarios/isls_failure_l1.txt -> gen_data/starlink_550_isls_failure_l1_ground_stations_top_100_with_hsinchu_algorithm_hierarchical_virtual_gid_27deg_k8/isls.txt
+Generating description...
+Generating GSL interfaces info..
+Generating forwarding state...
+Thread 0 does interval [0.00 ms, 2000.00 ms]
+Thread 1 does interval [2000.00 ms, 4000.00 ms]
+Thread 2 does interval [4000.00 ms, 6000.00 ms]
+Thread 3 does interval [6000.00 ms, 8000.00 ms]
+Thread 4 does interval [8000.00 ms, 10000.00 ms]
+Thread 5 does interval [10000.00 ms, 12000.00 ms]
+Thread 6 does interval [12000.00 ms, 14000.00 ms]
+Thread 7 does interval [14000.00 ms, 16000.00 ms]
+Thread 8 does interval [16000.00 ms, 18000.00 ms]
+Thread 9 does interval [18000.00 ms, 20000.00 ms]
+multiprocessing.pool.RemoteTraceback: 
+"""
+Traceback (most recent call last):
+  File "/mnt/ssd2t/conda_envs/kun/kun_hypatia/lib/python3.10/multiprocessing/pool.py", line 125, in worker
+    result = (True, func(*args, **kwds))
+  File "/mnt/ssd2t/conda_envs/kun/kun_hypatia/lib/python3.10/multiprocessing/pool.py", line 48, in mapstar
+    return list(map(*args))
+  File "/home/kun/ssd2t/Leo/kun_hypatia/paper/satellite_networks_state/../../satgenpy/satgen/dynamic_state/helper_dynamic_state.py", line 62, in worker
+    generate_dynamic_state(
+  File "/home/kun/ssd2t/Leo/kun_hypatia/paper/satellite_networks_state/../../satgenpy/satgen/dynamic_state/generate_dynamic_state.py", line 72, in generate_dynamic_state
+    prev_output = generate_dynamic_state_at(
+  File "/home/kun/ssd2t/Leo/kun_hypatia/paper/satellite_networks_state/../../satgenpy/satgen/dynamic_state/generate_dynamic_state.py", line 337, in generate_dynamic_state_at
+    return algorithm_hierarchical_virtual_gid(
+  File "/home/kun/ssd2t/Leo/kun_hypatia/paper/satellite_networks_state/../../satgenpy/satgen/dynamic_state/algorithm_hierarchical_virtual_gid.py", line 1689, in algorithm_hierarchical_virtual_gid
+    ret = step(payload)
+  File "/home/kun/ssd2t/Leo/kun_hypatia/paper/satellite_networks_state/../../satgenpy/satgen/dynamic_state/algorithm_hierarchical_virtual_gid.py", line 1438, in step
+    k_best = _ROUTER.k_best
+AttributeError: 'VirtualGIDRouter' object has no attribute 'k_best'
+"""
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/kun/ssd2t/Leo/kun_hypatia/paper/satellite_networks_state/main_starlink_550.py", line 122, in <module>
+    main()
+  File "/home/kun/ssd2t/Leo/kun_hypatia/paper/satellite_networks_state/main_starlink_550.py", line 108, in main
+    main_helper.calculate(
+  File "/home/kun/ssd2t/Leo/kun_hypatia/paper/satellite_networks_state/main_helper.py", line 212, in calculate
+    satgen.help_dynamic_state(
+  File "/home/kun/ssd2t/Leo/kun_hypatia/paper/satellite_networks_state/../../satgenpy/satgen/dynamic_state/helper_dynamic_state.py", line 138, in help_dynamic_state
+    pool.map(worker, list_args)
+  File "/mnt/ssd2t/conda_envs/kun/kun_hypatia/lib/python3.10/multiprocessing/pool.py", line 367, in map
+    return self._map_async(func, iterable, mapstar, chunksize).get()
+  File "/mnt/ssd2t/conda_envs/kun/kun_hypatia/lib/python3.10/multiprocessing/pool.py", line 774, in get
+    raise self._value
+AttributeError: 'VirtualGIDRouter' object has no attribute 'k_best'
+FORWARDING STATE AT T = 16000000000ns (= 16.0 seconds)
+
+BASIC INFORMATION
+  > Epoch.................. 2000-01-01 00:00:00.000
+  > Time since epoch....... 16000000000 ns
+  > Absolute time.......... 2000-01-01 00:00:16.000
+  > Satellites............. 1584
+  > Ground stations........ 101
+  > Max. range GSL......... 1089686.4181956202m
+  > Max. range ISL......... 5016591.233098428m
+
+ISL INFORMATION
+  > Total ISLs............. 3167
+  > Min. ISLs/satellite.... 3
+  > Max. ISLs/satellite.... 4
+
+GSL INTERFACE INFORMATION
+  > Min. GSL IFs/satellite........ 1
+  > Max. GSL IFs/satellite........ 1
+  > Min. GSL IFs/ground station... 1
+  > Max. GSL IFs/ground_station... 1
+
+GSL IN-RANGE INFORMATION
+  > Min. satellites in range... 4
+  > Max. satellites in range... 20
+[MODE] SP_OVER_PID_QUOTIENT=True
+  > Calculating Floyd-Warshall for graph without ground-station relays
+  > Writing forwarding state to: gen_data/starlink_550_isls_failure_l1_ground_stations_top_100_with_hsinchu_algorithm_hierarchical_virtual_gid_27deg_k8/dynamic_state_100ms_for_20s/fstate_16000000000.txt
+  > [SIGNALING] 累計統計: 4 事件, 0 字節
+  > [SIGNALING] 累計統計: 6 事件, 0 字節
+FORWARDING STATE AT T = 14000000000ns (= 14.0 seconds)
+
+BASIC INFORMATION
+  > Epoch.................. 2000-01-01 00:00:00.000
+  > Time since epoch....... 14000000000 ns
+  > Absolute time.......... 2000-01-01 00:00:14.000
+  > Satellites............. 1584
+  > Ground stations........ 101
+  > Max. range GSL......... 1089686.4181956202m
+  > Max. range ISL......... 5016591.233098428m
+
+ISL INFORMATION
+  > Total ISLs............. 3167
+  > Min. ISLs/satellite.... 3
+  > Max. ISLs/satellite.... 4
+
+GSL INTERFACE INFORMATION
+  > Min. GSL IFs/satellite........ 1
+  > Max. GSL IFs/satellite........ 1
+  > Min. GSL IFs/ground station... 1
+  > Max. GSL IFs/ground_station... 1
+
+GSL IN-RANGE INFORMATION
+  > Min. satellites in range... 4
+  > Max. satellites in range... 20
+[MODE] SP_OVER_PID_QUOTIENT=True
+  > Calculating Floyd-Warshall for graph without ground-station relays
+  > Writing forwarding state to: gen_data/starlink_550_isls_failure_l1_ground_stations_top_100_with_hsinchu_algorithm_hierarchical_virtual_gid_27deg_k8/dynamic_state_100ms_for_20s/fstate_14000000000.txt
+  > [SIGNALING] 累計統計: 4 事件, 0 字節
+  > [SIGNALING] 累計統計: 6 事件, 0 字節
+FORWARDING STATE AT T = 12000000000ns (= 12.0 seconds)
+
+BASIC INFORMATION
+  > Epoch.................. 2000-01-01 00:00:00.000
+  > Time since epoch....... 12000000000 ns
+  > Absolute time.......... 2000-01-01 00:00:12.000
+  > Satellites............. 1584
+  > Ground stations........ 101
+  > Max. range GSL......... 1089686.4181956202m
+  > Max. range ISL......... 5016591.233098428m
+
+ISL INFORMATION
+  > Total ISLs............. 3167
+  > Min. ISLs/satellite.... 3
+  > Max. ISLs/satellite.... 4
+
+GSL INTERFACE INFORMATION
+  > Min. GSL IFs/satellite........ 1
+  > Max. GSL IFs/satellite........ 1
+  > Min. GSL IFs/ground station... 1
+  > Max. GSL IFs/ground_station... 1
+
+GSL IN-RANGE INFORMATION
+  > Min. satellites in range... 4
+  > Max. satellites in range... 20
+[MODE] SP_OVER_PID_QUOTIENT=True
+  > Calculating Floyd-Warshall for graph without ground-station relays
+  > Writing forwarding state to: gen_data/starlink_550_isls_failure_l1_ground_stations_top_100_with_hsinchu_algorithm_hierarchical_virtual_gid_27deg_k8/dynamic_state_100ms_for_20s/fstate_12000000000.txt
+  > [SIGNALING] 累計統計: 4 事件, 0 字節
+  > [SIGNALING] 累計統計: 6 事件, 0 字節
+FORWARDING STATE AT T = 2000000000ns (= 2.0 seconds)
+
+BASIC INFORMATION
+  > Epoch.................. 2000-01-01 00:00:00.000
+  > Time since epoch....... 2000000000 ns
+  > Absolute time.......... 2000-01-01 00:00:02.000
+  > Satellites............. 1584
+  > Ground stations........ 101
+  > Max. range GSL......... 1089686.4181956202m
+  > Max. range ISL......... 5016591.233098428m
+
+ISL INFORMATION
+  > Total ISLs............. 3167
+  > Min. ISLs/satellite.... 3
+  > Max. ISLs/satellite.... 4
+
+GSL INTERFACE INFORMATION
+  > Min. GSL IFs/satellite........ 1
+  > Max. GSL IFs/satellite........ 1
+  > Min. GSL IFs/ground station... 1
+  > Max. GSL IFs/ground_station... 1
+
+GSL IN-RANGE INFORMATION
+  > Min. satellites in range... 4
+  > Max. satellites in range... 20
+[MODE] SP_OVER_PID_QUOTIENT=True
+  > Calculating Floyd-Warshall for graph without ground-station relays
+  > Writing forwarding state to: gen_data/starlink_550_isls_failure_l1_ground_stations_top_100_with_hsinchu_algorithm_hierarchical_virtual_gid_27deg_k8/dynamic_state_100ms_for_20s/fstate_2000000000.txt
+  > [SIGNALING] 累計統計: 4 事件, 0 字節
+  > [SIGNALING] 累計統計: 6 事件, 0 字節
+FORWARDING STATE AT T = 18000000000ns (= 18.0 seconds)
+
+BASIC INFORMATION
+  > Epoch.................. 2000-01-01 00:00:00.000
+  > Time since epoch....... 18000000000 ns
+  > Absolute time.......... 2000-01-01 00:00:18.000
+  > Satellites............. 1584
+  > Ground stations........ 101
+  > Max. range GSL......... 1089686.4181956202m
+  > Max. range ISL......... 5016591.233098428m
+
+ISL INFORMATION
+  > Total ISLs............. 3167
+  > Min. ISLs/satellite.... 3
+  > Max. ISLs/satellite.... 4
+
+GSL INTERFACE INFORMATION
+  > Min. GSL IFs/satellite........ 1
+  > Max. GSL IFs/satellite........ 1
+  > Min. GSL IFs/ground station... 1
+  > Max. GSL IFs/ground_station... 1
+
+GSL IN-RANGE INFORMATION
+  > Min. satellites in range... 4
+  > Max. satellites in range... 20
+[MODE] SP_OVER_PID_QUOTIENT=True
+  > Calculating Floyd-Warshall for graph without ground-station relays
+  > Writing forwarding state to: gen_data/starlink_550_isls_failure_l1_ground_stations_top_100_with_hsinchu_algorithm_hierarchical_virtual_gid_27deg_k8/dynamic_state_100ms_for_20s/fstate_18000000000.txt
+  > [SIGNALING] 累計統計: 4 事件, 0 字節
+  > [SIGNALING] 累計統計: 6 事件, 0 字節
+FORWARDING STATE AT T = 0ns (= 0.0 seconds)
+
+BASIC INFORMATION
+  > Epoch.................. 2000-01-01 00:00:00.000
+  > Time since epoch....... 0 ns
+  > Absolute time.......... 2000-01-01 00:00:00.000
+  > Satellites............. 1584
+  > Ground stations........ 101
+  > Max. range GSL......... 1089686.4181956202m
+  > Max. range ISL......... 5016591.233098428m
+
+ISL INFORMATION
+  > Total ISLs............. 3167
+  > Min. ISLs/satellite.... 3
+  > Max. ISLs/satellite.... 4
+
+GSL INTERFACE INFORMATION
+  > Min. GSL IFs/satellite........ 1
+  > Max. GSL IFs/satellite........ 1
+  > Min. GSL IFs/ground station... 1
+  > Max. GSL IFs/ground_station... 1
+
+GSL IN-RANGE INFORMATION
+  > Min. satellites in range... 4
+  > Max. satellites in range... 20
+[MODE] SP_OVER_PID_QUOTIENT=True
+  > Calculating Floyd-Warshall for graph without ground-station relays
+  > Writing forwarding state to: gen_data/starlink_550_isls_failure_l1_ground_stations_top_100_with_hsinchu_algorithm_hierarchical_virtual_gid_27deg_k8/dynamic_state_100ms_for_20s/fstate_0.txt
+  > [SIGNALING] 累計統計: 4 事件, 0 字節
+  > [SIGNALING] 累計統計: 6 事件, 0 字節
+FORWARDING STATE AT T = 6000000000ns (= 6.0 seconds)
+
+BASIC INFORMATION
+  > Epoch.................. 2000-01-01 00:00:00.000
+  > Time since epoch....... 6000000000 ns
+  > Absolute time.......... 2000-01-01 00:00:06.000
+  > Satellites............. 1584
+  > Ground stations........ 101
+  > Max. range GSL......... 1089686.4181956202m
+  > Max. range ISL......... 5016591.233098428m
+
+ISL INFORMATION
+  > Total ISLs............. 3167
+  > Min. ISLs/satellite.... 3
+  > Max. ISLs/satellite.... 4
+
+GSL INTERFACE INFORMATION
+  > Min. GSL IFs/satellite........ 1
+  > Max. GSL IFs/satellite........ 1
+  > Min. GSL IFs/ground station... 1
+  > Max. GSL IFs/ground_station... 1
+
+GSL IN-RANGE INFORMATION
+  > Min. satellites in range... 4
+  > Max. satellites in range... 20
+[MODE] SP_OVER_PID_QUOTIENT=True
+  > Calculating Floyd-Warshall for graph without ground-station relays
+  > Writing forwarding state to: gen_data/starlink_550_isls_failure_l1_ground_stations_top_100_with_hsinchu_algorithm_hierarchical_virtual_gid_27deg_k8/dynamic_state_100ms_for_20s/fstate_6000000000.txt
+  > [SIGNALING] 累計統計: 4 事件, 0 字節
+  > [SIGNALING] 累計統計: 6 事件, 0 字節
+FORWARDING STATE AT T = 8000000000ns (= 8.0 seconds)
+
+BASIC INFORMATION
+  > Epoch.................. 2000-01-01 00:00:00.000
+  > Time since epoch....... 8000000000 ns
+  > Absolute time.......... 2000-01-01 00:00:08.000
+  > Satellites............. 1584
+  > Ground stations........ 101
+  > Max. range GSL......... 1089686.4181956202m
+  > Max. range ISL......... 5016591.233098428m
+
+ISL INFORMATION
+  > Total ISLs............. 3167
+  > Min. ISLs/satellite.... 3
+  > Max. ISLs/satellite.... 4
+
+GSL INTERFACE INFORMATION
+  > Min. GSL IFs/satellite........ 1
+  > Max. GSL IFs/satellite........ 1
+  > Min. GSL IFs/ground station... 1
+  > Max. GSL IFs/ground_station... 1
+
+GSL IN-RANGE INFORMATION
+  > Min. satellites in range... 4
+  > Max. satellites in range... 19
+[MODE] SP_OVER_PID_QUOTIENT=True
+  > Calculating Floyd-Warshall for graph without ground-station relays
+  > Writing forwarding state to: gen_data/starlink_550_isls_failure_l1_ground_stations_top_100_with_hsinchu_algorithm_hierarchical_virtual_gid_27deg_k8/dynamic_state_100ms_for_20s/fstate_8000000000.txt
+  > [SIGNALING] 累計統計: 4 事件, 0 字節
+  > [SIGNALING] 累計統計: 6 事件, 0 字節

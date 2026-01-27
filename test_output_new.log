@@ -1,0 +1,38 @@
+========================================
+測試單個 ISL Failure 場景
+========================================
+
+測試配置：
+  - Scenario: Failure L1 (1 ISL 失效)
+  - K 值: 8
+  - 模擬時間: 20s
+  - 時間步: 100ms (200 snapshots)
+
+1. 清理舊數據...
+
+2. 運行實驗...
+   命令: python paper/satellite_networks_state/main_starlink_550.py \
+           20 100 isls_failure_l1 ground_stations_top_100_with_hsinchu \
+           algorithm_hierarchical_virtual_gid 10 27 8
+
+Traceback (most recent call last):
+  File "/home/kun/ssd2t/Leo/kun_hypatia/paper/satellite_networks_state/main_starlink_550.py", line 25, in <module>
+    from main_helper import MainHelper
+  File "/home/kun/ssd2t/Leo/kun_hypatia/paper/satellite_networks_state/main_helper.py", line 25, in <module>
+    import satgen
+  File "/home/kun/ssd2t/Leo/kun_hypatia/paper/satellite_networks_state/../../satgenpy/satgen/__init__.py", line 5, in <module>
+    from .dynamic_state import *
+  File "/home/kun/ssd2t/Leo/kun_hypatia/paper/satellite_networks_state/../../satgenpy/satgen/dynamic_state/__init__.py", line 1, in <module>
+    from .helper_dynamic_state import (
+  File "/home/kun/ssd2t/Leo/kun_hypatia/paper/satellite_networks_state/../../satgenpy/satgen/dynamic_state/helper_dynamic_state.py", line 27, in <module>
+    from .generate_dynamic_state import generate_dynamic_state
+  File "/home/kun/ssd2t/Leo/kun_hypatia/paper/satellite_networks_state/../../satgenpy/satgen/dynamic_state/generate_dynamic_state.py", line 34, in <module>
+    from .algorithm_hierarchical_virtual_gid import algorithm_hierarchical_virtual_gid  # 你的新算法 (GID: Group Identifier)
+  File "/home/kun/ssd2t/Leo/kun_hypatia/paper/satellite_networks_state/../../satgenpy/satgen/dynamic_state/algorithm_hierarchical_virtual_gid.py", line 1409
+    _ROUTER,
+IndentationError: unexpected indent
+
+✓ 實驗完成！耗時: 1 秒
+
+3. 檢查臨時統計文件...
+   ✗ 警告：臨時目錄不存在: paper/satellite_networks_state/analytic_result/temp_grhr_failure_l1_k8
