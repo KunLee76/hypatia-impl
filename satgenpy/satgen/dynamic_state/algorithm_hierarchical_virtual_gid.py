@@ -32,6 +32,70 @@ GWC_EMA_ALPHA = 0.8                    # 成本EMA的舊值權重
 GWC_PUBLISH_JACCARD_THRESHOLD = 0.15   # 新舊top-k集合Jaccard差異門檻（超過才升版）
 
 # -------------------------------
+# Chaos Monkey 配置（間歇性ISL失效）
+# -------------------------------
+ENABLE_CHAOS_MONKEY = os.environ.get('ENABLE_CHAOS_MONKEY', 'false').lower() == 'true'
+CHAOS_FAILURE_RATE = float(os.environ.get('CHAOS_FAILURE_RATE', '0.01'))  # 預設1%
+CHAOS_INTERVAL_SNAPSHOTS = int(os.environ.get('CHAOS_INTERVAL_SNAPSHOTS', '20'))  # 預設20 snapshots (2秒@100ms)
+CHAOS_LOG_FILE = os.environ.get('CHAOS_LOG_FILE', 'chaos_monkey.log')  # Chaos Monkey專用日誌
+
+# -------------------------------
+# Chaos Monkey: 間歇性ISL失效
+# -------------------------------
+import random
+
+def chaos_monkey_inject_failures(G_sat_isls, snapshot_idx, failure_rate, log_file='chaos_monkey.log'):
+    """
+    Chaos Monkey: 在當前snapshot隨機移除指定比例的ISL
+    
+    Args:
+        G_sat_isls: NetworkX圖，ISL拓撲
+        snapshot_idx: 當前snapshot索引
+        failure_rate: 失效率 (0.0-1.0)
+        log_file: 日誌文件路徑
+    
+    Returns:
+        removed_edges: 被移除的邊列表 [(u, v), ...]
+    """
+    if not G_sat_isls or G_sat_isls.number_of_edges() == 0:
+        return []
+    
+    # 獲取所有ISL邊 (G_sat_isls中的邊沒有type屬性，所有邊都是ISL)
+    all_isls = [(u, v) for u, v in G_sat_isls.edges()]
+    
+    if not all_isls:
+        return []
+    
+    # 計算要移除的數量
+    num_to_remove = max(1, int(len(all_isls) * failure_rate))
+    
+    # 隨機選擇要移除的ISL
+    edges_to_remove = random.sample(all_isls, num_to_remove)
+    
+    # 從圖中移除這些邊
+    removed_count = 0
+    for u, v in edges_to_remove:
+        if G_sat_isls.has_edge(u, v):
+            G_sat_isls.remove_edge(u, v)
+            removed_count += 1
+    
+    # 記錄到日誌
+    timestamp = _dt.datetime.now(_dt.timezone.utc).strftime("%Y-%m-%d %H:%M:%S.%f")[:-3] + "Z"
+    log_msg = (f"{timestamp} [CHAOS_MONKEY] Snapshot={snapshot_idx} "
+               f"Total_ISLs={len(all_isls)} Removed={removed_count} Rate={failure_rate:.2%}\n")
+    
+    try:
+        with open(log_file, 'a', encoding='utf-8') as f:
+            f.write(log_msg)
+            # 記錄每條被移除的ISL詳細信息
+            for u, v in edges_to_remove:
+                f.write(f"  - ISL removed: {u} <-> {v}\n")
+    except Exception as e:
+        print(f"Warning: Could not write to Chaos Monkey log: {e}", file=sys.stderr)
+    
+    return edges_to_remove
+
+# -------------------------------
 # 控制信令統計
 # -------------------------------
 @dataclass
@@ -1081,6 +1145,17 @@ def init(config=None):
     """主程式在模擬開始時呼叫一次。"""
     global _ROUTER, _GCACHE, _SSSP
     cfg = config or {}
+    
+    # 打印Chaos Monkey配置
+    print("\n" + "="*60)
+    print("🐒 CHAOS MONKEY CONFIGURATION")
+    print("="*60)
+    print(f"  ENABLE_CHAOS_MONKEY       = {ENABLE_CHAOS_MONKEY}")
+    print(f"  CHAOS_FAILURE_RATE        = {CHAOS_FAILURE_RATE} ({CHAOS_FAILURE_RATE*100:.1f}%)")
+    print(f"  CHAOS_INTERVAL_SNAPSHOTS  = {CHAOS_INTERVAL_SNAPSHOTS} (every {CHAOS_INTERVAL_SNAPSHOTS*100/1000:.1f}s)")
+    print(f"  CHAOS_LOG_FILE            = {CHAOS_LOG_FILE}")
+    print("="*60 + "\n")
+    
     # 優先從環境變數讀取 grid_deg（支援自動化腳本動態設定）
     grid_deg = cfg.get("grid_deg", int(os.environ.get('SATGEN_GRID_DEG', GRID_DEG)))
     allow_diag = cfg.get("allow_diagonal_neighbor", ALLOW_DIAGONAL_NEIGHBOR)
@@ -1164,14 +1239,31 @@ def step(payload: dict):
 
         # （新增）SP 模式也先把權重重置回幾何長度，確保受限圖的基線一致
         reset_edge_weights_to_geo(G_sat_isls)
-
-        # (1) 分群 / 子圖 / 分量
-        sat_gid = _ROUTER.refresh_gid_members_and_subgraphs(sat_ids, sat_nadir_latlon, G_sat_isls)
-
+        
         # 以 snapshot 為節拍：每 N 個 snapshot 才重建候選；其餘沿用已發布版本
         time_ns = payload["time_since_epoch_ns"]
         time_step_ns = payload.get("time_step_ns", 100_000_000)  # 若未提供，預設 100ms
         snapshot_idx = int(time_ns // time_step_ns)
+        
+        # ========================================
+        # 🐒 CHAOS MONKEY: 間歇性ISL失效注入
+        # ========================================
+        if ENABLE_CHAOS_MONKEY and (snapshot_idx % CHAOS_INTERVAL_SNAPSHOTS == 0):
+            removed_isls = chaos_monkey_inject_failures(
+                G_sat_isls, 
+                snapshot_idx, 
+                CHAOS_FAILURE_RATE,
+                CHAOS_LOG_FILE
+            )
+            _alog(f"[CHAOS_MONKEY] Injected {len(removed_isls)} ISL failures at snapshot {snapshot_idx}", {
+                "snapshot": snapshot_idx,
+                "removed_count": len(removed_isls),
+                "failure_rate": CHAOS_FAILURE_RATE
+            })
+        # ========================================
+
+        # (1) 分群 / 子圖 / 分量
+        sat_gid = _ROUTER.refresh_gid_members_and_subgraphs(sat_ids, sat_nadir_latlon, G_sat_isls)
 
         # 將 snapshot 時間資訊掛到物件，供各種 signaling hooks 使用
         _ROUTER._snapshot_index = snapshot_idx
@@ -1363,6 +1455,12 @@ def step(payload: dict):
                 match = re.search(r'isls_failure_(l\d+)', output_dir)
                 if match:
                     scenario_info = f"_failure_{match.group(1)}"
+            elif "isls_random_" in output_dir:
+                # 提取 random_pX 部分
+                import re
+                match = re.search(r'isls_random_(p\d+)', output_dir)
+                if match:
+                    scenario_info = f"_random_{match.group(1)}"
             
             # 臨時文件目錄：根據 scenario 和 K 值命名，避免不同實驗混淆
             temp_dir_name = "temp_grhr"

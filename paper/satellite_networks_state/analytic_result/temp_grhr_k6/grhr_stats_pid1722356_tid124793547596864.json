@@ -1,0 +1,1606 @@
+{
+  "algorithm": "algorithm_hierarchical_virtual_gid",
+  "algorithm_display_name": "Hierarchical GID (27°)",
+  "grid_deg": 27,
+  "timestamp": "2026-01-30T01:33:15.583456",
+  "summary": {
+    "total_events": 131,
+    "total_bytes": 0,
+    "by_type": {
+      "gid_rebuild": {
+        "count": 52,
+        "bytes": 0
+      },
+      "gateway_update": {
+        "count": 52,
+        "bytes": 0
+      },
+      "topology_change": {
+        "count": 1,
+        "bytes": 0
+      },
+      "routing_update": {
+        "count": 26,
+        "bytes": 0
+      }
+    },
+    "time_window": {
+      "start_ms": null,
+      "end_ms": null,
+      "duration_ms": null
+    }
+  },
+  "timeline": [
+    {
+      "snapshot": 0,
+      "time_ms": 0,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 78
+      }
+    },
+    {
+      "snapshot": 0,
+      "time_ms": 0,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 6,
+        "k_used": 6,
+        "changed_pairs": 442,
+        "num_messages": 442,
+        "num_entries": 2652
+      }
+    },
+    {
+      "snapshot": 0,
+      "time_ms": 0,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_isl": 0,
+        "delta_gsl": 0
+      }
+    },
+    {
+      "snapshot": 0,
+      "time_ms": 0,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 170084,
+        "total_entries": 170084,
+        "diff_ratio": 1.0
+      }
+    },
+    {
+      "snapshot": 0,
+      "time_ms": 0,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 0,
+      "time_ms": 0,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 6,
+        "k_used": 6,
+        "changed_pairs": 196,
+        "num_messages": 196,
+        "num_entries": 1176
+      }
+    },
+    {
+      "snapshot": 0,
+      "time_ms": 0,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 17
+      }
+    },
+    {
+      "snapshot": 20,
+      "time_ms": 2000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 6,
+        "k_used": 6,
+        "changed_pairs": 294,
+        "num_messages": 294,
+        "num_entries": 1764
+      }
+    },
+    {
+      "snapshot": 20,
+      "time_ms": 2000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 54513,
+        "total_entries": 170084,
+        "diff_ratio": 0.32050633804473083
+      }
+    },
+    {
+      "snapshot": 20,
+      "time_ms": 2000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 20,
+      "time_ms": 2000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 6,
+        "k_used": 6,
+        "changed_pairs": 54,
+        "num_messages": 54,
+        "num_entries": 324
+      }
+    },
+    {
+      "snapshot": 20,
+      "time_ms": 2000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 10
+      }
+    },
+    {
+      "snapshot": 40,
+      "time_ms": 4000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 6,
+        "k_used": 6,
+        "changed_pairs": 278,
+        "num_messages": 278,
+        "num_entries": 1668
+      }
+    },
+    {
+      "snapshot": 40,
+      "time_ms": 4000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 53019,
+        "total_entries": 170084,
+        "diff_ratio": 0.3117224430281508
+      }
+    },
+    {
+      "snapshot": 40,
+      "time_ms": 4000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 40,
+      "time_ms": 4000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 6,
+        "k_used": 6,
+        "changed_pairs": 74,
+        "num_messages": 74,
+        "num_entries": 444
+      }
+    },
+    {
+      "snapshot": 40,
+      "time_ms": 4000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 14
+      }
+    },
+    {
+      "snapshot": 60,
+      "time_ms": 6000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 6,
+        "k_used": 6,
+        "changed_pairs": 286,
+        "num_messages": 286,
+        "num_entries": 1716
+      }
+    },
+    {
+      "snapshot": 60,
+      "time_ms": 6000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 52300,
+        "total_entries": 170084,
+        "diff_ratio": 0.30749512005832413
+      }
+    },
+    {
+      "snapshot": 60,
+      "time_ms": 6000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 60,
+      "time_ms": 6000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 6,
+        "k_used": 6,
+        "changed_pairs": 24,
+        "num_messages": 24,
+        "num_entries": 144
+      }
+    },
+    {
+      "snapshot": 60,
+      "time_ms": 6000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 4
+      }
+    },
+    {
+      "snapshot": 80,
+      "time_ms": 8000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 6,
+        "k_used": 6,
+        "changed_pairs": 284,
+        "num_messages": 284,
+        "num_entries": 1704
+      }
+    },
+    {
+      "snapshot": 80,
+      "time_ms": 8000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 55203,
+        "total_entries": 170084,
+        "diff_ratio": 0.3245631570282919
+      }
+    },
+    {
+      "snapshot": 80,
+      "time_ms": 8000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 80,
+      "time_ms": 8000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 6,
+        "k_used": 6,
+        "changed_pairs": 6,
+        "num_messages": 6,
+        "num_entries": 36
+      }
+    },
+    {
+      "snapshot": 80,
+      "time_ms": 8000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 10
+      }
+    },
+    {
+      "snapshot": 100,
+      "time_ms": 10000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 6,
+        "k_used": 6,
+        "changed_pairs": 268,
+        "num_messages": 268,
+        "num_entries": 1608
+      }
+    },
+    {
+      "snapshot": 100,
+      "time_ms": 10000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 53647,
+        "total_entries": 170084,
+        "diff_ratio": 0.3154147362479716
+      }
+    },
+    {
+      "snapshot": 100,
+      "time_ms": 10000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 100,
+      "time_ms": 10000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 6,
+        "k_used": 6,
+        "changed_pairs": 12,
+        "num_messages": 12,
+        "num_entries": 72
+      }
+    },
+    {
+      "snapshot": 100,
+      "time_ms": 10000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 13
+      }
+    },
+    {
+      "snapshot": 120,
+      "time_ms": 12000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 6,
+        "k_used": 6,
+        "changed_pairs": 286,
+        "num_messages": 286,
+        "num_entries": 1716
+      }
+    },
+    {
+      "snapshot": 120,
+      "time_ms": 12000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 55471,
+        "total_entries": 170084,
+        "diff_ratio": 0.32613884903929824
+      }
+    },
+    {
+      "snapshot": 120,
+      "time_ms": 12000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 120,
+      "time_ms": 12000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 6,
+        "k_used": 6,
+        "changed_pairs": 6,
+        "num_messages": 6,
+        "num_entries": 36
+      }
+    },
+    {
+      "snapshot": 120,
+      "time_ms": 12000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 8
+      }
+    },
+    {
+      "snapshot": 140,
+      "time_ms": 14000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 6,
+        "k_used": 6,
+        "changed_pairs": 292,
+        "num_messages": 292,
+        "num_entries": 1752
+      }
+    },
+    {
+      "snapshot": 140,
+      "time_ms": 14000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 54445,
+        "total_entries": 170084,
+        "diff_ratio": 0.320106535594177
+      }
+    },
+    {
+      "snapshot": 140,
+      "time_ms": 14000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 140,
+      "time_ms": 14000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 6,
+        "k_used": 6,
+        "changed_pairs": 12,
+        "num_messages": 12,
+        "num_entries": 72
+      }
+    },
+    {
+      "snapshot": 140,
+      "time_ms": 14000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 15
+      }
+    },
+    {
+      "snapshot": 160,
+      "time_ms": 16000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 6,
+        "k_used": 6,
+        "changed_pairs": 278,
+        "num_messages": 278,
+        "num_entries": 1668
+      }
+    },
+    {
+      "snapshot": 160,
+      "time_ms": 16000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 53834,
+        "total_entries": 170084,
+        "diff_ratio": 0.3165141929869947
+      }
+    },
+    {
+      "snapshot": 160,
+      "time_ms": 16000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 160,
+      "time_ms": 16000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 6,
+        "k_used": 6,
+        "changed_pairs": 8,
+        "num_messages": 8,
+        "num_entries": 48
+      }
+    },
+    {
+      "snapshot": 160,
+      "time_ms": 16000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 10
+      }
+    },
+    {
+      "snapshot": 180,
+      "time_ms": 18000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 6,
+        "k_used": 6,
+        "changed_pairs": 276,
+        "num_messages": 276,
+        "num_entries": 1656
+      }
+    },
+    {
+      "snapshot": 180,
+      "time_ms": 18000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 53647,
+        "total_entries": 170084,
+        "diff_ratio": 0.3154147362479716
+      }
+    },
+    {
+      "snapshot": 180,
+      "time_ms": 18000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 180,
+      "time_ms": 18000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 6,
+        "k_used": 6,
+        "changed_pairs": 12,
+        "num_messages": 12,
+        "num_entries": 72
+      }
+    },
+    {
+      "snapshot": 180,
+      "time_ms": 18000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 11
+      }
+    },
+    {
+      "snapshot": 200,
+      "time_ms": 20000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 6,
+        "k_used": 6,
+        "changed_pairs": 290,
+        "num_messages": 290,
+        "num_entries": 1740
+      }
+    },
+    {
+      "snapshot": 200,
+      "time_ms": 20000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 55551,
+        "total_entries": 170084,
+        "diff_ratio": 0.3266092048634792
+      }
+    },
+    {
+      "snapshot": 200,
+      "time_ms": 20000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 200,
+      "time_ms": 20000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 6,
+        "k_used": 6,
+        "changed_pairs": 20,
+        "num_messages": 20,
+        "num_entries": 120
+      }
+    },
+    {
+      "snapshot": 200,
+      "time_ms": 20000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 8
+      }
+    },
+    {
+      "snapshot": 220,
+      "time_ms": 22000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 6,
+        "k_used": 6,
+        "changed_pairs": 276,
+        "num_messages": 276,
+        "num_entries": 1656
+      }
+    },
+    {
+      "snapshot": 220,
+      "time_ms": 22000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 54955,
+        "total_entries": 170084,
+        "diff_ratio": 0.32310505397333084
+      }
+    },
+    {
+      "snapshot": 220,
+      "time_ms": 22000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 220,
+      "time_ms": 22000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 6,
+        "k_used": 6,
+        "changed_pairs": 18,
+        "num_messages": 18,
+        "num_entries": 108
+      }
+    },
+    {
+      "snapshot": 220,
+      "time_ms": 22000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 10
+      }
+    },
+    {
+      "snapshot": 240,
+      "time_ms": 24000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 6,
+        "k_used": 6,
+        "changed_pairs": 292,
+        "num_messages": 292,
+        "num_entries": 1752
+      }
+    },
+    {
+      "snapshot": 240,
+      "time_ms": 24000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 56143,
+        "total_entries": 170084,
+        "diff_ratio": 0.3300898379624186
+      }
+    },
+    {
+      "snapshot": 240,
+      "time_ms": 24000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 240,
+      "time_ms": 24000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 6,
+        "k_used": 6,
+        "changed_pairs": 14,
+        "num_messages": 14,
+        "num_entries": 84
+      }
+    },
+    {
+      "snapshot": 240,
+      "time_ms": 24000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 14
+      }
+    },
+    {
+      "snapshot": 260,
+      "time_ms": 26000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 6,
+        "k_used": 6,
+        "changed_pairs": 274,
+        "num_messages": 274,
+        "num_entries": 1644
+      }
+    },
+    {
+      "snapshot": 260,
+      "time_ms": 26000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 52412,
+        "total_entries": 170084,
+        "diff_ratio": 0.3081536182121775
+      }
+    },
+    {
+      "snapshot": 260,
+      "time_ms": 26000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 260,
+      "time_ms": 26000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 6,
+        "k_used": 6,
+        "changed_pairs": 10,
+        "num_messages": 10,
+        "num_entries": 60
+      }
+    },
+    {
+      "snapshot": 260,
+      "time_ms": 26000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 54
+      }
+    },
+    {
+      "snapshot": 280,
+      "time_ms": 28000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 6,
+        "k_used": 6,
+        "changed_pairs": 330,
+        "num_messages": 330,
+        "num_entries": 1980
+      }
+    },
+    {
+      "snapshot": 280,
+      "time_ms": 28000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 54357,
+        "total_entries": 170084,
+        "diff_ratio": 0.3195891441875779
+      }
+    },
+    {
+      "snapshot": 280,
+      "time_ms": 28000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 280,
+      "time_ms": 28000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 6,
+        "k_used": 6,
+        "changed_pairs": 4,
+        "num_messages": 4,
+        "num_entries": 24
+      }
+    },
+    {
+      "snapshot": 280,
+      "time_ms": 28000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 17
+      }
+    },
+    {
+      "snapshot": 300,
+      "time_ms": 30000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 6,
+        "k_used": 6,
+        "changed_pairs": 276,
+        "num_messages": 276,
+        "num_entries": 1656
+      }
+    },
+    {
+      "snapshot": 300,
+      "time_ms": 30000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 53817,
+        "total_entries": 170084,
+        "diff_ratio": 0.3164142423743562
+      }
+    },
+    {
+      "snapshot": 300,
+      "time_ms": 30000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 300,
+      "time_ms": 30000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 6,
+        "k_used": 6,
+        "changed_pairs": 26,
+        "num_messages": 26,
+        "num_entries": 156
+      }
+    },
+    {
+      "snapshot": 300,
+      "time_ms": 30000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 12
+      }
+    },
+    {
+      "snapshot": 320,
+      "time_ms": 32000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 6,
+        "k_used": 6,
+        "changed_pairs": 274,
+        "num_messages": 274,
+        "num_entries": 1644
+      }
+    },
+    {
+      "snapshot": 320,
+      "time_ms": 32000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 52334,
+        "total_entries": 170084,
+        "diff_ratio": 0.30769502128360104
+      }
+    },
+    {
+      "snapshot": 320,
+      "time_ms": 32000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 320,
+      "time_ms": 32000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 6,
+        "k_used": 6,
+        "changed_pairs": 14,
+        "num_messages": 14,
+        "num_entries": 84
+      }
+    },
+    {
+      "snapshot": 320,
+      "time_ms": 32000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 22
+      }
+    },
+    {
+      "snapshot": 340,
+      "time_ms": 34000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 6,
+        "k_used": 6,
+        "changed_pairs": 306,
+        "num_messages": 306,
+        "num_entries": 1836
+      }
+    },
+    {
+      "snapshot": 340,
+      "time_ms": 34000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 53766,
+        "total_entries": 170084,
+        "diff_ratio": 0.3161143905364408
+      }
+    },
+    {
+      "snapshot": 340,
+      "time_ms": 34000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 340,
+      "time_ms": 34000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 6,
+        "k_used": 6,
+        "changed_pairs": 8,
+        "num_messages": 8,
+        "num_entries": 48
+      }
+    },
+    {
+      "snapshot": 340,
+      "time_ms": 34000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 8
+      }
+    },
+    {
+      "snapshot": 360,
+      "time_ms": 36000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 6,
+        "k_used": 6,
+        "changed_pairs": 284,
+        "num_messages": 284,
+        "num_entries": 1704
+      }
+    },
+    {
+      "snapshot": 360,
+      "time_ms": 36000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 54963,
+        "total_entries": 170084,
+        "diff_ratio": 0.3231520895557489
+      }
+    },
+    {
+      "snapshot": 360,
+      "time_ms": 36000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 360,
+      "time_ms": 36000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 6,
+        "k_used": 6,
+        "changed_pairs": 12,
+        "num_messages": 12,
+        "num_entries": 72
+      }
+    },
+    {
+      "snapshot": 360,
+      "time_ms": 36000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 13
+      }
+    },
+    {
+      "snapshot": 380,
+      "time_ms": 38000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 6,
+        "k_used": 6,
+        "changed_pairs": 280,
+        "num_messages": 280,
+        "num_entries": 1680
+      }
+    },
+    {
+      "snapshot": 380,
+      "time_ms": 38000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 53097,
+        "total_entries": 170084,
+        "diff_ratio": 0.31218103995672725
+      }
+    },
+    {
+      "snapshot": 380,
+      "time_ms": 38000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 380,
+      "time_ms": 38000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 6,
+        "k_used": 6,
+        "changed_pairs": 20,
+        "num_messages": 20,
+        "num_entries": 120
+      }
+    },
+    {
+      "snapshot": 380,
+      "time_ms": 38000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 13
+      }
+    },
+    {
+      "snapshot": 400,
+      "time_ms": 40000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 6,
+        "k_used": 6,
+        "changed_pairs": 276,
+        "num_messages": 276,
+        "num_entries": 1656
+      }
+    },
+    {
+      "snapshot": 400,
+      "time_ms": 40000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 52611,
+        "total_entries": 170084,
+        "diff_ratio": 0.30932362832482774
+      }
+    },
+    {
+      "snapshot": 400,
+      "time_ms": 40000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 400,
+      "time_ms": 40000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 6,
+        "k_used": 6,
+        "changed_pairs": 16,
+        "num_messages": 16,
+        "num_entries": 96
+      }
+    },
+    {
+      "snapshot": 400,
+      "time_ms": 40000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 8
+      }
+    },
+    {
+      "snapshot": 420,
+      "time_ms": 42000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 6,
+        "k_used": 6,
+        "changed_pairs": 274,
+        "num_messages": 274,
+        "num_entries": 1644
+      }
+    },
+    {
+      "snapshot": 420,
+      "time_ms": 42000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 54766,
+        "total_entries": 170084,
+        "diff_ratio": 0.3219938383387032
+      }
+    },
+    {
+      "snapshot": 420,
+      "time_ms": 42000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 420,
+      "time_ms": 42000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 6,
+        "k_used": 6,
+        "changed_pairs": 18,
+        "num_messages": 18,
+        "num_entries": 108
+      }
+    },
+    {
+      "snapshot": 420,
+      "time_ms": 42000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 10
+      }
+    },
+    {
+      "snapshot": 440,
+      "time_ms": 44000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 6,
+        "k_used": 6,
+        "changed_pairs": 260,
+        "num_messages": 260,
+        "num_entries": 1560
+      }
+    },
+    {
+      "snapshot": 440,
+      "time_ms": 44000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 54508,
+        "total_entries": 170084,
+        "diff_ratio": 0.32047694080571953
+      }
+    },
+    {
+      "snapshot": 440,
+      "time_ms": 44000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 440,
+      "time_ms": 44000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 6,
+        "k_used": 6,
+        "changed_pairs": 12,
+        "num_messages": 12,
+        "num_entries": 72
+      }
+    },
+    {
+      "snapshot": 440,
+      "time_ms": 44000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 12
+      }
+    },
+    {
+      "snapshot": 460,
+      "time_ms": 46000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 6,
+        "k_used": 6,
+        "changed_pairs": 264,
+        "num_messages": 264,
+        "num_entries": 1584
+      }
+    },
+    {
+      "snapshot": 460,
+      "time_ms": 46000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 52430,
+        "total_entries": 170084,
+        "diff_ratio": 0.30825944827261825
+      }
+    },
+    {
+      "snapshot": 460,
+      "time_ms": 46000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 460,
+      "time_ms": 46000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 6,
+        "k_used": 6,
+        "changed_pairs": 10,
+        "num_messages": 10,
+        "num_entries": 60
+      }
+    },
+    {
+      "snapshot": 460,
+      "time_ms": 46000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 31
+      }
+    },
+    {
+      "snapshot": 480,
+      "time_ms": 48000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 6,
+        "k_used": 6,
+        "changed_pairs": 308,
+        "num_messages": 308,
+        "num_entries": 1848
+      }
+    },
+    {
+      "snapshot": 480,
+      "time_ms": 48000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 53161,
+        "total_entries": 170084,
+        "diff_ratio": 0.31255732461607205
+      }
+    },
+    {
+      "snapshot": 480,
+      "time_ms": 48000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 480,
+      "time_ms": 48000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 6,
+        "k_used": 6,
+        "changed_pairs": 12,
+        "num_messages": 12,
+        "num_entries": 72
+      }
+    },
+    {
+      "snapshot": 480,
+      "time_ms": 48000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 28
+      }
+    },
+    {
+      "snapshot": 500,
+      "time_ms": 50000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 6,
+        "k_used": 6,
+        "changed_pairs": 308,
+        "num_messages": 308,
+        "num_entries": 1848
+      }
+    },
+    {
+      "snapshot": 500,
+      "time_ms": 50000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 54477,
+        "total_entries": 170084,
+        "diff_ratio": 0.3202946779238494
+      }
+    },
+    {
+      "snapshot": 500,
+      "time_ms": 50000,
+      "event": "gid_rebuild",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_gids": 0
+      }
+    },
+    {
+      "snapshot": 500,
+      "time_ms": 50000,
+      "event": "gateway_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "k": 6,
+        "k_used": 6,
+        "changed_pairs": 28,
+        "num_messages": 28,
+        "num_entries": 168
+      }
+    }
+  ]
+}

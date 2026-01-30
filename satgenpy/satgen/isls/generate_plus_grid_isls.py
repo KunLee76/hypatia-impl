@@ -141,6 +141,80 @@ def generate_plus_grid_isls_polar(output_filename_isls, n_orbits, n_sats_per_orb
     return list_isls
 
 
+def generate_plus_grid_isls_with_random_failures(output_filename_isls, n_orbits, n_sats_per_orbit, isl_shift, 
+                                                  failure_probability, random_seed=None, idx_offset=0,
+                                                  inclination_degree=None, use_polar_version=None):
+    """
+    Generate ISL topology with random distributed failures.
+    
+    This function first generates a complete ISL topology (using either original or polar version),
+    then randomly removes ISLs based on the specified failure probability.
+    
+    Args:
+        output_filename_isls: Output filename for ISL topology
+        n_orbits: Number of orbits
+        n_sats_per_orbit: Number of satellites per orbit
+        isl_shift: ISL shift between orbits
+        failure_probability: Probability of each ISL failing (e.g., 0.01 for 1%, 0.05 for 5%, 0.10 for 10%)
+        random_seed: Random seed for reproducibility (if None, uses unpredictable randomness)
+        idx_offset: Index offset for multi-shell constellations
+        inclination_degree: Inclination to decide polar/delta (required if use_polar_version=None)
+        use_polar_version: 
+            - None (default): Auto-detect based on inclination_degree
+            - True: Force polar version
+            - False: Force original version
+    
+    Returns:
+        list_isls: List of surviving ISL tuples after random failures
+    """
+    import random
+    
+    # Set random seed for reproducibility
+    if random_seed is not None:
+        random.seed(random_seed)
+    
+    # Step 1: Generate complete ISL topology (auto-select polar/original version)
+    if use_polar_version is None:
+        if inclination_degree is None:
+            raise ValueError("Must provide inclination_degree for auto-detection, or explicitly set use_polar_version")
+        use_polar_version = (80.0 < inclination_degree < 100.0)
+    
+    if use_polar_version:
+        if inclination_degree is None:
+            raise ValueError("inclination_degree is required for polar version")
+        complete_isls = generate_plus_grid_isls_polar(
+            "/dev/null",  # Temporary output, we'll write the filtered list later
+            n_orbits, n_sats_per_orbit, inclination_degree, isl_shift, idx_offset
+        )
+    else:
+        complete_isls = generate_plus_grid_isls_original(
+            "/dev/null",  # Temporary output
+            n_orbits, n_sats_per_orbit, isl_shift, idx_offset
+        )
+    
+    # Step 2: Randomly remove ISLs based on failure probability
+    surviving_isls = []
+    failed_count = 0
+    
+    for isl in complete_isls:
+        # Each ISL has (1 - failure_probability) chance to survive
+        if random.random() > failure_probability:
+            surviving_isls.append(isl)
+        else:
+            failed_count += 1
+    
+    # Step 3: Write surviving ISLs to output file
+    with open(output_filename_isls, 'w+') as f:
+        for (a, b) in surviving_isls:
+            f.write(str(a) + " " + str(b) + "\n")
+    
+    print(f"[ISL Random Failure] Total ISLs: {len(complete_isls)}, "
+          f"Failed: {failed_count} ({failed_count/len(complete_isls)*100:.2f}%), "
+          f"Surviving: {len(surviving_isls)} ({len(surviving_isls)/len(complete_isls)*100:.2f}%)")
+    
+    return surviving_isls
+
+
 def generate_plus_grid_isls(output_filename_isls, n_orbits, n_sats_per_orbit, isl_shift, idx_offset=0, 
                             inclination_degree=None, use_polar_version=None):
     """

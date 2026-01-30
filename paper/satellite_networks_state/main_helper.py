@@ -24,6 +24,7 @@ import sys
 sys.path.append("../../satgenpy")
 import satgen
 import os
+import shutil
 
 
 class MainHelper:
@@ -165,8 +166,32 @@ class MainHelper:
             print(f"使用失效場景: {failure_level}")
             print(f"  複製 {source_file} -> {dest_file}")
             
-            import shutil
             shutil.copy2(source_file, dest_file)
+        elif isl_selection.startswith("isls_random_"):
+            # ISL 隨機失效場景：動態生成
+            # 格式: isls_random_p1 (1%), isls_random_p5 (5%), isls_random_p10 (10%)
+            import re
+            match = re.search(r'isls_random_p(\d+)', isl_selection)
+            if not match:
+                raise ValueError(f"Invalid random failure format: {isl_selection}, expected isls_random_pX where X is 1, 5, or 10")
+            
+            failure_percent = int(match.group(1))
+            failure_probability = failure_percent / 100.0
+            random_seed = 42  # 固定種子以確保可重複性
+            
+            print(f"使用隨機失效場景: {failure_percent}% 失效率 (seed={random_seed})")
+            
+            satgen.generate_plus_grid_isls_with_random_failures(
+                output_generated_data_dir + "/" + name + "/isls.txt",
+                self.NUM_ORBS,
+                self.NUM_SATS_PER_ORB,
+                isl_shift=0,
+                failure_probability=failure_probability,
+                random_seed=random_seed,
+                idx_offset=0,
+                inclination_degree=self.INCLINATION_DEGREE,
+                use_polar_version=None  # Auto-detect based on inclination
+            )
         else:
             raise ValueError("Unknown ISL selection: " + isl_selection)
 
