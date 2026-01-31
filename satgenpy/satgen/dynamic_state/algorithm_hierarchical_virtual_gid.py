@@ -1461,6 +1461,12 @@ def step(payload: dict):
                 match = re.search(r'isls_random_(p\d+)', output_dir)
                 if match:
                     scenario_info = f"_random_{match.group(1)}"
+            elif "isls_dynamic_" in output_dir:
+                # 提取 dynamic_pX 部分 (Chaos Monkey 動態失效場景)
+                import re
+                match = re.search(r'isls_dynamic_(p\d+)', output_dir)
+                if match:
+                    scenario_info = f"_dynamic_{match.group(1)}"
             
             # 臨時文件目錄：根據 scenario 和 K 值命名，避免不同實驗混淆
             temp_dir_name = "temp_grhr"

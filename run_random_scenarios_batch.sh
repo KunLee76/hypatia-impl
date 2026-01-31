@@ -36,7 +36,7 @@ export SATGEN_GRID_DEG=27
 # 模擬參數
 DURATION=200
 TIME_STEP=2000  # 2000ms = 2秒
-ISL_TYPE="isls_plus_grid"
+# ISL_TYPE 會根據失效率動態設定為 isls_dynamic_p1/p5/p10（在迴圈內）
 GS_TYPE="ground_stations_top_100_with_hsinchu"
 ALGORITHM="algorithm_hierarchical_virtual_gid"
 THREADS=4
@@ -75,9 +75,13 @@ for i in "${!FAILURE_RATES[@]}"; do
     RATE="${FAILURE_RATES[$i]}"
     LABEL="${FAILURE_LABELS[$i]}"
     
+    # 根據失效率設定 ISL_TYPE，使用 dynamic 前綴區分靜態實驗
+    ISL_TYPE="isls_dynamic_${LABEL,,}"  # isls_dynamic_p1, isls_dynamic_p5, isls_dynamic_p10
+    
     echo ""
     echo "========================================"
-    echo "執行 ${LABEL} 系列（失效率 ${RATE}）"
+    echo "執行 ${LABEL} 系列（失效率 ${RATE}）- 動態失效"
+    echo "ISL Type: ${ISL_TYPE}"
     echo "========================================"
     
     export CHAOS_FAILURE_RATE=$RATE

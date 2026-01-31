@@ -168,7 +168,7 @@ class MainHelper:
             
             shutil.copy2(source_file, dest_file)
         elif isl_selection.startswith("isls_random_"):
-            # ISL 隨機失效場景：動態生成
+            # ISL 隨機失效場景：靜態生成（在生成拓撲時就移除固定的 ISL）
             # 格式: isls_random_p1 (1%), isls_random_p5 (5%), isls_random_p10 (10%)
             import re
             match = re.search(r'isls_random_p(\d+)', isl_selection)
@@ -179,7 +179,7 @@ class MainHelper:
             failure_probability = failure_percent / 100.0
             random_seed = 42  # 固定種子以確保可重複性
             
-            print(f"使用隨機失效場景: {failure_percent}% 失效率 (seed={random_seed})")
+            print(f"使用靜態隨機失效場景: {failure_percent}% 失效率 (seed={random_seed})")
             
             satgen.generate_plus_grid_isls_with_random_failures(
                 output_generated_data_dir + "/" + name + "/isls.txt",
@@ -188,6 +188,29 @@ class MainHelper:
                 isl_shift=0,
                 failure_probability=failure_probability,
                 random_seed=random_seed,
+                idx_offset=0,
+                inclination_degree=self.INCLINATION_DEGREE,
+                use_polar_version=None  # Auto-detect based on inclination
+            )
+        elif isl_selection.startswith("isls_dynamic_"):
+            # ISL 動態失效場景：生成完整的 plus_grid ISL，依賴 Chaos Monkey 動態移除
+            # 格式: isls_dynamic_p1, isls_dynamic_p5, isls_dynamic_p10
+            # Chaos Monkey 會通過環境變數 CHAOS_FAILURE_RATE 控制失效率
+            import re
+            match = re.search(r'isls_dynamic_p(\d+)', isl_selection)
+            if not match:
+                raise ValueError(f"Invalid dynamic failure format: {isl_selection}, expected isls_dynamic_pX where X is 1, 5, or 10")
+            
+            failure_percent = int(match.group(1))
+            print(f"使用動態失效場景: {failure_percent}% 失效率 (依賴 Chaos Monkey)")
+            print(f"  生成完整的 plus_grid ISL 拓撲，Chaos Monkey 將動態移除 ISL")
+            
+            # 生成完整的 ISL 拓撲（與 isls_plus_grid 相同）
+            satgen.generate_plus_grid_isls(
+                output_generated_data_dir + "/" + name + "/isls.txt",
+                self.NUM_ORBS,
+                self.NUM_SATS_PER_ORB,
+                isl_shift=0,
                 idx_offset=0,
                 inclination_degree=self.INCLINATION_DEGREE,
                 use_polar_version=None  # Auto-detect based on inclination

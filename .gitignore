@@ -3,3 +3,25 @@
 dev_testing/
 satviz/static_html/
 .DS_Store
+
+# 統計數據 JSON 檔案（檔案太大，不納入版本控制）
+paper/satellite_networks_state/analytic_result/*_signaling_stats.json
+paper/satellite_networks_state/analytic_result/hierarchical_*.json
+paper/satellite_networks_state/analytic_result/lohi_*.json
+paper/satellite_networks_state/analytic_result/baseline_*.json
+
+# 臨時統計目錄
+paper/satellite_networks_state/analytic_result/temp_*/
+
+# Log 檔案
+logs/
+*.log
+paper/satellite_networks_state/logs/
+
+# Chaos Monkey 日誌
+chaos_*.log
+
+# 執行摘要報告
+*_summary_*.txt
+random_scenarios_summary_*.txt
+failure_scenarios_summary_*.txt
