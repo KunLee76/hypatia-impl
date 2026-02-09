@@ -129,7 +129,8 @@ class KParameterAnalyzer:
     def extract_metrics(self, stats_data):
         """提取關鍵指標"""
         summary = stats_data.get('summary', {})
-        by_type = summary.get('by_type', {})
+        # 支持兩種格式：event_counts (新) 和 by_type (舊)
+        by_type = summary.get('event_counts', summary.get('by_type', {}))
         
         metrics = {
             'total_events': summary.get('total_events', 0),

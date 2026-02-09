@@ -1,24 +1,24 @@
 Hypatia 多算法控制信令比較報告
 ============================================================
-生成時間: 2026-01-17 21:55:43
+生成時間: 2026-02-02 23:03:43
 比較算法數: 3
 
 算法總覽:
 ------------------------------------------------------------
 
-Hierarchical GID (15°):
-  總事件數: 4,198
-  總字節數: 377,707,616
-  ✅ 相比基線節省: 93.88%
+Floyd-Warshall Baseline:
+  總事件數: 103
+  總字節數: 24,749,664
+
+GRHR (27°):
+  總事件數: 512
+  總字節數: 26,271,712
+  ❌ 相比基線增加: 6.15%
 
 LoHi (p=6, s=10):
-  總事件數: 5,998
-  總字節數: 1,244,208,384
-  ✅ 相比基線節省: 79.84%
-
-Floyd-Warshall Baseline:
-  總事件數: 2,000
-  總字節數: 6,172,093,184
+  總事件數: 306
+  總字節數: 45,878,176
+  ❌ 相比基線增加: 85.37%
 
 
 按事件類型詳細比較:
@@ -26,25 +26,25 @@ Floyd-Warshall Baseline:
 
 gateway_update:
   Floyd-Warshall Baseline                 : N/A
-  Hierarchical GID (15°)                  :    197 次,  8,635,968 字節
+  GRHR (27°)                              :    205 次,  1,467,520 字節
   LoHi (p=6, s=10)                        : N/A
 
 gid_rebuild:
   Floyd-Warshall Baseline                 : N/A
-  Hierarchical GID (15°)                  :   2000 次,  1,342,592 字節
+  GRHR (27°)                              :    200 次,     54,400 字節
   LoHi (p=6, s=10)                        : N/A
 
 pid_rebuild:
   Floyd-Warshall Baseline                 : N/A
-  Hierarchical GID (15°)                  : N/A
-  LoHi (p=6, s=10)                        :   1999 次,     65,120 字節
+  GRHR (27°)                              : N/A
+  LoHi (p=6, s=10)                        :    103 次,      7,904 字節
 
 routing_update:
-  Floyd-Warshall Baseline                 :   2000 次, 6,172,093,184 字節
-  Hierarchical GID (15°)                  :   1991 次, 367,728,736 字節
-  LoHi (p=6, s=10)                        :   2000 次, 1,244,076,992 字節
+  Floyd-Warshall Baseline                 :    103 次, 24,749,664 字節
+  GRHR (27°)                              :    103 次, 24,749,664 字節
+  LoHi (p=6, s=10)                        :    103 次, 45,857,856 字節
 
 topology_change:
   Floyd-Warshall Baseline                 : N/A
-  Hierarchical GID (15°)                  :     10 次,        320 字節
-  LoHi (p=6, s=10)                        :   1999 次,     66,272 字節
+  GRHR (27°)                              :      4 次,        128 字節
+  LoHi (p=6, s=10)                        :    100 次,     12,416 字節

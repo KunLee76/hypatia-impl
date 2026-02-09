@@ -27,6 +27,65 @@ import json
 import os
 import threading
 from datetime import datetime
+import random
+import sys
+
+# ===== Chaos Monkey 配置（間歇性ISL失效）=====
+ENABLE_CHAOS_MONKEY = os.environ.get('ENABLE_CHAOS_MONKEY', 'false').lower() == 'true'
+CHAOS_FAILURE_RATE = float(os.environ.get('CHAOS_FAILURE_RATE', '0.01'))  # 預設1%
+CHAOS_INTERVAL_SNAPSHOTS = int(os.environ.get('CHAOS_INTERVAL_SNAPSHOTS', '20'))  # 預設20 snapshots
+CHAOS_LOG_FILE = os.environ.get('CHAOS_LOG_FILE', 'chaos_monkey_baseline.log')  # Chaos Monkey專用日誌
+
+def chaos_monkey_inject_failures(G_sat_isls, snapshot_idx, failure_rate, log_file='chaos_monkey_baseline.log'):
+    """
+    Chaos Monkey: 在當前snapshot隨機移除指定比例的ISL
+    
+    Args:
+        G_sat_isls: NetworkX圖，ISL拓撲
+        snapshot_idx: 當前snapshot索引
+        failure_rate: 失效率 (0.0-1.0)
+        log_file: 日誌文件路徑
+    
+    Returns:
+        removed_edges: 被移除的邊列表 [(u, v), ...]
+    """
+    if not G_sat_isls or G_sat_isls.number_of_edges() == 0:
+        return []
+    
+    # 獲取所有ISL邊
+    all_isls = [(u, v) for u, v in G_sat_isls.edges()]
+    
+    if not all_isls:
+        return []
+    
+    # 計算要移除的數量
+    num_to_remove = max(1, int(len(all_isls) * failure_rate))
+    
+    # 隨機選擇要移除的ISL
+    edges_to_remove = random.sample(all_isls, num_to_remove)
+    
+    # 從圖中移除這些邊
+    removed_count = 0
+    for u, v in edges_to_remove:
+        if G_sat_isls.has_edge(u, v):
+            G_sat_isls.remove_edge(u, v)
+            removed_count += 1
+    
+    # 記錄到日誌
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3] + "Z"
+    log_msg = (f"{timestamp} [CHAOS_MONKEY] Snapshot={snapshot_idx} "
+               f"Total_ISLs={len(all_isls)} Removed={removed_count} Rate={failure_rate:.2%}\n")
+    
+    try:
+        with open(log_file, 'a', encoding='utf-8') as f:
+            f.write(log_msg)
+            # 記錄每條被移除的ISL詳細信息
+            for u, v in edges_to_remove:
+                f.write(f"  - ISL removed: {u} <-> {v}\n")
+    except Exception as e:
+        print(f"Warning: Could not write to Chaos Monkey log: {e}", file=sys.stderr)
+    
+    return edges_to_remove
 
 # ===== 控制信令統計功能 (參考 algorithm_hierarchical_virtual_pid.py) =====
 
@@ -88,7 +147,8 @@ class ControlSignalingStats:
                               bytes=b))
     
     def record_topology_change(self, snapshot, sim_time_ms,
-                               delta_isl:int, delta_gsl:int, bytes=None):
+                               delta_isl:int, delta_gsl:int, bytes=None,
+                               isl_removed:int=0, isl_added:int=0):
         """記錄拓撲變化
         
         Note:
@@ -99,6 +159,7 @@ class ControlSignalingStats:
         self._append(EventRow(snapshot, sim_time_ms, "topology_change",
                               count=1,
                               detail={"delta_isl": delta_isl, "delta_gsl": delta_gsl,
+                                     "isl_removed": isl_removed, "isl_added": isl_added,
                                      "algorithm": "baseline_floyd_warshall"},
                               bytes=b))
     
@@ -227,6 +288,22 @@ def algorithm_free_one_only_over_isls(
         for n in sat_net_graph_only_satellites_with_isls.neighbors(sid):
             if n >= len(satellites):
                 raise ValueError("Graph cannot contain satellite-to-ground-station links")
+    
+    # ========================================
+    # 🐒 CHAOS MONKEY: 間歇性ISL失效注入
+    # ========================================
+    chaos_monkey_removed_count = 0
+    if ENABLE_CHAOS_MONKEY and (snapshot % CHAOS_INTERVAL_SNAPSHOTS == 0):
+        removed_isls = chaos_monkey_inject_failures(
+            sat_net_graph_only_satellites_with_isls, 
+            snapshot, 
+            CHAOS_FAILURE_RATE,
+            CHAOS_LOG_FILE
+        )
+        chaos_monkey_removed_count = len(removed_isls)
+        if enable_verbose_logs:
+            print(f"  > [CHAOS_MONKEY] Injected {chaos_monkey_removed_count} ISL failures at snapshot {snapshot}")
+    # ========================================
 
     #################################
     # BANDWIDTH STATE
@@ -262,33 +339,9 @@ def algorithm_free_one_only_over_isls(
     # 每次調用都需要重新計算所有節點對之間的最短路徑
     num_satellites = len(satellites)
     num_ground_stations = len(ground_stations)
-    total_node_pairs = num_satellites * num_satellites  # Floyd-Warshall 計算量
-    
-    # 計算有多少路由條目會被更新
-    if prev_fstate is None:
-        # 首次計算，所有路由都是新的
-        changed_entries = num_satellites * num_ground_stations * 2  # 上行+下行
-    else:
-        # 後續計算，估算變化量（基於拓撲變化）
-        # Floyd-Warshall 特點：任何邊的變化都可能影響所有路徑
-        edge_count = sat_net_graph_only_satellites_with_isls.number_of_edges()
-        # 保守估計：每個邊的變化影響 10% 的路由
-        changed_entries = int((num_satellites * num_ground_stations * 2) * 0.3)
-    
-    total_entries = num_satellites * num_ground_stations * 2
-    
-    # 記錄路由更新統計 - Floyd-Warshall 的控制開銷
-    # bytes 計算交給 analyzer 統一處理（32B header + changed_entries*32B）
-    _get_process_local_stats().record_routing_update(
-        snapshot, sim_time_ms,
-        changed_entries=changed_entries,
-        total_entries=total_entries
-    )
+    total_entries = num_satellites * num_ground_stations * 2  # 上行+下行
 
-    if enable_verbose_logs:
-        print(f"  > [SIGNALING] Floyd-Warshall 路由更新: {changed_entries}/{total_entries} 條目")
-
-    # Forwarding state using shortest paths
+    # Forwarding state using shortest paths（先計算 fstate，再統計變化量）
     fstate = calculate_fstate_shortest_path_without_gs_relaying(
         output_dynamic_state_dir,
         time_since_epoch_ns,
@@ -303,25 +356,61 @@ def algorithm_free_one_only_over_isls(
         enable_verbose_logs
     )
 
+    # [統計記錄] 計算實際的路由變化量（與 GRHR/LoHi 一致的方式）
+    # 比較前後 fstate 的差異，計算實際變化的路由條目數
+    flat_fstate = {(u, dst): nh[0] for (u, dst), nh in fstate.items()} if fstate else {}
+    changed_entries = 0
+    
+    if hasattr(_get_process_local_stats(), '_prev_flat_fstate') and _get_process_local_stats()._prev_flat_fstate:
+        prev_flat = _get_process_local_stats()._prev_flat_fstate
+        all_keys = set(prev_flat.keys()) | set(flat_fstate.keys())
+        for k in all_keys:
+            if prev_flat.get(k) != flat_fstate.get(k):
+                changed_entries += 1
+    else:
+        # 首次計算，所有路由都是新的
+        changed_entries = len(flat_fstate)
+    
+    _get_process_local_stats()._prev_flat_fstate = flat_fstate
+    
+    # 記錄路由更新統計
+    if changed_entries > 0:
+        _get_process_local_stats().record_routing_update(
+            snapshot, sim_time_ms,
+            changed_entries=changed_entries,
+            total_entries=total_entries
+        )
+        if enable_verbose_logs:
+            print(f"  > [SIGNALING] Floyd-Warshall 路由更新: {changed_entries}/{total_entries} 條目變化")
+
     # [統計記錄] 檢測拓撲變化
-    if snapshot > 0:  # 第一個快照沒有拓撲變化
-        # 簡化的拓撲變化檢測 - 基於邊數變化
-        current_edges = sat_net_graph_only_satellites_with_isls.number_of_edges()
-        prev_edges = getattr(_get_process_local_stats(), '_prev_edge_count', current_edges)
-        
+    # 追蹤實際的拓撲變化（包括 Chaos Monkey 移除和自然重建）
+    current_edges = sat_net_graph_only_satellites_with_isls.number_of_edges()
+    prev_edges = getattr(_get_process_local_stats(), '_prev_edge_count', None)
+    
+    if prev_edges is not None:
+        # 淨變化 = 當前邊數 - 前一個邊數
         delta_isl = current_edges - prev_edges
         delta_gsl = 0  # 這個算法不處理GSL變化
         
-        if delta_isl != 0:
+        # 計算實際的添加和移除數量
+        # 淨變化 = 添加 - 移除，因此：添加 = 移除 + 淨變化
+        isl_removed = chaos_monkey_removed_count
+        isl_added = isl_removed + delta_isl
+        
+        # 只要有任何變化就記錄（移除或添加）
+        if isl_removed > 0 or isl_added > 0 or delta_isl != 0:
             _get_process_local_stats().record_topology_change(
                 snapshot, sim_time_ms,
                 delta_isl=delta_isl,
-                delta_gsl=delta_gsl
+                delta_gsl=delta_gsl,
+                isl_removed=isl_removed,
+                isl_added=isl_added
             )
             if enable_verbose_logs:
-                print(f"  > [SIGNALING] 拓撲變化: ISL {delta_isl:+}")
-        
-        _get_process_local_stats()._prev_edge_count = current_edges
+                print(f"  > [SIGNALING] 拓撲變化: ISL 淨變化={delta_isl:+}, 移除={isl_removed}, 添加={isl_added}")
+    
+    _get_process_local_stats()._prev_edge_count = current_edges
 
     if enable_verbose_logs:
         print("")
@@ -334,13 +423,54 @@ def algorithm_free_one_only_over_isls(
     thread_id = threading.get_ident()
     pid = os.getpid()
     
-    stats_output_dir = "analytic_result"
+    # 統計輸出目錄 - 總是使用當前工作目錄下的 analytic_result
+    # 腳本運行在 paper/satellite_networks_state/ 目錄
+    # 避免路徑重複問題（如 paper/satellite_networks_state/paper/satellite_networks_state/...）
+    stats_output_dir = os.path.abspath("analytic_result")
     os.makedirs(stats_output_dir, exist_ok=True)
     
+    # 從 output_dynamic_state_dir 或環境變數提取場景資訊，避免不同實驗混淆
+    import re
+    output_dir = output_dynamic_state_dir if output_dynamic_state_dir else ""
+    scenario_info = ""
+    
+    # 優先從路徑提取場景資訊
+    if "isls_failure_" in output_dir:
+        match = re.search(r'isls_failure_(l\d+)', output_dir)
+        if match:
+            scenario_info = f"_failure_{match.group(1)}"
+    elif "isls_random_" in output_dir:
+        match = re.search(r'isls_random_(p\d+)', output_dir)
+        if match:
+            scenario_info = f"_random_{match.group(1)}"
+    elif "isls_dynamic_" in output_dir:
+        match = re.search(r'isls_dynamic_(p\d+)', output_dir)
+        if match:
+            scenario_info = f"_dynamic_{match.group(1)}"
+    
+    # 如果啟用了 Chaos Monkey 但沒有從路徑識別出場景，從失效率推斷
+    if not scenario_info and ENABLE_CHAOS_MONKEY:
+        rate = CHAOS_FAILURE_RATE
+        if rate == 0.01:
+            scenario_info = "_dynamic_p1"
+        elif rate == 0.05:
+            scenario_info = "_dynamic_p5"
+        elif rate == 0.10 or rate == 0.1:
+            scenario_info = "_dynamic_p10"
+    
     # 臨時文件：用於收集各進程的統計數據
-    temp_dir = os.path.join(stats_output_dir, "temp_baseline")
+    temp_dir_name = f"temp_baseline{scenario_info}"
+    temp_dir = os.path.join(stats_output_dir, temp_dir_name)
     os.makedirs(temp_dir, exist_ok=True)
     stats_file = os.path.join(temp_dir, f"baseline_stats_pid{pid}_tid{thread_id}.json")
+    
+    # 強制輸出調試信息（不依賴 verbose 設置）
+    print(f"  > [BASELINE-STATS] scenario_info='{scenario_info}', temp_dir={temp_dir}")
+    
+    if enable_verbose_logs:
+        print(f"  > [DEBUG] output_dir: {output_dir}")
+        print(f"  > [DEBUG] scenario_info: '{scenario_info}'")
+        print(f"  > [DEBUG] temp_dir_name: {temp_dir_name}")
     
     try:
         

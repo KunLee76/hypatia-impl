@@ -1087,16 +1087,13 @@ def route_all_gs_pairs(
         G_sat_isls: nx.Graph,                        # 全衛星圖（edge["weight"] 建議為 delay 或 geo）
         sat_neighbor_to_if_map: Dict[Tuple[int,int], Tuple[int,int]],
         gs_pairs: List[Tuple[int,int,int,int,int]],  # (src_gs, dst_gs, src_uplink_sat, dst_downlink_sat, t_int)
-        fstate: Dict[Tuple[int,int], Tuple[int,int,int]]
+        fstate: Dict[Tuple[int,int], Tuple[int,int,int]],
+        sat_gid: Dict[int, int]  # 從 step() 傳入，避免重複調用 refresh_gid_members_and_subgraphs
     ):
     """
     外部把原本 GS×GS 迴圈中的資訊包成 gs_pairs 傳入。
+    sat_gid 由 step() 中已經調用過的 refresh_gid_members_and_subgraphs 計算得到。
     """
-    # 1) 依當下位置重建 GID 成員與子圖/分量
-    # 每個 snapshot 先重置邊權重為幾何長度
-    reset_edge_weights_to_geo(G_sat_isls)
-    sat_gid = router.refresh_gid_members_and_subgraphs(sat_ids, sat_nadir_latlon, G_sat_isls)
-    
     # 清空群內 single-source shortest path 快取，避免用到上一個 snapshot
     sssp_cache.clear_all()
 
@@ -1524,6 +1521,7 @@ def step(payload: dict):
         payload.get("sat_neighbor_to_if_map") or payload.get("sat_neighbor_to_if"),
         payload["gs_pairs"],
         payload["fstate"],
+        sat_gid,  # 傳入已計算的 sat_gid，避免重複調用 refresh_gid_members_and_subgraphs
     )
     _alog("[STITCH] done", payload)
     

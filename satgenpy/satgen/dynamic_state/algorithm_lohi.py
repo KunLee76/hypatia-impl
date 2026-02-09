@@ -31,6 +31,7 @@ import networkx as nx
 import os
 import random
 import threading
+import sys
 
 # ==========================
 # Tunables (LoHi p×s - 文獻固定參數 6×10)
@@ -42,6 +43,63 @@ SATS_PER_PLANE_IN_GROUP = int(os.environ.get('LOHI_SATS_PER_PLANE', 10))  # s (�
 # Intra-PID queue-aware weights
 BETA_Q = float(os.environ.get('LOHI_BETA_Q', 1.0))   # [3]
 BETA_S = float(os.environ.get('LOHI_BETA_S', 0.0))   # [3]
+
+# ===== Chaos Monkey 配置（間歇性ISL失效）=====
+ENABLE_CHAOS_MONKEY = os.environ.get('ENABLE_CHAOS_MONKEY', 'false').lower() == 'true'
+CHAOS_FAILURE_RATE = float(os.environ.get('CHAOS_FAILURE_RATE', '0.01'))  # 預設1%
+CHAOS_INTERVAL_SNAPSHOTS = int(os.environ.get('CHAOS_INTERVAL_SNAPSHOTS', '20'))  # 預設20 snapshots
+CHAOS_LOG_FILE = os.environ.get('CHAOS_LOG_FILE', 'chaos_monkey_lohi.log')  # Chaos Monkey專用日誌
+
+def chaos_monkey_inject_failures(G_sat_isls, snapshot_idx, failure_rate, log_file='chaos_monkey_lohi.log'):
+    """
+    Chaos Monkey: 在當前snapshot隨機移除指定比例的ISL
+    
+    Args:
+        G_sat_isls: NetworkX圖，ISL拓撲
+        snapshot_idx: 當前snapshot索引
+        failure_rate: 失效率 (0.0-1.0)
+        log_file: 日誌文件路徑
+    
+    Returns:
+        removed_edges: 被移除的邊列表 [(u, v), ...]
+    """
+    if not G_sat_isls or G_sat_isls.number_of_edges() == 0:
+        return []
+    
+    # 獲取所有ISL邊
+    all_isls = [(u, v) for u, v in G_sat_isls.edges()]
+    
+    if not all_isls:
+        return []
+    
+    # 計算要移除的數量
+    num_to_remove = max(1, int(len(all_isls) * failure_rate))
+    
+    # 隨機選擇要移除的ISL
+    edges_to_remove = random.sample(all_isls, num_to_remove)
+    
+    # 從圖中移除這些邊
+    removed_count = 0
+    for u, v in edges_to_remove:
+        if G_sat_isls.has_edge(u, v):
+            G_sat_isls.remove_edge(u, v)
+            removed_count += 1
+    
+    # 記錄到日誌
+    timestamp = _dt.datetime.now(_dt.timezone.utc).strftime("%Y-%m-%d %H:%M:%S.%f")[:-3] + "Z"
+    log_msg = (f"{timestamp} [CHAOS_MONKEY] Snapshot={snapshot_idx} "
+               f"Total_ISLs={len(all_isls)} Removed={removed_count} Rate={failure_rate:.2%}\n")
+    
+    try:
+        with open(log_file, 'a', encoding='utf-8') as f:
+            f.write(log_msg)
+            # 記錄每條被移除的ISL詳細信息
+            for u, v in edges_to_remove:
+                f.write(f"  - ISL removed: {u} <-> {v}\n")
+    except Exception as e:
+        print(f"Warning: Could not write to Chaos Monkey log: {e}", file=sys.stderr)
+    
+    return edges_to_remove
 
 # ============================================================================
 # LoHi 階層路由：控制面 vs 資料面分離
@@ -122,15 +180,19 @@ class ControlSignalingStats:
         self._append(EventRow(snapshot, ms, 'pid_rebuild', 1, 0,
                               {'changed_pids': changed_pids}))
 
-    def record_topology_change(self, snapshot, ms, delta_group_edges:int):
+    def record_topology_change(self, snapshot, ms, delta_group_edges:int, delta_isl:int=0):
         """記錄群圖拓撲變化事件
+        
+        Args:
+            delta_group_edges: 群際邊的淨變化
+            delta_isl: ISL 的淨變化（用於追蹤 Chaos Monkey 影響）
         
         Note:
             bytes 計算交給 analyzer 統一處理（HDR + |delta_group_edges|*ENTRY）
         """
         self.topology_changes += 1
         self._append(EventRow(snapshot, ms, 'topology_change', 1, 0,
-                              {'delta_group_edges': delta_group_edges}))
+                              {'delta_group_edges': delta_group_edges, 'delta_isl': delta_isl}))
 
     def record_routing_update(self, snapshot, ms, changed:int, total:int):
         """記錄路由更新事件
@@ -565,8 +627,17 @@ class GroupPlanner:
         # 4. 記錄拓撲變化（用於信令統計）
         curr = {(a,b) for (a,b) in GG.edges()}
         delta = len(curr - self.prev_edges) - len(self.prev_edges - curr)
-        _get_process_local_stats().record_topology_change(self._snapshot_idx, self._snapshot_ms*self._snapshot_idx, delta)
+        
+        # 同時追蹤 ISL 級別的變化（反映 Chaos Monkey 影響）
+        current_isl_count = G_sat.number_of_edges()
+        prev_isl_count = getattr(self, '_prev_isl_count', current_isl_count)
+        delta_isl = current_isl_count - prev_isl_count
+        
+        # 記錄群際邊變化（原有邏輯）
+        _get_process_local_stats().record_topology_change(self._snapshot_idx, self._snapshot_ms*self._snapshot_idx, delta, delta_isl=delta_isl)
+        
         self.prev_edges = curr
+        self._prev_isl_count = current_isl_count
         self.group_graph = GG
 
     def shortest_group_path(self, src_pid:int, dst_pid:int) -> List[int]:
@@ -1521,6 +1592,20 @@ def algorithm_lohi(
         if 'geo_len_m' in d:
             d['weight'] = d['geo_len_m']
     
+    # ========================================
+    # 🐒 CHAOS MONKEY: 間歇性ISL失效注入
+    # ========================================
+    if ENABLE_CHAOS_MONKEY and (snapshot_idx % CHAOS_INTERVAL_SNAPSHOTS == 0):
+        removed_isls = chaos_monkey_inject_failures(
+            sat_net_graph_only_satellites_with_isls, 
+            snapshot_idx, 
+            CHAOS_FAILURE_RATE,
+            CHAOS_LOG_FILE
+        )
+        if enable_verbose_logs:
+            print(f"  > [CHAOS_MONKEY] Injected {len(removed_isls)} ISL failures at snapshot {snapshot_idx}")
+    # ========================================
+    
     # 添加 plane 和 pos_in_plane 屬性到圖節點
     # 嘗試從常見星座配置推斷（基於衛星總數）
     constellation_config = _infer_constellation_config(num_sats)
@@ -1784,14 +1869,54 @@ def algorithm_lohi(
     thread_id = threading.get_ident()
     pid = os.getpid()
     
-    # 輸出統計
-    stats_dir = 'analytic_result'
+    # 輸出統計 - 總是使用當前工作目錄下的 analytic_result
+    # 腳本運行在 paper/satellite_networks_state/ 目錄
+    # 避免路徑重複問題
+    stats_dir = os.path.abspath("analytic_result")
     os.makedirs(stats_dir, exist_ok=True)
     
+    # 從 output_dynamic_state_dir 提取場景資訊，避免不同實驗混淆
+    import re
+    output_dir = output_dynamic_state_dir if output_dynamic_state_dir else ""
+    scenario_info = ""
+    
+    # 優先從路徑提取場景資訊
+    if "isls_failure_" in output_dir:
+        match = re.search(r'isls_failure_(l\d+)', output_dir)
+        if match:
+            scenario_info = f"_failure_{match.group(1)}"
+    elif "isls_random_" in output_dir:
+        match = re.search(r'isls_random_(p\d+)', output_dir)
+        if match:
+            scenario_info = f"_random_{match.group(1)}"
+    elif "isls_dynamic_" in output_dir:
+        match = re.search(r'isls_dynamic_(p\d+)', output_dir)
+        if match:
+            scenario_info = f"_dynamic_{match.group(1)}"
+    
+    # 如果啟用了 Chaos Monkey 但沒有從路徑識別出場景，從失效率推斷
+    if not scenario_info and ENABLE_CHAOS_MONKEY:
+        rate = CHAOS_FAILURE_RATE
+        if rate == 0.01:
+            scenario_info = "_dynamic_p1"
+        elif rate == 0.05:
+            scenario_info = "_dynamic_p5"
+        elif rate == 0.10 or rate == 0.1:
+            scenario_info = "_dynamic_p10"
+    
     # 臨時文件：用於收集各進程的統計數據
-    temp_dir = os.path.join(stats_dir, "temp_lohi")
+    temp_dir_name = f"temp_lohi{scenario_info}"
+    temp_dir = os.path.join(stats_dir, temp_dir_name)
     os.makedirs(temp_dir, exist_ok=True)
     stats_file = os.path.join(temp_dir, f"lohi_stats_pid{pid}_tid{thread_id}.json")
+    
+    # 強制輸出調試信息（不依賴 verbose 設置）
+    print(f"  > [LOHI-STATS] scenario_info='{scenario_info}', temp_dir={temp_dir}")
+    
+    if enable_verbose_logs:
+        print(f"  > [DEBUG] output_dir: {output_dir}")
+        print(f"  > [DEBUG] scenario_info: '{scenario_info}'")
+        print(f"  > [DEBUG] temp_dir_name: {temp_dir_name}")
     
     with open(stats_file, 'w', encoding='utf-8') as f:
         json.dump({
