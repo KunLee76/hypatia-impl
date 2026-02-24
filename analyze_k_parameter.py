@@ -46,6 +46,68 @@ class KParameterAnalyzer:
         
         return files
     
+    def _filter_duplicate_routing_updates(self, timeline: list) -> list:
+        """
+        過濾重複的 routing_update 事件
+        問題：某些 snapshot 會同時記錄增量更新和完整表更新（bug）
+        解決：對每個 snapshot，如果有多個 routing_update，只保留增量更新
+        """
+        from collections import defaultdict
+        
+        # 按 snapshot 分組所有 routing_update
+        routing_by_snapshot = defaultdict(list)
+        other_events = []
+        
+        for event in timeline:
+            if event.get('event') == 'routing_update':
+                routing_by_snapshot[event['snapshot']].append(event)
+            else:
+                other_events.append(event)
+        
+        # 處理每個 snapshot 的 routing_update
+        filtered_routing = []
+        removed_count = 0
+        
+        for snapshot, events in routing_by_snapshot.items():
+            if len(events) == 1:
+                # 只有一個事件，直接保留
+                filtered_routing.append(events[0])
+            else:
+                # 有多個事件，需要過濾
+                # 規則：保留 changed_entries < total_entries 的增量更新
+                #       移除 changed_entries == total_entries 的完整表更新
+                increment_updates = []
+                full_table_updates = []
+                
+                for e in events:
+                    detail = e.get('detail', {})
+                    changed = detail.get('changed_entries', 0)
+                    total = detail.get('total_entries', 0)
+                    
+                    if changed == total and changed > 100000:
+                        # 完整表更新（錯誤的重複事件）
+                        full_table_updates.append(e)
+                    else:
+                        # 增量更新（正確的事件）
+                        increment_updates.append(e)
+                
+                # 優先保留增量更新，如果沒有增量更新才保留完整表更新
+                if increment_updates:
+                    filtered_routing.extend(increment_updates)
+                    removed_count += len(full_table_updates)
+                else:
+                    # 沒有增量更新，保留完整表更新（可能是 snapshot=0 的初始化）
+                    filtered_routing.extend(full_table_updates)
+        
+        if removed_count > 0:
+            print(f"  ⚠️  過濾了 {removed_count} 個錯誤的完整表 routing_update 事件")
+        
+        # 合併並按原順序排序
+        filtered_timeline = other_events + filtered_routing
+        filtered_timeline.sort(key=lambda x: (x['snapshot'], x['time_ms'], x['event']))
+        
+        return filtered_timeline
+    
     def load_stats(self, file_path):
         """加載統計數據並重新計算字節數"""
         with open(file_path, 'r', encoding='utf-8') as f:
@@ -61,14 +123,20 @@ class KParameterAnalyzer:
         summary = data.get('summary', {})
         timeline = data.get('timeline', [])
         
+        # ===== 過濾錯誤的重複 routing_update 事件 =====
+        timeline = self._filter_duplicate_routing_updates(timeline)
+        data['timeline'] = timeline  # 更新過濾後的 timeline
+        
         # 備份原始值
         if 'raw_total_bytes' not in summary:
             summary['raw_total_bytes'] = summary.get('total_bytes', 0)
         
         # 重新計算
         norm_total_bytes = 0
+        # 支援兩種格式：event_counts (新) 或 by_type (舊)
+        event_data = summary.get('event_counts', summary.get('by_type', {}))
         norm_by_type = {k: {'count': v.get('count', 0), 'bytes': 0} 
-                       for k, v in summary.get('by_type', {}).items()}
+                       for k, v in event_data.items()}
         
         for row in timeline:
             ev = row.get('event') or row.get('type')
@@ -122,8 +190,10 @@ class KParameterAnalyzer:
             else:
                 norm_by_type[ev] = {'count': msg_count, 'bytes': norm_bytes}
         
-        # 更新 summary
+        # 更新 summary（同時更新兩種格式以兼容性）
         summary['total_bytes'] = norm_total_bytes
+        if 'event_counts' in summary:
+            summary['event_counts'] = norm_by_type
         summary['by_type'] = norm_by_type
     
     def extract_metrics(self, stats_data):
@@ -141,6 +211,8 @@ class KParameterAnalyzer:
             'gateway_bytes': 0,
             'gid_rebuilds': 0,
             'gid_bytes': 0,
+            'topology_changes': 0,
+            'topology_bytes': 0,
         }
         
         # 提取各類事件統計
@@ -157,6 +229,13 @@ class KParameterAnalyzer:
             elif event_type == 'gid_rebuild':
                 metrics['gid_rebuilds'] = count
                 metrics['gid_bytes'] = bytes_val
+            elif event_type == 'topology_change':
+                metrics['topology_changes'] = count
+                metrics['topology_bytes'] = bytes_val
+        
+        # 計算地面站→Agent 信令（Gateway Update + Topology Change）
+        metrics['gs_to_agent_bytes'] = metrics['gateway_bytes'] + metrics['topology_bytes']
+        metrics['gs_to_agent_events'] = metrics['gateway_updates'] + metrics['topology_changes']
         
         return metrics
     
@@ -195,22 +274,23 @@ class KParameterAnalyzer:
         with open(report_path, 'w', encoding='utf-8') as f:
             f.write("K_BEST_GATEWAYS 參數實驗比較報告\n")
             f.write("="*70 + "\n")
-            f.write(f"實驗配置：Grid Degree = 27°, 模擬時長 = 20 秒\n")
+            f.write(f"實驗配置：Grid Degree = 27°, 模擬時長 = 200 秒\n")
             f.write(f"測試 K 值：{', '.join(map(str, df['k'].tolist()))}\n\n")
             
-            f.write("總體統計：\n")
+            f.write("GS→Agent 控制信令統計（排除 Routing Update）：\n")
             f.write("-"*70 + "\n")
-            f.write(f"{'K 值':<8} {'總事件數':<12} {'總字節數':<15} {'平均事件開銷':<15}\n")
+            f.write(f"{'K 值':<8} {'控制事件數':<15} {'控制信令 (MB)':<18} {'平均事件開銷':<15}\n")
             f.write("-"*70 + "\n")
             
             for _, row in df.iterrows():
                 k = row['k']
-                total_events = row['total_events']
-                total_bytes = row['total_bytes']
-                avg_bytes = total_bytes / total_events if total_events > 0 else 0
+                # 使用 GS→Agent 控制信令數據（與 Chart 1 一致）
+                control_events = row['gs_to_agent_events']
+                control_bytes = row['gs_to_agent_bytes']
+                avg_bytes = control_bytes / control_events if control_events > 0 else 0
                 
                 k_str = "All" if k == 999 else str(k)
-                f.write(f"{k_str:<8} {total_events:<12} {total_bytes:<15,} {avg_bytes:<15.1f}\n")
+                f.write(f"{k_str:<8} {control_events:<15} {control_bytes/1e6:<18.2f} {avg_bytes:<15.1f}\n")
             
             f.write("\n\n按事件類型詳細統計：\n")
             f.write("="*70 + "\n")
@@ -273,13 +353,13 @@ class KParameterAnalyzer:
         self._chart4_improvement(df_plot)
     
     def _chart1_total_overhead(self, df_plot):
-        """圖表1：總控制信令開銷（字節數 + 事件數）"""
+        """圖表1：地面站→Agent 控制信令（Gateway Update + Topology Change）"""
         fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 6))
         
-        # 左圖：總字節數
-        bars1 = ax1.bar(df_plot['k_label'], df_plot['total_bytes'] / 1e6, 
+        # 左圖：地面站→Agent 字節數（Gateway Update + Topology Change）
+        bars1 = ax1.bar(df_plot['k_label'], df_plot['gs_to_agent_bytes'] / 1e6, 
                        color='steelblue', alpha=0.85, edgecolor='black', linewidth=0.5)
-        ax1.set_xlabel('K Value', fontsize=13, fontweight='bold')
+        ax1.set_xlabel('k value', fontsize=13, fontweight='bold')
         ax1.set_ylabel('Total Signaling (MB)', fontsize=13, fontweight='bold')
         ax1.set_title('Total Control Signaling Bytes', fontsize=15, fontweight='bold')
         ax1.grid(True, alpha=0.3, axis='y', linestyle='--')
@@ -291,10 +371,10 @@ class KParameterAnalyzer:
                    f'{height:.2f}',
                    ha='center', va='bottom', fontsize=10)
         
-        # 右圖：總事件數
-        bars2 = ax2.bar(df_plot['k_label'], df_plot['total_events'],
+        # 右圖：地面站→Agent 事件數
+        bars2 = ax2.bar(df_plot['k_label'], df_plot['gs_to_agent_events'],
                        color='coral', alpha=0.85, edgecolor='black', linewidth=0.5)
-        ax2.set_xlabel('K Value', fontsize=13, fontweight='bold')
+        ax2.set_xlabel('k value', fontsize=13, fontweight='bold')
         ax2.set_ylabel('Total Events', fontsize=13, fontweight='bold')
         ax2.set_title('Total Control Signaling Events', fontsize=15, fontweight='bold')
         ax2.grid(True, alpha=0.3, axis='y', linestyle='--')
@@ -307,7 +387,7 @@ class KParameterAnalyzer:
                    ha='center', va='bottom', fontsize=10)
         
         plt.tight_layout()
-        output_path = self.output_dir / "chart1_total_overhead_comparison.png"
+        output_path = self.output_dir / "chart1_gs_to_agent_signaling.png"
         plt.savefig(output_path, dpi=300, bbox_inches='tight')
         print(f"  📊 圖表1已保存: {output_path.name}")
         plt.close()
@@ -319,7 +399,7 @@ class KParameterAnalyzer:
         # 左圖：Gateway 更新總字節數
         bars1 = ax1.bar(df_plot['k_label'], df_plot['gateway_bytes'] / 1e6, 
                        color='darkorange', alpha=0.85, edgecolor='black', linewidth=0.5)
-        ax1.set_xlabel('K Value', fontsize=13, fontweight='bold')
+        ax1.set_xlabel('k value', fontsize=13, fontweight='bold')
         ax1.set_ylabel('Gateway Update Signaling (MB)', fontsize=13, fontweight='bold')
         ax1.set_title('Gateway Update Control Signaling', fontsize=15, fontweight='bold')
         ax1.grid(True, alpha=0.3, axis='y', linestyle='--')
@@ -334,7 +414,7 @@ class KParameterAnalyzer:
         # 右圖：Gateway 更新次數
         bars2 = ax2.bar(df_plot['k_label'], df_plot['gateway_updates'],
                        color='coral', alpha=0.85, edgecolor='black', linewidth=0.5)
-        ax2.set_xlabel('K Value', fontsize=13, fontweight='bold')
+        ax2.set_xlabel('k value', fontsize=13, fontweight='bold')
         ax2.set_ylabel('Gateway Update Count', fontsize=13, fontweight='bold')
         ax2.set_title('Gateway Update Frequency', fontsize=15, fontweight='bold')
         ax2.grid(True, alpha=0.3, axis='y', linestyle='--')
@@ -353,21 +433,24 @@ class KParameterAnalyzer:
         plt.close()
     
     def _chart3_event_distribution(self, df_plot):
-        """圖表3：事件類型分佈（分組柱狀圖）"""
+        """圖表3：事件類型分佈（分組柱狀圖，Routing/GID 加點點樣式）"""
         fig, ax = plt.subplots(figsize=(16, 9))
         
         # 準備數據
         event_types = ['gateway_updates', 'routing_updates', 'gid_rebuilds']
         event_labels = ['Gateway Updates', 'Routing Updates', 'GID Rebuilds']
         colors = ['orange', 'skyblue', 'lightgreen']
+        # Routing 和 GID 使用點點樣式
+        hatches = ['', '...', '...']
         
         x = np.arange(len(df_plot))
         width = 0.25
         
-        for i, (event_type, label, color) in enumerate(zip(event_types, event_labels, colors)):
+        for i, (event_type, label, color, hatch) in enumerate(zip(event_types, event_labels, colors, hatches)):
             offset = (i - 1) * width
             bars = ax.bar(x + offset, df_plot[event_type], width, 
-                         label=label, color=color, alpha=0.85, edgecolor='black', linewidth=0.5)
+                         label=label, color=color, alpha=0.85, 
+                         edgecolor='black', linewidth=0.5, hatch=hatch)
             
             # 標註數值
             for bar in bars:
@@ -377,7 +460,7 @@ class KParameterAnalyzer:
                            f'{int(height)}',
                            ha='center', va='bottom', fontsize=8)
         
-        ax.set_xlabel('K Value', fontsize=13, fontweight='bold')
+        ax.set_xlabel('k value', fontsize=13, fontweight='bold')
         ax.set_ylabel('Event Count', fontsize=13, fontweight='bold')
         ax.set_title('Control Signaling Event Type Distribution', fontsize=15, fontweight='bold')
         ax.set_xticks(x)
@@ -392,11 +475,11 @@ class KParameterAnalyzer:
         plt.close()
     
     def _chart4_improvement(self, df_plot):
-        """圖表4：相對於 K=1 的改善百分比"""
+        """圖表4：相對於 K=1 的改善百分比（基於地面站→Agent 信令）"""
         fig, ax = plt.subplots(figsize=(12, 8))
         
-        baseline_bytes = df_plot.iloc[0]['total_bytes']
-        df_plot['improvement'] = (1 - df_plot['total_bytes'] / baseline_bytes) * 100
+        baseline_bytes = df_plot.iloc[0]['gs_to_agent_bytes']
+        df_plot['improvement'] = (1 - df_plot['gs_to_agent_bytes'] / baseline_bytes) * 100
         
         colors = ['red' if x < 0 else 'green' for x in df_plot['improvement']]
         bars = ax.bar(df_plot['k_label'], df_plot['improvement'], 

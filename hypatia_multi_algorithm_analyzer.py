@@ -42,7 +42,7 @@ class MultiAlgorithmAnalyzer:
         """查找所有算法的統計文件"""
         patterns = {
             "baseline": "baseline_floyd_warshall_signaling_stats.json",
-            "hierarchical_floyd": "hierarchical_gid_*deg_signaling_stats.json",
+            "hierarchical_floyd": "hierarchical_gid_*deg_k*_signaling_stats.json",  # 修改為匹配 k4 和 k999
             "hierarchical_dijkstra": "hierarchical_gid_dijkstra_*deg_signaling_stats.json",
             "lohi": "lohi_signaling_stats*.json"  # 新增 LoHi 模式
         }
@@ -54,10 +54,13 @@ class MultiAlgorithmAnalyzer:
         if baseline_path.exists():
             found_files['baseline'] = [str(baseline_path)]
         
-        # Hierarchical (Floyd-Warshall)
+        # Hierarchical (Floyd-Warshall) - 只包含 k=4 和 k=999
         h_floyd_files = glob.glob(str(self.stats_dir / patterns["hierarchical_floyd"]))
-        # 排除 dijkstra 版本
-        h_floyd_files = [f for f in h_floyd_files if 'dijkstra' not in f]
+        # 排除 dijkstra 版本和 BACKUP 文件，只保留 k4 和 k999
+        h_floyd_files = [f for f in h_floyd_files 
+                        if 'dijkstra' not in f 
+                        and 'BACKUP' not in f
+                        and ('k4_' in f or 'k999_' in f)]
         if h_floyd_files:
             found_files['hierarchical_floyd'] = sorted(h_floyd_files)
         
@@ -68,6 +71,8 @@ class MultiAlgorithmAnalyzer:
         
         # LoHi
         lohi_files = glob.glob(str(self.stats_dir / patterns["lohi"]))
+        # 排除 dynamic 場景（ISL 失效場景）
+        lohi_files = [f for f in lohi_files if 'dynamic' not in f]
         if lohi_files:
             found_files['lohi'] = sorted(lohi_files)
         
@@ -82,13 +87,42 @@ class MultiAlgorithmAnalyzer:
         with open(file_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
 
-        # 驗證格式正確性
+        # 檢查並補充舊格式（針對 k=999）
         if 'summary' not in data or 'by_type' not in data.get('summary', {}):
-            raise ValueError(
-                f"❌ 格式錯誤: {Path(file_path).name}\n"
-                f"   期望 summary.by_type 結構，但未找到。\n"
-                f"   請確保所有算法輸出統一格式的統計數據。"
-            )
+            # 嘗試從 timeline 構建 by_type
+            if 'timeline' in data:
+                from collections import defaultdict
+                by_type = defaultdict(list)
+                for event in data['timeline']:
+                    event_type = event.get('event')
+                    if event_type:
+                        by_type[event_type].append(event)
+                
+                # 構建或補充 summary
+                if 'summary' not in data:
+                    data['summary'] = {}
+                
+                data['summary']['by_type'] = {}
+                for event_type, events in by_type.items():
+                    data['summary']['by_type'][event_type] = {
+                        'count': len(events),
+                        'bytes': 0,  # 將由 NORMALIZE_BYTES 重新計算
+                        'events': events
+                    }
+                
+                # 添加基本統計
+                if 'total_events' not in data['summary']:
+                    data['summary']['total_events'] = len(data['timeline'])
+                
+                # 更新 algorithm_display_name（針對 k=999）
+                if 'k_best_gateways' in data and data.get('k_best_gateways') == 999:
+                    data['algorithm_display_name'] = 'GRHR (27°, k=all)'
+            else:
+                raise ValueError(
+                    f"❌ 格式錯誤: {Path(file_path).name}\n"
+                    f"   期望 summary.by_type 結構，但未找到。\n"
+                    f"   請確保所有算法輸出統一格式的統計數據。"
+                )
 
         if NORMALIZE_BYTES:
             self._normalize_control_bytes(data, file_path)
@@ -250,16 +284,36 @@ class MultiAlgorithmAnalyzer:
         
         for category, files in all_files.items():
             for file_path in files:
+                # 對於 hierarchical_floyd，只保留 k=4 和 k=999
+                if category == 'hierarchical_floyd':
+                    filename = Path(file_path).name
+                    if not ('k4_' in filename or 'k999_' in filename):
+                        continue
+                
                 data = self.load_stats(file_path)
                 display_name = data.get('algorithm_display_name', Path(file_path).stem)
                 grid_deg = data.get('grid_deg', None)
+                
+                # 為 GRHR 計算排除 routing_update 的控制信令（用於 Chart 1, 2）
+                control_signaling_bytes = data['summary']['total_bytes']
+                control_events = data['summary']['total_events']
+                
+                if category == 'hierarchical_floyd':
+                    # GRHR: 排除 routing_update（衛星自行計算，無需傳輸）
+                    by_type = data['summary'].get('by_type', {})
+                    routing_bytes = by_type.get('routing_update', {}).get('bytes', 0)
+                    routing_events = by_type.get('routing_update', {}).get('count', 0)  # 修正：使用 'count' 而非 'events'
+                    control_signaling_bytes = data['summary']['total_bytes'] - routing_bytes
+                    control_events = data['summary']['total_events'] - routing_events
                 
                 algorithms_data.append({
                     'category': category,
                     'file': file_path,
                     'name': display_name,
                     'grid_deg': grid_deg,
-                    'data': data
+                    'data': data,
+                    'control_signaling_bytes': control_signaling_bytes,  # 控制信令字節數（排除 routing_update）
+                    'control_events': control_events  # 控制事件數（排除 routing_update）
                 })
                 print(f"  ✅ {display_name}: {len(data.get('timeline', []))} 事件, {data['summary']['total_bytes']:,} 字節")
         
@@ -309,10 +363,12 @@ class MultiAlgorithmAnalyzer:
             summary_table = []
             for algo in algorithms_data:
                 summary = algo['data']['summary']
+                # 使用 control_signaling_bytes 和 control_events（GRHR 已排除 routing_update）
                 summary_table.append({
                     'name': algo['name'],
-                    'events': summary['total_events'],
-                    'bytes': summary['total_bytes']
+                    'events': algo['control_events'],  # 修改為使用控制事件數
+                    'bytes': algo['control_signaling_bytes'],  # 修改為使用控制信令字節數
+                    'category': algo['category']
                 })
             
             # 按字節數排序
@@ -320,8 +376,11 @@ class MultiAlgorithmAnalyzer:
             
             for item in summary_table:
                 f.write(f"\n{item['name']}:\n")
-                f.write(f"  總事件數: {item['events']:,}\n")
-                f.write(f"  總字節數: {item['bytes']:,}\n")
+                f.write(f"  控制事件數: {item['events']:,}\n")  # 改為「控制事件數」
+                f.write(f"  控制信令字節數: {item['bytes']:,}\n")
+                # GRHR 額外說明已排除 routing_update
+                if item['category'] == 'hierarchical_floyd':
+                    f.write(f"  (註: GRHR 已排除 routing_update，衛星自行計算)\n")
                 
                 if baseline_data and item['bytes'] != baseline_data['summary']['total_bytes']:
                     baseline_bytes = baseline_data['summary']['total_bytes']
@@ -380,8 +439,10 @@ class MultiAlgorithmAnalyzer:
         
         names = [algo['name'] for algo in algorithms_data]
         labels_for_plot = [name.replace(' (', '\n(') for name in names]
-        total_bytes = [algo['data']['summary']['total_bytes'] for algo in algorithms_data]
-        total_events = [algo['data']['summary']['total_events'] for algo in algorithms_data]
+        # Chart 1, 2 使用 control_signaling_bytes 和 control_events（GRHR 已排除 routing_update）
+        total_bytes = [algo['control_signaling_bytes'] for algo in algorithms_data]
+        total_bytes_mb = [b / (1024 * 1024) for b in total_bytes]  # 轉換為 MB
+        control_events = [algo['control_events'] for algo in algorithms_data]  # 修改為使用控制事件數
         
         # 改進的顏色編碼：使用漸變色表示不同網格大小
         colors = []
@@ -397,17 +458,29 @@ class MultiAlgorithmAnalyzer:
             elif algo['category'] == 'lohi':
                 # LoHi 使用紫色系
                 colors.append('mediumpurple')
+            elif algo['category'] == 'hierarchical_floyd':
+                # GRHR: k=4 用深綠色，k=all 用淺綠色
+                name = algo['name']
+                if 'k=4' in name or 'k4' in name.lower():
+                    colors.append('#228B22')  # 深綠色 (ForestGreen)
+                elif 'k=all' in name.lower() or 'k=999' in name.lower():
+                    colors.append('#90C695')  # 淺綠色
+                else:
+                    # 預設綠色系
+                    grid_deg = algo.get('grid_deg', 15)
+                    intensity = 0.4 + (grid_deg / 30.0) * 0.6
+                    colors.append(plt.cm.Greens(intensity))
             else:
-                # Floyd-Warshall hierarchical 使用綠色系
+                # 其他使用綠色系
                 grid_deg = algo.get('grid_deg', 15)
                 intensity = 0.4 + (grid_deg / 30.0) * 0.6
                 colors.append(plt.cm.Greens(intensity))
         
         # 左圖：總字節數
-        bars1 = ax1.bar(range(len(names)), total_bytes, color=colors, alpha=0.85, edgecolor='black', linewidth=0.5, width=0.5)
+        bars1 = ax1.bar(range(len(names)), total_bytes_mb, color=colors, alpha=0.85, edgecolor='black', linewidth=0.5, width=0.5)
         ax1.set_xlabel('Algorithm', fontsize=13, fontweight='bold')
-        ax1.set_ylabel('Total Bytes', fontsize=13, fontweight='bold')
-        ax1.set_title('Total Control Signaling Bytes', fontsize=15, fontweight='bold')
+        ax1.set_ylabel('Total Signaling (MB)', fontsize=13, fontweight='bold')
+        ax1.set_title('Total Control Signaling (MB)', fontsize=15, fontweight='bold')
         ax1.set_xticks(range(len(names)))
         
         # 優化 x 軸標籤顯示
@@ -420,16 +493,16 @@ class MultiAlgorithmAnalyzer:
         
         # 添加數值標籤（只在算法數量不太多時顯示）
         if num_algos <= 10:
-            for bar, value in zip(bars1, total_bytes):
+            for bar, value in zip(bars1, total_bytes_mb):
                 height = bar.get_height()
                 ax1.text(bar.get_x() + bar.get_width()/2, height,
-                        f'{value:,}', ha='center', va='bottom', fontsize=10, rotation=0)
+                        f'{value:.2f}', ha='center', va='bottom', fontsize=10, rotation=0)
         
-        # 右圖：總事件數
-        bars2 = ax2.bar(range(len(names)), total_events, color=colors, alpha=0.85, edgecolor='black', linewidth=0.5, width=0.5)
+        # 右圖：控制事件數
+        bars2 = ax2.bar(range(len(names)), control_events, color=colors, alpha=0.85, edgecolor='black', linewidth=0.5, width=0.5)
         ax2.set_xlabel('Algorithm', fontsize=13, fontweight='bold')
-        ax2.set_ylabel('Total Events', fontsize=13, fontweight='bold')
-        ax2.set_title('Total Control Signaling Events', fontsize=15, fontweight='bold')
+        ax2.set_ylabel('Control Events Count', fontsize=13, fontweight='bold')  # 改為 Control Events Count
+        ax2.set_title('Total Control Events', fontsize=15, fontweight='bold')  # 改為 Total Control Events
         ax2.set_xticks(range(len(names)))
         
         if num_algos > 6:
@@ -441,7 +514,7 @@ class MultiAlgorithmAnalyzer:
         
         # 添加數值標籤
         if num_algos <= 10:
-            for bar, value in zip(bars2, total_events):
+            for bar, value in zip(bars2, control_events):  # 改為 control_events
                 height = bar.get_height()
                 ax2.text(bar.get_x() + bar.get_width()/2, height,
                         f'{value:,}', ha='center', va='bottom', fontsize=8, rotation=0)
@@ -466,8 +539,13 @@ class MultiAlgorithmAnalyzer:
             if timeline:
                 df = pd.DataFrame(timeline)
                 if not df.empty and 'time_ms' in df.columns and 'bytes' in df.columns:
+                    # GRHR: 排除 routing_update 事件
+                    if algo['category'] == 'hierarchical_floyd':
+                        df = df[df['event'] != 'routing_update'].copy()
+                    
                     df_sorted = df.sort_values('time_ms')
                     cumulative_bytes = df_sorted['bytes'].cumsum()
+                    cumulative_mb = cumulative_bytes / (1024 * 1024)  # 轉換為 MB
                     
                     # 顏色選擇
                     if algo['category'] == 'baseline':
@@ -478,6 +556,17 @@ class MultiAlgorithmAnalyzer:
                         color = plt.cm.Blues(intensity)
                     elif algo['category'] == 'lohi':
                         color = 'mediumpurple'
+                    elif algo['category'] == 'hierarchical_floyd':
+                        # GRHR: k=4 用深綠色，k=all 用淺綠色
+                        name = algo['name']
+                        if 'k=4' in name or 'k4' in name.lower():
+                            color = '#228B22'  # 深綠色 (ForestGreen)
+                        elif 'k=all' in name.lower() or 'k=999' in name.lower():
+                            color = '#90C695'  # 淺綠色
+                        else:
+                            grid_deg = algo.get('grid_deg', 15)
+                            intensity = 0.4 + (grid_deg / 30.0) * 0.6
+                            color = plt.cm.Greens(intensity)
                     else:
                         grid_deg = algo.get('grid_deg', 15)
                         intensity = 0.4 + (grid_deg / 30.0) * 0.6
@@ -486,13 +575,13 @@ class MultiAlgorithmAnalyzer:
                     # 線型選擇
                     linestyle = line_styles[idx % len(line_styles)]
                     
-                    ax.plot(df_sorted['time_ms']/1000, cumulative_bytes,
+                    ax.plot(df_sorted['time_ms']/1000, cumulative_mb,
                            label=algo['name'], color=color, linewidth=2.5,
                            linestyle=linestyle, alpha=0.85)
         
         ax.set_title('Cumulative Control Overhead Over Time', fontsize=15, fontweight='bold')
         ax.set_xlabel('Time (seconds)', fontsize=13, fontweight='bold')
-        ax.set_ylabel('Cumulative Bytes', fontsize=13, fontweight='bold')
+        ax.set_ylabel('Cumulative MB', fontsize=13, fontweight='bold')
         
         # 優化圖例顯示
         if num_algos > 8:
@@ -547,8 +636,19 @@ class MultiAlgorithmAnalyzer:
             elif algo['category'] == 'lohi':
                 # LoHi 使用紫色系
                 colors.append('mediumpurple')
+            elif algo['category'] == 'hierarchical_floyd':
+                # GRHR: k=4 用深綠色，k=all 用淺綠色
+                name = algo['name']
+                if 'k=4' in name or 'k4' in name.lower():
+                    colors.append('#228B22')  # 深綠色 (ForestGreen)
+                elif 'k=all' in name.lower() or 'k=999' in name.lower():
+                    colors.append('#90C695')  # 淺綠色
+                else:
+                    grid_deg = algo.get('grid_deg', 15)
+                    intensity = 0.4 + (grid_deg / 30.0) * 0.6
+                    colors.append(plt.cm.Greens(intensity))
             else:
-                # Floyd-Warshall hierarchical 使用綠色系
+                # 其他使用綠色系
                 grid_deg = algo.get('grid_deg', 15)
                 intensity = 0.4 + (grid_deg / 30.0) * 0.6
                 colors.append(plt.cm.Greens(intensity))
@@ -651,8 +751,19 @@ class MultiAlgorithmAnalyzer:
             elif algo['category'] == 'lohi':
                 # LoHi 使用紫色系
                 colors.append('mediumpurple')
+            elif algo['category'] == 'hierarchical_floyd':
+                # GRHR: k=4 用深綠色，k=all 用淺綠色
+                name = algo['name']
+                if 'k=4' in name or 'k4' in name.lower():
+                    colors.append('#228B22')  # 深綠色 (ForestGreen)
+                elif 'k=all' in name.lower() or 'k=999' in name.lower():
+                    colors.append('#90C695')  # 淺綠色
+                else:
+                    grid_deg = algo.get('grid_deg', 15)
+                    intensity = 0.4 + (grid_deg / 30.0) * 0.6
+                    colors.append(plt.cm.Greens(intensity))
             else:
-                # Floyd-Warshall hierarchical 使用綠色系
+                # 其他使用綠色系
                 grid_deg = algo.get('grid_deg', 15)
                 intensity = 0.4 + (grid_deg / 30.0) * 0.6
                 colors.append(plt.cm.Greens(intensity))

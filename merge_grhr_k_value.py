@@ -29,14 +29,10 @@ def merge_grhr_k_value(k_value):
     
     print(f"找到 {len(temp_files)} 個 temp 文件")
     
-    # 找出最新的文件（根據修改時間）
-    temp_files_with_time = [(f, f.stat().st_mtime) for f in temp_files]
-    temp_files_with_time.sort(key=lambda x: x[1], reverse=True)
+    # 使用所有文件進行合併（多線程並行運行，每個線程生成一個文件）
+    recent_files = sorted(temp_files)
     
-    # 取最新的 4 個文件（假設使用 4 個線程）
-    recent_files = [f for f, _ in temp_files_with_time[:4]]
-    
-    print(f"使用最新的 {len(recent_files)} 個文件進行合併")
+    print(f"使用所有 {len(recent_files)} 個文件進行合併")
     
     # 去重合併
     seen_events = set()
