@@ -1,0 +1,1592 @@
+{
+  "summary": {
+    "total_events": 223,
+    "total_bytes": 0,
+    "by_type": {
+      "routing_update": {
+        "count": 206,
+        "bytes": 0
+      },
+      "gateway_update": {
+        "count": 0,
+        "bytes": 0
+      },
+      "gid_rebuild": {
+        "count": 0,
+        "bytes": 0
+      },
+      "topology_change": {
+        "count": 17,
+        "bytes": 0
+      }
+    }
+  },
+  "timeline": [
+    {
+      "snapshot": 0,
+      "time_ms": 0,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 170084,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 1,
+      "time_ms": 2000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 4967,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 1,
+      "time_ms": 2000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 4918,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 1,
+      "time_ms": 2000,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_isl": 31,
+        "delta_gsl": 0,
+        "isl_removed": 0,
+        "isl_added": 31,
+        "algorithm": "baseline_floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 2,
+      "time_ms": 4000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 726,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 3,
+      "time_ms": 6000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 677,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 4,
+      "time_ms": 8000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 652,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 5,
+      "time_ms": 10000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 376,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 6,
+      "time_ms": 12000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 766,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 7,
+      "time_ms": 14000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 750,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 8,
+      "time_ms": 16000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 483,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 9,
+      "time_ms": 18000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 629,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 10,
+      "time_ms": 20000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 517,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 11,
+      "time_ms": 22000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 736,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 12,
+      "time_ms": 24000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 545,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 13,
+      "time_ms": 26000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 741,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 14,
+      "time_ms": 28000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 632,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 15,
+      "time_ms": 30000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 661,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 16,
+      "time_ms": 32000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 842,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 17,
+      "time_ms": 34000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 319,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 18,
+      "time_ms": 36000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 722,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 19,
+      "time_ms": 38000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 690,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 20,
+      "time_ms": 40000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 6327,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 20,
+      "time_ms": 40000,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_isl": -31,
+        "delta_gsl": 0,
+        "algorithm": "baseline_floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 20,
+      "time_ms": 40000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 5978,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 20,
+      "time_ms": 40000,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_isl": -31,
+        "delta_gsl": 0,
+        "isl_removed": 31,
+        "isl_added": 0,
+        "algorithm": "baseline_floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 21,
+      "time_ms": 42000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 6603,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 21,
+      "time_ms": 42000,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_isl": 31,
+        "delta_gsl": 0,
+        "algorithm": "baseline_floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 21,
+      "time_ms": 42000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 6171,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 21,
+      "time_ms": 42000,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_isl": 31,
+        "delta_gsl": 0,
+        "isl_removed": 0,
+        "isl_added": 31,
+        "algorithm": "baseline_floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 22,
+      "time_ms": 44000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 481,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 23,
+      "time_ms": 46000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 885,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 24,
+      "time_ms": 48000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 652,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 25,
+      "time_ms": 50000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 500,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 25,
+      "time_ms": 50000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 170084,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 26,
+      "time_ms": 52000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 798,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 27,
+      "time_ms": 54000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 544,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 28,
+      "time_ms": 56000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 1427,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 29,
+      "time_ms": 58000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 1026,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 30,
+      "time_ms": 60000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 1421,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 31,
+      "time_ms": 62000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 2634,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 32,
+      "time_ms": 64000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 1165,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 33,
+      "time_ms": 66000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 1022,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 34,
+      "time_ms": 68000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 947,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 35,
+      "time_ms": 70000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 2464,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 36,
+      "time_ms": 72000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 1448,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 37,
+      "time_ms": 74000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 1419,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 38,
+      "time_ms": 76000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 1194,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 39,
+      "time_ms": 78000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 500,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 40,
+      "time_ms": 80000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 4304,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 40,
+      "time_ms": 80000,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_isl": -31,
+        "delta_gsl": 0,
+        "algorithm": "baseline_floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 40,
+      "time_ms": 80000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 6634,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 40,
+      "time_ms": 80000,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_isl": -31,
+        "delta_gsl": 0,
+        "isl_removed": 31,
+        "isl_added": 0,
+        "algorithm": "baseline_floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 41,
+      "time_ms": 82000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 4614,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 41,
+      "time_ms": 82000,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_isl": 31,
+        "delta_gsl": 0,
+        "algorithm": "baseline_floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 41,
+      "time_ms": 82000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 6957,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 41,
+      "time_ms": 82000,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_isl": 31,
+        "delta_gsl": 0,
+        "isl_removed": 0,
+        "isl_added": 31,
+        "algorithm": "baseline_floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 42,
+      "time_ms": 84000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 904,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 43,
+      "time_ms": 86000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 477,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 44,
+      "time_ms": 88000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 763,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 45,
+      "time_ms": 90000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 533,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 46,
+      "time_ms": 92000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 501,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 47,
+      "time_ms": 94000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 804,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 48,
+      "time_ms": 96000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 772,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 49,
+      "time_ms": 98000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 814,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 50,
+      "time_ms": 100000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 682,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 50,
+      "time_ms": 100000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 170084,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 51,
+      "time_ms": 102000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 279,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 52,
+      "time_ms": 104000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 524,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 53,
+      "time_ms": 106000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 666,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 54,
+      "time_ms": 108000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 596,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 55,
+      "time_ms": 110000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 476,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 56,
+      "time_ms": 112000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 966,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 57,
+      "time_ms": 114000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 628,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 58,
+      "time_ms": 116000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 521,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 59,
+      "time_ms": 118000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 885,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 60,
+      "time_ms": 120000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 5933,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 60,
+      "time_ms": 120000,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_isl": -31,
+        "delta_gsl": 0,
+        "algorithm": "baseline_floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 60,
+      "time_ms": 120000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 6882,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 60,
+      "time_ms": 120000,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_isl": -31,
+        "delta_gsl": 0,
+        "isl_removed": 31,
+        "isl_added": 0,
+        "algorithm": "baseline_floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 61,
+      "time_ms": 122000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 6020,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 61,
+      "time_ms": 122000,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_isl": 31,
+        "delta_gsl": 0,
+        "algorithm": "baseline_floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 61,
+      "time_ms": 122000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 7070,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 61,
+      "time_ms": 122000,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_isl": 31,
+        "delta_gsl": 0,
+        "isl_removed": 0,
+        "isl_added": 31,
+        "algorithm": "baseline_floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 62,
+      "time_ms": 124000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 736,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 63,
+      "time_ms": 126000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 654,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 64,
+      "time_ms": 128000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 815,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 65,
+      "time_ms": 130000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 608,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 66,
+      "time_ms": 132000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 635,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 67,
+      "time_ms": 134000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 413,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 68,
+      "time_ms": 136000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 721,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 69,
+      "time_ms": 138000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 562,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 70,
+      "time_ms": 140000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 900,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 71,
+      "time_ms": 142000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 594,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 72,
+      "time_ms": 144000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 1178,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 73,
+      "time_ms": 146000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 639,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 74,
+      "time_ms": 148000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 777,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 75,
+      "time_ms": 150000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 771,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 75,
+      "time_ms": 150000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 170084,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 76,
+      "time_ms": 152000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 779,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 77,
+      "time_ms": 154000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 844,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 78,
+      "time_ms": 156000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 735,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 79,
+      "time_ms": 158000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 441,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 80,
+      "time_ms": 160000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 5310,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 80,
+      "time_ms": 160000,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_isl": -31,
+        "delta_gsl": 0,
+        "algorithm": "baseline_floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 80,
+      "time_ms": 160000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 5861,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 80,
+      "time_ms": 160000,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_isl": -31,
+        "delta_gsl": 0,
+        "isl_removed": 31,
+        "isl_added": 0,
+        "algorithm": "baseline_floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 81,
+      "time_ms": 162000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 5345,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 81,
+      "time_ms": 162000,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_isl": 31,
+        "delta_gsl": 0,
+        "algorithm": "baseline_floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 81,
+      "time_ms": 162000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 5841,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 81,
+      "time_ms": 162000,
+      "event": "topology_change",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "delta_isl": 31,
+        "delta_gsl": 0,
+        "isl_removed": 0,
+        "isl_added": 31,
+        "algorithm": "baseline_floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 82,
+      "time_ms": 164000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 540,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 83,
+      "time_ms": 166000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 775,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 84,
+      "time_ms": 168000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 784,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 85,
+      "time_ms": 170000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 777,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 86,
+      "time_ms": 172000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 483,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 87,
+      "time_ms": 174000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 780,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 88,
+      "time_ms": 176000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 693,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 89,
+      "time_ms": 178000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 819,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 90,
+      "time_ms": 180000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 644,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 91,
+      "time_ms": 182000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 531,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 92,
+      "time_ms": 184000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 875,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 93,
+      "time_ms": 186000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 1618,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 94,
+      "time_ms": 188000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 1131,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 95,
+      "time_ms": 190000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 1608,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 96,
+      "time_ms": 192000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 1095,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 97,
+      "time_ms": 194000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 10704,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 98,
+      "time_ms": 196000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 3999,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    },
+    {
+      "snapshot": 99,
+      "time_ms": 198000,
+      "event": "routing_update",
+      "count": 1,
+      "bytes": 0,
+      "detail": {
+        "changed_entries": 1853,
+        "total_entries": 319968,
+        "algorithm": "floyd_warshall"
+      }
+    }
+  ]
+}

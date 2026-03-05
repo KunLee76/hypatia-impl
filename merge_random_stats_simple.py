@@ -16,12 +16,23 @@ from collections import defaultdict
 def merge_stats_files(temp_dir, output_file):
     """合并指定目录下的所有统计文件"""
     
-    # 查找所有统计文件
-    pattern = os.path.join(temp_dir, "grhr_stats_pid*_tid*.json")
-    files = glob.glob(pattern)
+    # 自動檢測文件類型：grhr, baseline, 或 lohi
+    patterns = [
+        os.path.join(temp_dir, "grhr_stats_pid*_tid*.json"),
+        os.path.join(temp_dir, "baseline_stats_pid*_tid*.json"),
+        os.path.join(temp_dir, "lohi_stats_pid*_tid*.json")
+    ]
+    
+    files = []
+    for pattern in patterns:
+        files = glob.glob(pattern)
+        if files:
+            break
     
     if not files:
-        print(f"  ✗ 未找到统计文件: {pattern}")
+        print(f"  ✗ 未找到统计文件，嘗試的模式:")
+        for p in patterns:
+            print(f"    - {p}")
         return False
     
     print(f"  找到 {len(files)} 个统计文件")
@@ -78,6 +89,63 @@ def merge_stats_files(temp_dir, output_file):
         merged_data['timeline'].sort(key=lambda x: (x.get('snapshot', 0), x.get('sim_time_ms', 0)))
     
     # 去重：移除所有重复的事件
+    if merged_data['timeline']:
+        original_count = len(merged_data['timeline'])
+        seen = set()
+        deduplicated_timeline = []
+        duplicate_count = 0
+        
+        for event in merged_data['timeline']:
+            key = (
+                event.get('snapshot', 0),
+                event.get('sim_time_ms', 0),
+                event.get('event', ''),
+                json.dumps(event.get('detail', {}), sort_keys=True)
+            )
+            
+            if key not in seen:
+                seen.add(key)
+                deduplicated_timeline.append(event)
+            else:
+                duplicate_count += 1
+        
+        merged_data['timeline'] = deduplicated_timeline
+        print(f"  去重后timeline事件数: {len(deduplicated_timeline)} (原始: {original_count}, 移除重复: {duplicate_count})")
+    
+    # 重新生成新格式 - 添加 summary 和 by_type
+    final_data = {
+        'summary': {
+            'total_events': merged_data['total_messages'],
+            'total_bytes': merged_data['total_bytes'],
+            'by_type': {
+                'routing_update': {
+                    'count': merged_data['routing_updates'],
+                    'bytes': 0  # 從timeline中計算實際字節數
+                },
+                'gateway_update': {
+                    'count': merged_data['gateway_updates'],
+                    'bytes': 0
+                },
+                'gid_rebuild': {
+                    'count': merged_data['gid_rebuilds'],
+                    'bytes': 0
+                },
+                'topology_change': {
+                    'count': merged_data['topology_changes'],
+                    'bytes': 0
+                }
+            }
+        },
+        'timeline': merged_data['timeline']
+    }
+    
+    # 從timeline重新計算每種事件類型的字節數
+    for event in merged_data['timeline']:
+        event_type = event.get('event', '')
+        if event_type in final_data['summary']['by_type']:
+            final_data['summary']['by_type'][event_type]['bytes'] += event.get('bytes', 0)
+    
+    # 寫入輸出文件
     # 问题：每个process都处理完整的时间范围（0到自己的max_snapshot），导致大量重复
     # 例如：Process 1处理0-20，Process 2处理0-40，...，导致snapshot 0-20被所有processes重复记录
     # 解决：使用(snapshot, event_type, time_ms, detail)作为唯一键，只保留第一次出现的事件
@@ -128,7 +196,7 @@ def merge_stats_files(temp_dir, output_file):
         os.makedirs(os.path.dirname(output_file), exist_ok=True)
         
         with open(output_file, 'w') as f:
-            json.dump(merged_data, f, indent=2, ensure_ascii=False)
+            json.dump(final_data, f, indent=2, ensure_ascii=False)
         
         print(f"  ✓ 合并完成: {output_file}")
         return True

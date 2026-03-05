@@ -1,0 +1,39 @@
+================================================================================
+Random ISL Failure Scenarios - Algorithm Comparison Report
+================================================================================
+
+Algorithms:
+  - Baseline: Floyd-Warshall Global Routing
+  - LoHi: Two-Layer Routing (p=6, s=10)
+  - GRHR: Hierarchical Virtual GID Routing (K=4, 27° Grid)
+
+Note:
+  - GRHR control signaling excludes routing_update (computed locally)
+  - LoHi and Baseline include all events
+
+
+Random 1% ISL Failure
+----------------------------------------------------------------------
+Algorithm       Events       Control Signaling (MB)   
+----------------------------------------------------------------------
+Baseline        223          26.63                    
+LoHi            618          48.27                    
+GRHR (K=4)      327          2.53                     
+
+Random 5% ISL Failure
+----------------------------------------------------------------------
+Algorithm       Events       Control Signaling (MB)   
+----------------------------------------------------------------------
+Baseline        223          36.56                    
+LoHi            300          43.27                    
+GRHR (K=4)      327          4.04                     
+
+Random 10% ISL Failure
+----------------------------------------------------------------------
+Algorithm       Events       Control Signaling (MB)   
+----------------------------------------------------------------------
+Baseline        223          45.33                    
+LoHi            300          42.48                    
+GRHR (K=4)      327          5.14                     
+
+================================================================================

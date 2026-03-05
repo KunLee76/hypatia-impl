@@ -33,7 +33,7 @@ plt.rcParams['axes.unicode_minus'] = False
 # 工作目錄
 WORK_DIR = "paper/satellite_networks_state"
 ANALYTIC_DIR = os.path.join(WORK_DIR, "analytic_result")
-OUTPUT_DIR = "k_parameter_analysis"
+OUTPUT_DIR = "random_failure_analysis"  # 動態失效場景專用目錄
 
 # 場景定義
 SCENARIOS = ["p1", "p5", "p10"]
@@ -68,13 +68,37 @@ def extract_metrics(stats_data):
     if not stats_data:
         return None
     
-    # 提取基本統計
-    routing_updates = stats_data.get('routing_updates', 0)
-    gateway_updates = stats_data.get('gateway_updates', 0)
-    gid_rebuilds = stats_data.get('gid_rebuilds', 0)
-    topology_changes = stats_data.get('topology_changes', 0)
-    total_messages = stats_data.get('total_messages', 0)
-    total_bytes = stats_data.get('total_bytes', 0)
+    # 檢查是否為新格式（summary.by_type）
+    if 'summary' in stats_data:
+        summary = stats_data['summary']
+        
+        # 新格式：從 summary 中提取
+        total_messages = summary.get('total_events', 0)
+        total_bytes = summary.get('total_bytes', 0)
+        
+        # 從 by_type 提取各類事件
+        by_type = summary.get('by_type', {})
+        if by_type:
+            # 新格式：使用 by_type 結構
+            routing_updates = by_type.get('routing_update', {}).get('count', 0)
+            gateway_updates = by_type.get('gateway_update', {}).get('count', 0)
+            gid_rebuilds = by_type.get('gid_rebuild', {}).get('count', 0)
+            topology_changes = by_type.get('topology_change', {}).get('count', 0)
+        else:
+            # event_counts 格式（過渡格式）
+            event_counts = summary.get('event_counts', {})
+            routing_updates = event_counts.get('routing_update', {}).get('count', 0)
+            gateway_updates = event_counts.get('gateway_update', {}).get('count', 0)
+            gid_rebuilds = event_counts.get('gid_rebuild', {}).get('count', 0)
+            topology_changes = event_counts.get('topology_change', {}).get('count', 0)
+    else:
+        # 舊格式：從頂層提取
+        routing_updates = stats_data.get('routing_updates', 0)
+        gateway_updates = stats_data.get('gateway_updates', 0)
+        gid_rebuilds = stats_data.get('gid_rebuilds', 0)
+        topology_changes = stats_data.get('topology_changes', 0)
+        total_messages = stats_data.get('total_messages', 0)
+        total_bytes = stats_data.get('total_bytes', 0)
     
     # 從timeline重新計算字節數（使用統一的控制信令模型）
     CTRL_HDR_BYTES = 32
