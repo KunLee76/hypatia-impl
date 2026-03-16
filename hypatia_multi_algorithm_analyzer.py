@@ -333,6 +333,9 @@ class MultiAlgorithmAnalyzer:
         
         # 生成比較報告
         self.generate_multi_comparison_report(algorithms_data, output_path)
+
+        # 生成 entries 對照報告（解釋每種事件如何換算 bytes）
+        self.generate_entries_reference_report(algorithms_data, output_path)
         
         # 生成可視化
         self.generate_multi_algorithm_charts(algorithms_data, output_path)
@@ -411,6 +414,149 @@ class MultiAlgorithmAnalyzer:
                         f.write(f"  {algo['name']:40s}: N/A\n")
         
         print(f"📄 比較報告已保存: {report_file}")
+
+    def _collect_entry_stats(self, algo):
+        """依照 normalize 規則統計各事件的 entry 數量與公式 bytes。"""
+        data = algo.get('data', {})
+        summary = data.get('summary', {})
+        by_type = summary.get('by_type', {})
+        timeline = data.get('timeline', [])
+
+        is_lohi = algo.get('category') == 'lohi'
+        stats = {}
+
+        def _ensure(ev):
+            if ev not in stats:
+                stats[ev] = {
+                    'events': int(by_type.get(ev, {}).get('count', 0) or 0),
+                    'entries_total': 0,
+                    'header_units': 0,
+                    'entry_bytes': 0,
+                    'calc_bytes': 0,
+                    'summary_bytes': int(by_type.get(ev, {}).get('bytes', 0) or 0),
+                }
+
+        for row in timeline:
+            ev = row.get('event') or row.get('type')
+            if not ev:
+                continue
+            ev = str(ev)
+            detail = row.get('detail') or {}
+
+            n_entries = 0
+            hdr_units = 1
+            entry_bytes = 0
+
+            if ev == 'routing_update':
+                n_entries = int(detail.get('changed_entries', 0) or 0)
+                entry_bytes = ROUTE_ENTRY_BYTES
+            elif ev == 'topology_change':
+                if 'delta_group_edges' in detail:
+                    n_entries = abs(int(detail.get('delta_group_edges', 0) or 0))
+                    entry_bytes = GROUP_TOPO_ENTRY_BYTES if is_lohi else PHYS_TOPO_ENTRY_BYTES
+                else:
+                    n_entries = abs(int(detail.get('delta_isl', 0) or 0)) + abs(int(detail.get('delta_gsl', 0) or 0))
+                    if n_entries == 0 and 'delta_edges' in detail:
+                        n_entries = abs(int(detail.get('delta_edges', 0) or 0))
+                    entry_bytes = PHYS_TOPO_ENTRY_BYTES
+            elif ev == 'gid_rebuild':
+                n_entries = int(detail.get('changed_gids', 0) or 0)
+                entry_bytes = ID_ENTRY_BYTES
+            elif ev == 'pid_rebuild':
+                n_entries = int(detail.get('changed_pids', 0) or 0)
+                entry_bytes = ID_ENTRY_BYTES
+            elif ev == 'gateway_update':
+                n_msgs = int(detail.get('num_messages', 0) or 0)
+                n_entries = int(detail.get('num_entries', 0) or 0)
+                if n_msgs == 0 and n_entries == 0:
+                    changed_pairs = int(detail.get('changed_pairs', 0) or 0)
+                    k = int(detail.get('k', 0) or detail.get('k_used', 0) or 0)
+                    n_msgs = changed_pairs
+                    n_entries = changed_pairs * max(k, 1)
+                hdr_units = n_msgs
+                entry_bytes = GATEWAY_ENTRY_BYTES
+            else:
+                # 其他未知事件，不納入 entries 對照
+                continue
+
+            calc_bytes = hdr_units * CTRL_HDR_BYTES + n_entries * entry_bytes
+            _ensure(ev)
+            stats[ev]['entries_total'] += n_entries
+            stats[ev]['header_units'] += hdr_units
+            stats[ev]['entry_bytes'] = entry_bytes
+            stats[ev]['calc_bytes'] += calc_bytes
+
+        # 若某事件在 summary 出現但 timeline 未累積到，仍保留列（方便對照）
+        for ev in by_type.keys():
+            _ensure(ev)
+
+        return stats
+
+    def generate_entries_reference_report(self, algorithms_data, output_path):
+        """輸出每演算法、每事件類型對應的 entries 對照報告。"""
+        report_file = output_path / "multi_algorithm_entries_reference.txt"
+
+        with open(report_file, 'w', encoding='utf-8') as f:
+            f.write("Hypatia 控制信令 Entries 對照報告\n")
+            f.write("=" * 90 + "\n")
+            f.write(f"生成時間: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
+
+            f.write("統一位元組模型（normalize）:\n")
+            f.write(f"  - CTRL_HDR_BYTES = {CTRL_HDR_BYTES}\n")
+            f.write(f"  - ROUTE_ENTRY_BYTES = {ROUTE_ENTRY_BYTES}\n")
+            f.write(f"  - PHYS_TOPO_ENTRY_BYTES = {PHYS_TOPO_ENTRY_BYTES}\n")
+            f.write(f"  - GROUP_TOPO_ENTRY_BYTES = {GROUP_TOPO_ENTRY_BYTES}\n")
+            f.write(f"  - ID_ENTRY_BYTES = {ID_ENTRY_BYTES}\n")
+            f.write(f"  - GATEWAY_ENTRY_BYTES = {GATEWAY_ENTRY_BYTES}\n\n")
+
+            f.write("事件 -> entries 推導規則:\n")
+            f.write("  - routing_update: entries = changed_entries\n")
+            f.write("  - topology_change: entries = |delta_group_edges| (LoHi) 或 |delta_isl|+|delta_gsl|\n")
+            f.write("  - gid_rebuild: entries = changed_gids\n")
+            f.write("  - pid_rebuild: entries = changed_pids\n")
+            f.write("  - gateway_update: entries = num_entries (或 changed_pairs * k_used), headers = num_messages\n")
+            f.write("\n")
+            f.write("備註: Chart1/Chart2 的 GRHR 會排除 routing_update（視為衛星本地計算）。\n")
+            f.write("=" * 90 + "\n")
+
+            ordered_events = [
+                'gateway_update',
+                'gid_rebuild',
+                'pid_rebuild',
+                'routing_update',
+                'topology_change',
+            ]
+
+            for algo in algorithms_data:
+                f.write(f"\n【{algo['name']}】\n")
+                f.write("-" * 90 + "\n")
+                f.write(f"{'Event':<18} {'Events':>8} {'Entries':>12} {'AvgEntry/Event':>15} {'Headers':>10} {'EntryB':>8} {'CalcBytes':>14} {'SummaryBytes':>14}\n")
+                f.write("-" * 90 + "\n")
+
+                stats = self._collect_entry_stats(algo)
+                all_events = ordered_events + [e for e in stats.keys() if e not in ordered_events]
+
+                total_entries_all = 0
+                for ev in all_events:
+                    if ev not in stats:
+                        continue
+
+                    item = stats[ev]
+                    events = int(item.get('events', 0) or 0)
+                    entries = int(item.get('entries_total', 0) or 0)
+                    avg = (entries / events) if events > 0 else 0.0
+                    headers = int(item.get('header_units', 0) or 0)
+                    entry_b = int(item.get('entry_bytes', 0) or 0)
+                    calc_b = int(item.get('calc_bytes', 0) or 0)
+                    sum_b = int(item.get('summary_bytes', 0) or 0)
+
+                    total_entries_all += entries
+                    f.write(f"{ev:<18} {events:>8,d} {entries:>12,d} {avg:>15.2f} {headers:>10,d} {entry_b:>8,d} {calc_b:>14,d} {sum_b:>14,d}\n")
+
+                f.write("-" * 90 + "\n")
+                f.write(f"{'TOTAL':<18} {'':>8} {total_entries_all:>12,d}\n")
+
+        print(f"📄 Entries 對照報告已保存: {report_file}")
     
     def generate_multi_algorithm_charts(self, algorithms_data, output_path):
         """生成多算法比較圖表"""
@@ -428,6 +574,20 @@ class MultiAlgorithmAnalyzer:
         self._chart4_improvement_multi(algorithms_data, output_path)
         
         print(f"✅ 所有圖表已保存到: {output_path}/")
+
+    def _chart1_metrics(self, algo):
+        """Chart1 metrics with GRHR routing_update excluded."""
+        summary = algo['data'].get('summary', {})
+        by_type = summary.get('by_type', {})
+        total_bytes = int(summary.get('total_bytes', 0) or 0)
+        total_events = int(summary.get('total_events', 0) or 0)
+
+        if algo.get('category') == 'hierarchical_floyd':
+            routing_bytes = int(by_type.get('routing_update', {}).get('bytes', 0) or 0)
+            routing_events = int(by_type.get('routing_update', {}).get('count', 0) or 0)
+            return max(total_bytes - routing_bytes, 0), max(total_events - routing_events, 0)
+
+        return total_bytes, total_events
     
     def _chart1_overall_multi(self, algorithms_data, output_path):
         """圖表1: 多算法總體比較"""
@@ -439,10 +599,11 @@ class MultiAlgorithmAnalyzer:
         
         names = [algo['name'] for algo in algorithms_data]
         labels_for_plot = [name.replace(' (', '\n(') for name in names]
-        # Chart 1, 2 使用 control_signaling_bytes 和 control_events（GRHR 已排除 routing_update）
-        total_bytes = [algo['control_signaling_bytes'] for algo in algorithms_data]
+        # Chart 1 明確以「GRHR 排除 routing_update」規則計算
+        metrics = [self._chart1_metrics(algo) for algo in algorithms_data]
+        total_bytes = [m[0] for m in metrics]
         total_bytes_mb = [b / (1024 * 1024) for b in total_bytes]  # 轉換為 MB
-        control_events = [algo['control_events'] for algo in algorithms_data]  # 修改為使用控制事件數
+        control_events = [m[1] for m in metrics]
         
         # 改進的顏色編碼：使用漸變色表示不同網格大小
         colors = []
@@ -659,6 +820,12 @@ class MultiAlgorithmAnalyzer:
             has_data_flags = []  # 記錄是否有數據
             
             for event_type in all_event_types:
+                # GRHR 的 routing_update 在圖表3視為 N/A（衛星本地計算，不視為控制信令）
+                if algo.get('category') == 'hierarchical_floyd' and event_type == 'routing_update':
+                    counts.append(0)
+                    has_data_flags.append(False)
+                    continue
+
                 if 'by_type' in summary and event_type in summary['by_type']:
                     counts.append(summary['by_type'][event_type]['count'])
                     has_data_flags.append(True)
